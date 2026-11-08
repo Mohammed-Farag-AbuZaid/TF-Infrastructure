@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tracks = [
+  {
+    id: 'TF_News_Researcher',
+    title: 'TF News Opportunities Researcher',
+    commitment: '4–6 hrs/week',
+    desc: 'Curate and verify international scholarships, olympiads, summer research programs, and university financial aid pathways.',
+  },
+  {
+    id: 'TF_Guide_Curator',
+    title: 'TF Guide STEM Roadmap Curator',
+    commitment: '4–6 hrs/week',
+    desc: 'Author structured study guides and problem-solving roadmaps for Mathematics, Physics, CS/AI, Biology, and Chemistry.',
+  },
+  {
+    id: 'Frontend_Dev',
+    title: 'Frontend Developer (Flutter Web / Astro)',
+    commitment: '5–8 hrs/week',
+    desc: 'Build high-performance student web interfaces across TF News, TF Connect, and the Foundation Portal.',
+  },
+  {
+    id: 'Automation_Dev',
+    title: 'Automation & Backend Engineer (n8n / Baserow)',
+    commitment: '4–6 hrs/week',
+    desc: 'Maintain n8n workflows, data pipelines, and automated verification services.',
+  },
+  {
+    id: 'Graphic_Design',
+    title: 'Visual & Brand Designer',
+    commitment: '3–5 hrs/week',
+    desc: 'Design educational infographics, social announcements, and seasonal campaign visuals.',
+  },
+  {
+    id: 'Community_Mod',
+    title: 'Student Community Moderator',
+    commitment: '4–5 hrs/week',
+    desc: 'Guide student study cohorts, moderate Q&A channels, and triage community feedback.',
+  },
+];
+---
+<BaseLayout title="Volunteer Role Board & Application Portal">
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Join the Team</span>
+    <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">Help Build TF Unions</h1>
+    <p class="mt-3 text-slate-300 max-w-2xl text-base leading-relaxed">
+      Volunteering across all TF Unions sub-projects (including TF News, TF Guide, TF Connect, and STEM Union) is managed centrally here. Complete a seasonal cohort to earn an official verifiable certificate on <code class="text-[#FFB800]">verify.tfunions.org</code>.
+    </p>
+
+    <!-- Open Tracks Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-12">
+      {tracks.map((t) => (
+        <div class="bg-[#0C1636] border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-mono text-[#FFB800] bg-[#FFB800]/10 px-2.5 py-1 rounded">
+              {t.commitment}
+            </span>
+            <h3 class="font-['Exo_2'] font-bold text-lg mt-3 text-white">{t.title}</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">{t.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/10 text-[11px] text-slate-400">
+            Track ID: <code>{t.id}</code>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Application Form -->
+    <div class="max-w-2xl mx-auto bg-[#0C1636] border border-[#FFB800]/30 rounded-2xl p-8 shadow-xl">
+      <h2 class="font-['Exo_2'] font-bold text-2xl">Seasonal Volunteer Application</h2>
+      <p class="text-xs text-slate-400 mt-1 mb-6">
+        Submits directly to the TF Unions HR Pipeline (n8n Workflow #2).
+      </p>
+
+      <div id="vol-alert" class="hidden mb-4 p-3 rounded-xl text-xs font-medium"></div>
+
+      <form id="volunteer-form" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Full Official Name</label>
+            <input id="v-name" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white" placeholder="Sara Mahmoud" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">TF Unions Account Email</label>
+            <input id="v-email" type="email" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white" placeholder="sara@example.com" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Seasonal Cohort</label>
+            <select id="v-cohort" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white">
+              <option value="Winter_2026">Winter 2026 Cohort</option>
+              <option value="Summer_2026">Summer 2026 Cohort</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Target Track</label>
+            <select id="v-track" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white">
+              {tracks.map((t) => (
+                <option value={t.id}>{t.title}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Portfolio, GitHub, CV, or Sample Work URL</label>
+          <input id="v-url" type="url" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white" placeholder="https://github.com/..." />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Why do you want to contribute &amp; hours/week available?</label>
+          <textarea id="v-motivation" rows="4" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white" placeholder="Share your background, goals, and weekly availability..."></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-sm transition">
+          Submit Volunteer Application →
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.getElementById('volunteer-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertEl = document.getElementById('vol-alert');
+      try {
+        const res = await fetch('https://auto.tfunions.org/webhook/volunteer-status-webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: '1_Applied',
+            full_name: document.getElementById('v-name').value,
+            applicant_email: document.getElementById('v-email').value,
+            season_cohort: document.getElementById('v-cohort').value,
+            target_track: document.getElementById('v-track').value,
+            portfolio_or_cv_url: document.getElementById('v-url').value,
+            motivation_answer: document.getElementById('v-motivation').value,
+          }),
+        });
+        if (!res.ok) throw new Error('Submission failed');
+        alertEl.textContent = '✅ Application received! Check your email for confirmation.';
+        alertEl.className = 'mb-4 p-3 rounded-xl text-xs font-medium bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
+        alertEl.classList.remove('hidden');
+        e.target.reset();
+      } catch {
+        alertEl.textContent = '⚠️ Could not reach auto.tfunions.org webhook. Please try again shortly.';
+        alertEl.className = 'mb-4 p-3 rounded-xl text-xs font-medium bg-amber-500/20 text-amber-200 border border-amber-500/40';
+        alertEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>

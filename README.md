@@ -110,8 +110,8 @@ TF-Infrastructure/
 ## 🚀 Execution Roadmap Status
 
 - [x] **Repository & Architectural Outline Scaffolded**
-- [ ] **Step 1 — VPS Infrastructure Provisioning (`01-vps-infra/`)**
-- [ ] **Step 2 — Baserow & Firestore Schema Initialization (`02-database-schemas/`)**
-- [ ] **Step 3 — Unified SSO Hub & Flutter Client SDK (`03-sso-auth-hub/`)**
-- [ ] **Step 4 — Core n8n Automation Workflows & Gotenberg Templates (`04-n8n-workflows/`)**
-- [ ] **Step 5 — Public Foundation Portal, Verifier, Docs & QA Widget (`05-web-portals/`)**
+- [x] **Step 1 — VPS Infrastructure Provisioning (`01-vps-infra/`)**
+- [x] **Step 2 — Baserow & Firestore Schema Initialization (`02-database-schemas/`)**
+- [x] **Step 3 — Unified SSO Hub & Flutter Client SDK (`03-sso-auth-hub/`)**
+- [x] **Step 4 — Core n8n Automation Workflows & Gotenberg Templates (`04-n8n-workflows/`)**
+- [x] **Step 5 — Public Foundation Portal, Verifier, Docs & QA Widget (`05-web-portals/`)**

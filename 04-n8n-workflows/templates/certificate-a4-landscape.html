@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TF Unions Official Credential — {{SERIAL_CODE}}</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 297mm;
+      height: 210mm;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #070E24;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .outer-frame {
+      width: 281mm;
+      height: 194mm;
+      background: linear-gradient(135deg, #0A1538 0%, #002583 60%, #070E24 100%);
+      border: 2.5mm solid #FFB800;
+      padding: 4mm;
+      position: relative;
+    }
+    .inner-frame {
+      width: 100%;
+      height: 100%;
+      border: 0.6mm solid rgba(255, 184, 0, 0.45);
+      padding: 12mm 16mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.4mm solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 5mm;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+      font-family: 'Arial', sans-serif;
+    }
+    .logo-badge {
+      width: 14mm;
+      height: 14mm;
+      border-radius: 3mm;
+      background: #FFB800;
+      color: #070E24;
+      font-weight: 900;
+      font-size: 20pt;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-title {
+      font-size: 16pt;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+    .brand-sub {
+      font-size: 8.5pt;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #FFE082;
+    }
+    .serial-pill {
+      font-family: 'Courier New', monospace;
+      font-size: 10pt;
+      color: #FFB800;
+      border: 0.4mm solid rgba(255, 184, 0, 0.5);
+      padding: 2mm 4mm;
+      border-radius: 2mm;
+      background: rgba(7, 14, 36, 0.6);
+    }
+    .body-content {
+      text-align: center;
+      margin: auto 0;
+    }
+    .credential-type {
+      font-family: 'Arial', sans-serif;
+      font-size: 11pt;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #FFB800;
+      margin-bottom: 3mm;
+    }
+    .cert-heading {
+      font-size: 28pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 4mm;
+    }
+    .presented-to {
+      font-style: italic;
+      font-size: 12pt;
+      color: #CBD5E1;
+      margin-bottom: 3mm;
+    }
+    .recipient-name {
+      font-size: 32pt;
+      font-weight: 700;
+      color: #FFB800;
+      border-bottom: 0.6mm solid rgba(255, 184, 0, 0.5);
+      display: inline-block;
+      padding: 0 12mm 2mm 12mm;
+      margin-bottom: 5mm;
+    }
+    .recognition-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #E2E8F0;
+      max-width: 210mm;
+      margin: 0 auto;
+    }
+    .role-highlight {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+    .hours-badge {
+      display: inline-block;
+      margin-top: 4mm;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #070E24;
+      background: #FFE082;
+      padding: 1.5mm 5mm;
+      border-radius: 10mm;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 5mm;
+      border-top: 0.4mm solid rgba(255, 255, 255, 0.15);
+      font-family: 'Arial', sans-serif;
+    }
+    .signature-block {
+      text-align: center;
+      width: 62mm;
+    }
+    .signature-script {
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 15pt;
+      color: #FFB800;
+      margin-bottom: 1.5mm;
+    }
+    .signature-line {
+      border-top: 0.4mm solid rgba(255, 255, 255, 0.4);
+      padding-top: 1.5mm;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .signature-title {
+      font-size: 8pt;
+      color: #93C5FD;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .qr-verify-box {
+      display: flex;
+      align-items: center;
+      gap: 3.5mm;
+      background: rgba(7, 14, 36, 0.75);
+      border: 0.4mm solid rgba(255, 184, 0, 0.4);
+      padding: 2.5mm 4mm;
+      border-radius: 2.5mm;
+    }
+    .qr-svg {
+      width: 20mm;
+      height: 20mm;
+      background: #FFFFFF;
+      padding: 1.5mm;
+      border-radius: 1.5mm;
+    }
+    .verify-meta {
+      font-size: 7.5pt;
+      line-height: 1.45;
+      color: #CBD5E1;
+    }
+    .verify-url {
+      color: #FFB800;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer-frame">
+    <div class="inner-frame">
+      <div class="header">
+        <div class="brand">
+          <div class="logo-badge">TF</div>
+          <div>
+            <div class="brand-title">TF Unions Foundation</div>
+            <div class="brand-sub">Science • Research • Innovation Ecosystem</div>
+          </div>
+        </div>
+        <div class="serial-pill">SERIAL: {{SERIAL_CODE}}</div>
+      </div>
+
+      <div class="body-content">
+        <div class="credential-type">{{CREDENTIAL_TYPE}}</div>
+        <div class="cert-heading">Certificate of Distinction</div>
+        <div class="presented-to">This official credential is proudly presented to</div>
+        <div class="recipient-name">{{RECIPIENT_NAME}}</div>
+        <div class="recognition-text">
+          in recognition of outstanding dedication and verified impact as
+          <span class="role-highlight">{{ROLE_OR_PROGRAM_TITLE}}</span>
+          within the TF Unions non-profit educational ecosystem empowering standout students across Egypt.
+        </div>
+        <div class="hours-badge">Verified Contribution: {{HOURS_CREDITED}} Hours • Issued: {{ISSUE_DATE}}</div>
+      </div>
+
+      <div class="footer">
+        <div class="signature-block">
+          <div class="signature-script">Mohammed Farag</div>
+          <div class="signature-line">Mohammed Farag</div>
+          <div class="signature-title">Founder &amp; Principal Architect</div>
+        </div>
+
+        <div class="qr-verify-box">
+          <div class="qr-svg">{{QR_SVG}}</div>
+          <div class="verify-meta">
+            <strong>CRYPTOGRAPHICALLY VERIFIABLE</strong><br />
+            Scan QR or visit:<br />
+            <span class="verify-url">verify.tfunions.org/?code={{SERIAL_CODE}}</span><br />
+            Issued Date: {{ISSUE_DATE}}
+          </div>
+        </div>
+
+        <div class="signature-block">
+          <div class="signature-script">Mohammed Abdelghany</div>
+          <div class="signature-line">Mohammed Abdelghany</div>
+          <div class="signature-title">Co-Founder &amp; Operations Lead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

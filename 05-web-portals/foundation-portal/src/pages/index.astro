@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const products = [
+  {
+    name: 'TF News',
+    subdomain: 'news.tfunions.org',
+    url: 'https://news.tfunions.org',
+    status: 'LIVE • SEASON 2',
+    statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+    description:
+      'Scholarships, international olympiads, research programs, and verified admission pathways for 1,500+ global universities.',
+    metrics: '1,500+ Universities • Real-Time Deadlines',
+  },
+  {
+    name: 'TF Connect',
+    subdomain: 'connect.tfunions.org',
+    url: 'https://connect.tfunions.org',
+    status: 'SEASONAL COHORTS',
+    statusColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+    description:
+      'Structured peer study circles and senior mentorship cohorts connecting standout high schoolers with alumni at top global universities.',
+    metrics: 'Peer & Senior Mentorship',
+  },
+  {
+    name: 'TF Guide',
+    subdomain: 'guide.tfunions.org',
+    url: 'https://guide.tfunions.org',
+    status: 'CURATED ROADMAPS',
+    statusColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+    description:
+      'Step-by-step STEM, Olympiad (IMO, IPhO, IOI), scientific research, and exam preparation roadmaps tailored for Egyptian students.',
+    metrics: 'Open-Source Study Tracks',
+  },
+  {
+    name: 'STEM Union & Shop',
+    subdomain: 'stem.tfunions.org',
+    url: '/ideas',
+    status: 'COMMUNITY INITIATIVE',
+    statusColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+    description:
+      'Connecting students across all 27 Egyptian STEM schools to share capstone hardware, study banks, and reusable student-built tools.',
+    metrics: '27 Governorates Connected',
+  },
+];
+---
+<BaseLayout title="Ecosystem Foundation Portal">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden py-24 px-6 border-b border-white/10">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFB800]/15 border border-[#FFB800]/35 text-[#FFB800] text-xs font-semibold mb-6">
+        <span>💛</span> We are proud to be a community of Egypt’s brightest minds
+      </div>
+
+      <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-6xl tracking-tight leading-[1.1] text-white">
+        Helping ambitious students in Egypt move closer to their
+        <span class="text-[#FFB800]">science &amp; innovation goals.</span>
+      </h1>
+
+      <p class="mt-6 text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
+        Our mission is to provide standout students across all 27 governorates with the tools, roadmaps, and opportunities they need — even before they realize the questions they should be asking.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="https://auth.tfunions.org/?redirect_to=https://tfunions.org"
+          class="px-7 py-3.5 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-sm transition shadow-lg"
+        >
+          Create Your Unified TF Passport →
+        </a>
+        <a
+          href="https://news.tfunions.org"
+          class="px-7 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-['Exo_2'] font-semibold text-sm transition"
+        >
+          Explore TF News Opportunities
+        </a>
+      </div>
+
+      <p class="mt-4 text-xs text-slate-400">
+        🔒 <strong>One account. All TF Unions services.</strong> Zero ads. 100% non-profit &amp; student-first.
+      </p>
+    </div>
+  </section>
+
+  <!-- Live Impact Counters -->
+  <section class="max-w-6xl mx-auto px-6 -mt-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0C1636] border border-white/15 rounded-2xl p-6 shadow-xl">
+      <div class="text-center">
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-[#FFB800]">27</div>
+        <div class="text-xs text-slate-300 mt-1">Egyptian Governorates</div>
+      </div>
+      <div class="text-center">
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-white">1,500+</div>
+        <div class="text-xs text-slate-300 mt-1">Researched Global Universities</div>
+      </div>
+      <div class="text-center">
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-[#FFB800]">$0/mo</div>
+        <div class="text-xs text-slate-300 mt-1">Cost to Students Forever</div>
+      </div>
+      <div class="text-center">
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-emerald-400">100%</div>
+        <div class="text-xs text-slate-300 mt-1">Open-Book Ledger Transparency</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Ecosystem Product Grid -->
+  <section class="max-w-7xl mx-auto px-6 py-20">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Umbrella Operating System</span>
+        <h2 class="font-['Exo_2'] font-bold text-3xl sm:text-4xl mt-2">The TF Unions Ecosystem</h2>
+      </div>
+      <p class="text-sm text-slate-400 max-w-md mt-2 md:mt-0">
+        Every platform below authenticates seamlessly via <code class="text-[#FFB800]">auth.tfunions.org</code> and reports to our central operations hub.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {products.map((p) => (
+        <a
+          href={p.url}
+          class="group block bg-[#0C1636] hover:bg-[#101D45] border border-white/10 hover:border-[#FFB800]/50 rounded-2xl p-7 transition shadow-lg"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-mono text-xs text-blue-300">{p.subdomain}</span>
+            <span class={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${p.statusColor}`}>
+              {p.status}
+            </span>
+          </div>
+          <h3 class="font-['Exo_2'] font-bold text-2xl text-white group-hover:text-[#FFB800] transition">
+            {p.name} →
+          </h3>
+          <p class="mt-2 text-sm text-slate-300 leading-relaxed">{p.description}</p>
+          <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+            <span>{p.metrics}</span>
+            <span class="text-[#FFB800] font-semibold">Launch Service</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Unified SSO Call to Action Banner -->
+  <section class="max-w-6xl mx-auto px-6 pb-8">
+    <div class="bg-gradient-to-r from-[#002583] to-[#0C1636] border border-[#FFB800]/40 rounded-2xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <span class="text-xs uppercase tracking-widest text-[#FFB800] font-bold">Unified Student Passport</span>
+        <h3 class="font-['Exo_2'] font-bold text-2xl sm:text-3xl mt-1">One account. All TF Unions services.</h3>
+        <p class="text-sm text-slate-200 mt-2 max-w-xl">
+          Sign in once at <code class="text-[#FFB800]">auth.tfunions.org</code> and automatically stay signed in across TF News, TF Connect, TF Guide, and the Student Idea Incubator.
+        </p>
+      </div>
+      <div class="flex gap-3 shrink-0">
+        <a
+          href="https://auth.tfunions.org"
+          class="px-6 py-3 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-sm hover:bg-[#ffc633] transition"
+        >
+          Open SSO Hub →
+        </a>
+        <a
+          href="/volunteer"
+          class="px-6 py-3 rounded-xl bg-white/10 text-white font-['Exo_2'] font-semibold text-sm hover:bg-white/20 transition"
+        >
+          Volunteer With Us
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,322 @@
+{
+  "workspace_name": "TF_Unions_Core",
+  "database_name": "TF_Unions_Core_DB",
+  "tables": [
+    {
+      "name": "Members_Passport",
+      "primary_field": "firebase_uid",
+      "fields": [
+        { "name": "firebase_uid", "type": "text", "primary": true },
+        { "name": "full_name", "type": "text" },
+        { "name": "email", "type": "email" },
+        { "name": "phone_whatsapp", "type": "phone_number" },
+        {
+          "name": "governorate",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Cairo", "color": "blue" },
+            { "value": "Giza", "color": "light-blue" },
+            { "value": "Alexandria", "color": "cyan" },
+            { "value": "Dakahlia", "color": "green" },
+            { "value": "Red Sea", "color": "red" },
+            { "value": "Beheira", "color": "light-green" },
+            { "value": "Fayoum", "color": "yellow" },
+            { "value": "Gharbia", "color": "orange" },
+            { "value": "Ismailia", "color": "purple" },
+            { "value": "Menofia", "color": "pink" },
+            { "value": "Minya", "color": "brown" },
+            { "value": "Qalyubia", "color": "gray" },
+            { "value": "New Valley", "color": "dark-green" },
+            { "value": "Suez", "color": "dark-blue" },
+            { "value": "Aswan", "color": "dark-orange" },
+            { "value": "Assiut", "color": "dark-red" },
+            { "value": "Beni Suef", "color": "light-orange" },
+            { "value": "Port Said", "color": "light-cyan" },
+            { "value": "Damietta", "color": "light-purple" },
+            { "value": "Sharqia", "color": "light-pink" },
+            { "value": "South Sinai", "color": "light-red" },
+            { "value": "Kafr El Sheikh", "color": "light-gray" },
+            { "value": "Matrouh", "color": "dark-purple" },
+            { "value": "Luxor", "color": "dark-yellow" },
+            { "value": "Qena", "color": "dark-cyan" },
+            { "value": "North Sinai", "color": "dark-pink" },
+            { "value": "Sohag", "color": "dark-brown" },
+            { "value": "International", "color": "darker-gray" }
+          ]
+        },
+        {
+          "name": "education_system",
+          "type": "single_select",
+          "select_options": [
+            { "value": "STEM", "color": "blue" },
+            { "value": "Thanaweya_Amma", "color": "green" },
+            { "value": "IGCSE", "color": "purple" },
+            { "value": "American", "color": "red" },
+            { "value": "Azhar", "color": "yellow" },
+            { "value": "University", "color": "cyan" }
+          ]
+        },
+        {
+          "name": "grade_level",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Prep_3", "color": "light-gray" },
+            { "value": "G10", "color": "light-blue" },
+            { "value": "G11", "color": "blue" },
+            { "value": "G12", "color": "dark-blue" },
+            { "value": "Undergrad", "color": "purple" },
+            { "value": "Grad", "color": "dark-purple" }
+          ]
+        },
+        {
+          "name": "stem_interests",
+          "type": "multiple_select",
+          "select_options": [
+            { "value": "Math", "color": "blue" },
+            { "value": "Physics", "color": "purple" },
+            { "value": "CS_AI", "color": "cyan" },
+            { "value": "Biology", "color": "green" },
+            { "value": "Chemistry", "color": "yellow" },
+            { "value": "Robotics", "color": "orange" },
+            { "value": "Scholarships", "color": "pink" },
+            { "value": "Research", "color": "red" }
+          ]
+        },
+        {
+          "name": "ecosystem_role",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Student", "color": "gray" },
+            { "value": "Volunteer", "color": "blue" },
+            { "value": "Mentor", "color": "purple" },
+            { "value": "Core_Team", "color": "orange" },
+            { "value": "Founder", "color": "yellow" }
+          ]
+        },
+        { "name": "joined_at", "type": "created_on" }
+      ]
+    },
+    {
+      "name": "Volunteer_HR_Pipeline",
+      "primary_field": "application_id",
+      "fields": [
+        { "name": "application_id", "type": "autonumber", "primary": true },
+        { "name": "member", "type": "link_row", "link_row_table": "Members_Passport" },
+        { "name": "applicant_email", "type": "lookup", "through_field": "member", "target_field": "email" },
+        {
+          "name": "season_cohort",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Summer_2026", "color": "yellow" },
+            { "value": "Winter_2026", "color": "blue" },
+            { "value": "Spring_2027", "color": "green" }
+          ]
+        },
+        {
+          "name": "target_track",
+          "type": "single_select",
+          "select_options": [
+            { "value": "TF_News_Researcher", "color": "blue" },
+            { "value": "TF_Guide_Curator", "color": "green" },
+            { "value": "Frontend_Dev", "color": "purple" },
+            { "value": "Automation_Dev", "color": "cyan" },
+            { "value": "Graphic_Design", "color": "pink" },
+            { "value": "Community_Mod", "color": "orange" }
+          ]
+        },
+        { "name": "portfolio_or_cv_url", "type": "url" },
+        { "name": "motivation_answer", "type": "long_text" },
+        {
+          "name": "status",
+          "type": "single_select",
+          "select_options": [
+            { "value": "1_Applied", "color": "gray" },
+            { "value": "2_Screening", "color": "light-blue" },
+            { "value": "3_Interview", "color": "yellow" },
+            { "value": "4_Accepted", "color": "green" },
+            { "value": "5_Active", "color": "blue" },
+            { "value": "6_Completed_Season", "color": "purple" },
+            { "value": "7_Rejected", "color": "red" }
+          ]
+        },
+        { "name": "reviewer_notes", "type": "long_text" },
+        { "name": "logged_hours", "type": "number", "number_decimal_places": 0 },
+        { "name": "issue_certificate_trigger", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "Public_Team_Directory",
+      "primary_field": "team_member_id",
+      "fields": [
+        { "name": "team_member_id", "type": "autonumber", "primary": true },
+        { "name": "member", "type": "link_row", "link_row_table": "Members_Passport" },
+        { "name": "display_name", "type": "text" },
+        { "name": "role_title", "type": "text" },
+        {
+          "name": "category",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Founders", "color": "yellow" },
+            { "value": "Core_Team", "color": "orange" },
+            { "value": "Advisors", "color": "purple" },
+            { "value": "Seasonal_Contributors", "color": "blue" }
+          ]
+        },
+        { "name": "season_badge", "type": "text" },
+        { "name": "avatar_url", "type": "url" },
+        { "name": "linkedin_url", "type": "url" },
+        { "name": "github_url", "type": "url" },
+        { "name": "is_public", "type": "boolean" },
+        { "name": "sort_order", "type": "number", "number_decimal_places": 0 }
+      ]
+    },
+    {
+      "name": "Certificates_Registry",
+      "primary_field": "serial_code",
+      "fields": [
+        { "name": "serial_code", "type": "text", "primary": true },
+        { "name": "member", "type": "link_row", "link_row_table": "Members_Passport" },
+        { "name": "recipient_name", "type": "text" },
+        {
+          "name": "credential_type",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Volunteer_Service", "color": "blue" },
+            { "value": "Mentorship_Excellence", "color": "purple" },
+            { "value": "Program_Completion", "color": "green" },
+            { "value": "Core_Team_Recognition", "color": "yellow" }
+          ]
+        },
+        { "name": "role_or_program_title", "type": "text" },
+        { "name": "hours_credited", "type": "number", "number_decimal_places": 0 },
+        { "name": "issue_date", "type": "date", "date_format": "ISO" },
+        { "name": "pdf_download_url", "type": "url" },
+        { "name": "is_revoked", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "Financial_Ledger_And_Sponsors",
+      "primary_field": "tx_id",
+      "fields": [
+        { "name": "tx_id", "type": "autonumber", "primary": true },
+        {
+          "name": "tx_type",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Incoming_Donation", "color": "green" },
+            { "value": "Corporate_Sponsorship", "color": "blue" },
+            { "value": "Founder_Contribution", "color": "yellow" },
+            { "value": "Outgoing_Expense", "color": "red" }
+          ]
+        },
+        {
+          "name": "payment_channel",
+          "type": "single_select",
+          "select_options": [
+            { "value": "InstaPay", "color": "purple" },
+            { "value": "Vodafone_Cash", "color": "red" },
+            { "value": "Kashier_Paymob", "color": "blue" },
+            { "value": "Open_Collective", "color": "cyan" },
+            { "value": "Direct_Invoice", "color": "gray" }
+          ]
+        },
+        { "name": "amount_egp", "type": "number", "number_decimal_places": 2 },
+        { "name": "amount_usd", "type": "number", "number_decimal_places": 2 },
+        { "name": "donor_or_vendor_name", "type": "text" },
+        { "name": "is_anonymous", "type": "boolean" },
+        {
+          "name": "category",
+          "type": "single_select",
+          "select_options": [
+            { "value": "VPS_Hosting", "color": "blue" },
+            { "value": "Domain_Registration", "color": "purple" },
+            { "value": "Project_Fund", "color": "green" },
+            { "value": "General_Support", "color": "yellow" }
+          ]
+        },
+        { "name": "proof_screenshot_url", "type": "url" },
+        {
+          "name": "verification_status",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Pending_Review", "color": "yellow" },
+            { "value": "Verified_Published", "color": "green" },
+            { "value": "Rejected", "color": "red" }
+          ]
+        },
+        { "name": "tx_date", "type": "date", "date_format": "ISO" }
+      ]
+    },
+    {
+      "name": "QA_Tickets_And_Idea_Incubator",
+      "primary_field": "item_id",
+      "fields": [
+        { "name": "item_id", "type": "autonumber", "primary": true },
+        {
+          "name": "submission_type",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Bug_Report", "color": "red" },
+            { "value": "Broken_Link_Or_Typo", "color": "orange" },
+            { "value": "Project_Idea", "color": "yellow" },
+            { "value": "Feature_Request", "color": "blue" }
+          ]
+        },
+        {
+          "name": "source_service",
+          "type": "single_select",
+          "select_options": [
+            { "value": "Foundation_Portal", "color": "blue" },
+            { "value": "TF_News", "color": "cyan" },
+            { "value": "TF_Connect", "color": "purple" },
+            { "value": "TF_Guide", "color": "green" },
+            { "value": "Auth_SSO", "color": "yellow" },
+            { "value": "STEM_Union", "color": "orange" },
+            { "value": "STEM_Shop", "color": "pink" }
+          ]
+        },
+        { "name": "title", "type": "text" },
+        { "name": "description", "type": "long_text" },
+        { "name": "page_url", "type": "url" },
+        { "name": "submitted_by", "type": "link_row", "link_row_table": "Members_Passport" },
+        { "name": "voter_uids_json", "type": "long_text" },
+        { "name": "upvote_count", "type": "number", "number_decimal_places": 0 },
+        {
+          "name": "status",
+          "type": "single_select",
+          "select_options": [
+            { "value": "New_Triage", "color": "gray" },
+            { "value": "Under_Review", "color": "yellow" },
+            { "value": "Planned_On_Roadmap", "color": "blue" },
+            { "value": "In_Progress", "color": "purple" },
+            { "value": "Shipped_Fixed", "color": "green" },
+            { "value": "Closed", "color": "red" }
+          ]
+        },
+        { "name": "is_public_on_board", "type": "boolean" }
+      ]
+    }
+  ],
+  "seed_rows": {
+    "Public_Team_Directory": [
+      {
+        "display_name": "Mohammed Farag",
+        "role_title": "Founder & Principal Systems Architect",
+        "category": "Founders",
+        "season_badge": "Founding Team",
+        "avatar_url": "https://github.com/Mohammed-Farag-AbuZaid.png",
+        "github_url": "https://github.com/Mohammed-Farag-AbuZaid",
+        "is_public": true,
+        "sort_order": 1
+      },
+      {
+        "display_name": "Mohammed Abdelghany",
+        "role_title": "Co-Founder & Operations Lead",
+        "category": "Founders",
+        "season_badge": "Founding Team",
+        "is_public": true,
+        "sort_order": 2
+      }
+    ]
+  }
+}

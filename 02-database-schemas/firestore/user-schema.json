@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TF Unions Unified User & Custom Claims Schema",
+  "description": "Combines the Master Spec users/{firebase_uid} schema with legacy Flutter fields (firstName, lastName, academicLevel, stemSchool) so TF News, STEM Union, and STEM Shop work seamlessly.",
+  "type": "object",
+  "required": ["uid", "fullName", "email", "role"],
+  "properties": {
+    "uid": {
+      "type": "string",
+      "description": "Primary Key — Firebase Auth UID"
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Full official name (also used for certificates)"
+    },
+    "firstName": {
+      "type": "string",
+      "description": "First name (checked by TF News AuthenticationRepository.screenRedirect)"
+    },
+    "lastName": {
+      "type": "string",
+      "description": "Last name (checked by TF News AuthenticationRepository.screenRedirect)"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Egyptian WhatsApp/Phone (+20...)"
+    },
+    "avatarUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "profilePicture": {
+      "type": "string",
+      "description": "Alias for avatarUrl in Flutter UserModel"
+    },
+    "governorate": {
+      "type": "string",
+      "enum": [
+        "Cairo", "Giza", "Alexandria", "Dakahlia", "Red Sea", "Beheira",
+        "Fayoum", "Gharbia", "Ismailia", "Menofia", "Minya", "Qalyubia",
+        "New Valley", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said",
+        "Damietta", "Sharqia", "South Sinai", "Kafr El Sheikh", "Matrouh",
+        "Luxor", "Qena", "North Sinai", "Sohag", "International"
+      ]
+    },
+    "educationSystem": {
+      "type": "string",
+      "enum": ["STEM", "Thanaweya Amma", "IG", "American", "Azhar", "University", "Prep School"]
+    },
+    "academicLevel": {
+      "type": "string",
+      "description": "Alias for educationSystem in Flutter apps"
+    },
+    "stemSchool": {
+      "type": "string",
+      "description": "Specific Egyptian STEM school if educationSystem == STEM"
+    },
+    "gradeOrYear": {
+      "type": "string",
+      "enum": ["Prep_3", "G10", "G11", "G12", "Undergrad", "Grad"]
+    },
+    "grade": {
+      "type": "string",
+      "description": "Alias for gradeOrYear in Flutter apps"
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["Male", "Female", ""]
+    },
+    "birthDate": {
+      "type": "string"
+    },
+    "interests": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["math_olympiad", "physics", "ai_ml", "scholarships", "research", "biology", "chemistry", "robotics"]
+      }
+    },
+    "role": {
+      "type": "string",
+      "enum": ["student", "volunteer", "mentor", "core_team", "founder"],
+      "default": "student"
+    },
+    "badges": {
+      "type": "array",
+      "items": { "type": "string" },
+      "examples": [["early_member", "imo_cohort_2026", "verified_volunteer"]]
+    },
+    "baserowRowId": {
+      "type": "integer",
+      "description": "Linked Row ID in Baserow Members_Passport table"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "firebaseCustomClaims": {
+      "type": "object",
+      "maxProperties": 10,
+      "description": "Stored in Firebase Auth JWT (<1000 bytes)",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["student", "volunteer", "mentor", "core_team", "founder"]
+        },
+        "tier": {
+          "type": "string"
+        },
+        "tracks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "name": "02_Volunteer_Recruitment_And_Auto_Promotion",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "volunteer-status-webhook",
+        "responseMode": "onReceived"
+      },
+      "id": "baserow-volunteer-webhook",
+      "name": "Webhook: Volunteer_HR_Pipeline Status Change",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 320],
+      "webhookId": "tf-volunteer-hr"
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.items ? $json.body.items[0].status.value : $json.body.status }}",
+        "rules": {
+          "rules": [
+            { "value2": "1_Applied", "output": 0 },
+            { "value2": "4_Accepted", "output": 1 }
+          ]
+        }
+      },
+      "id": "switch-status",
+      "name": "Switch on Application Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [460, 320]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_FOUNDERS_CHAT_ID }}",
+        "text": "=🚀 *New Volunteer Application*\n\n*Name:* {{ $json.body.full_name || $json.body.items[0].member[0].value }}\n*Track:* {{ $json.body.target_track || $json.body.items[0].target_track.value }}\n*Cohort:* {{ $json.body.season_cohort || $json.body.items[0].season_cohort.value }}\n*Portfolio:* {{ $json.body.portfolio_or_cv_url || $json.body.items[0].portfolio_or_cv_url }}",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram-notify-applied",
+      "name": "Telegram: Alert Founders Group",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [740, 180]
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@tfunions.org",
+        "toEmail": "={{ $json.body.applicant_email || $json.body.items[0].applicant_email[0].value }}",
+        "subject": "TF Unions Volunteer Application Received",
+        "html": "=<p>Hi {{ $json.body.full_name || 'Applicant' }},</p><p>We have received your application for the <strong>{{ $json.body.target_track || $json.body.items[0].target_track.value }}</strong> track at TF Unions. Mohammed Farag &amp; Mohammed Abdelghany will review your submission and update you shortly.</p>"
+      },
+      "id": "smtp-confirm-applied",
+      "name": "SMTP: Confirm Application to Student",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [980, 180]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://identitytoolkit.googleapis.com/v1/projects/tf-unions/accounts:update",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"localId\": \"{{ $json.body.items[0].member[0].value }}\",\n  \"customAttributes\": {{ JSON.stringify(JSON.stringify({ role: 'volunteer', tier: 'volunteer', tracks: [$json.body.items[0].target_track.value], verified: true })) }}\n}"
+      },
+      "id": "firebase-update-claims",
+      "name": "HTTP: Update Firebase Custom Claims",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [740, 440]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_MEMBERS_PASSPORT }}",
+        "rowId": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].member[0].id }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "ecosystem_role", "fieldValue": "Volunteer" }
+          ]
+        }
+      },
+      "id": "baserow-promote-member",
+      "name": "Baserow: Set ecosystem_role = Volunteer",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [980, 440]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_PUBLIC_TEAM_DIRECTORY }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "display_name", "fieldValue": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].reviewer_notes || 'TF Unions Volunteer' }}" },
+            { "fieldId": "role_title", "fieldValue": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].target_track.value }}" },
+            { "fieldId": "category", "fieldValue": "Seasonal_Contributors" },
+            { "fieldId": "season_badge", "fieldValue": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].season_cohort.value }}" },
+            { "fieldId": "is_public", "fieldValue": "true" },
+            { "fieldId": "sort_order", "fieldValue": "50" }
+          ]
+        }
+      },
+      "id": "baserow-add-public-directory",
+      "name": "Baserow: Add to Public_Team_Directory",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [1220, 440]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL }}"
+      },
+      "id": "cf-pages-rebuild",
+      "name": "HTTP: Trigger Cloudflare Pages Rebuild (/team)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1460, 440]
+    },
+    {
+      "parameters": {
+        "fromEmail": "founders@tfunions.org",
+        "toEmail": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].applicant_email[0].value }}",
+        "subject": "🎉 Welcome to the TF Unions Volunteer Cohort!",
+        "html": "=<p>Congratulations! Your application to join the <strong>{{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].target_track.value }}</strong> track has been accepted.</p><p>Your TF Unions Passport has been upgraded with Volunteer permissions, and your profile is now live on <a href=\"https://tfunions.org/team\">tfunions.org/team</a>.</p>"
+      },
+      "id": "smtp-send-onboarding-kit",
+      "name": "SMTP: Send Volunteer Onboarding Kit",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1700, 440]
+    }
+  ],
+  "connections": {
+    "Webhook: Volunteer_HR_Pipeline Status Change": {
+      "main": [[{ "node": "Switch on Application Status", "type": "main", "index": 0 }]]
+    },
+    "Switch on Application Status": {
+      "main": [
+        [{ "node": "Telegram: Alert Founders Group", "type": "main", "index": 0 }],
+        [{ "node": "HTTP: Update Firebase Custom Claims", "type": "main", "index": 0 }]
+      ]
+    },
+    "Telegram: Alert Founders Group": {
+      "main": [[{ "node": "SMTP: Confirm Application to Student", "type": "main", "index": 0 }]]
+    },
+    "HTTP: Update Firebase Custom Claims": {
+      "main": [[{ "node": "Baserow: Set ecosystem_role = Volunteer", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Set ecosystem_role = Volunteer": {
+      "main": [[{ "node": "Baserow: Add to Public_Team_Directory", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Add to Public_Team_Directory": {
+      "main": [[{ "node": "HTTP: Trigger Cloudflare Pages Rebuild (/team)", "type": "main", "index": 0 }]]
+    },
+    "HTTP: Trigger Cloudflare Pages Rebuild (/team)": {
+      "main": [[{ "node": "SMTP: Send Volunteer Onboarding Kit", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

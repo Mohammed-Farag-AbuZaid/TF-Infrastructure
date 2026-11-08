@@ -1,0 +1,19 @@
+auto.tfunions.org {
+    reverse_proxy n8n:5678
+}
+
+ops.tfunions.org {
+    reverse_proxy baserow:80
+}
+
+mail.tfunions.org {
+    reverse_proxy listmonk:9000
+}
+
+analytics.tfunions.org {
+    reverse_proxy umami:3000
+}
+
+status.tfunions.org {
+    reverse_proxy uptime-kuma:3001
+}

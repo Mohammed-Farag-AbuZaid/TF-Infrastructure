@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface IdeaItem {
+  item_id: number;
+  title: string;
+  description: string;
+  source_service: string;
+  upvote_count: number;
+  status: string;
+}
+
+const seedIdeas: IdeaItem[] = [
+  {
+    item_id: 1,
+    title: 'Olympiad Past-Paper & Arabic Solution Bank (IMO / IPhO / IOI)',
+    description: 'Interactive archive of Egyptian National Olympiad screening exams with peer-reviewed step-by-step solutions.',
+    source_service: 'TF_Guide',
+    upvote_count: 84,
+    status: 'Planned_On_Roadmap',
+  },
+  {
+    item_id: 2,
+    title: 'Cross-Governorate Capstone Hardware & Component Exchange',
+    description: 'Let graduating Grade 12 STEM students pass sensors, microcontrollers, and lab kits to incoming juniors.',
+    source_service: 'STEM_Shop',
+    upvote_count: 67,
+    status: 'In_Progress',
+  },
+  {
+    item_id: 3,
+    title: 'University Essay & Financial Aid Peer Review Circles',
+    description: 'Match G12 applicants with Egyptian seniors currently studying on full financial aid abroad.',
+    source_service: 'TF_Connect',
+    upvote_count: 59,
+    status: 'Under_Review',
+  },
+];
+---
+<BaseLayout title="Student Problem & Project Incubator">
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <!-- Left 2 Columns: Public Idea Board -->
+      <div class="lg:col-span-2">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Community-Driven Roadmap</span>
+        <h1 class="font-['Exo_2'] font-extrabold text-4xl mt-2">Student Idea Incubator</h1>
+        <p class="mt-2 text-sm text-slate-300">
+          TF Unions builds tools that solve real student challenges. Upvote proposals below (authenticated via your TF Unions Passport) or pitch a new challenge.
+        </p>
+
+        <div class="mt-8 space-y-4" id="ideas-list">
+          {seedIdeas.map((idea) => (
+            <div class="bg-[#0C1636] border border-white/10 rounded-2xl p-6 flex items-start gap-5">
+              <button
+                type="button"
+                data-item-id={idea.item_id}
+                class="upvote-btn flex flex-col items-center justify-center w-14 h-16 rounded-xl bg-[#070E24] hover:bg-[#002583] border border-[#FFB800]/40 text-[#FFB800] transition shrink-0"
+              >
+                <span class="text-xs">▲</span>
+                <span class="font-['Exo_2'] font-extrabold text-base vote-count">{idea.upvote_count}</span>
+              </button>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300">
+                    {idea.source_service.replace(/_/g, ' ')}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-[#FFB800]/15 text-[#FFB800]">
+                    {idea.status.replace(/_/g, ' ')}
+                  </span>
+                </div>
+                <h3 class="font-['Exo_2'] font-bold text-lg text-white">{idea.title}</h3>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">{idea.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Right Column: Propose New Idea Form -->
+      <div class="bg-[#0C1636] border border-[#FFB800]/30 rounded-2xl p-7 h-fit">
+        <h2 class="font-['Exo_2'] font-bold text-xl">Propose a Student Project</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-5">
+          Submits directly to `QA_Tickets_And_Idea_Incubator` (n8n Workflow #6).
+        </p>
+
+        <div id="idea-alert" class="hidden mb-3 p-3 rounded-xl text-xs"></div>
+
+        <form id="idea-form" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Target Ecosystem Service</label>
+            <select id="i-service" class="w-full px-3 py-2 rounded-xl bg-[#070E24] border border-white/15 text-xs text-white">
+              <option value="Foundation_Portal">New Standalone TF Unions Project</option>
+              <option value="TF_News">TF News</option>
+              <option value="TF_Guide">TF Guide</option>
+              <option value="TF_Connect">TF Connect</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Idea Title</label>
+            <input id="i-title" required placeholder="Short title of the tool or initiative..." class="w-full px-3.5 py-2 rounded-xl bg-[#070E24] border border-white/15 text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Problem Statement &amp; Proposed Solution</label>
+            <textarea id="i-desc" rows="4" required placeholder="What challenge does this solve for students in Egypt?" class="w-full px-3.5 py-2 rounded-xl bg-[#070E24] border border-white/15 text-xs text-white"></textarea>
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition">
+            Submit to Idea Incubator →
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    function getCookieUid() {
+      try {
+        const m = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
+        return m ? JSON.parse(decodeURIComponent(m[1])).uid || '' : '';
+      } catch {
+        return '';
+      }
+    }
+
+    document.querySelectorAll('.upvote-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const uid = getCookieUid();
+        if (!uid) {
+          window.location.href = 'https://auth.tfunions.org/?redirect_to=' + encodeURIComponent(window.location.href);
+          return;
+        }
+        const itemId = Number(btn.getAttribute('data-item-id'));
+        const countEl = btn.querySelector('.vote-count');
+        try {
+          const res = await fetch('https://auto.tfunions.org/webhook/idea-upvote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ itemId, uid }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.upvoteCount) countEl.textContent = String(data.upvoteCount);
+          }
+        } catch {}
+      });
+    });
+
+    document.getElementById('idea-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertEl = document.getElementById('idea-alert');
+      try {
+        await fetch('https://auto.tfunions.org/webhook/qa-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            submissionType: 'Project_Idea',
+            service: document.getElementById('i-service').value,
+            title: document.getElementById('i-title').value,
+            description: document.getElementById('i-desc').value,
+            pageUrl: window.location.href,
+            uid: getCookieUid(),
+          }),
+        });
+        alertEl.textContent = '✅ Idea submitted for Founder review!';
+        alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
+        alertEl.classList.remove('hidden');
+        e.target.reset();
+      } catch {
+        alertEl.textContent = '⚠️ Could not submit idea right now.';
+        alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-amber-500/20 text-amber-200 border border-amber-500/40';
+        alertEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>

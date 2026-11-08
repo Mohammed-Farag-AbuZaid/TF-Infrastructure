@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isFounderOrCore() {
+      return isSignedIn() && (request.auth.token.role == 'founder' || request.auth.token.role == 'core_team');
+    }
+
+    // 1. Unified Student & Ecosystem Member Passport
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId
+                    && (!('role' in request.resource.data) || request.resource.data.role == 'student');
+      allow update: if (isSignedIn() && request.auth.uid == userId 
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'badges', 'baserowRowId']))
+                    || isFounderOrCore();
+    }
+
+    // 2. Username reservation lookup (used by TF Unions account registration)
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow delete: if isFounderOrCore();
+    }
+
+    // 3. TF News Opportunities Feed
+    match /opportunities/{opportunityId} {
+      allow read: if true;
+      allow write: if isFounderOrCore()
+                   || (isSignedIn() && request.auth.token.tracks != null && 'tf_news_editor' in request.auth.token.tracks);
+    }
+  }
+}

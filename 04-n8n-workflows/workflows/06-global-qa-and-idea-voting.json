@@ -1,0 +1,169 @@
+{
+  "name": "06_Global_QA_Triage_And_Idea_Voting",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "qa-submit",
+        "responseMode": "onReceived",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook-qa-submit",
+      "name": "Webhook 1 (POST /webhook/qa-submit)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 220],
+      "webhookId": "tf-qa-submit"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_QA_INCUBATOR }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "submission_type", "fieldValue": "={{ $json.body.submissionType || 'Bug_Report' }}" },
+            { "fieldId": "source_service", "fieldValue": "={{ $json.body.service || 'Foundation_Portal' }}" },
+            { "fieldId": "title", "fieldValue": "={{ $json.body.title }}" },
+            { "fieldId": "description", "fieldValue": "={{ $json.body.description }}\n\n---\nUser-Agent: {{ $json.body.userAgent || 'Unknown' }}\nUID: {{ $json.body.uid || 'Anonymous' }}" },
+            { "fieldId": "page_url", "fieldValue": "={{ $json.body.pageUrl || 'https://tfunions.org' }}" },
+            { "fieldId": "voter_uids_json", "fieldValue": "={{ JSON.stringify($json.body.uid ? [$json.body.uid] : []) }}" },
+            { "fieldId": "upvote_count", "fieldValue": "1" },
+            { "fieldId": "status", "fieldValue": "New_Triage" },
+            { "fieldId": "is_public_on_board", "fieldValue": "false" }
+          ]
+        }
+      },
+      "id": "baserow-create-qa-item",
+      "name": "Baserow: Insert into QA_Tickets_And_Idea_Incubator",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [480, 220]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.submissionType || 'Bug_Report' }}",
+              "operation": "equals",
+              "value2": "Bug_Report"
+            }
+          ]
+        }
+      },
+      "id": "if-bug-report",
+      "name": "IF Bug_Report",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [740, 220]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_QA_ALERTS_CHAT_ID }}",
+        "text": "=🛠️ *QA Alert — {{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.service }}*\n\n*Title:* {{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.title }}\n*URL:* {{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.pageUrl }}\n*Details:* {{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.description }}\n*Reporter UID:* `{{ $('Webhook 1 (POST /webhook/qa-submit)').item.json.body.uid || 'guest' }}`",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram-qa-alert",
+      "name": "Telegram: Post to #qa-alerts",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1000, 160]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "idea-upvote",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://tfunions.org"
+        }
+      },
+      "id": "webhook-idea-upvote",
+      "name": "Webhook 2 (POST /webhook/idea-upvote)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 520],
+      "webhookId": "tf-idea-upvote"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_QA_INCUBATOR }}",
+        "rowId": "={{ $json.body.itemId }}"
+      },
+      "id": "baserow-get-idea",
+      "name": "Baserow: Fetch Idea Row",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [480, 520]
+    },
+    {
+      "parameters": {
+        "jsCode": "const reqBody = $('Webhook 2 (POST /webhook/idea-upvote)').first().json.body;\nconst row = $input.first().json;\n\n// Extract UID from Firebase JWT payload (or verified uid parameter)\nlet uid = reqBody.uid || '';\nif (reqBody.idToken) {\n  try {\n    const payloadB64 = reqBody.idToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');\n    const decoded = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf8'));\n    if (decoded.aud === 'tf-unions' && decoded.sub) {\n      uid = decoded.sub;\n    }\n  } catch {}\n}\n\nif (!uid) {\n  throw new Error('Authentication required to upvote ideas');\n}\n\nlet voters = [];\ntry {\n  voters = JSON.parse(row.voter_uids_json || '[]');\n} catch {\n  voters = [];\n}\n\nconst alreadyVoted = voters.includes(uid);\nif (!alreadyVoted) {\n  voters.push(uid);\n}\n\nconst newScore = alreadyVoted ? Number(row.upvote_count || 1) : Number(row.upvote_count || 1) + 1;\n\nreturn [{\n  json: {\n    rowId: row.id,\n    alreadyVoted,\n    voterUidsJson: JSON.stringify(voters),\n    upvoteCount: newScore\n  }\n}];"
+      },
+      "id": "code-dedup-vote",
+      "name": "Code: Verify Firebase Token & Deduplicate Voter UID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [740, 520]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_QA_INCUBATOR }}",
+        "rowId": "={{ $json.rowId }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "voter_uids_json", "fieldValue": "={{ $json.voterUidsJson }}" },
+            { "fieldId": "upvote_count", "fieldValue": "={{ $json.upvoteCount }}" }
+          ]
+        }
+      },
+      "id": "baserow-update-vote",
+      "name": "Baserow: Save Updated Upvote Count",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [1000, 520]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"ok\": true,\n  \"itemId\": {{ $('Code: Verify Firebase Token & Deduplicate Voter UID').item.json.rowId }},\n  \"alreadyVoted\": {{ $('Code: Verify Firebase Token & Deduplicate Voter UID').item.json.alreadyVoted }},\n  \"upvoteCount\": {{ $('Code: Verify Firebase Token & Deduplicate Voter UID').item.json.upvoteCount }}\n}"
+      },
+      "id": "respond-vote-score",
+      "name": "Respond: Updated Score JSON",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1260, 520]
+    }
+  ],
+  "connections": {
+    "Webhook 1 (POST /webhook/qa-submit)": {
+      "main": [[{ "node": "Baserow: Insert into QA_Tickets_And_Idea_Incubator", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Insert into QA_Tickets_And_Idea_Incubator": {
+      "main": [[{ "node": "IF Bug_Report", "type": "main", "index": 0 }]]
+    },
+    "IF Bug_Report": {
+      "main": [[{ "node": "Telegram: Post to #qa-alerts", "type": "main", "index": 0 }], []]
+    },
+    "Webhook 2 (POST /webhook/idea-upvote)": {
+      "main": [[{ "node": "Baserow: Fetch Idea Row", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Fetch Idea Row": {
+      "main": [[{ "node": "Code: Verify Firebase Token & Deduplicate Voter UID", "type": "main", "index": 0 }]]
+    },
+    "Code: Verify Firebase Token & Deduplicate Voter UID": {
+      "main": [[{ "node": "Baserow: Save Updated Upvote Count", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Save Updated Upvote Count": {
+      "main": [[{ "node": "Respond: Updated Score JSON", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

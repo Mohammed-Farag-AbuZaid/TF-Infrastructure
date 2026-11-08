@@ -1,0 +1,153 @@
+{
+  "name": "01_SSO_User_Onboarding_Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "user-onboard",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-user-onboard",
+      "name": "Webhook (POST /webhook/user-onboard)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "tf-user-onboard"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_MEMBERS_PASSPORT }}",
+        "returnAll": false,
+        "limit": 1,
+        "additionalOptions": {
+          "filters": {
+            "fields": [
+              {
+                "field": "firebase_uid",
+                "operator": "equal",
+                "value": "={{ $json.body.uid }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "baserow-search-member",
+      "name": "Baserow: Search Members_Passport",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.id === undefined }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "if-new-user",
+      "name": "IF New User",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_MEMBERS_PASSPORT }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "firebase_uid", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.uid }}" },
+            { "fieldId": "full_name", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.fullName }}" },
+            { "fieldId": "email", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.email }}" },
+            { "fieldId": "governorate", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.governorate }}" },
+            { "fieldId": "education_system", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.educationSystem }}" },
+            { "fieldId": "grade_level", "fieldValue": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.gradeOrYear }}" },
+            { "fieldId": "ecosystem_role", "fieldValue": "Student" }
+          ]
+        }
+      },
+      "id": "baserow-create-member",
+      "name": "Baserow: Create Row in Members_Passport",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [920, 220]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/users/{{ $('Webhook (POST /webhook/user-onboard)').item.json.body.uid }}?updateMask.fieldPaths=baserowRowId",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fields\": {\n    \"baserowRowId\": {\n      \"integerValue\": \"{{ $json.id }}\"\n    }\n  }\n}"
+      },
+      "id": "firestore-patch-row-id",
+      "name": "HTTP: Patch baserowRowId to Firestore",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1160, 220]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://listmonk:9000/api/subscribers",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"email\": \"{{ $('Webhook (POST /webhook/user-onboard)').item.json.body.email }}\",\n  \"name\": \"{{ $('Webhook (POST /webhook/user-onboard)').item.json.body.fullName }}\",\n  \"status\": \"enabled\",\n  \"lists\": [1],\n  \"attribs\": {\n    \"governorate\": \"{{ $('Webhook (POST /webhook/user-onboard)').item.json.body.governorate }}\",\n    \"educationSystem\": \"{{ $('Webhook (POST /webhook/user-onboard)').item.json.body.educationSystem }}\",\n    \"interests\": {{ JSON.stringify($('Webhook (POST /webhook/user-onboard)').item.json.body.interests || []) }}\n  }\n}"
+      },
+      "id": "listmonk-subscribe",
+      "name": "HTTP: Subscribe to Listmonk Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 220]
+    },
+    {
+      "parameters": {
+        "fromEmail": "founders@tfunions.org",
+        "toEmail": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.email }}",
+        "subject": "Welcome to TF Unions — Your Unified Student Passport is Active!",
+        "html": "=<div style=\"font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#070E24;color:#ffffff;border-radius:12px;\"><h2 style=\"color:#FFB800;\">Welcome to TF Unions, {{ $('Webhook (POST /webhook/user-onboard)').item.json.body.fullName }}!</h2><p>Your single TF Unions Passport now unlocks the entire ecosystem:</p><ul><li><strong>TF News (news.tfunions.org):</strong> Scholarships, olympiads, internships, and 1,500+ global university admission pathways.</li><li><strong>TF Guide (guide.tfunions.org):</strong> Curated STEM & research roadmaps.</li><li><strong>TF Connect (connect.tfunions.org):</strong> Peer & senior mentorship cohorts.</li></ul><p style=\"margin-top:20px;\"><em>\"زكاة العلم نشره — Sharing knowledge is a responsibility.\"</em></p><p>— Mohammed Farag &amp; Mohammed Abdelghany<br/>Co-Founders, TF Unions</p></div>"
+      },
+      "id": "smtp-welcome-email",
+      "name": "SMTP: Send Welcome Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1640, 220]
+    }
+  ],
+  "connections": {
+    "Webhook (POST /webhook/user-onboard)": {
+      "main": [[{ "node": "Baserow: Search Members_Passport", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Search Members_Passport": {
+      "main": [[{ "node": "IF New User", "type": "main", "index": 0 }]]
+    },
+    "IF New User": {
+      "main": [[{ "node": "Baserow: Create Row in Members_Passport", "type": "main", "index": 0 }], []]
+    },
+    "Baserow: Create Row in Members_Passport": {
+      "main": [[{ "node": "HTTP: Patch baserowRowId to Firestore", "type": "main", "index": 0 }]]
+    },
+    "HTTP: Patch baserowRowId to Firestore": {
+      "main": [[{ "node": "HTTP: Subscribe to Listmonk Digest", "type": "main", "index": 0 }]]
+    },
+    "HTTP: Subscribe to Listmonk Digest": {
+      "main": [[{ "node": "SMTP: Send Welcome Email", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

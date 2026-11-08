@@ -1,0 +1,145 @@
+{
+  "name": "05_Donation_Verification_And_Ledger_Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "submit-donation",
+        "responseMode": "onReceived",
+        "options": {
+          "allowedOrigins": "https://tfunions.org"
+        }
+      },
+      "id": "webhook-submit-donation",
+      "name": "Webhook (POST /webhook/submit-donation)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 280],
+      "webhookId": "tf-submit-donation"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_FINANCIAL_LEDGER }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "tx_type", "fieldValue": "={{ $json.body.txType || 'Incoming_Donation' }}" },
+            { "fieldId": "payment_channel", "fieldValue": "={{ $json.body.paymentChannel || 'InstaPay' }}" },
+            { "fieldId": "amount_egp", "fieldValue": "={{ $json.body.amountEgp || 0 }}" },
+            { "fieldId": "amount_usd", "fieldValue": "={{ $json.body.amountUsd || 0 }}" },
+            { "fieldId": "donor_or_vendor_name", "fieldValue": "={{ $json.body.isAnonymous ? 'Anonymous Supporter' : ($json.body.donorName || 'Community Supporter') }}" },
+            { "fieldId": "is_anonymous", "fieldValue": "={{ Boolean($json.body.isAnonymous) }}" },
+            { "fieldId": "category", "fieldValue": "={{ $json.body.category || 'General_Support' }}" },
+            { "fieldId": "proof_screenshot_url", "fieldValue": "={{ $json.body.proofUrl || '' }}" },
+            { "fieldId": "verification_status", "fieldValue": "Pending_Review" },
+            { "fieldId": "tx_date", "fieldValue": "={{ new Date().toISOString().split('T')[0] }}" }
+          ]
+        }
+      },
+      "id": "baserow-insert-pending-donation",
+      "name": "Baserow: Insert Pending Transaction",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [480, 280]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_FOUNDERS_CHAT_ID }}",
+        "text": "=💛 *New TF Unions Support / Donation Submitted*\n\n*Row ID:* #{{ $json.id }}\n*Donor:* {{ $json.donor_or_vendor_name }}\n*Channel:* {{ $json.payment_channel.value || 'InstaPay' }}\n*Amount:* {{ $json.amount_egp }} EGP ({{ $json.amount_usd }} USD)\n*Receipt Proof:* {{ $json.proof_screenshot_url || 'N/A' }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Approve & Publish",
+                    "additionalFields": { "callback_data": "=approve_tx:{{ $json.id }}:{{ $('Webhook (POST /webhook/submit-donation)').item.json.body.donorEmail || '' }}" }
+                  },
+                  {
+                    "text": "❌ Reject",
+                    "additionalFields": { "callback_data": "=reject_tx:{{ $json.id }}" }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "telegram-founders-approval",
+      "name": "Telegram: Send Receipt with Inline Approval Buttons",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [760, 280]
+    },
+    {
+      "parameters": {
+        "updates": ["callback_query"]
+      },
+      "id": "telegram-callback-trigger",
+      "name": "Telegram Trigger: Founder Approval Callback",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [220, 560]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json.callback_query?.data || '';\nconst [action, rowId, donorEmail] = data.split(':');\nreturn [{ json: { action, rowId: Number(rowId), donorEmail: donorEmail || '', status: action === 'approve_tx' ? 'Verified_Published' : 'Rejected' } }];"
+      },
+      "id": "parse-callback",
+      "name": "Code: Parse Approval Action",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 560]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_FINANCIAL_LEDGER }}",
+        "rowId": "={{ $json.rowId }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "verification_status", "fieldValue": "={{ $json.status }}" }
+          ]
+        }
+      },
+      "id": "baserow-update-ledger-status",
+      "name": "Baserow: Update verification_status",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [760, 560]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL }}"
+      },
+      "id": "cf-rebuild-transparency",
+      "name": "HTTP: Rebuild Open-Book Ledger (/transparency)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1040, 560]
+    }
+  ],
+  "connections": {
+    "Webhook (POST /webhook/submit-donation)": {
+      "main": [[{ "node": "Baserow: Insert Pending Transaction", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Insert Pending Transaction": {
+      "main": [[{ "node": "Telegram: Send Receipt with Inline Approval Buttons", "type": "main", "index": 0 }]]
+    },
+    "Telegram Trigger: Founder Approval Callback": {
+      "main": [[{ "node": "Code: Parse Approval Action", "type": "main", "index": 0 }]]
+    },
+    "Code: Parse Approval Action": {
+      "main": [[{ "node": "Baserow: Update verification_status", "type": "main", "index": 0 }]]
+    },
+    "Baserow: Update verification_status": {
+      "main": [[{ "node": "HTTP: Rebuild Open-Book Ledger (/transparency)", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

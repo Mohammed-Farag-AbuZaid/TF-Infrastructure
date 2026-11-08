@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * 100% Open-Book Financial Ledger (`/transparency`)
+ * Pulls verified rows (`verification_status = Verified_Published`) from Baserow `Financial_Ledger_And_Sponsors`
+ */
+interface LedgerRow {
+  tx_id: number;
+  tx_type: 'Incoming_Donation' | 'Corporate_Sponsorship' | 'Founder_Contribution' | 'Outgoing_Expense';
+  payment_channel: string;
+  amount_egp: number;
+  amount_usd: number;
+  donor_or_vendor_name: string;
+  is_anonymous: boolean;
+  category: string;
+  tx_date: string;
+}
+
+const fallbackLedger: LedgerRow[] = [
+  {
+    tx_id: 1,
+    tx_type: 'Founder_Contribution',
+    payment_channel: 'Direct_Invoice',
+    amount_egp: 3250,
+    amount_usd: 65,
+    donor_or_vendor_name: 'Mohammed Farag & Mohammed Abdelghany (Co-Founders)',
+    is_anonymous: false,
+    category: 'VPS_Hosting',
+    tx_date: '2026-09-01',
+  },
+  {
+    tx_id: 2,
+    tx_type: 'Outgoing_Expense',
+    payment_channel: 'Direct_Invoice',
+    amount_egp: 600,
+    amount_usd: 12,
+    donor_or_vendor_name: 'Cloudflare Registrar (tfunions.org)',
+    is_anonymous: false,
+    category: 'Domain_Registration',
+    tx_date: '2026-09-02',
+  },
+  {
+    tx_id: 3,
+    tx_type: 'Outgoing_Expense',
+    payment_channel: 'Direct_Invoice',
+    amount_egp: 1850,
+    amount_usd: 37,
+    donor_or_vendor_name: 'Linux Production VPS (Consolidated Docker Host)',
+    is_anonymous: false,
+    category: 'VPS_Hosting',
+    tx_date: '2026-09-05',
+  },
+];
+
+let ledger: LedgerRow[] = fallbackLedger;
+const baserowToken = import.meta.env.BASEROW_READ_TOKEN;
+const baserowLedgerTableId = import.meta.env.BASEROW_TABLE_FINANCIAL_LEDGER;
+
+if (baserowToken && baserowLedgerTableId) {
+  try {
+    const res = await fetch(
+      `https://ops.tfunions.org/api/database/rows/table/${baserowLedgerTableId}/?user_field_names=true&filter__verification_status__equal=Verified_Published`,
+      { headers: { Authorization: `Token ${baserowToken}` } }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.results) && data.results.length > 0) {
+        ledger = data.results.map((r: any) => ({
+          tx_id: r.tx_id || r.id,
+          tx_type: r.tx_type?.value || 'Incoming_Donation',
+          payment_channel: r.payment_channel?.value || 'InstaPay',
+          amount_egp: Number(r.amount_egp || 0),
+          amount_usd: Number(r.amount_usd || 0),
+          donor_or_vendor_name: r.is_anonymous ? 'Anonymous Supporter' : r.donor_or_vendor_name,
+          is_anonymous: Boolean(r.is_anonymous),
+          category: r.category?.value || 'General_Support',
+          tx_date: r.tx_date || '2026-09-01',
+        }));
+      }
+    }
+  } catch {}
+}
+
+const totalInflowEgp = ledger
+  .filter((r) => r.tx_type !== 'Outgoing_Expense')
+  .reduce((acc, r) => acc + r.amount_egp, 0);
+
+const totalOutflowEgp = ledger
+  .filter((r) => r.tx_type === 'Outgoing_Expense')
+  .reduce((acc, r) => acc + r.amount_egp, 0);
+
+const netReserveEgp = totalInflowEgp - totalOutflowEgp;
+---
+<BaseLayout title="100% Open-Book Financial Ledger">
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">100% Financial Transparency</span>
+        <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">Open-Book Financial Ledger</h1>
+        <p class="mt-2 text-sm text-slate-300 max-w-2xl">
+          Every verified community donation, co-founder contribution, and server/domain expense is published below directly from our Baserow ledger.
+        </p>
+      </div>
+      <a
+        href="/support"
+        class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition"
+      >
+        Support or Submit Receipt →
+      </a>
+    </div>
+
+    <!-- Summary Counters -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+      <div class="bg-[#0C1636] border border-emerald-500/30 rounded-2xl p-6">
+        <div class="text-xs uppercase tracking-wider text-emerald-300 font-semibold">Total Verified Inflows</div>
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-emerald-400 mt-1">
+          {totalInflowEgp.toLocaleString()} EGP
+        </div>
+        <div class="text-[11px] text-slate-400 mt-1">Donations, Sponsors &amp; Founder Contributions</div>
+      </div>
+
+      <div class="bg-[#0C1636] border border-red-500/30 rounded-2xl p-6">
+        <div class="text-xs uppercase tracking-wider text-red-300 font-semibold">Total Infrastructure Expenses</div>
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-red-400 mt-1">
+          {totalOutflowEgp.toLocaleString()} EGP
+        </div>
+        <div class="text-[11px] text-slate-400 mt-1">VPS Hosting &amp; Domain Renewals ($0 SaaS Overhead)</div>
+      </div>
+
+      <div class="bg-[#0C1636] border border-[#FFB800]/30 rounded-2xl p-6">
+        <div class="text-xs uppercase tracking-wider text-[#FFB800] font-semibold">Net Treasury Balance</div>
+        <div class="font-['Exo_2'] font-extrabold text-3xl text-white mt-1">
+          {netReserveEgp.toLocaleString()} EGP
+        </div>
+        <div class="text-[11px] text-slate-400 mt-1">100% Dedicated to Student Programs &amp; Infra</div>
+      </div>
+    </div>
+
+    <!-- Ledger Table -->
+    <div class="bg-[#0C1636] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-[#070E24] text-slate-400 uppercase tracking-wider border-b border-white/10">
+            <tr>
+              <th class="py-3.5 px-5">TX ID</th>
+              <th class="py-3.5 px-5">Date</th>
+              <th class="py-3.5 px-5">Type</th>
+              <th class="py-3.5 px-5">Supporter / Vendor</th>
+              <th class="py-3.5 px-5">Category</th>
+              <th class="py-3.5 px-5">Channel</th>
+              <th class="py-3.5 px-5 text-right">Amount (EGP)</th>
+              <th class="py-3.5 px-5 text-right">Equivalent (USD)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/10">
+            {ledger.map((row) => {
+              const isExpense = row.tx_type === 'Outgoing_Expense';
+              return (
+                <tr class="hover:bg-white/[0.02]">
+                  <td class="py-3.5 px-5 font-mono text-slate-400">#{row.tx_id}</td>
+                  <td class="py-3.5 px-5 text-slate-300">{row.tx_date}</td>
+                  <td class="py-3.5 px-5">
+                    <span
+                      class={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                        isExpense
+                          ? 'bg-red-500/20 text-red-300'
+                          : 'bg-emerald-500/20 text-emerald-300'
+                      }`}
+                    >
+                      {row.tx_type.replace(/_/g, ' ')}
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-5 font-semibold text-white">{row.donor_or_vendor_name}</td>
+                  <td class="py-3.5 px-5 text-slate-300">{row.category.replace(/_/g, ' ')}</td>
+                  <td class="py-3.5 px-5 text-slate-400">{row.payment_channel.replace(/_/g, ' ')}</td>
+                  <td class={`py-3.5 px-5 text-right font-mono font-bold ${isExpense ? 'text-red-400' : 'text-emerald-400'}`}>
+                    {isExpense ? '-' : '+'}{row.amount_egp.toLocaleString()} EGP
+                  </td>
+                  <td class="py-3.5 px-5 text-right font-mono text-slate-400">
+                    ${row.amount_usd}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

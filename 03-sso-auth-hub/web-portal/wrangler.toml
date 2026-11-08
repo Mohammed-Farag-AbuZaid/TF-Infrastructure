@@ -1,0 +1,14 @@
+name = "tf-auth-hub"
+pages_build_output_dir = "./dist"
+compatibility_date = "2025-01-01"
+
+[vars]
+ROOT_DOMAIN = "tfunions.org"
+FIREBASE_PROJECT_ID = "tf-unions"
+N8N_ONBOARD_WEBHOOK_URL = "https://auto.tfunions.org/webhook/user-onboard"
+
+# Set sensitive secrets via `wrangler pages secret put <NAME>`:
+# - FIREBASE_CLIENT_EMAIL (Service Account email for session cookies & custom tokens)
+# - FIREBASE_PRIVATE_KEY  (Service Account PEM private key)
+# - FIREBASE_WEB_API_KEY  (Web API key for Identity Toolkit REST calls)
+# - N8N_WEBHOOK_SECRET    (Shared X-TF-Webhook-Secret header for n8n Workflow #1)

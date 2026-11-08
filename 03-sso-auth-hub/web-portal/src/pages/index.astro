@@ -1,0 +1,314 @@
+---
+/**
+ * Central Unified SSO Login & Registration Hub (https://auth.tfunions.org)
+ * Supports ?redirect_to=https://news.tfunions.org/dashboard (strictly validated against *.tfunions.org)
+ */
+---
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TF Unions — Unified Single Sign-On</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-[#070E24] text-white font-['Inter',sans-serif] flex flex-col justify-between">
+    <header class="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-6xl w-full mx-auto">
+      <a href="https://tfunions.org" class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg bg-[#002583] border border-[#FFB800]/40 flex items-center justify-center font-['Exo_2'] font-extrabold text-[#FFB800] text-lg">TF</span>
+        <div>
+          <span class="font-['Exo_2'] font-bold text-lg tracking-tight">TF Unions</span>
+          <span class="block text-[11px] text-blue-300/70 uppercase tracking-widest">Unified Identity Passport</span>
+        </div>
+      </a>
+      <span class="text-xs text-slate-400 hidden sm:inline">One account. All TF Unions services.</span>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-6">
+      <div class="w-full max-w-md bg-[#0C1636] border border-white/10 rounded-2xl p-8 shadow-2xl">
+        <div class="mb-6">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFB800]/15 text-[#FFB800] border border-[#FFB800]/30">
+            🔒 Official Ecosystem SSO
+          </span>
+          <h1 class="mt-3 text-2xl font-['Exo_2'] font-bold text-white" id="form-title">Sign in to TF Unions</h1>
+          <p class="mt-1 text-sm text-slate-300" id="redirect-banner">
+            Continue to <strong id="target-service-name" class="text-[#FFB800]">TF Unions Ecosystem</strong>
+          </p>
+        </div>
+
+        <!-- Tabs: Sign In vs Create Passport -->
+        <div class="grid grid-cols-2 gap-2 p-1 bg-[#070E24] rounded-xl mb-6 border border-white/5">
+          <button id="tab-signin" type="button" class="py-2 text-xs font-semibold rounded-lg bg-[#002583] text-white transition">Sign In</button>
+          <button id="tab-register" type="button" class="py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition">Create Passport</button>
+        </div>
+
+        <div id="status-alert" class="hidden mb-4 p-3 rounded-lg text-xs font-medium"></div>
+
+        <!-- OAuth Providers -->
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <button id="btn-google" type="button" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white text-slate-900 font-semibold text-xs hover:bg-slate-100 transition">
+            <span>G</span> Continue with Google
+          </button>
+          <button id="btn-github" type="button" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-800 text-white border border-white/15 font-semibold text-xs hover:bg-slate-700 transition">
+            <span>⌘</span> GitHub
+          </button>
+        </div>
+
+        <div class="relative flex py-2 items-center mb-6">
+          <div class="flex-grow border-t border-white/10"></div>
+          <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-slate-400">Or with Email</span>
+          <div class="flex-grow border-t border-white/10"></div>
+        </div>
+
+        <form id="sso-form" class="space-y-4">
+          <!-- Extra registration fields (hidden in Sign-In mode) -->
+          <div id="register-fields" class="hidden space-y-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Full Official Name</label>
+              <input id="fullName" type="text" placeholder="Ahmed Hassan" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Governorate</label>
+                <select id="governorate" class="w-full px-3 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none">
+                  <option value="Cairo">Cairo</option>
+                  <option value="Giza">Giza</option>
+                  <option value="Alexandria">Alexandria</option>
+                  <option value="Dakahlia">Dakahlia</option>
+                  <option value="Sharqia">Sharqia</option>
+                  <option value="Gharbia">Gharbia</option>
+                  <option value="Menofia">Menofia</option>
+                  <option value="Qalyubia">Qalyubia</option>
+                  <option value="Ismailia">Ismailia</option>
+                  <option value="Assiut">Assiut</option>
+                  <option value="Luxor">Luxor</option>
+                  <option value="Red Sea">Red Sea</option>
+                  <option value="International">International</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Education System</label>
+                <select id="educationSystem" class="w-full px-3 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none">
+                  <option value="STEM">STEM School</option>
+                  <option value="Thanaweya Amma">Thanaweya Amma</option>
+                  <option value="IG">IGCSE</option>
+                  <option value="American">American</option>
+                  <option value="Azhar">Azhar</option>
+                  <option value="University">University</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Grade / Academic Year</label>
+              <select id="gradeOrYear" class="w-full px-3 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none">
+                <option value="Prep_3">Prep 3</option>
+                <option value="G10">Grade 10</option>
+                <option value="G11" selected>Grade 11</option>
+                <option value="G12">Grade 12</option>
+                <option value="Undergrad">Undergraduate</option>
+                <option value="Grad">Graduate</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+            <input id="email" type="email" required placeholder="student@tfunions.org" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Password</label>
+            <input id="password" type="password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070E24] border border-white/15 text-sm text-white focus:border-[#FFB800] focus:outline-none" />
+          </div>
+
+          <button id="btn-submit" type="submit" class="w-full py-3 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-slate-950 font-['Exo_2'] font-bold text-sm transition shadow-lg">
+            Sign In to Ecosystem →
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500">
+      TF Unions Foundation • Protected by Cloudflare Zero Trust & Firebase Auth
+    </footer>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js';
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        signInWithPopup,
+        GoogleAuthProvider,
+        GithubAuthProvider,
+        updateProfile
+      } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js';
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        serverTimestamp
+      } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js';
+
+      // Shared Firebase project configuration from TF Unions ecosystem (`tf-unions`)
+      const firebaseConfig = {
+        apiKey: 'AIzaSyB0bILaWHg8QXuwl3Fhfht3BQnYLgTkWUk',
+        authDomain: 'tf-unions.firebaseapp.com',
+        projectId: 'tf-unions',
+        storageBucket: 'tf-unions.firebasestorage.app',
+        messagingSenderId: '879703010053',
+        appId: '1:879703010053:web:1fe4e4476ab1680a67a56c',
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Strict *.tfunions.org redirect_to validation
+      function getValidatedRedirectUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const raw = params.get('redirect_to');
+        if (!raw) return 'https://tfunions.org';
+        try {
+          const parsed = new URL(raw);
+          if (
+            parsed.protocol === 'https:' &&
+            (parsed.hostname === 'tfunions.org' || parsed.hostname.endsWith('.tfunions.org'))
+          ) {
+            return parsed.toString();
+          }
+        } catch {}
+        return 'https://tfunions.org';
+      }
+
+      const redirectUrl = getValidatedRedirectUrl();
+      const targetNameEl = document.getElementById('target-service-name');
+      try {
+        targetNameEl.textContent = new URL(redirectUrl).hostname;
+      } catch {}
+
+      let isRegisterMode = false;
+      const tabSignin = document.getElementById('tab-signin');
+      const tabRegister = document.getElementById('tab-register');
+      const registerFields = document.getElementById('register-fields');
+      const btnSubmit = document.getElementById('btn-submit');
+      const formTitle = document.getElementById('form-title');
+      const statusAlert = document.getElementById('status-alert');
+
+      function showStatus(msg, isError = false) {
+        statusAlert.textContent = msg;
+        statusAlert.className = `mb-4 p-3 rounded-lg text-xs font-medium ${
+          isError ? 'bg-red-500/20 text-red-200 border border-red-500/40' : 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40'
+        }`;
+        statusAlert.classList.remove('hidden');
+      }
+
+      tabSignin.addEventListener('click', () => {
+        isRegisterMode = false;
+        registerFields.classList.add('hidden');
+        tabSignin.className = 'py-2 text-xs font-semibold rounded-lg bg-[#002583] text-white transition';
+        tabRegister.className = 'py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition';
+        formTitle.textContent = 'Sign in to TF Unions';
+        btnSubmit.textContent = 'Sign In to Ecosystem →';
+      });
+
+      tabRegister.addEventListener('click', () => {
+        isRegisterMode = true;
+        registerFields.classList.remove('hidden');
+        tabRegister.className = 'py-2 text-xs font-semibold rounded-lg bg-[#002583] text-white transition';
+        tabSignin.className = 'py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition';
+        formTitle.textContent = 'Create Your TF Unions Passport';
+        btnSubmit.textContent = 'Create Unified Account →';
+      });
+
+      async function establishRootSessionAndRedirect(user, onboardingProfile = null) {
+        showStatus('Minting unified .tfunions.org session cookie...');
+        const idToken = await user.getIdToken(true);
+        const res = await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ idToken, onboardingProfile }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Failed to establish root session');
+        }
+        window.location.href = redirectUrl;
+      }
+
+      document.getElementById('sso-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        try {
+          if (isRegisterMode) {
+            const fullName = document.getElementById('fullName').value.trim() || email.split('@')[0];
+            const governorate = document.getElementById('governorate').value;
+            const educationSystem = document.getElementById('educationSystem').value;
+            const gradeOrYear = document.getElementById('gradeOrYear').value;
+            const nameParts = fullName.split(' ');
+            const firstName = nameParts[0] || fullName;
+            const lastName = nameParts.slice(1).join(' ') || 'Student';
+
+            const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(cred.user, { displayName: fullName });
+
+            // Write unified + legacy-compatible document to Firestore `users/{uid}`
+            await setDoc(doc(db, 'users', cred.user.uid), {
+              uid: cred.user.uid,
+              fullName,
+              firstName,
+              lastName,
+              email,
+              governorate,
+              educationSystem,
+              academicLevel: educationSystem,
+              gradeOrYear,
+              grade: gradeOrYear,
+              interests: ['scholarships', 'research'],
+              role: 'student',
+              badges: ['early_member'],
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            }, { merge: true });
+
+            await establishRootSessionAndRedirect(cred.user, {
+              fullName,
+              governorate,
+              educationSystem,
+              gradeOrYear,
+              interests: ['scholarships', 'research'],
+            });
+          } else {
+            const cred = await signInWithEmailAndPassword(auth, email, password);
+            await establishRootSessionAndRedirect(cred.user);
+          }
+        } catch (err) {
+          showStatus(err.message || 'Authentication failed', true);
+        }
+      });
+
+      document.getElementById('btn-google').addEventListener('click', async () => {
+        try {
+          const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+          await establishRootSessionAndRedirect(cred.user);
+        } catch (err) {
+          showStatus(err.message || 'Google Sign-In failed', true);
+        }
+      });
+
+      document.getElementById('btn-github').addEventListener('click', async () => {
+        try {
+          const cred = await signInWithPopup(auth, new GithubAuthProvider());
+          await establishRootSessionAndRedirect(cred.user);
+        } catch (err) {
+          showStatus(err.message || 'GitHub Sign-In failed', true);
+        }
+      });
+    </script>
+  </body>
+</html>

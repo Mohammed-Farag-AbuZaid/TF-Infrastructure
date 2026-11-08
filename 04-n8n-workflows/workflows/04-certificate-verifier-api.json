@@ -1,0 +1,142 @@
+{
+  "name": "04_Certificate_Verification_Public_API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "verify-certificate",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://verify.tfunions.org,https://tfunions.org"
+        }
+      },
+      "id": "webhook-verify-cert",
+      "name": "Webhook (GET /webhook/verify-certificate)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "tf-verify-cert"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawCode = ($input.first().json.query?.code || '').trim().toUpperCase();\nconst isValidFormat = /^TFU-\\d{4}-[A-Z0-9]{6}$/.test(rawCode);\nreturn [{ json: { code: rawCode, isValidFormat } }];"
+      },
+      "id": "sanitize-serial-code",
+      "name": "Code: Validate Regex ^TFU-\\d{4}-[A-Z0-9]{6}$",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            { "value1": "={{ $json.isValidFormat }}", "value2": true }
+          ]
+        }
+      },
+      "id": "if-valid-format",
+      "name": "IF Valid Serial Format",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_CERTIFICATES_REGISTRY }}",
+        "returnAll": false,
+        "limit": 1,
+        "additionalOptions": {
+          "filters": {
+            "fields": [
+              { "field": "serial_code", "operator": "equal", "value": "={{ $json.code }}" }
+            ]
+          }
+        }
+      },
+      "id": "baserow-lookup-cert",
+      "name": "Baserow: Query Certificates_Registry",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [920, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            { "value1": "={{ $json.id !== undefined && $json.is_revoked !== true }}", "value2": true }
+          ]
+        }
+      },
+      "id": "if-cert-active",
+      "name": "IF Found & Not Revoked",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1160, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"valid\": true,\n  \"serialCode\": \"{{ $json.serial_code }}\",\n  \"recipientName\": \"{{ $json.recipient_name }}\",\n  \"credentialType\": \"{{ ($json.credential_type?.value || 'Volunteer_Service').replace(/_/g, ' ') }}\",\n  \"roleTitle\": \"{{ $json.role_or_program_title }}\",\n  \"hoursCredited\": {{ $json.hours_credited || 0 }},\n  \"issueDate\": \"{{ $json.issue_date }}\",\n  \"pdfUrl\": \"{{ $json.pdf_download_url }}\"\n}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.org" }
+            ]
+          }
+        }
+      },
+      "id": "respond-200-valid",
+      "name": "Respond 200: Valid Certificate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1420, 120]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"valid\": false, \"message\": \"Certificate not found or revoked.\"}",
+        "options": {
+          "responseCode": 404,
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.org" }
+            ]
+          }
+        }
+      },
+      "id": "respond-404-invalid",
+      "name": "Respond 404: Not Found or Revoked",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1420, 340]
+    }
+  ],
+  "connections": {
+    "Webhook (GET /webhook/verify-certificate)": {
+      "main": [[{ "node": "Code: Validate Regex ^TFU-\\d{4}-[A-Z0-9]{6}$", "type": "main", "index": 0 }]]
+    },
+    "Code: Validate Regex ^TFU-\\d{4}-[A-Z0-9]{6}$": {
+      "main": [[{ "node": "IF Valid Serial Format", "type": "main", "index": 0 }]]
+    },
+    "IF Valid Serial Format": {
+      "main": [
+        [{ "node": "Baserow: Query Certificates_Registry", "type": "main", "index": 0 }],
+        [{ "node": "Respond 404: Not Found or Revoked", "type": "main", "index": 0 }]
+      ]
+    },
+    "Baserow: Query Certificates_Registry": {
+      "main": [[{ "node": "IF Found & Not Revoked", "type": "main", "index": 0 }]]
+    },
+    "IF Found & Not Revoked": {
+      "main": [
+        [{ "node": "Respond 200: Valid Certificate", "type": "main", "index": 0 }],
+        [{ "node": "Respond 404: Not Found or Revoked", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

@@ -1,0 +1,197 @@
+version: "3.9"
+
+networks:
+  tf_internal:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pg_data:
+  redis_data:
+  n8n_data:
+  baserow_media:
+  uptime_kuma_data:
+
+services:
+  # 1. Reverse Proxy & Auto-SSL
+  caddy:
+    image: caddy:2-alpine
+    container_name: tf_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - tf_internal
+
+  # 2. Shared PostgreSQL 16 Server
+  postgres:
+    image: postgres:16-alpine
+    container_name: tf_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: ${TZ}
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c max_connections=150
+      -c work_mem=8MB
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    networks:
+      - tf_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 3. Shared Redis 7 Server
+  redis:
+    image: redis:7-alpine
+    container_name: tf_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - tf_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 4. n8n Automation & Webhook Hub
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: tf_n8n
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n_db
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_HOST=auto.${ROOT_DOMAIN}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://auto.${ROOT_DOMAIN}/
+      - GENERIC_TIMEZONE=${TZ}
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - N8N_WEBHOOK_SECRET=${N8N_WEBHOOK_SECRET}
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - tf_internal
+
+  # 5. Baserow (Internal CRM, HR, Ledger & CMS)
+  baserow:
+    image: baserow/baserow:1.28.0
+    container_name: tf_baserow
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - BASEROW_PUBLIC_URL=https://ops.${ROOT_DOMAIN}
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=baserow_db
+      - DATABASE_USER=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SECRET_KEY=${BASEROW_SECRET_KEY}
+      - BASEROW_JWT_SIGNING_KEY=${BASEROW_JWT_SIGNING_KEY}
+      - BASEROW_CADDY_ADDRESSES=:80
+      - BASEROW_AMOUNT_OF_WORKERS=1
+      - EMAIL_SMTP=True
+      - EMAIL_SMTP_HOST=${SMTP_HOST}
+      - EMAIL_SMTP_PORT=${SMTP_PORT}
+      - EMAIL_SMTP_USE_TLS=True
+      - EMAIL_SMTP_USER=${SMTP_USER}
+      - EMAIL_SMTP_PASSWORD=${SMTP_PASS}
+      - FROM_EMAIL=no-reply@${ROOT_DOMAIN}
+    volumes:
+      - baserow_media:/baserow/data
+    networks:
+      - tf_internal
+
+  # 6. Listmonk (Newsletter & Digest Manager)
+  listmonk:
+    image: listmonk/listmonk:latest
+    container_name: tf_listmonk
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: [sh, -c, "./listmonk --install --idempotent --yes && ./listmonk"]
+    environment:
+      - LISTMONK_app__address=0.0.0.0:9000
+      - LISTMONK_db__host=postgres
+      - LISTMONK_db__port=5432
+      - LISTMONK_db__user=${POSTGRES_USER}
+      - LISTMONK_db__password=${POSTGRES_PASSWORD}
+      - LISTMONK_db__database=listmonk_db
+      - LISTMONK_db__ssl_mode=disable
+      - TZ=${TZ}
+    networks:
+      - tf_internal
+
+  # 7. Umami (Privacy-First Web Analytics)
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: tf_umami
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/umami_db
+      - DATABASE_TYPE=postgresql
+      - APP_SECRET=${UMAMI_APP_SECRET}
+    networks:
+      - tf_internal
+
+  # 8. Gotenberg (Internal Stateless HTML-to-PDF Engine for Certificates)
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: tf_gotenberg
+    restart: unless-stopped
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=^file:///.*$"
+    networks:
+      - tf_internal
+
+  # 9. Uptime Kuma (Public Ecosystem Status Page)
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: tf_uptime_kuma
+    restart: unless-stopped
+    volumes:
+      - uptime_kuma_data:/app/data
+    networks:
+      - tf_internal
