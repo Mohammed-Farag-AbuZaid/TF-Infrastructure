@@ -1,171 +1,141 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const products = [
+const sections = [
   {
-    name: 'TF News',
-    subdomain: 'news.tfunions.com',
-    url: 'https://news.tfunions.com',
-    status: 'LIVE â€¢ SEASON 2',
-    statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-    description:
-      'Scholarships, international olympiads, research programs, and verified admission pathways for 1,500+ global universities.',
-    metrics: '1,500+ Universities â€¢ Real-Time Deadlines',
+    title: 'TF News',
+    subtitle: 'Scholarships, internships, programs, and admission pathways for 1,500+ universities.',
+    stat: '1,500+ universities',
+    href: 'https://news.tfunions.com',
   },
   {
-    name: 'TF Connect',
-    subdomain: 'connect.tfunions.com',
-    url: 'https://connect.tfunions.com',
-    status: 'SEASONAL COHORTS',
-    statusColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-    description:
-      'Structured peer study circles and senior mentorship cohorts connecting standout high schoolers with alumni at top global universities.',
-    metrics: 'Peer & Senior Mentorship',
+    title: 'TF Guides',
+    subtitle: 'Step-by-step roadmaps for Olympiads, scientific research, and university preparation.',
+    stat: 'guides.tfunions.com',
+    href: 'https://guides.tfunions.com',
   },
   {
-    name: 'TF Guide',
-    subdomain: 'guide.tfunions.com',
-    url: 'https://guide.tfunions.com',
-    status: 'CURATED ROADMAPS',
-    statusColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
-    description:
-      'Step-by-step STEM, Olympiad (IMO, IPhO, IOI), scientific research, and exam preparation roadmaps tailored for Egyptian students.',
-    metrics: 'Open-Source Study Tracks',
+    title: 'TF Connect',
+    subtitle: 'Peer study circles and senior mentorship cohorts connecting students across Egypt.',
+    stat: 'connect.tfunions.com',
+    href: 'https://connect.tfunions.com',
   },
   {
-    name: 'STEM Union & Shop',
-    subdomain: 'stem.tfunions.com',
-    url: '/ideas',
-    status: 'COMMUNITY INITIATIVE',
-    statusColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-    description:
-      'Connecting students across all 27 Egyptian STEM schools to share capstone hardware, study banks, and reusable student-built tools.',
-    metrics: '27 Governorates Connected',
+    title: 'Volunteer & Incubator',
+    subtitle: 'Join seasonal contributor tracks or propose and upvote student-built tools.',
+    stat: '27 governorates',
+    href: '/volunteer',
   },
 ];
+
+const foundationRows = [
+  { category: 'Mission', title: 'About TF Unions & Charter', meta: 'Non-profit', href: '/about' },
+  { category: 'People', title: 'Founders & Contributors Directory', meta: 'Team', href: '/team' },
+  { category: 'Join', title: 'Apply for Seasonal Volunteer Tracks', meta: 'Open', href: '/volunteer' },
+  { category: 'Community', title: 'Student Project & Idea Incubator', meta: 'Vote', href: '/ideas' },
+  { category: 'Registry', title: 'Verify a TF Unions Certificate', meta: 'verify.tfunions.com', href: 'https://verify.tfunions.com' },
+  { category: 'Finances', title: 'Open-Book Financial Ledger & Support', meta: '100% public', href: '/transparency' },
+];
 ---
-<BaseLayout title="Ecosystem Foundation Portal">
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden py-24 px-6 border-b border-white/10">
-    <div class="max-w-5xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFB800]/15 border border-[#FFB800]/35 text-[#FFB800] text-xs font-semibold mb-6">
-        <span>ðŸ’›</span> We are proud to be a community of Egyptâ€™s brightest minds
-      </div>
-
-      <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-6xl tracking-tight leading-[1.1] text-white">
-        Helping ambitious students in Egypt move closer to their
-        <span class="text-[#FFB800]">science &amp; innovation goals.</span>
-      </h1>
-
-      <p class="mt-6 text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
-        Our mission is to provide standout students across all 27 governorates with the tools, roadmaps, and opportunities they need â€” even before they realize the questions they should be asking.
-      </p>
-
-      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href="https://tf-auth-hub.pages.dev/?redirect_to=https://tf-foundation-portal.pages.dev"
-          class="px-7 py-3.5 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-sm transition shadow-lg"
-        >
-          Create Your Unified TF Passport →
-        </a>
-        <a
-          href="https://news.tfunions.com"
-          class="px-7 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-['Exo_2'] font-semibold text-sm transition"
-        >
-          Explore TF News Opportunities
-        </a>
-      </div>
-
-      <p class="mt-4 text-xs text-slate-400">
-        ðŸ”’ <strong>One account. All TF Unions services.</strong> Zero ads. 100% non-profit &amp; student-first.
-      </p>
-    </div>
+<BaseLayout title="Home">
+  <!-- Intro (matches _intro in home_page.dart) -->
+  <section class="mt-14 sm:mt-[88px]">
+    <h1
+      class="font-bold text-[#1D1D1F] leading-[1.08] tracking-[-1.5px] sm:tracking-[-2px]"
+      style="font-size: clamp(36px, 6vw, 64px);"
+    >
+      Science &amp; opportunity,<br />all in one place.
+    </h1>
+    <p class="mt-[18px] text-[18px] leading-[1.45] text-[#6E6E73] max-w-[640px]">
+      Open tools, verified university pathways, and study communities for ambitious students across Egypt.
+    </p>
   </section>
 
-  <!-- Live Impact Counters -->
-  <section class="max-w-6xl mx-auto px-6 -mt-8">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0C1636] border border-white/15 rounded-2xl p-6 shadow-xl">
-      <div class="text-center">
-        <div class="font-['Exo_2'] font-extrabold text-3xl text-[#FFB800]">27</div>
-        <div class="text-xs text-slate-300 mt-1">Egyptian Governorates</div>
-      </div>
-      <div class="text-center">
-        <div class="font-['Exo_2'] font-extrabold text-3xl text-white">1,500+</div>
-        <div class="text-xs text-slate-300 mt-1">Researched Global Universities</div>
-      </div>
-      <div class="text-center">
-        <div class="font-['Exo_2'] font-extrabold text-3xl text-[#FFB800]">$0/mo</div>
-        <div class="text-xs text-slate-300 mt-1">Cost to Students Forever</div>
-      </div>
-      <div class="text-center">
-        <div class="font-['Exo_2'] font-extrabold text-3xl text-emerald-400">100%</div>
-        <div class="text-xs text-slate-300 mt-1">Open-Book Ledger Transparency</div>
-      </div>
-    </div>
+  <!-- Four Equal Section Tiles (matches _SectionTile in home_page.dart) -->
+  <section class="mt-14 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {sections.map((s) => (
+      <a
+        href={s.href}
+        class="group flex flex-col justify-between bg-[#F5F5F7] hover:bg-[#ECECEE] rounded-[20px] p-7 min-h-[216px] transition"
+      >
+        <div>
+          <h2 class="text-[24px] font-bold tracking-[-0.5px] leading-[1.2] text-[#1D1D1F]">
+            {s.title}
+          </h2>
+          <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
+            {s.subtitle}
+          </p>
+        </div>
+        <div class="mt-6 flex items-center justify-between">
+          <span class="text-[13px] text-[#6E6E73]">{s.stat}</span>
+          <span class="text-[15px] font-semibold text-[#002583] flex items-center gap-1">
+            Explore <span class="text-[18px] leading-none">›</span>
+          </span>
+        </div>
+      </a>
+    ))}
   </section>
 
-  <!-- Live Ecosystem Product Grid -->
-  <section class="max-w-7xl mx-auto px-6 py-20">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
-      <div>
-        <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Umbrella Operating System</span>
-        <h2 class="font-['Exo_2'] font-bold text-3xl sm:text-4xl mt-2">The TF Unions Ecosystem</h2>
-      </div>
-      <p class="text-sm text-slate-400 max-w-md mt-2 md:mt-0">
-        Every platform below authenticates seamlessly via <code class="text-[#FFB800]">auth.tfunions.com</code> and reports to our central operations hub.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {products.map((p) => (
-        <a
-          href={p.url}
-          class="group block bg-[#0C1636] hover:bg-[#101D45] border border-white/10 hover:border-[#FFB800]/50 rounded-2xl p-7 transition shadow-lg"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <span class="font-mono text-xs text-blue-300">{p.subdomain}</span>
-            <span class={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${p.statusColor}`}>
-              {p.status}
-            </span>
+  <!-- Two Plain Lists (matches _lists in home_page.dart) -->
+  <section class="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 gap-14">
+    <!-- Left Column: Live Opportunities from VPS PostgreSQL -->
+    <div>
+      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Latest opportunities</h2>
+      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70" id="live-opps-list">
+        <div class="py-4 flex items-center justify-between">
+          <div>
+            <div class="text-[12px] text-[#6E6E73]">Loading</div>
+            <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Fetching live opportunities...</div>
           </div>
-          <h3 class="font-['Exo_2'] font-bold text-2xl text-white group-hover:text-[#FFB800] transition">
-            {p.name} â†’
-          </h3>
-          <p class="mt-2 text-sm text-slate-300 leading-relaxed">{p.description}</p>
-          <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-            <span>{p.metrics}</span>
-            <span class="text-[#FFB800] font-semibold">Launch Service</span>
-          </div>
-        </a>
-      ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Foundation & Ecosystem Directory -->
+    <div>
+      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Foundation</h2>
+      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
+        {foundationRows.map((r) => (
+          <a href={r.href} class="py-4 px-0.5 flex items-center justify-between hover:bg-black/[0.02] transition">
+            <div class="pr-4">
+              <div class="text-[12px] text-[#6E6E73]">{r.category}</div>
+              <div class="text-[16px] font-semibold text-[#1D1D1F] leading-[1.3] mt-0.5">{r.title}</div>
+            </div>
+            <span class="text-[13px] text-[#6E6E73] shrink-0">{r.meta}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
-  <!-- Unified SSO Call to Action Banner -->
-  <section class="max-w-6xl mx-auto px-6 pb-8">
-    <div class="bg-gradient-to-r from-[#002583] to-[#0C1636] border border-[#FFB800]/40 rounded-2xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
-      <div>
-        <span class="text-xs uppercase tracking-widest text-[#FFB800] font-bold">Unified Student Passport</span>
-        <h3 class="font-['Exo_2'] font-bold text-2xl sm:text-3xl mt-1">One account. All TF Unions services.</h3>
-        <p class="text-sm text-slate-200 mt-2 max-w-xl">
-          Sign in once at <code class="text-[#FFB800]">auth.tfunions.com</code> and automatically stay signed in across TF News, TF Connect, TF Guide, and the Student Idea Incubator.
-        </p>
-      </div>
-      <div class="flex gap-3 shrink-0">
-        <a
-          href="https://auth.tfunions.com"
-          class="px-6 py-3 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-sm hover:bg-[#ffc633] transition"
-        >
-          Open SSO Hub â†’
-        </a>
-        <a
-          href="/volunteer"
-          class="px-6 py-3 rounded-xl bg-white/10 text-white font-['Exo_2'] font-semibold text-sm hover:bg-white/20 transition"
-        >
-          Volunteer With Us
-        </a>
-      </div>
-    </div>
-  </section>
+  <script is:inline>
+    (async () => {
+      const container = document.getElementById('live-opps-list');
+      if (!container) return;
+      try {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/opportunities');
+        const data = await res.json();
+        const list = (data.opportunities || []).slice(0, 6);
+        if (list.length === 0) {
+          container.innerHTML = `<div class="py-6 text-[15px] text-[#6E6E73]">No opportunities listed right now.</div>`;
+          return;
+        }
+        container.innerHTML = list
+          .map(
+            (o) => `
+            <a href="https://news.tfunions.com" class="py-4 px-0.5 flex items-center justify-between hover:bg-black/[0.02] transition">
+              <div class="pr-4">
+                <div class="text-[12px] text-[#6E6E73]">${o.category || o.section || 'Opportunity'}</div>
+                <div class="text-[16px] font-semibold text-[#1D1D1F] leading-[1.3] mt-0.5 line-clamp-1">${o.title}</div>
+              </div>
+              <span class="text-[13px] text-[#6E6E73] shrink-0">${o.topic || 'Explore'}</span>
+            </a>
+          `
+          )
+          .join('');
+      } catch {
+        container.innerHTML = `<div class="py-6 text-[15px] text-[#6E6E73]">Explore all opportunities on <a href="https://news.tfunions.com" class="text-[#002583] font-medium">news.tfunions.com</a>.</div>`;
+      }
+    })();
+  </script>
 </BaseLayout>
-

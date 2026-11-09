@@ -1,91 +1,132 @@
 /**
- * TF Unions — Global QA & Bug Reporter Web Component (<4KB)
- * Connected to Self-Hosted VPS API (`https://n8n.tfunions.com/tf-api/api/qa-submit`)
+ * Minimalist Feedback & QA Web Component (`<tf-qa-widget>`)
+ * Matches `tf_minimal.dart`: quiet pill button, white modal with hairline border, #F5F5F7 inputs, #002583 button.
  */
-(function () {
-  if (customElements.get('tf-qa-widget')) return;
+class TfQaWidget extends HTMLElement {
+  connectedCallback() {
+    const service = this.getAttribute('service') || 'Foundation_Portal';
+    const root = this.attachShadow({ mode: 'open' });
 
-  function getUserHintUid() {
-    try {
-      const m = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
-      if (!m) return '';
-      return JSON.parse(decodeURIComponent(m[1])).uid || '';
-    } catch {
-      return '';
-    }
-  }
-
-  class TfQaWidget extends HTMLElement {
-    connectedCallback() {
-      const service = this.getAttribute('service') || 'Foundation_Portal';
-      const root = this.attachShadow({ mode: 'open' });
-      root.innerHTML = `<style>
-        :host{position:fixed;bottom:18px;left:18px;z-index:99999;font-family:Inter,system-ui,sans-serif}
-        .btn{background:#070E24;color:#fff;border:1px solid rgba(255,184,0,.45);border-radius:99px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.35);display:flex;align-items:center;gap:6px;transition:transform .15s}
-        .btn:hover{transform:translateY(-2px);border-color:#FFB800}
-        .modal{display:none;position:fixed;bottom:64px;left:18px;width:310px;background:#0C1636;color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:16px;box-shadow:0 16px 40px rgba(0,0,0,.5)}
-        .modal.open{display:block}
-        h4{margin:0 0 10px;font-size:14px;color:#FFB800}
-        select,input,textarea{width:100%;box-sizing:border-box;margin-bottom:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#070E24;color:#fff;font-size:12px}
-        .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
-        .sub{background:#FFB800;color:#070E24;border:0;padding:7px 12px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
-        .can{background:transparent;color:#94a3b8;border:0;font-size:12px;cursor:pointer}
-        .msg{font-size:11px;color:#34d399;margin-top:6px;display:none}
-      </style>
-      <button class="btn" id="tg" type="button">🛠️ Report Bug / Suggest Fix</button>
-      <div class="modal" id="md">
-        <h4>QA & Feedback (${service.replace(/_/g, ' ')})</h4>
-        <form id="fm">
-          <select id="tp">
-            <option value="Bug_Report">Bug Report</option>
-            <option value="Broken_Link_Or_Typo">Broken Link / Typo</option>
-            <option value="Feature_Request">Feature Request</option>
-            <option value="Project_Idea">Project Idea</option>
-          </select>
-          <input id="ti" required placeholder="Short summary..." />
-          <textarea id="ds" rows="3" required placeholder="Steps to reproduce or suggestion..."></textarea>
-          <div class="actions">
-            <button type="button" class="can" id="cl">Cancel</button>
-            <button type="submit" class="sub" id="sb">Send Report</button>
-          </div>
-          <div class="msg" id="ok">✅ Sent to TF Unions QA & Zain Bot!</div>
-        </form>
-      </div>`;
-
-      const md = root.getElementById('md');
-      root.getElementById('tg').onclick = () => md.classList.toggle('open');
-      root.getElementById('cl').onclick = () => md.classList.remove('open');
-      root.getElementById('fm').onsubmit = async (e) => {
-        e.preventDefault();
-        const sb = root.getElementById('sb');
-        sb.disabled = true;
-        try {
-          await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              service,
-              submissionType: root.getElementById('tp').value,
-              title: root.getElementById('ti').value,
-              description: root.getElementById('ds').value,
-              pageUrl: window.location.href,
-              userAgent: navigator.userAgent,
-              uid: getUserHintUid(),
-            }),
-          });
-          root.getElementById('ok').style.display = 'block';
-          setTimeout(() => {
-            md.classList.remove('open');
-            root.getElementById('fm').reset();
-            root.getElementById('ok').style.display = 'none';
-            sb.disabled = false;
-          }, 1400);
-        } catch {
-          sb.disabled = false;
+    root.innerHTML = `
+      <style>
+        * { box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .trigger {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 9998;
+          height: 38px;
+          padding: 0 14px;
+          border-radius: 999px;
+          background: #F5F5F7;
+          color: #1D1D1F;
+          border: 1px solid #D2D2D7;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.15s ease;
         }
-      };
-    }
-  }
+        .trigger:hover { background: #E8E8ED; }
+        .backdrop {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(29, 29, 31, 0.25);
+          z-index: 9999;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+        }
+        .backdrop.open { display: flex; }
+        .sheet {
+          width: 100%;
+          max-width: 400px;
+          background: #FFFFFF;
+          border: 1px solid #D2D2D7;
+          border-radius: 20px;
+          padding: 24px;
+          color: #1D1D1F;
+        }
+        .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin: 0; }
+        .close { background: none; border: none; color: #6E6E73; font-size: 18px; cursor: pointer; padding: 4px; }
+        .field {
+          width: 100%;
+          padding: 13px 14px;
+          border-radius: 12px;
+          background: #F5F5F7;
+          border: 1.5px solid transparent;
+          color: #1D1D1F;
+          font-size: 14px;
+          margin-bottom: 10px;
+          outline: none;
+        }
+        .field:focus { border-color: #002583; background: #FFFFFF; }
+        .btn {
+          width: 100%;
+          height: 44px;
+          border-radius: 12px;
+          background: #002583;
+          color: #FFFFFF;
+          border: none;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .msg { font-size: 13px; color: #15803D; margin-top: 8px; display: none; }
+      </style>
+      <button class="trigger" id="open-btn">Feedback</button>
+      <div class="backdrop" id="modal">
+        <div class="sheet">
+          <div class="top">
+            <h3 class="title">Report issue or idea</h3>
+            <button class="close" id="close-btn">✕</button>
+          </div>
+          <form id="qa-form">
+            <select class="field" id="type">
+              <option value="Bug_Report">Report an issue</option>
+              <option value="Project_Idea">Suggest an improvement</option>
+            </select>
+            <input class="field" id="title" type="text" required placeholder="Short summary" />
+            <textarea class="field" id="desc" rows="3" required placeholder="Details"></textarea>
+            <button class="btn" type="submit">Send</button>
+            <div class="msg" id="msg">Sent. Thank you.</div>
+          </form>
+        </div>
+      </div>
+    `;
 
+    const modal = root.getElementById('modal');
+    root.getElementById('open-btn').onclick = () => modal.classList.add('open');
+    root.getElementById('close-btn').onclick = () => modal.classList.remove('open');
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    };
+
+    root.getElementById('qa-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const msg = root.getElementById('msg');
+      await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          submissionType: root.getElementById('type').value,
+          service,
+          title: root.getElementById('title').value.trim(),
+          description: root.getElementById('desc').value.trim(),
+          pageUrl: window.location.href,
+        }),
+      }).catch(() => {});
+      msg.style.display = 'block';
+      setTimeout(() => {
+        msg.style.display = 'none';
+        modal.classList.remove('open');
+        root.getElementById('qa-form').reset();
+      }, 900);
+    };
+  }
+}
+
+if (!customElements.get('tf-qa-widget')) {
   customElements.define('tf-qa-widget', TfQaWidget);
-})();
+}

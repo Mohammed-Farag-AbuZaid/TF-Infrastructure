@@ -1,139 +1,98 @@
-﻿---
-import BaseLayout from '../layouts/BaseLayout.astro';
-
-/**
- * Dynamic Team & Contributors Wall
- * At build time (or when triggered by n8n Workflow #2 deploy hook), fetches accepted public rows
- * from Baserow `Public_Team_Directory` (`is_public = true`), with fallback to Founding Team seed data.
- */
-interface TeamMember {
-  display_name: string;
-  role_title: string;
-  category: 'Founders' | 'Core_Team' | 'Advisors' | 'Seasonal_Contributors';
-  season_badge: string;
-  avatar_url?: string;
-  linkedin_url?: string;
-  github_url?: string;
-  sort_order: number;
-}
-
-const fallbackMembers: TeamMember[] = [
-  {
-    display_name: 'Mohammed Farag',
-    role_title: 'Founder & Principal Systems Architect',
-    category: 'Founders',
-    season_badge: 'Founding Team',
-    avatar_url: 'https://github.com/Mohammed-Farag-AbuZaid.png',
-    github_url: 'https://github.com/Mohammed-Farag-AbuZaid',
-    sort_order: 1,
-  },
-  {
-    display_name: 'Mohammed Abdelghany',
-    role_title: 'Co-Founder & Operations Lead',
-    category: 'Founders',
-    season_badge: 'Founding Team',
-    sort_order: 2,
-  },
-];
-
-let members: TeamMember[] = fallbackMembers;
-const baserowToken = import.meta.env.BASEROW_READ_TOKEN;
-const baserowTableId = import.meta.env.BASEROW_TABLE_PUBLIC_TEAM_DIRECTORY;
-
-if (baserowToken && baserowTableId) {
-  try {
-    const res = await fetch(
-      `https://ops.tfunions.com/api/database/rows/table/${baserowTableId}/?user_field_names=true&filter__is_public__equal=true`,
-      { headers: { Authorization: `Token ${baserowToken}` } }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data.results) && data.results.length > 0) {
-        members = data.results.map((r: any) => ({
-          display_name: r.display_name,
-          role_title: r.role_title,
-          category: r.category?.value || 'Seasonal_Contributors',
-          season_badge: r.season_badge || 'Season 2 Cohort',
-          avatar_url: r.avatar_url,
-          linkedin_url: r.linkedin_url,
-          github_url: r.github_url,
-          sort_order: Number(r.sort_order || 99),
-        })).sort((a: TeamMember, b: TeamMember) => a.sort_order - b.sort_order);
-      }
-    }
-  } catch {}
-}
-
-const founders = members.filter((m) => m.category === 'Founders');
-const contributors = members.filter((m) => m.category !== 'Founders');
 ---
-<BaseLayout title="Team & Seasonal Contributors Wall">
-  <section class="max-w-6xl mx-auto px-6 py-16">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Team" backLabel="TF Unions" backHref="/">
+  <section class="mt-14 sm:mt-20 max-w-[720px]">
+    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
+      Team &amp; contributors.
+    </h1>
+    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
+      The co-founders and seasonal contributors building the TF Unions ecosystem.
+    </p>
+  </section>
+
+  <!-- Founders Tiles -->
+  <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="bg-[#F5F5F7] rounded-[20px] p-7 flex flex-col justify-between min-h-[190px]">
       <div>
-        <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">People Behind TF Unions</span>
-        <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">Leadership &amp; Contributors Wall</h1>
-      </div>
-      <a
-        href="/volunteer"
-        class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition"
-      >
-        Join Next Volunteer Cohort â†’
-      </a>
-    </div>
-
-    <!-- Founders Section -->
-    <h2 class="font-['Exo_2'] font-bold text-xl text-[#FFB800] mb-4">Co-Founders</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
-      {founders.map((f) => (
-        <div class="bg-[#0C1636] border border-[#FFB800]/30 rounded-2xl p-6 flex items-center gap-5">
-          <div class="w-16 h-16 rounded-2xl bg-[#002583] border border-[#FFB800]/50 flex items-center justify-center font-['Exo_2'] font-bold text-xl text-[#FFB800] overflow-hidden shrink-0">
-            {f.avatar_url ? (
-              <img src={f.avatar_url} alt={f.display_name} class="w-full h-full object-cover" />
-            ) : (
-              f.display_name.split(' ').map((n) => n[0]).join('')
-            )}
-          </div>
-          <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFB800]/15 text-[#FFB800]">
-              {f.season_badge}
-            </span>
-            <h3 class="font-['Exo_2'] font-bold text-xl text-white mt-1.5">{f.display_name}</h3>
-            <p class="text-xs text-slate-300 mt-0.5">{f.role_title}</p>
-            {f.github_url && (
-              <a href={f.github_url} target="_blank" rel="noreferrer" class="inline-block mt-2 text-xs text-blue-300 hover:underline">
-                GitHub Profile â†—
-              </a>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <!-- Core Team & Seasonal Contributors -->
-    <h2 class="font-['Exo_2'] font-bold text-xl text-white mb-4">Core Team &amp; Seasonal Volunteer Cohorts</h2>
-    {contributors.length === 0 ? (
-      <div class="bg-[#0C1636] border border-white/10 rounded-2xl p-8 text-center">
-        <p class="text-sm text-slate-300">
-          Accepted seasonal volunteers are automatically published here via n8n Workflow #2 as soon as their onboarding completes.
+        <div class="text-[13px] text-[#6E6E73]">Co-Founder</div>
+        <h2 class="mt-1 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Mohammed Farag</h2>
+        <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
+          Founder &amp; Principal Systems Architect
         </p>
-        <a href="/volunteer" class="inline-block mt-4 text-xs font-bold text-[#FFB800] hover:underline">
-          Apply for an open Season 2 track â†’
+      </div>
+      <div class="mt-6 flex items-center justify-between text-[13px]">
+        <span class="text-[#6E6E73]">Founding Cohort</span>
+        <a href="https://github.com/Mohammed-Farag-AbuZaid" target="_blank" rel="noreferrer" class="text-[#002583] font-semibold hover:underline">
+          GitHub ›
         </a>
       </div>
-    ) : (
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {contributors.map((c) => (
-          <div class="bg-[#0C1636] border border-white/10 rounded-xl p-5">
-            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">
-              {c.season_badge}
-            </span>
-            <h3 class="font-['Exo_2'] font-bold text-lg mt-2">{c.display_name}</h3>
-            <p class="text-xs text-slate-400">{c.role_title}</p>
-          </div>
-        ))}
-      </div>
-    )}
-  </section>
-</BaseLayout>
+    </div>
 
+    <div class="bg-[#F5F5F7] rounded-[20px] p-7 flex flex-col justify-between min-h-[190px]">
+      <div>
+        <div class="text-[13px] text-[#6E6E73]">Co-Founder</div>
+        <h2 class="mt-1 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Mohammed Abdelghany</h2>
+        <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
+          Co-Founder &amp; Head of Ecosystem Operations
+        </p>
+      </div>
+      <div class="mt-6 flex items-center justify-between text-[13px]">
+        <span class="text-[#6E6E73]">Founding Cohort</span>
+        <a href="https://www.linkedin.com/company/tfunions" target="_blank" rel="noreferrer" class="text-[#002583] font-semibold hover:underline">
+          LinkedIn ›
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Directory from Baserow -->
+  <section class="mt-16">
+    <div class="flex items-center justify-between">
+      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Directory</h2>
+      <a href="/volunteer" class="text-[14px] font-semibold text-[#002583] hover:underline">Apply to join ›</a>
+    </div>
+    <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70" id="team-directory-rows">
+      <div class="py-4 flex items-center justify-between">
+        <div>
+          <div class="text-[12px] text-[#6E6E73]">Founders</div>
+          <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Mohammed Farag</div>
+        </div>
+        <span class="text-[13px] text-[#6E6E73]">Founder &amp; Principal Systems Architect</span>
+      </div>
+      <div class="py-4 flex items-center justify-between">
+        <div>
+          <div class="text-[12px] text-[#6E6E73]">Founders</div>
+          <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Mohammed Abdelghany</div>
+        </div>
+        <span class="text-[13px] text-[#6E6E73]">Co-Founder &amp; Head of Ecosystem Operations</span>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (async () => {
+      try {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/team-directory');
+        const data = await res.json();
+        const members = (data.members || []).filter((m) => m.display_name);
+        if (members.length > 0) {
+          const box = document.getElementById('team-directory-rows');
+          box.innerHTML = members
+            .map(
+              (m) => `
+              <div class="py-4 flex items-center justify-between">
+                <div>
+                  <div class="text-[12px] text-[#6E6E73]">${m.season_badge || 'Founding Cohort'}</div>
+                  <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">${m.display_name}</div>
+                </div>
+                <span class="text-[13px] text-[#6E6E73]">${m.role_title || 'Contributor'}</span>
+              </div>
+            `
+            )
+            .join('');
+        }
+      } catch {}
+    })();
+  </script>
+</BaseLayout>

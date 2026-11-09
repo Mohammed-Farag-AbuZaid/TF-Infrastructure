@@ -1,69 +1,65 @@
-﻿---
+---
 /**
  * Official Credential & Certificate Verifier (`https://verify.tfunions.com`)
- * Queries n8n Workflow #4: `GET https://n8n.tfunions.com/tf-api/api/verify-certificate?code=TFU-2026-XXXXXX`
+ * Built with the `tf_minimal` design system: white page (#FFFFFF), 1000px frame,
+ * thin top bar (#D2D2D7), #F5F5F7 borderless inputs, single #002583 accent.
  */
 ---
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Credential & Certificate Verifier | TF Unions</title>
+    <title>Verify Credential — TF Unions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-[#070E24] text-white font-['Inter',sans-serif] flex flex-col justify-between">
-    <header class="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-5xl w-full mx-auto">
-      <a href="https://tfunions.com" class="flex items-center gap-3">
-        <span class="w-9 h-9 rounded-lg bg-[#002583] border border-[#FFB800]/50 flex items-center justify-center font-['Exo_2'] font-extrabold text-[#FFB800]">TF</span>
-        <div>
-          <span class="font-['Exo_2'] font-bold text-base">TF Unions</span>
-          <span class="block text-[10px] uppercase tracking-widest text-[#FFB800]">Official Credential Registry</span>
-        </div>
-      </a>
-      <a href="https://tfunions.com" class="text-xs text-slate-300 hover:text-white">â† Back to Foundation Portal</a>
-    </header>
+  <body class="min-h-screen bg-white text-[#1D1D1F] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased">
+    <div class="max-w-[1000px] mx-auto px-6 pb-20">
+      <!-- TfTopBar -->
+      <header class="h-16 border-b border-[#D2D2D7]/70 flex items-center justify-between">
+        <a href="https://www.tfunions.com" class="text-[15px] font-medium text-[#002583] hover:opacity-75 transition flex items-center gap-1">
+          <span>‹</span> Back to TF Unions
+        </a>
+        <a href="https://www.tfunions.com" class="text-[17px] font-bold tracking-[-0.2px] text-[#1D1D1F]">
+          TF Unions
+        </a>
+      </header>
 
-    <main class="flex-1 flex items-center justify-center p-6">
-      <div class="w-full max-w-xl bg-[#0C1636] border border-white/15 rounded-2xl p-8 shadow-2xl">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFB800]/15 text-[#FFB800]">
-          ðŸŽ“ Public Verification Registry
-        </span>
-        <h1 class="font-['Exo_2'] font-extrabold text-3xl mt-3">Verify a TF Unions Certificate</h1>
-        <p class="text-xs text-slate-300 mt-1">
-          Enter the serial code printed on the certificate (format: <code class="text-[#FFB800]">TFU-2026-XXXXXX</code>) or scan the certificate QR code.
+      <main class="mt-16 sm:mt-24 max-w-[560px]">
+        <h1 class="text-[36px] sm:text-[48px] font-bold tracking-[-1.5px] leading-[1.08] text-[#1D1D1F]">
+          Verify a certificate.
+        </h1>
+        <p class="mt-4 text-[17px] leading-[1.45] text-[#6E6E73]">
+          Enter the serial code printed on a TF Unions credential (for example, <span class="text-[#1D1D1F] font-mono text-[15px]">TFU-2026-8F92A1</span>).
         </p>
 
-        <form id="verify-form" class="mt-6 flex flex-col sm:flex-row gap-3">
+        <form id="verify-form" class="mt-8 flex flex-col sm:flex-row gap-3">
           <input
             id="serial-input"
             type="text"
             required
-            pattern="^TFU-\d{4}-[A-Za-z0-9]{6}$"
             placeholder="TFU-2026-8F92A1"
-            class="flex-1 px-4 py-3 rounded-xl bg-[#070E24] border border-white/20 font-mono text-sm uppercase text-white focus:border-[#FFB800] focus:outline-none"
+            class="flex-1 px-4 py-3.5 rounded-[12px] bg-[#F5F5F7] font-mono text-[15px] uppercase text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
           />
           <button
             type="submit"
-            class="px-6 py-3 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-sm transition"
+            class="h-12 px-6 rounded-[12px] bg-[#002583] hover:opacity-95 text-white font-semibold text-[15px] transition shrink-0"
           >
-            Verify Credential
+            Verify
           </button>
         </form>
 
-        <!-- Result Container -->
-        <div id="result-box" class="hidden mt-6 rounded-2xl p-6 border"></div>
-      </div>
-    </main>
+        <div class="mt-4 flex items-center gap-4 text-[13px] text-[#6E6E73]">
+          <span>Sample codes:</span>
+          <button type="button" data-code="TFU-2026-8F92A1" class="sample-btn text-[#002583] font-medium hover:underline">TFU-2026-8F92A1</button>
+          <button type="button" data-code="TFU-2026-000001" class="sample-btn text-[#002583] font-medium hover:underline">TFU-2026-000001</button>
+        </div>
 
-    <footer class="py-4 text-center text-xs text-slate-500">
-      TF Unions Credential Verifier â€¢ Powered by Baserow Registry &amp; Gotenberg
-    </footer>
-
-    <script src="https://tfunions.com/widgets/tf-qa-widget.js" defer></script>
-    <tf-qa-widget service="Foundation_Portal"></tf-qa-widget>
+        <div id="result-box" class="hidden mt-10 rounded-[20px] bg-[#F5F5F7] p-7"></div>
+      </main>
+    </div>
 
     <script is:inline>
       const form = document.getElementById('verify-form');
@@ -72,47 +68,59 @@
 
       async function verifySerial(code) {
         const clean = code.trim().toUpperCase();
+        resultBox.classList.remove('hidden');
+
         if (!/^TFU-\d{4}-[A-Z0-9]{6}$/.test(clean)) {
-          resultBox.className = 'mt-6 rounded-2xl p-6 border bg-red-500/15 border-red-500/40 text-red-200 text-xs';
-          resultBox.innerHTML = '<strong>Invalid Serial Format:</strong> Must match <code>TFU-YYYY-XXXXXX</code>.';
-          resultBox.classList.remove('hidden');
+          resultBox.innerHTML = `<p class="text-[15px] text-[#B91C1C] font-medium">Enter a valid serial code in the format TFU-YYYY-XXXXXX.</p>`;
           return;
         }
 
-        resultBox.className = 'mt-6 rounded-2xl p-6 border bg-white/5 border-white/10 text-slate-300 text-xs';
-        resultBox.textContent = 'Querying TF Unions Certificates Registry...';
-        resultBox.classList.remove('hidden');
+        resultBox.innerHTML = `<p class="text-[15px] text-[#6E6E73]">Checking registry...</p>`;
 
         try {
           const res = await fetch(`https://n8n.tfunions.com/tf-api/api/verify-certificate?code=${encodeURIComponent(clean)}`);
           const data = await res.json();
           if (res.ok && data.valid) {
-            resultBox.className = 'mt-6 rounded-2xl p-6 border bg-emerald-500/15 border-emerald-500/40 text-white';
             resultBox.innerHTML = `
-              <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-1 rounded-full bg-emerald-500/30 text-emerald-200 text-[11px] font-bold">âœ… AUTHENTIC & ACTIVE CREDENTIAL</span>
-                <span class="font-mono text-xs text-[#FFB800]">${data.serialCode}</span>
+              <div class="flex items-center justify-between pb-4 border-b border-[#D2D2D7]/70">
+                <span class="text-[13px] font-semibold text-[#15803D]">Verified credential</span>
+                <span class="font-mono text-[13px] text-[#6E6E73]">${data.serialCode}</span>
               </div>
-              <h3 class="font-['Exo_2'] font-bold text-2xl text-white">${data.recipientName}</h3>
-              <p class="text-xs text-slate-200 mt-1">${data.credentialType} â€” <strong>${data.roleTitle}</strong></p>
-              <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
-                <span>Verified Hours: <strong>${data.hoursCredited} hrs</strong></span>
-                <span>Issued: <strong>${data.issueDate}</strong></span>
-                ${data.pdfUrl ? `<a href="${data.pdfUrl}" target="_blank" rel="noreferrer" class="text-[#FFB800] font-bold hover:underline">Download Official PDF â†—</a>` : ''}
+              <h2 class="mt-5 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">${data.recipientName}</h2>
+              <p class="mt-1 text-[15px] text-[#6E6E73]">${data.roleTitle}</p>
+              <div class="mt-6 pt-4 border-t border-[#D2D2D7]/70 grid grid-cols-2 sm:grid-cols-3 gap-4 text-[13px]">
+                <div>
+                  <div class="text-[#6E6E73]">Type</div>
+                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.credentialType}</div>
+                </div>
+                <div>
+                  <div class="text-[#6E6E73]">Hours</div>
+                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.hoursCredited} hrs</div>
+                </div>
+                <div>
+                  <div class="text-[#6E6E73]">Issued</div>
+                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.issueDate}</div>
+                </div>
               </div>
             `;
           } else {
-            throw new Error(data.message || 'Certificate not found or revoked.');
+            throw new Error(data.message || 'No active credential matches this serial code.');
           }
         } catch (err) {
-          resultBox.className = 'mt-6 rounded-2xl p-6 border bg-red-500/15 border-red-500/40 text-red-200 text-xs';
-          resultBox.innerHTML = `<strong>âŒ Verification Failed:</strong> ${err.message || 'Certificate not found or revoked.'}`;
+          resultBox.innerHTML = `<p class="text-[15px] text-[#B91C1C] font-medium">${err.message || 'Certificate not found.'}</p>`;
         }
       }
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         verifySerial(input.value);
+      });
+
+      document.querySelectorAll('.sample-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          input.value = btn.getAttribute('data-code');
+          verifySerial(input.value);
+        });
       });
 
       const urlCode = new URLSearchParams(window.location.search).get('code');
@@ -123,4 +131,3 @@
     </script>
   </body>
 </html>
-

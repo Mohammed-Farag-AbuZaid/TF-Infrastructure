@@ -1,45 +1,56 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="About Us — Mission, Vision & Values">
-  <section class="max-w-4xl mx-auto px-6 py-16">
-    <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Who We Are</span>
-    <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">About TF Unions</h1>
-    <p class="mt-4 text-slate-300 text-lg leading-relaxed">
-      TF Unions (originally founded as <strong>Altafawwoq Union</strong>) is an independent, non-profit educational ecosystem dedicated to helping ambitious and standout students across Egypt achieve science, technology, engineering, mathematics (STEM), research, and innovation goals.
+<BaseLayout title="About" backLabel="TF Unions" backHref="/">
+  <section class="mt-14 sm:mt-20 max-w-[720px]">
+    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
+      Mission &amp; values.
+    </h1>
+    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
+      TF Unions (formerly Altafawwoq Union) is an independent non-profit educational initiative founded by Mohammed Farag and Mohammed Abdelghany.
     </p>
+  </section>
 
-    <div class="mt-12 space-y-6">
-      <div class="bg-[#0C1636] border-l-4 border-[#FFB800] rounded-r-2xl p-6 border-y border-r border-white/10">
-        <div class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Mission</div>
-        <p class="mt-2 text-slate-200 leading-relaxed">
-          Our mission is to provide students with the knowledge, tools, and opportunities they need — even before they realize the questions they should be asking.
-        </p>
-      </div>
-
-      <div class="bg-[#0C1636] border-l-4 border-[#FFB800] rounded-r-2xl p-6 border-y border-r border-white/10">
-        <div class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Vision</div>
-        <p class="mt-2 text-slate-200 leading-relaxed">
-          Our vision is to become the most trusted and impactful community for ambitious students in Egypt, building sustainable open-access services that reduce barriers regardless of a student’s governorate or school system.
-        </p>
-      </div>
-
-      <div class="bg-[#0C1636] border-l-4 border-[#FFB800] rounded-r-2xl p-6 border-y border-r border-white/10">
-        <div class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Values</div>
-        <p class="mt-2 text-slate-200 leading-relaxed">
-          Our values center around building a supportive family for all students. We believe that <strong>"زكاة العلم نشره"</strong> — sharing knowledge is a responsibility, and standout students are defined by curiosity, initiative, and perseverance rather than grades alone.
-        </p>
-      </div>
-    </div>
-
-    <div class="mt-12 bg-[#0C1636] border border-white/10 rounded-2xl p-8">
-      <h2 class="font-['Exo_2'] font-bold text-2xl">Open to Every Educational System</h2>
-      <p class="mt-2 text-sm text-slate-300 leading-relaxed">
-        You do <strong>not</strong> need to attend a STEM school to benefit from TF Unions. Whether you study in Thanaweya Amma, STEM High Schools, Azhar, IGCSE, American Diploma, Preparatory School, or University, a single TF Unions Passport gives you equal access to every service we build.
+  <section class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="bg-[#F5F5F7] rounded-[20px] p-7">
+      <div class="text-[13px] text-[#6E6E73]">Mission</div>
+      <h2 class="mt-2 text-[22px] font-bold tracking-[-0.4px] text-[#1D1D1F]">Answer before they ask</h2>
+      <p class="mt-2 text-[15px] leading-[1.5] text-[#6E6E73]">
+        Give standout students across all 27 Egyptian governorates the tools, university pathways, and research roadmaps they need—before they even know which questions to ask.
       </p>
-      <div class="mt-6 flex gap-4">
-        <a href="/charter" class="text-xs font-bold text-[#FFB800] hover:underline">Read the Organizational Charter →</a>
-        <a href="/team" class="text-xs font-bold text-blue-300 hover:underline">Meet the Founders &amp; Contributors →</a>
+    </div>
+    <div class="bg-[#F5F5F7] rounded-[20px] p-7">
+      <div class="text-[13px] text-[#6E6E73]">Core Ethos</div>
+      <h2 class="mt-2 text-[22px] font-bold tracking-[-0.4px] text-[#1D1D1F]">Sharing knowledge is a responsibility</h2>
+      <p class="mt-2 text-[15px] leading-[1.5] text-[#6E6E73]">
+        Built by students and alumni for students. Every tool is free of charge, free of advertisements, and open to every educational system in Egypt.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-16">
+    <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Principles</h2>
+    <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
+      <div class="py-4 flex items-center justify-between">
+        <div>
+          <div class="text-[16px] font-semibold text-[#1D1D1F]">Open to every educational system</div>
+          <div class="text-[14px] text-[#6E6E73] mt-0.5">Thanaweya Amma, STEM schools, IGCSE, American Diploma, Azhar, Prep, and universities.</div>
+        </div>
+        <span class="text-[13px] text-[#6E6E73] shrink-0">01</span>
+      </div>
+      <div class="py-4 flex items-center justify-between">
+        <div>
+          <div class="text-[16px] font-semibold text-[#1D1D1F]">Ambition over grades</div>
+          <div class="text-[14px] text-[#6E6E73] mt-0.5">Standout students are defined by curiosity, initiative, and meaningful goals.</div>
+        </div>
+        <span class="text-[13px] text-[#6E6E73] shrink-0">02</span>
+      </div>
+      <div class="py-4 flex items-center justify-between">
+        <div>
+          <div class="text-[16px] font-semibold text-[#1D1D1F]">Zero recurring SaaS overhead</div>
+          <div class="text-[14px] text-[#6E6E73] mt-0.5">Self-hosted infrastructure and 100% open-book financial transparency.</div>
+        </div>
+        <span class="text-[13px] text-[#6E6E73] shrink-0">03</span>
       </div>
     </div>
   </section>

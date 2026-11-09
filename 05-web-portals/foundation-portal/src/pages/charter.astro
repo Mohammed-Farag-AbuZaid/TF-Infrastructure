@@ -1,48 +1,44 @@
-﻿---
+---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Organizational Charter & Governance">
-  <section class="max-w-4xl mx-auto px-6 py-16">
-    <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Governance &amp; Principles</span>
-    <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">The TF Unions Charter</h1>
-    <p class="mt-4 text-slate-300 text-base leading-relaxed">
-      This charter codifies how TF Unions operates, selects projects, safeguards student data, and maintains 100% financial transparency.
+<BaseLayout title="Charter" backLabel="TF Unions" backHref="/">
+  <section class="mt-14 sm:mt-20 max-w-[720px]">
+    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
+      Non-profit charter.
+    </h1>
+    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
+      The governance rules, student data protections, and financial commitments of TF Unions.
     </p>
+  </section>
 
-    <div class="mt-10 space-y-8 text-sm text-slate-300 leading-relaxed">
-      <article class="bg-[#0C1636] border border-white/10 rounded-2xl p-7">
-        <h2 class="font-['Exo_2'] font-bold text-xl text-white">Article I â€” Non-Profit Mandate &amp; Zero-Cost Access</h2>
-        <p class="mt-2">
-          TF Unions is an independent non-profit educational initiative. Our primary metric is student impact, never profit. Core student-facing access to TF News, TF Guide, and TF Connect is and will remain free of charge.
-        </p>
-      </article>
-
-      <article class="bg-[#0C1636] border border-white/10 rounded-2xl p-7">
-        <h2 class="font-['Exo_2'] font-bold text-xl text-white">Article II â€” Project Selection Criteria</h2>
-        <p class="mt-2">
-          Before launching any seasonal tool or platform, the Founders and Core Team evaluate:
-        </p>
-        <ul class="list-disc list-inside mt-3 space-y-1.5 text-slate-300">
-          <li><strong>Real Student Pain Point:</strong> Does it solve a verified, recurring barrier for Egyptian students?</li>
-          <li><strong>Zero-Overhead Sustainability:</strong> Can it run reliably on our consolidated open-source infrastructure without recurring bloat?</li>
-          <li><strong>Community Upvotes:</strong> Proposals submitted on <a href="/ideas" class="text-[#FFB800] underline">/ideas</a> with strong student demand are prioritized each season.</li>
-        </ul>
-      </article>
-
-      <article class="bg-[#0C1636] border border-white/10 rounded-2xl p-7">
-        <h2 class="font-['Exo_2'] font-bold text-xl text-white">Article III â€” Verified Merit &amp; Credential Integrity</h2>
-        <p class="mt-2">
-          Every volunteer certificate issued by TF Unions is backed by logged contribution hours in our internal HR pipeline and assigned a permanent cryptographic serial code (`TFU-YYYY-XXXXXX`) verifiable at <a href="https://verify.tfunions.com" class="text-[#FFB800] underline">verify.tfunions.com</a>.
-        </p>
-      </article>
-
-      <article class="bg-[#0C1636] border border-white/10 rounded-2xl p-7">
-        <h2 class="font-['Exo_2'] font-bold text-xl text-white">Article IV â€” 100% Open-Book Financial Ledger</h2>
-        <p class="mt-2">
-          Every pound or dollar contributed by community donors, sponsors, or the co-founders is recorded alongside every server and domain invoice on <a href="/transparency" class="text-[#FFB800] underline">tfunions.com/transparency</a>.
-        </p>
-      </article>
+  <section class="mt-12 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
+    <div class="py-6">
+      <div class="text-[12px] text-[#6E6E73]">Article I</div>
+      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Independent non-profit mandate</h2>
+      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
+        TF Unions operates strictly as a non-profit educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled.
+      </p>
+    </div>
+    <div class="py-6">
+      <div class="text-[12px] text-[#6E6E73]">Article II</div>
+      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Student privacy &amp; single account</h2>
+      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
+        Student identity records are hosted on our dedicated infrastructure and are never sold or shared with third-party advertisers.
+      </p>
+    </div>
+    <div class="py-6">
+      <div class="text-[12px] text-[#6E6E73]">Article III</div>
+      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Verifiable volunteer credentials</h2>
+      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
+        Every volunteer and contributor certificate issued by TF Unions carries a permanent serial code verifiable at <a href="https://verify.tfunions.com" class="text-[#002583] font-medium hover:underline">verify.tfunions.com</a>.
+      </p>
+    </div>
+    <div class="py-6">
+      <div class="text-[12px] text-[#6E6E73]">Article IV</div>
+      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Open-book ledger</h2>
+      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
+        All incoming community contributions and outgoing server or program expenses are recorded publicly on the <a href="/transparency" class="text-[#002583] font-medium hover:underline">Open Ledger</a>.
+      </p>
     </div>
   </section>
 </BaseLayout>
-
