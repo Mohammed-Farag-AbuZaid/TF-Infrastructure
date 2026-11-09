@@ -1,98 +1,571 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import teamData from '../data/team-nodes.json';
 ---
-<BaseLayout title="Team" backLabel="TF Unions" backHref="/">
-  <section class="mt-14 sm:mt-20 max-w-[720px]">
-    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
-      Team &amp; contributors.
+<BaseLayout title="Team & Organizational Network" backLabel="TF Unions" backHref="/">
+  <!-- Header Title -->
+  <section class="mt-10 sm:mt-16 max-w-[800px]">
+    <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#F5F5F7] rounded-full text-[12px] font-semibold text-[#002583] mb-3">
+      <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+      Interactive Organizational Timeline
+    </div>
+    <h1 class="text-[34px] sm:text-[48px] font-bold tracking-[-1.5px] leading-[1.08] text-[#1D1D1F]">
+      Team &amp; Contributor Constellation.
     </h1>
-    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
-      The co-founders and seasonal contributors building the TF Unions ecosystem.
+    <p class="mt-3 text-[16px] sm:text-[17px] leading-[1.5] text-[#6E6E73]">
+      Explore the evolution of TF Unions from inception in <strong>October 2025</strong> to our nationwide network of 71 student leaders in <strong>November 2026</strong>.
     </p>
   </section>
 
-  <!-- Founders Tiles -->
-  <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div class="bg-[#F5F5F7] rounded-[20px] p-7 flex flex-col justify-between min-h-[190px]">
-      <div>
-        <div class="text-[13px] text-[#6E6E73]">Co-Founder</div>
-        <h2 class="mt-1 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Mohammed Farag</h2>
-        <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
-          Founder &amp; Principal Systems Architect
-        </p>
-      </div>
-      <div class="mt-6 flex items-center justify-between text-[13px]">
-        <span class="text-[#6E6E73]">Founding Cohort</span>
-        <a href="https://github.com/Mohammed-Farag-AbuZaid" target="_blank" rel="noreferrer" class="text-[#002583] font-semibold hover:underline">
-          GitHub ›
-        </a>
-      </div>
-    </div>
-
-    <div class="bg-[#F5F5F7] rounded-[20px] p-7 flex flex-col justify-between min-h-[190px]">
-      <div>
-        <div class="text-[13px] text-[#6E6E73]">Co-Founder</div>
-        <h2 class="mt-1 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Mohammed Abdelghany</h2>
-        <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
-          Co-Founder &amp; Head of Ecosystem Operations
-        </p>
-      </div>
-      <div class="mt-6 flex items-center justify-between text-[13px]">
-        <span class="text-[#6E6E73]">Founding Cohort</span>
-        <a href="https://www.linkedin.com/company/tfunions" target="_blank" rel="noreferrer" class="text-[#002583] font-semibold hover:underline">
-          LinkedIn ›
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Live Directory from Baserow -->
-  <section class="mt-16">
-    <div class="flex items-center justify-between">
-      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Directory</h2>
-      <a href="/volunteer" class="text-[14px] font-semibold text-[#002583] hover:underline">Apply to join ›</a>
-    </div>
-    <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70" id="team-directory-rows">
-      <div class="py-4 flex items-center justify-between">
-        <div>
-          <div class="text-[12px] text-[#6E6E73]">Founders</div>
-          <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Mohammed Farag</div>
+  <!-- Main Interactive Graph Container (As sketched) -->
+  <section class="mt-8 bg-white border border-[#D2D2D7]/80 rounded-[24px] shadow-sm overflow-hidden">
+    <!-- Top Interactive Timeline Strip (Matches Hand-Drawn Sketch) -->
+    <div class="p-6 sm:p-8 bg-[#FBFBFD] border-b border-[#D2D2D7]/70">
+      <div class="flex items-center justify-between text-[13px] font-bold uppercase tracking-wider text-[#1D1D1F] mb-3">
+        <span class="flex items-center gap-2">
+          <span class="text-[#002583]">OCT 2025</span>
+          <span class="text-[#86868B] font-normal">(Inception)</span>
+        </span>
+        <div class="flex items-center gap-3">
+          <button
+            id="play-btn"
+            type="button"
+            class="px-3 py-1 bg-white border border-[#D2D2D7] rounded-full text-[12px] font-semibold text-[#1D1D1F] hover:bg-[#F5F5F7] transition flex items-center gap-1.5 shadow-2xs"
+          >
+            <span id="play-icon">▶</span>
+            <span id="play-label">Play Timeline</span>
+          </button>
+          <span class="px-2.5 py-0.5 bg-[#002583]/10 text-[#002583] text-[11px] font-bold rounded-full" id="active-count-badge">
+            2 Members Active
+          </span>
         </div>
-        <span class="text-[13px] text-[#6E6E73]">Founder &amp; Principal Systems Architect</span>
+        <span class="flex items-center gap-2">
+          <span class="text-[#002583]">NOV 2026</span>
+          <span class="text-[#86868B] font-normal">(71 Members)</span>
+        </span>
       </div>
-      <div class="py-4 flex items-center justify-between">
-        <div>
-          <div class="text-[12px] text-[#6E6E73]">Founders</div>
-          <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Mohammed Abdelghany</div>
+
+      <!-- Scrubber Track & Thumb -->
+      <div class="relative py-2">
+        <input
+          id="timeline-slider"
+          type="range"
+          min="0"
+          max="4"
+          step="1"
+          value="4"
+          class="w-full h-2.5 bg-[#E5E5EA] rounded-lg appearance-none cursor-pointer accent-[#002583] focus:outline-none"
+        />
+        <!-- Timeline Tick Marks -->
+        <div class="flex justify-between text-[11px] text-[#86868B] mt-2 font-medium">
+          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(0)">Oct 2025<br/><strong class="text-[#1D1D1F]">Founders</strong></span>
+          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(1)">Jan 2026<br/><strong class="text-[#1D1D1F]">Heads</strong></span>
+          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(2)">Apr 2026<br/><strong class="text-[#1D1D1F]">Vice Heads</strong></span>
+          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(3)">Jul 2026<br/><strong class="text-[#1D1D1F]">Committees</strong></span>
+          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(4)">Nov 2026<br/><strong class="text-[#1D1D1F]">Full Network</strong></span>
         </div>
-        <span class="text-[13px] text-[#6E6E73]">Co-Founder &amp; Head of Ecosystem Operations</span>
+      </div>
+
+      <!-- Active Cohort Status Banner -->
+      <div class="mt-4 pt-3 border-t border-[#D2D2D7]/50 flex flex-wrap items-center justify-between gap-3 text-[13px]">
+        <div>
+          <span class="text-[#86868B]">Active Timeline Period:</span>
+          <strong id="cohort-desc" class="ml-1 text-[#1D1D1F]">November 2026 — Nationwide Ecosystem Scale</strong>
+        </div>
+        <div class="text-[12px] text-[#86868B]">
+          Drag slider or click any circle on the graph to inspect member profiles
+        </div>
       </div>
     </div>
-  </section>
 
-  <script is:inline>
-    (async () => {
-      try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/team-directory');
-        const data = await res.json();
-        const members = (data.members || []).filter((m) => m.display_name);
-        if (members.length > 0) {
-          const box = document.getElementById('team-directory-rows');
-          box.innerHTML = members
-            .map(
-              (m) => `
-              <div class="py-4 flex items-center justify-between">
-                <div>
-                  <div class="text-[12px] text-[#6E6E73]">${m.season_badge || 'Founding Cohort'}</div>
-                  <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">${m.display_name}</div>
-                </div>
-                <span class="text-[13px] text-[#6E6E73]">${m.role_title || 'Contributor'}</span>
+    <!-- Toolbar: Filters & Search -->
+    <div class="px-6 py-3.5 bg-white border-b border-[#D2D2D7]/60 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-1.5" id="team-filter-buttons">
+        <button type="button" data-team="All" class="team-btn active px-3 py-1 rounded-full text-[12px] font-semibold bg-[#1D1D1F] text-white transition">All Teams (71)</button>
+        <button type="button" data-team="Founders" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Founders (2)</button>
+        <button type="button" data-team="HR Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">HR Team (26)</button>
+        <button type="button" data-team="Marketing Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Marketing (12)</button>
+        <button type="button" data-team="PR Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">PR &amp; Outreach (17)</button>
+        <button type="button" data-team="Social Media Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Social Media (14)</button>
+      </div>
+
+      <div class="relative w-full sm:w-64">
+        <input
+          id="graph-search"
+          type="text"
+          placeholder="Search member or school..."
+          class="w-full px-3 py-1.5 bg-[#F5F5F7] border border-[#D2D2D7] rounded-lg text-[13px] text-[#1D1D1F] placeholder-[#86868B] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002583]"
+        />
+      </div>
+    </div>
+
+    <!-- The Interactive Visual Constellation (SVG Graph) -->
+    <div class="relative bg-[#FAFAFC] overflow-hidden" style="min-height: 600px;">
+      <!-- Zoom Controls -->
+      <div class="absolute top-4 right-4 z-10 flex flex-col gap-1.5 bg-white/90 backdrop-blur-md p-1.5 rounded-xl border border-[#D2D2D7] shadow-sm">
+        <button id="btn-zoom-in" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] font-bold text-[16px]" title="Zoom In">+</button>
+        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] font-bold text-[16px]" title="Zoom Out">−</button>
+        <button id="btn-zoom-reset" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] text-[11px] font-semibold" title="Reset View">100%</button>
+      </div>
+
+      <!-- Graph Canvas Container -->
+      <div id="graph-viewport" class="w-full h-full cursor-grab active:cursor-grabbing select-none" style="height: 620px;">
+        <svg id="network-svg" viewBox="0 0 1000 680" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- Founder Gradients -->
+            <linearGradient id="grad-founder" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#002583" />
+              <stop offset="100%" stop-color="#001850" />
+            </linearGradient>
+            <linearGradient id="grad-hr" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8B5CF6" />
+              <stop offset="100%" stop-color="#6D28D9" />
+            </linearGradient>
+            <linearGradient id="grad-marketing" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10B981" />
+              <stop offset="100%" stop-color="#059669" />
+            </linearGradient>
+            <linearGradient id="grad-pr" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0EA5E9" />
+              <stop offset="100%" stop-color="#0284C7" />
+            </linearGradient>
+            <linearGradient id="grad-social" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F59E0B" />
+              <stop offset="100%" stop-color="#D97706" />
+            </linearGradient>
+            <!-- Drop Shadow Filter -->
+            <filter id="node-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12" />
+            </filter>
+            <filter id="glow-founder" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#002583" flood-opacity="0.35" />
+            </filter>
+          </defs>
+
+          <!-- Dynamic SVG Group for Zoom/Pan -->
+          <g id="graph-content">
+            <!-- Edges / Links Layer -->
+            <g id="edges-layer"></g>
+
+            <!-- Hub Labels / Anchors Layer -->
+            <g id="hubs-layer">
+              <!-- HR Hub Anchor -->
+              <circle cx="230" cy="170" r="32" fill="#8B5CF6" fill-opacity="0.08" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="230" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#6D28D9" letter-spacing="0.5">HR TEAM</text>
+
+              <!-- PR Hub Anchor -->
+              <circle cx="770" cy="170" r="32" fill="#0EA5E9" fill-opacity="0.08" stroke="#0EA5E9" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="770" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#0284C7" letter-spacing="0.5">PR &amp; OUTREACH</text>
+
+              <!-- Marketing Hub Anchor -->
+              <circle cx="250" cy="480" r="32" fill="#10B981" fill-opacity="0.08" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="250" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#059669" letter-spacing="0.5">MARKETING</text>
+
+              <!-- Social Media Hub Anchor -->
+              <circle cx="750" cy="480" r="32" fill="#F59E0B" fill-opacity="0.08" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="750" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#D97706" letter-spacing="0.5">SOCIAL MEDIA</text>
+            </g>
+
+            <!-- Nodes Layer -->
+            <g id="nodes-layer"></g>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Floating Member Inspector Card (Appears on click/hover) -->
+      <div
+        id="member-inspector"
+        class="hidden absolute bottom-4 left-4 right-4 sm:right-auto sm:w-[420px] bg-white/95 backdrop-blur-md border border-[#D2D2D7] rounded-2xl p-5 shadow-xl transition-all duration-200 z-20"
+      >
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div id="insp-avatar" class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-[16px] shadow-sm">
+              MF
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 id="insp-name" class="font-bold text-[18px] text-[#1D1D1F] leading-tight">Mohammed Farag</h3>
+                <span id="insp-team-badge" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#F5F5F7] text-[#1D1D1F]">Founders</span>
               </div>
-            `
-            )
-            .join('');
+              <div id="insp-role" class="text-[13px] font-semibold text-[#002583] mt-0.5">Co-Founder &amp; Principal Systems Architect</div>
+            </div>
+          </div>
+          <button id="close-inspector-btn" type="button" class="text-[#86868B] hover:text-[#1D1D1F] p-1 text-[16px]">&times;</button>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-[#E5E5EA] text-[13px] space-y-1.5 text-[#52555E]">
+          <div class="flex items-center justify-between">
+            <span class="text-[#86868B]">School / University:</span>
+            <strong id="insp-school" class="text-[#1D1D1F] text-right">TF Unions Core</strong>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-[#86868B]">Academic Grade:</span>
+            <span id="insp-grade" class="text-[#1D1D1F]">Founding Cohort</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-[#86868B]">Joined Timeline:</span>
+            <span id="insp-cohort" class="text-[#002583] font-semibold">Oct 2025</span>
+          </div>
+        </div>
+
+        <div class="mt-3 p-3 bg-[#F5F5F7] rounded-xl text-[12.5px] text-[#52555E] leading-relaxed" id="insp-bio">
+          Principal Systems Architect leading cloud, backend, and portal infrastructure across Egypt.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Complete Directory Table / Cards (Synchronized with Timeline) -->
+  <section class="mt-14">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight text-[#1D1D1F]">Directory Roster</h2>
+        <p class="text-[14px] text-[#6E6E73]">
+          Showing members active in the selected timeline period. Click any card to highlight on graph.
+        </p>
+      </div>
+      <div class="text-[13px] font-semibold text-[#002583]">
+        <span id="roster-count">71</span> Total Registered Members
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="member-cards-container">
+      <!-- Injected dynamically by client JS -->
+    </div>
+  </section>
+
+  <!-- Client Script for Full Interactivity -->
+  <script is:inline define:vars={{ teamData }}>
+    const ALL_MEMBERS = teamData;
+
+    // Timeline step metadata
+    const STEPS = [
+      { key: '2025-10', label: 'Oct 2025', desc: 'October 2025 — Co-Founders Inception (Mohammed Farag & Mohammed Abdelghany)' },
+      { key: '2026-01', label: 'Jan 2026', desc: 'January 2026 — Executive Heads of HR, Marketing, PR & Social Media' },
+      { key: '2026-04', label: 'Apr 2026', desc: 'April 2026 — Vice Heads & Regional Guild Leaders' },
+      { key: '2026-07', label: 'Jul 2026', desc: 'July 2026 — Interview Committees, Outreach Leads & Managers' },
+      { key: '2026-11', label: 'Nov 2026', desc: 'November 2026 — Nationwide Scale (71 Active Members Across Egypt)' }
+    ];
+
+    let currentStepIndex = 4;
+    let selectedTeam = 'All';
+    let searchQuery = '';
+    let selectedMemberId = null;
+    let isPlaying = false;
+    let playInterval = null;
+
+    // Zoom/Pan State
+    let zoomLevel = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    const timelineSlider = document.getElementById('timeline-slider');
+    const cohortDesc = document.getElementById('cohort-desc');
+    const activeCountBadge = document.getElementById('active-count-badge');
+    const rosterCount = document.getElementById('roster-count');
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const playLabel = document.getElementById('play-label');
+    const graphSearch = document.getElementById('graph-search');
+    const graphContent = document.getElementById('graph-content');
+    const nodesLayer = document.getElementById('nodes-layer');
+    const edgesLayer = document.getElementById('edges-layer');
+    const cardsContainer = document.getElementById('member-cards-container');
+    const inspector = document.getElementById('member-inspector');
+    const closeInspectorBtn = document.getElementById('close-inspector-btn');
+
+    // Color definitions per team
+    const TEAM_COLORS = {
+      'Founders': { bg: '#002583', fill: 'url(#grad-founder)', stroke: '#001850', badge: 'bg-[#002583] text-white' },
+      'HR Team': { bg: '#8B5CF6', fill: 'url(#grad-hr)', stroke: '#6D28D9', badge: 'bg-[#8B5CF6]/15 text-[#6D28D9]' },
+      'Marketing Team': { bg: '#10B981', fill: 'url(#grad-marketing)', stroke: '#059669', badge: 'bg-[#10B981]/15 text-[#059669]' },
+      'PR Team': { bg: '#0EA5E9', fill: 'url(#grad-pr)', stroke: '#0284C7', badge: 'bg-[#0EA5E9]/15 text-[#0284C7]' },
+      'Social Media Team': { bg: '#F59E0B', fill: 'url(#grad-social)', stroke: '#D97706', badge: 'bg-[#F59E0B]/15 text-[#D97706]' }
+    };
+
+    function isMemberActiveAtStep(member, stepIdx) {
+      const stepKey = STEPS[stepIdx].key;
+      return member.cohortDate <= stepKey;
+    }
+
+    function getFilteredMembers() {
+      return ALL_MEMBERS.filter(m => {
+        const matchesTimeline = isMemberActiveAtStep(m, currentStepIndex);
+        const matchesTeam = selectedTeam === 'All' || m.team === selectedTeam;
+        const q = searchQuery.toLowerCase().trim();
+        const matchesQuery = !q ||
+          m.name.toLowerCase().includes(q) ||
+          (m.arabicName && m.arabicName.includes(q)) ||
+          m.role.toLowerCase().includes(q) ||
+          m.school.toLowerCase().includes(q);
+        return matchesTimeline && matchesTeam && matchesQuery;
+      });
+    }
+
+    function renderGraph() {
+      const activeMembers = ALL_MEMBERS.filter(m => isMemberActiveAtStep(m, currentStepIndex));
+      const activeIdSet = new Set(activeMembers.map(m => m.id));
+      const activeCount = activeMembers.length;
+
+      // Update counters
+      activeCountBadge.textContent = `${activeCount} Members Active`;
+      cohortDesc.textContent = STEPS[currentStepIndex].desc;
+
+      // Render Edges
+      let edgesHtml = '';
+      activeMembers.forEach(m => {
+        if (m.parent && activeIdSet.has(m.parent)) {
+          const parent = ALL_MEMBERS.find(p => p.id === m.parent);
+          if (parent) {
+            const isFounderLink = m.id === 'founder-1' && m.parent === 'founder-2';
+            const isHighlighted = selectedMemberId === m.id || selectedMemberId === m.parent;
+            edgesHtml += `
+              <line
+                x1="${m.x}" y1="${m.y}"
+                x2="${parent.x}" y2="${parent.y}"
+                stroke="${isFounderLink ? '#002583' : (isHighlighted ? '#1D1D1F' : '#D2D2D7')}"
+                stroke-width="${isFounderLink ? '3' : (isHighlighted ? '2' : '1.2')}"
+                stroke-dasharray="${isFounderLink ? 'none' : 'none'}"
+                stroke-opacity="${isHighlighted ? '1' : '0.6'}"
+                class="transition-all duration-300"
+              />
+            `;
+          }
         }
-      } catch {}
-    })();
+      });
+      edgesLayer.innerHTML = edgesHtml;
+
+      // Render Nodes
+      let nodesHtml = '';
+      activeMembers.forEach(m => {
+        const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
+        const isSelected = selectedMemberId === m.id;
+        const isFounder = m.tier === 0;
+        const initials = m.name.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+
+        nodesHtml += `
+          <g
+            class="node-group cursor-pointer transition-all duration-300"
+            data-id="${m.id}"
+            onclick="inspectMember('${m.id}')"
+          >
+            <!-- Glowing selection ring -->
+            ${isSelected ? `
+              <circle cx="${m.x}" cy="${m.y}" r="${m.r + 7}" fill="none" stroke="#002583" stroke-width="2.5" class="animate-pulse" />
+            ` : ''}
+
+            <!-- Main Circle -->
+            <circle
+              cx="${m.x}"
+              cy="${m.y}"
+              r="${m.r}"
+              fill="${colors.fill}"
+              stroke="#FFFFFF"
+              stroke-width="${isFounder ? '3' : '2'}"
+              filter="${isFounder ? 'url(#glow-founder)' : 'url(#node-shadow)'}"
+              class="hover:opacity-90"
+            />
+
+            <!-- Initials / Text inside node -->
+            <text
+              x="${m.x}"
+              y="${m.y + (m.r > 16 ? 4 : 3)}"
+              text-anchor="middle"
+              fill="#FFFFFF"
+              font-size="${m.r > 20 ? 11 : (m.r > 14 ? 9 : 8)}"
+              font-weight="700"
+              pointer-events="none"
+            >
+              ${initials}
+            </text>
+
+            <!-- Name Label below node -->
+            <text
+              x="${m.x}"
+              y="${m.y + m.r + 13}"
+              text-anchor="middle"
+              fill="#1D1D1F"
+              font-size="${isFounder ? 12 : 10}"
+              font-weight="${isFounder ? 700 : 600}"
+              class="select-none pointer-events-none"
+            >
+              ${m.name.split(' ')[0]} ${isFounder ? m.name.split(' ')[1] || '' : ''}
+            </text>
+          </g>
+        `;
+      });
+      nodesLayer.innerHTML = nodesHtml;
+    }
+
+    function renderRoster() {
+      const filtered = getFilteredMembers();
+      rosterCount.textContent = filtered.length;
+
+      cardsContainer.innerHTML = filtered.map(m => {
+        const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
+        const isSelected = selectedMemberId === m.id;
+        const initials = m.name.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+
+        return `
+          <div
+            class="p-5 rounded-2xl border transition-all cursor-pointer ${
+              isSelected
+                ? 'bg-[#002583]/5 border-[#002583] shadow-md ring-2 ring-[#002583]'
+                : 'bg-white border-[#D2D2D7]/70 hover:border-[#86868B] shadow-2xs'
+            }"
+            onclick="inspectMember('${m.id}')"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-[14px]" style="background-color: ${colors.bg};">
+                  ${initials}
+                </div>
+                <div>
+                  <h4 class="font-bold text-[16px] text-[#1D1D1F] leading-tight">${m.name}</h4>
+                  <div class="text-[12.5px] font-semibold text-[#002583] mt-0.5">${m.role}</div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold ${colors.badge}">${m.team.replace(' Team', '')}</span>
+            </div>
+
+            <div class="mt-3 pt-2.5 border-t border-[#F0F0F2] text-[12px] text-[#6E6E73] flex items-center justify-between">
+              <span>${m.school || 'TF Unions'}</span>
+              <span class="font-medium text-[#1D1D1F]">${m.cohortLabel || m.grade}</span>
+            </div>
+
+            <p class="mt-2 text-[12px] text-[#52555E] line-clamp-2 leading-relaxed">
+              ${m.bio}
+            </p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.inspectMember = function(id) {
+      selectedMemberId = id;
+      const m = ALL_MEMBERS.find(item => item.id === id);
+      if (!m) return;
+
+      const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
+      const initials = m.name.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+
+      document.getElementById('insp-name').textContent = m.name;
+      document.getElementById('insp-role').textContent = m.role;
+      document.getElementById('insp-team-badge').textContent = m.team;
+      document.getElementById('insp-school').textContent = m.school || 'TF Unions';
+      document.getElementById('insp-grade').textContent = `${m.grade} (Age ${m.age || 17})`;
+      document.getElementById('insp-cohort').textContent = m.cohortLabel;
+      document.getElementById('insp-bio').textContent = m.bio;
+
+      const avatar = document.getElementById('insp-avatar');
+      avatar.textContent = initials;
+      avatar.style.backgroundColor = colors.bg;
+
+      inspector.classList.remove('hidden');
+      renderGraph();
+      renderRoster();
+    };
+
+    window.setStep = function(idx) {
+      currentStepIndex = parseInt(idx);
+      timelineSlider.value = currentStepIndex;
+      renderGraph();
+      renderRoster();
+    };
+
+    timelineSlider.addEventListener('input', (e) => {
+      setStep(e.target.value);
+    });
+
+    closeInspectorBtn.addEventListener('click', () => {
+      inspector.classList.add('hidden');
+      selectedMemberId = null;
+      renderGraph();
+      renderRoster();
+    });
+
+    // Team Filter Buttons
+    document.querySelectorAll('#team-filter-buttons .team-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#team-filter-buttons .team-btn').forEach(b => {
+          b.className = 'team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition';
+        });
+        btn.className = 'team-btn active px-3 py-1 rounded-full text-[12px] font-semibold bg-[#1D1D1F] text-white transition';
+        selectedTeam = btn.dataset.team;
+        renderRoster();
+      });
+    });
+
+    graphSearch.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderRoster();
+    });
+
+    // Auto Play Timeline
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        clearInterval(playInterval);
+        isPlaying = false;
+        playIcon.textContent = '▶';
+        playLabel.textContent = 'Play Timeline';
+      } else {
+        isPlaying = true;
+        playIcon.textContent = '⏸';
+        playLabel.textContent = 'Pause';
+        playInterval = setInterval(() => {
+          currentStepIndex = (currentStepIndex + 1) % STEPS.length;
+          setStep(currentStepIndex);
+        }, 1800);
+      }
+    });
+
+    // Zoom & Pan Logic
+    function updateTransform() {
+      graphContent.setAttribute('transform', `translate(${panX}, ${panY}) scale(${zoomLevel})`);
+    }
+
+    document.getElementById('btn-zoom-in').addEventListener('click', () => {
+      zoomLevel = Math.min(zoomLevel + 0.2, 2.2);
+      updateTransform();
+    });
+
+    document.getElementById('btn-zoom-out').addEventListener('click', () => {
+      zoomLevel = Math.max(zoomLevel - 0.2, 0.6);
+      updateTransform();
+    });
+
+    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+      zoomLevel = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+    });
+
+    const viewport = document.getElementById('graph-viewport');
+    viewport.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.node-group')) return;
+      isDragging = true;
+      startX = e.clientX - panX;
+      startY = e.clientY - panY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Initial render
+    renderGraph();
+    renderRoster();
   </script>
 </BaseLayout>
