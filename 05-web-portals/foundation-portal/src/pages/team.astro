@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 /**
@@ -43,7 +43,7 @@ const baserowTableId = import.meta.env.BASEROW_TABLE_PUBLIC_TEAM_DIRECTORY;
 if (baserowToken && baserowTableId) {
   try {
     const res = await fetch(
-      `https://ops.tfunions.org/api/database/rows/table/${baserowTableId}/?user_field_names=true&filter__is_public__equal=true`,
+      `https://ops.tfunions.com/api/database/rows/table/${baserowTableId}/?user_field_names=true&filter__is_public__equal=true`,
       { headers: { Authorization: `Token ${baserowToken}` } }
     );
     if (res.ok) {
@@ -78,7 +78,7 @@ const contributors = members.filter((m) => m.category !== 'Founders');
         href="/volunteer"
         class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition"
       >
-        Join Next Volunteer Cohort →
+        Join Next Volunteer Cohort â†’
       </a>
     </div>
 
@@ -102,7 +102,7 @@ const contributors = members.filter((m) => m.category !== 'Founders');
             <p class="text-xs text-slate-300 mt-0.5">{f.role_title}</p>
             {f.github_url && (
               <a href={f.github_url} target="_blank" rel="noreferrer" class="inline-block mt-2 text-xs text-blue-300 hover:underline">
-                GitHub Profile ↗
+                GitHub Profile â†—
               </a>
             )}
           </div>
@@ -118,7 +118,7 @@ const contributors = members.filter((m) => m.category !== 'Founders');
           Accepted seasonal volunteers are automatically published here via n8n Workflow #2 as soon as their onboarding completes.
         </p>
         <a href="/volunteer" class="inline-block mt-4 text-xs font-bold text-[#FFB800] hover:underline">
-          Apply for an open Season 2 track →
+          Apply for an open Season 2 track â†’
         </a>
       </div>
     ) : (
@@ -136,3 +136,4 @@ const contributors = members.filter((m) => m.category !== 'Founders');
     )}
   </section>
 </BaseLayout>
+

@@ -1,9 +1,9 @@
-// 03-sso-auth-hub/flutter-sdk/tf_sso_client.dart
+﻿// 03-sso-auth-hub/flutter-sdk/tf_sso_client.dart
 // =============================================================================
-// TF Unions — Unified Single Sign-On (SSO) Hydration Helper for Flutter Web
+// TF Unions â€” Unified Single Sign-On (SSO) Hydration Helper for Flutter Web
 // Designed for drop-in integration into:
-//   - TF News (`news.tfunions.org` -> `lib/authentication/authentication_repository.dart`)
-//   - TF Connect (`connect.tfunions.org`)
+//   - TF News (`news.tfunions.com` -> `lib/authentication/authentication_repository.dart`)
+//   - TF Connect (`connect.tfunions.com`)
 //   - STEM Union / STEM Shop
 // =============================================================================
 
@@ -37,9 +37,9 @@ class TfUserHint {
 class TfSsoClient {
   TfSsoClient._();
 
-  static const String authHubOrigin = 'https://auth.tfunions.org';
+  static const String authHubOrigin = 'https://auth.tfunions.com';
 
-  /// Reads the non-sensitive `tf_user_hint` cookie scoped to `.tfunions.org`
+  /// Reads the non-sensitive `tf_user_hint` cookie scoped to `.tfunions.com`
   /// so headers/navbars can render the logged-in user's name immediately.
   static TfUserHint? readUserHintCookie() {
     if (!kIsWeb) return null;
@@ -66,8 +66,8 @@ class TfSsoClient {
   /// Call this in `main()` or `AuthenticationRepository.screenRedirect()` before
   /// checking `FirebaseAuth.instance.currentUser`.
   ///
-  /// If `currentUser` is null on `news.tfunions.org` or `connect.tfunions.org`,
-  /// but `.tfunions.org` has an active `tf_user_hint` cookie, this exchanges the
+  /// If `currentUser` is null on `news.tfunions.com` or `connect.tfunions.com`,
+  /// but `.tfunions.com` has an active `tf_user_hint` cookie, this exchanges the
   /// `HttpOnly` `tf_session` cookie for a short-lived Firebase Custom Token and
   /// signs in silently in the background.
   static Future<User?> ensureHydratedFromRootCookie() async {
@@ -102,7 +102,7 @@ class TfSsoClient {
     return null;
   }
 
-  /// Redirects the browser to `https://auth.tfunions.org/?redirect_to=<current_url>`
+  /// Redirects the browser to `https://auth.tfunions.com/?redirect_to=<current_url>`
   static void redirectToCentralLogin({String? returnUrl}) {
     if (!kIsWeb) return;
     final target = returnUrl ?? html.window.location.href;
@@ -110,7 +110,7 @@ class TfSsoClient {
     html.window.location.assign('$authHubOrigin/?redirect_to=$encoded');
   }
 
-  /// Signs out of local Firebase Auth AND clears `.tfunions.org` root session cookies
+  /// Signs out of local Firebase Auth AND clears `.tfunions.com` root session cookies
   static Future<void> signOutEverywhere() async {
     if (kIsWeb) {
       try {
@@ -126,3 +126,4 @@ class TfSsoClient {
     await FirebaseAuth.instance.signOut();
   }
 }
+

@@ -1,7 +1,7 @@
----
+﻿---
 /**
- * Official Credential & Certificate Verifier (`https://verify.tfunions.org`)
- * Queries n8n Workflow #4: `GET https://auto.tfunions.org/webhook/verify-certificate?code=TFU-2026-XXXXXX`
+ * Official Credential & Certificate Verifier (`https://verify.tfunions.com`)
+ * Queries n8n Workflow #4: `GET https://n8n.tfunions.com/tf-api/api/verify-certificate?code=TFU-2026-XXXXXX`
  */
 ---
 <!doctype html>
@@ -16,20 +16,20 @@
   </head>
   <body class="min-h-screen bg-[#070E24] text-white font-['Inter',sans-serif] flex flex-col justify-between">
     <header class="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-5xl w-full mx-auto">
-      <a href="https://tfunions.org" class="flex items-center gap-3">
+      <a href="https://tfunions.com" class="flex items-center gap-3">
         <span class="w-9 h-9 rounded-lg bg-[#002583] border border-[#FFB800]/50 flex items-center justify-center font-['Exo_2'] font-extrabold text-[#FFB800]">TF</span>
         <div>
           <span class="font-['Exo_2'] font-bold text-base">TF Unions</span>
           <span class="block text-[10px] uppercase tracking-widest text-[#FFB800]">Official Credential Registry</span>
         </div>
       </a>
-      <a href="https://tfunions.org" class="text-xs text-slate-300 hover:text-white">← Back to Foundation Portal</a>
+      <a href="https://tfunions.com" class="text-xs text-slate-300 hover:text-white">â† Back to Foundation Portal</a>
     </header>
 
     <main class="flex-1 flex items-center justify-center p-6">
       <div class="w-full max-w-xl bg-[#0C1636] border border-white/15 rounded-2xl p-8 shadow-2xl">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFB800]/15 text-[#FFB800]">
-          🎓 Public Verification Registry
+          ðŸŽ“ Public Verification Registry
         </span>
         <h1 class="font-['Exo_2'] font-extrabold text-3xl mt-3">Verify a TF Unions Certificate</h1>
         <p class="text-xs text-slate-300 mt-1">
@@ -59,10 +59,10 @@
     </main>
 
     <footer class="py-4 text-center text-xs text-slate-500">
-      TF Unions Credential Verifier • Powered by Baserow Registry &amp; Gotenberg
+      TF Unions Credential Verifier â€¢ Powered by Baserow Registry &amp; Gotenberg
     </footer>
 
-    <script src="https://tfunions.org/widgets/tf-qa-widget.js" defer></script>
+    <script src="https://tfunions.com/widgets/tf-qa-widget.js" defer></script>
     <tf-qa-widget service="Foundation_Portal"></tf-qa-widget>
 
     <script is:inline>
@@ -84,21 +84,21 @@
         resultBox.classList.remove('hidden');
 
         try {
-          const res = await fetch(`https://auto.tfunions.org/webhook/verify-certificate?code=${encodeURIComponent(clean)}`);
+          const res = await fetch(`https://n8n.tfunions.com/tf-api/api/verify-certificate?code=${encodeURIComponent(clean)}`);
           const data = await res.json();
           if (res.ok && data.valid) {
             resultBox.className = 'mt-6 rounded-2xl p-6 border bg-emerald-500/15 border-emerald-500/40 text-white';
             resultBox.innerHTML = `
               <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-1 rounded-full bg-emerald-500/30 text-emerald-200 text-[11px] font-bold">✅ AUTHENTIC & ACTIVE CREDENTIAL</span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/30 text-emerald-200 text-[11px] font-bold">âœ… AUTHENTIC & ACTIVE CREDENTIAL</span>
                 <span class="font-mono text-xs text-[#FFB800]">${data.serialCode}</span>
               </div>
               <h3 class="font-['Exo_2'] font-bold text-2xl text-white">${data.recipientName}</h3>
-              <p class="text-xs text-slate-200 mt-1">${data.credentialType} — <strong>${data.roleTitle}</strong></p>
+              <p class="text-xs text-slate-200 mt-1">${data.credentialType} â€” <strong>${data.roleTitle}</strong></p>
               <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
                 <span>Verified Hours: <strong>${data.hoursCredited} hrs</strong></span>
                 <span>Issued: <strong>${data.issueDate}</strong></span>
-                ${data.pdfUrl ? `<a href="${data.pdfUrl}" target="_blank" rel="noreferrer" class="text-[#FFB800] font-bold hover:underline">Download Official PDF ↗</a>` : ''}
+                ${data.pdfUrl ? `<a href="${data.pdfUrl}" target="_blank" rel="noreferrer" class="text-[#FFB800] font-bold hover:underline">Download Official PDF â†—</a>` : ''}
               </div>
             `;
           } else {
@@ -106,7 +106,7 @@
           }
         } catch (err) {
           resultBox.className = 'mt-6 rounded-2xl p-6 border bg-red-500/15 border-red-500/40 text-red-200 text-xs';
-          resultBox.innerHTML = `<strong>❌ Verification Failed:</strong> ${err.message || 'Certificate not found or revoked.'}`;
+          resultBox.innerHTML = `<strong>âŒ Verification Failed:</strong> ${err.message || 'Certificate not found or revoked.'}`;
         }
       }
 
@@ -123,3 +123,4 @@
     </script>
   </body>
 </html>
+

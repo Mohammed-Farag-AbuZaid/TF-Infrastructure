@@ -1,6 +1,6 @@
-/**
+﻿/**
  * WebCrypto Utilities for Firebase Admin Operations on Cloudflare Edge Workers
- * Zero Node.js dependencies — runs natively on Cloudflare Pages Functions Free Tier.
+ * Zero Node.js dependencies â€” runs natively on Cloudflare Pages Functions Free Tier.
  */
 
 export interface Env {
@@ -14,17 +14,17 @@ export interface Env {
 }
 
 const ALLOWED_ORIGINS = [
-  'https://tfunions.org',
-  'https://www.tfunions.org',
-  'https://auth.tfunions.org',
-  'https://docs.tfunions.org',
-  'https://verify.tfunions.org',
-  'https://news.tfunions.org',
-  'https://connect.tfunions.org',
-  'https://guide.tfunions.org',
+  'https://tfunions.com',
+  'https://www.tfunions.com',
+  'https://auth.tfunions.com',
+  'https://docs.tfunions.com',
+  'https://verify.tfunions.com',
+  'https://news.tfunions.com',
+  'https://connect.tfunions.com',
+  'https://guide.tfunions.com',
 ];
 
-export function isAllowedSubdomainOrigin(origin: string | null, rootDomain = 'tfunions.org'): boolean {
+export function isAllowedSubdomainOrigin(origin: string | null, rootDomain = 'tfunions.com'): boolean {
   if (!origin) return false;
   try {
     const url = new URL(origin);
@@ -37,7 +37,7 @@ export function isAllowedSubdomainOrigin(origin: string | null, rootDomain = 'tf
   }
 }
 
-export function corsHeaders(origin: string | null, rootDomain = 'tfunions.org'): Record<string, string> {
+export function corsHeaders(origin: string | null, rootDomain = 'tfunions.com'): Record<string, string> {
   const safeOrigin = isAllowedSubdomainOrigin(origin, rootDomain)
     ? origin!
     : `https://auth.${rootDomain}`;
@@ -144,3 +144,4 @@ export function parseCookies(cookieHeader: string | null): Record<string, string
   }
   return out;
 }
+

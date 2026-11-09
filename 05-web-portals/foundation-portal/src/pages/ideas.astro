@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 interface IdeaItem {
@@ -56,7 +56,7 @@ const seedIdeas: IdeaItem[] = [
                 data-item-id={idea.item_id}
                 class="upvote-btn flex flex-col items-center justify-center w-14 h-16 rounded-xl bg-[#070E24] hover:bg-[#002583] border border-[#FFB800]/40 text-[#FFB800] transition shrink-0"
               >
-                <span class="text-xs">▲</span>
+                <span class="text-xs">â–²</span>
                 <span class="font-['Exo_2'] font-extrabold text-base vote-count">{idea.upvote_count}</span>
               </button>
               <div class="flex-1">
@@ -104,7 +104,7 @@ const seedIdeas: IdeaItem[] = [
             <textarea id="i-desc" rows="4" required placeholder="What challenge does this solve for students in Egypt?" class="w-full px-3.5 py-2 rounded-xl bg-[#070E24] border border-white/15 text-xs text-white"></textarea>
           </div>
           <button type="submit" class="w-full py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition">
-            Submit to Idea Incubator →
+            Submit to Idea Incubator â†’
           </button>
         </form>
       </div>
@@ -125,13 +125,13 @@ const seedIdeas: IdeaItem[] = [
       btn.addEventListener('click', async () => {
         const uid = getCookieUid();
         if (!uid) {
-          window.location.href = 'https://auth.tfunions.org/?redirect_to=' + encodeURIComponent(window.location.href);
+          window.location.href = 'https://auth.tfunions.com/?redirect_to=' + encodeURIComponent(window.location.href);
           return;
         }
         const itemId = Number(btn.getAttribute('data-item-id'));
         const countEl = btn.querySelector('.vote-count');
         try {
-          const res = await fetch('https://auto.tfunions.org/webhook/idea-upvote', {
+          const res = await fetch('https://n8n.tfunions.com/tf-api/api/idea-upvote', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ itemId, uid }),
@@ -148,7 +148,7 @@ const seedIdeas: IdeaItem[] = [
       e.preventDefault();
       const alertEl = document.getElementById('idea-alert');
       try {
-        await fetch('https://auto.tfunions.org/webhook/qa-submit', {
+        await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -160,15 +160,16 @@ const seedIdeas: IdeaItem[] = [
             uid: getCookieUid(),
           }),
         });
-        alertEl.textContent = '✅ Idea submitted for Founder review!';
+        alertEl.textContent = 'âœ… Idea submitted for Founder review!';
         alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
         alertEl.classList.remove('hidden');
         e.target.reset();
       } catch {
-        alertEl.textContent = '⚠️ Could not submit idea right now.';
+        alertEl.textContent = 'âš ï¸ Could not submit idea right now.';
         alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-amber-500/20 text-amber-200 border border-amber-500/40';
         alertEl.classList.remove('hidden');
       }
     });
   </script>
 </BaseLayout>
+

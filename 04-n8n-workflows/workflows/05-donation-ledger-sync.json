@@ -7,7 +7,7 @@
         "path": "submit-donation",
         "responseMode": "onReceived",
         "options": {
-          "allowedOrigins": "https://tfunions.org"
+          "allowedOrigins": "https://tfunions.com"
         }
       },
       "id": "webhook-submit-donation",

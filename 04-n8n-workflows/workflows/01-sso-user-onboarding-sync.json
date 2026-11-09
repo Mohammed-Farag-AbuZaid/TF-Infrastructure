@@ -100,7 +100,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://listmonk:9000/api/subscribers",
+        "url": "http://tf_listmonk:9000/api/subscribers",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBasicAuth",
         "sendBody": true,
@@ -115,10 +115,10 @@
     },
     {
       "parameters": {
-        "fromEmail": "founders@tfunions.org",
+        "fromEmail": "founders@tfunions.com",
         "toEmail": "={{ $('Webhook (POST /webhook/user-onboard)').item.json.body.email }}",
         "subject": "Welcome to TF Unions — Your Unified Student Passport is Active!",
-        "html": "=<div style=\"font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#070E24;color:#ffffff;border-radius:12px;\"><h2 style=\"color:#FFB800;\">Welcome to TF Unions, {{ $('Webhook (POST /webhook/user-onboard)').item.json.body.fullName }}!</h2><p>Your single TF Unions Passport now unlocks the entire ecosystem:</p><ul><li><strong>TF News (news.tfunions.org):</strong> Scholarships, olympiads, internships, and 1,500+ global university admission pathways.</li><li><strong>TF Guide (guide.tfunions.org):</strong> Curated STEM & research roadmaps.</li><li><strong>TF Connect (connect.tfunions.org):</strong> Peer & senior mentorship cohorts.</li></ul><p style=\"margin-top:20px;\"><em>\"زكاة العلم نشره — Sharing knowledge is a responsibility.\"</em></p><p>— Mohammed Farag &amp; Mohammed Abdelghany<br/>Co-Founders, TF Unions</p></div>"
+        "html": "=<div style=\"font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#070E24;color:#ffffff;border-radius:12px;\"><h2 style=\"color:#FFB800;\">Welcome to TF Unions, {{ $('Webhook (POST /webhook/user-onboard)').item.json.body.fullName }}!</h2><p>Your single TF Unions Passport now unlocks the entire ecosystem:</p><ul><li><strong>TF News (news.tfunions.com):</strong> Scholarships, olympiads, internships, and 1,500+ global university admission pathways.</li><li><strong>TF Guide (guide.tfunions.com):</strong> Curated STEM & research roadmaps.</li><li><strong>TF Connect (connect.tfunions.com):</strong> Peer & senior mentorship cohorts.</li></ul><p style=\"margin-top:20px;\"><em>\"زكاة العلم نشره — Sharing knowledge is a responsibility.\"</em></p><p>— Mohammed Farag &amp; Mohammed Abdelghany<br/>Co-Founders, TF Unions</p></div>"
       },
       "id": "smtp-welcome-email",
       "name": "SMTP: Send Welcome Email",

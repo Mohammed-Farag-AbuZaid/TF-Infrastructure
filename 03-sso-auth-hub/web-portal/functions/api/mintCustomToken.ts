@@ -1,4 +1,4 @@
-import {
+﻿import {
   Env,
   corsHeaders,
   parseCookies,
@@ -10,12 +10,12 @@ import {
 export const onRequestOptions: PagesFunction<Env> = async ({ request, env }) => {
   return new Response(null, {
     status: 204,
-    headers: corsHeaders(request.headers.get('Origin'), env.ROOT_DOMAIN || 'tfunions.org'),
+    headers: corsHeaders(request.headers.get('Origin'), env.ROOT_DOMAIN || 'tfunions.com'),
   });
 };
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const rootDomain = env.ROOT_DOMAIN || 'tfunions.org';
+  const rootDomain = env.ROOT_DOMAIN || 'tfunions.com';
   const headers = {
     ...corsHeaders(request.headers.get('Origin'), rootDomain),
     'Content-Type': 'application/json',
@@ -106,3 +106,4 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 };
+

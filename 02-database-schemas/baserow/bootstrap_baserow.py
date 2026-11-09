@@ -51,10 +51,22 @@ def main():
         schema = json.load(f)
 
     print(f"🔐 Authenticating with Baserow at {BASEROW_URL}...")
-    auth = api_request("POST", "/api/user/token-auth/", payload={
-        "email": BASEROW_EMAIL,
-        "password": BASEROW_PASSWORD,
-    })
+    try:
+        auth = api_request("POST", "/api/user/token-auth/", payload={
+            "email": BASEROW_EMAIL,
+            "password": BASEROW_PASSWORD,
+        })
+    except urllib.error.HTTPError as e:
+        if e.code == 401:
+            print(f"👤 Registering initial Baserow admin account ({BASEROW_EMAIL})...")
+            auth = api_request("POST", "/api/user/", payload={
+                "name": "TF Unions Admin",
+                "email": BASEROW_EMAIL,
+                "password": BASEROW_PASSWORD,
+                "authenticate": True,
+            })
+        else:
+            raise
     jwt_token = auth["token"]
 
     # 1. Create or locate Workspace `TF_Unions_Core`
@@ -173,9 +185,31 @@ def main():
                 payload=seed_row,
             )
 
+    # 6. Create or retrieve Database Token for n8n & API automation
+    tokens = api_request("GET", "/api/database/tokens/", token=jwt_token)
+    db_token_obj = next((t for t in tokens if t["name"] == "TF_N8N_API_TOKEN" and t["workspace"] == ws["id"]), None)
+    if not db_token_obj:
+        print("🔑 Creating Baserow Database Token 'TF_N8N_API_TOKEN'...")
+        db_token_obj = api_request(
+            "POST",
+            "/api/database/tokens/",
+            token=jwt_token,
+            payload={"name": "TF_N8N_API_TOKEN", "workspace": ws["id"]},
+        )
+
+    output_meta = {
+        "workspace_id": ws["id"],
+        "database_id": db_app["id"],
+        "db_api_token": db_token_obj.get("key"),
+        "tables": table_map,
+    }
+    meta_path = Path(__file__).parent / "baserow-provisioned.json"
+    with open(meta_path, "w", encoding="utf-8") as mf:
+        json.dump(output_meta, mf, indent=2)
+
     print("\n🎉 Baserow Workspace 'TF_Unions_Core' and all 6 tables are provisioned!")
-    print("Table ID Map (save for n8n environment variables):")
-    print(json.dumps(table_map, indent=2))
+    print("Provisioned Metadata (saved to baserow-provisioned.json):")
+    print(json.dumps(output_meta, indent=2))
 
 
 if __name__ == "__main__":

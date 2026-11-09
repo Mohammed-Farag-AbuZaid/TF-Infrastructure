@@ -45,7 +45,7 @@
     },
     {
       "parameters": {
-        "fromEmail": "no-reply@tfunions.org",
+        "fromEmail": "no-reply@tfunions.com",
         "toEmail": "={{ $json.body.applicant_email || $json.body.items[0].applicant_email[0].value }}",
         "subject": "TF Unions Volunteer Application Received",
         "html": "=<p>Hi {{ $json.body.full_name || 'Applicant' }},</p><p>We have received your application for the <strong>{{ $json.body.target_track || $json.body.items[0].target_track.value }}</strong> track at TF Unions. Mohammed Farag &amp; Mohammed Abdelghany will review your submission and update you shortly.</p>"
@@ -125,10 +125,10 @@
     },
     {
       "parameters": {
-        "fromEmail": "founders@tfunions.org",
+        "fromEmail": "founders@tfunions.com",
         "toEmail": "={{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].applicant_email[0].value }}",
         "subject": "🎉 Welcome to the TF Unions Volunteer Cohort!",
-        "html": "=<p>Congratulations! Your application to join the <strong>{{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].target_track.value }}</strong> track has been accepted.</p><p>Your TF Unions Passport has been upgraded with Volunteer permissions, and your profile is now live on <a href=\"https://tfunions.org/team\">tfunions.org/team</a>.</p>"
+        "html": "=<p>Congratulations! Your application to join the <strong>{{ $('Webhook: Volunteer_HR_Pipeline Status Change').item.json.body.items[0].target_track.value }}</strong> track has been accepted.</p><p>Your TF Unions Passport has been upgraded with Volunteer permissions, and your profile is now live on <a href=\"https://tfunions.com/team\">tfunions.com/team</a>.</p>"
       },
       "id": "smtp-send-onboarding-kit",
       "name": "SMTP: Send Volunteer Onboarding Kit",

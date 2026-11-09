@@ -1,8 +1,6 @@
 /**
  * TF Unions — Global QA & Bug Reporter Web Component (<4KB)
- * Usage across TF Unions, TF News, TF Connect, TF Guide:
- *   <script src="https://tfunions.org/widgets/tf-qa-widget.js" defer></script>
- *   <tf-qa-widget service="TF_News"></tf-qa-widget>
+ * Connected to Self-Hosted VPS API (`https://n8n.tfunions.com/tf-api/api/qa-submit`)
  */
 (function () {
   if (customElements.get('tf-qa-widget')) return;
@@ -50,7 +48,7 @@
             <button type="button" class="can" id="cl">Cancel</button>
             <button type="submit" class="sub" id="sb">Send Report</button>
           </div>
-          <div class="msg" id="ok">✅ Sent to TF Unions QA Triage!</div>
+          <div class="msg" id="ok">✅ Sent to TF Unions QA & Zain Bot!</div>
         </form>
       </div>`;
 
@@ -62,7 +60,7 @@
         const sb = root.getElementById('sb');
         sb.disabled = true;
         try {
-          await fetch('https://auto.tfunions.org/webhook/qa-submit', {
+          await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

@@ -6,7 +6,7 @@ export interface Props {
 
 const {
   title,
-  description = 'TF Unions — An independent non-profit educational ecosystem helping ambitious students across Egypt achieve their STEM, research, and innovation goals.',
+  description = 'TF Unions â€” An independent non-profit educational ecosystem helping ambitious students across Egypt achieve their STEM, research, and innovation goals.',
 } = Astro.props;
 ---
 <!doctype html>
@@ -19,8 +19,8 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <!-- Privacy-First Analytics (Umami on analytics.tfunions.org) -->
-    <script defer src="https://analytics.tfunions.org/script.js" data-website-id="tfunions-foundation"></script>
+    <!-- Privacy-First Analytics (Umami on analytics.tfunions.com) -->
+    <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
   </head>
   <body class="min-h-screen bg-[#070E24] text-white font-['Inter',sans-serif] flex flex-col selection:bg-[#FFB800] selection:text-[#070E24]">
     <!-- Top Unified Ecosystem Navbar -->
@@ -46,13 +46,14 @@ const {
           <a href="/ideas" class="hover:text-[#FFB800] transition">Idea Incubator</a>
           <a href="/support" class="hover:text-[#FFB800] transition">Support</a>
           <a href="/transparency" class="hover:text-[#FFB800] transition">Open Ledger</a>
-          <a href="https://docs.tfunions.org" class="hover:text-[#FFB800] transition">Docs ↗</a>
+          <a href="https://tf-verify-portal.pages.dev" class="hover:text-[#FFB800] transition">Verify Cert</a>
+          <a href="https://tf-docs-portal.pages.dev" class="hover:text-[#FFB800] transition">Docs ↗</a>
         </nav>
 
         <!-- Dynamic SSO User Hint Slot -->
         <div class="flex items-center gap-3" id="sso-nav-slot">
           <a
-            href="https://auth.tfunions.org/?redirect_to=https://tfunions.org"
+            href="https://tf-auth-hub.pages.dev/?redirect_to=https://tf-foundation-portal.pages.dev"
             class="px-4 py-2 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-xs transition shadow"
           >
             Unified Sign In →
@@ -76,16 +77,16 @@ const {
           <p class="text-slate-400 text-xs leading-relaxed">
             An independent non-profit educational ecosystem helping ambitious students across Egypt achieve their science, research, and innovation goals.
           </p>
-          <p class="mt-3 text-xs text-[#FFB800] font-semibold">"زكاة العلم نشره — Sharing knowledge is a responsibility."</p>
+          <p class="mt-3 text-xs text-[#FFB800] font-semibold">"Ø²ÙƒØ§Ø© Ø§Ù„Ø¹Ù„Ù… Ù†Ø´Ø±Ù‡ â€” Sharing knowledge is a responsibility."</p>
         </div>
 
         <div>
           <h4 class="font-['Exo_2'] font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Ecosystem Services</h4>
           <ul class="space-y-2 text-xs text-slate-400">
-            <li><a href="https://news.tfunions.org" class="hover:text-white">TF News — Opportunities &amp; 1,500+ Universities</a></li>
-            <li><a href="https://connect.tfunions.org" class="hover:text-white">TF Connect — Peer &amp; Senior Cohorts</a></li>
-            <li><a href="https://guide.tfunions.org" class="hover:text-white">TF Guide — STEM Study Roadmaps</a></li>
-            <li><a href="https://verify.tfunions.org" class="hover:text-white">Credential &amp; Certificate Verifier</a></li>
+            <li><a href="https://news.tfunions.com" class="hover:text-white">TF News â€” Opportunities &amp; 1,500+ Universities</a></li>
+            <li><a href="https://connect.tfunions.com" class="hover:text-white">TF Connect â€” Peer &amp; Senior Cohorts</a></li>
+            <li><a href="https://guide.tfunions.com" class="hover:text-white">TF Guide â€” STEM Study Roadmaps</a></li>
+            <li><a href="https://verify.tfunions.com" class="hover:text-white">Credential &amp; Certificate Verifier</a></li>
           </ul>
         </div>
 
@@ -102,8 +103,8 @@ const {
         <div>
           <h4 class="font-['Exo_2'] font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Infrastructure &amp; Trust</h4>
           <ul class="space-y-2 text-xs text-slate-400">
-            <li><a href="https://status.tfunions.org" class="hover:text-white">🟢 Live Ecosystem Status (Uptime Kuma)</a></li>
-            <li><a href="https://docs.tfunions.org" class="hover:text-white">Official Wiki &amp; FAQ</a></li>
+            <li><a href="https://status.tfunions.com" class="hover:text-white">ðŸŸ¢ Live Ecosystem Status (Uptime Kuma)</a></li>
+            <li><a href="https://docs.tfunions.com" class="hover:text-white">Official Wiki &amp; FAQ</a></li>
             <li><a href="/volunteer" class="hover:text-white">Join Seasonal Volunteer Cohort</a></li>
             <li><a href="/ideas" class="hover:text-white">Propose a Student Project</a></li>
           </ul>
@@ -111,7 +112,7 @@ const {
       </div>
 
       <div class="max-w-7xl mx-auto mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-        <p>Copyright © 2026 TF Unions (formerly Altafawwoq Union). Founded by Mohammed Farag &amp; Mohammed Abdelghany.</p>
+        <p>Copyright Â© 2026 TF Unions (formerly Altafawwoq Union). Founded by Mohammed Farag &amp; Mohammed Abdelghany.</p>
         <p class="mt-2 sm:mt-0">One account. All TF Unions services.</p>
       </div>
     </footer>
@@ -143,3 +144,4 @@ const {
     </script>
   </body>
 </html>
+

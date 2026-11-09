@@ -1,41 +1,41 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const tracks = [
   {
     id: 'TF_News_Researcher',
     title: 'TF News Opportunities Researcher',
-    commitment: '4–6 hrs/week',
+    commitment: '4â€“6 hrs/week',
     desc: 'Curate and verify international scholarships, olympiads, summer research programs, and university financial aid pathways.',
   },
   {
     id: 'TF_Guide_Curator',
     title: 'TF Guide STEM Roadmap Curator',
-    commitment: '4–6 hrs/week',
+    commitment: '4â€“6 hrs/week',
     desc: 'Author structured study guides and problem-solving roadmaps for Mathematics, Physics, CS/AI, Biology, and Chemistry.',
   },
   {
     id: 'Frontend_Dev',
     title: 'Frontend Developer (Flutter Web / Astro)',
-    commitment: '5–8 hrs/week',
+    commitment: '5â€“8 hrs/week',
     desc: 'Build high-performance student web interfaces across TF News, TF Connect, and the Foundation Portal.',
   },
   {
     id: 'Automation_Dev',
     title: 'Automation & Backend Engineer (n8n / Baserow)',
-    commitment: '4–6 hrs/week',
+    commitment: '4â€“6 hrs/week',
     desc: 'Maintain n8n workflows, data pipelines, and automated verification services.',
   },
   {
     id: 'Graphic_Design',
     title: 'Visual & Brand Designer',
-    commitment: '3–5 hrs/week',
+    commitment: '3â€“5 hrs/week',
     desc: 'Design educational infographics, social announcements, and seasonal campaign visuals.',
   },
   {
     id: 'Community_Mod',
     title: 'Student Community Moderator',
-    commitment: '4–5 hrs/week',
+    commitment: '4â€“5 hrs/week',
     desc: 'Guide student study cohorts, moderate Q&A channels, and triage community feedback.',
   },
 ];
@@ -45,7 +45,7 @@ const tracks = [
     <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Join the Team</span>
     <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">Help Build TF Unions</h1>
     <p class="mt-3 text-slate-300 max-w-2xl text-base leading-relaxed">
-      Volunteering across all TF Unions sub-projects (including TF News, TF Guide, TF Connect, and STEM Union) is managed centrally here. Complete a seasonal cohort to earn an official verifiable certificate on <code class="text-[#FFB800]">verify.tfunions.org</code>.
+      Volunteering across all TF Unions sub-projects (including TF News, TF Guide, TF Connect, and STEM Union) is managed centrally here. Complete a seasonal cohort to earn an official verifiable certificate on <code class="text-[#FFB800]">verify.tfunions.com</code>.
     </p>
 
     <!-- Open Tracks Grid -->
@@ -116,7 +116,7 @@ const tracks = [
         </div>
 
         <button type="submit" class="w-full py-3 rounded-xl bg-[#FFB800] hover:bg-[#ffc633] text-[#070E24] font-['Exo_2'] font-bold text-sm transition">
-          Submit Volunteer Application →
+          Submit Volunteer Application â†’
         </button>
       </form>
     </div>
@@ -127,7 +127,7 @@ const tracks = [
       e.preventDefault();
       const alertEl = document.getElementById('vol-alert');
       try {
-        const res = await fetch('https://auto.tfunions.org/webhook/volunteer-status-webhook', {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/volunteer-apply', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -141,15 +141,16 @@ const tracks = [
           }),
         });
         if (!res.ok) throw new Error('Submission failed');
-        alertEl.textContent = '✅ Application received! Check your email for confirmation.';
+        alertEl.textContent = 'âœ… Application received! Check your email for confirmation.';
         alertEl.className = 'mb-4 p-3 rounded-xl text-xs font-medium bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
         alertEl.classList.remove('hidden');
         e.target.reset();
       } catch {
-        alertEl.textContent = '⚠️ Could not reach auto.tfunions.org webhook. Please try again shortly.';
+        alertEl.textContent = 'âš ï¸ Could not reach auto.tfunions.com webhook. Please try again shortly.';
         alertEl.className = 'mb-4 p-3 rounded-xl text-xs font-medium bg-amber-500/20 text-amber-200 border border-amber-500/40';
         alertEl.classList.remove('hidden');
       }
     });
   </script>
 </BaseLayout>
+

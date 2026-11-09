@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 /**
@@ -35,7 +35,7 @@ const fallbackLedger: LedgerRow[] = [
     payment_channel: 'Direct_Invoice',
     amount_egp: 600,
     amount_usd: 12,
-    donor_or_vendor_name: 'Cloudflare Registrar (tfunions.org)',
+    donor_or_vendor_name: 'Cloudflare Registrar (tfunions.com)',
     is_anonymous: false,
     category: 'Domain_Registration',
     tx_date: '2026-09-02',
@@ -60,7 +60,7 @@ const baserowLedgerTableId = import.meta.env.BASEROW_TABLE_FINANCIAL_LEDGER;
 if (baserowToken && baserowLedgerTableId) {
   try {
     const res = await fetch(
-      `https://ops.tfunions.org/api/database/rows/table/${baserowLedgerTableId}/?user_field_names=true&filter__verification_status__equal=Verified_Published`,
+      `https://ops.tfunions.com/api/database/rows/table/${baserowLedgerTableId}/?user_field_names=true&filter__verification_status__equal=Verified_Published`,
       { headers: { Authorization: `Token ${baserowToken}` } }
     );
     if (res.ok) {
@@ -106,7 +106,7 @@ const netReserveEgp = totalInflowEgp - totalOutflowEgp;
         href="/support"
         class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition"
       >
-        Support or Submit Receipt →
+        Support or Submit Receipt â†’
       </a>
     </div>
 
@@ -189,3 +189,4 @@ const netReserveEgp = totalInflowEgp - totalOutflowEgp;
     </div>
   </section>
 </BaseLayout>
+

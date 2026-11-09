@@ -1,4 +1,4 @@
----
+﻿---
 title: Welcome to TF Unions Official Documentation
 description: The umbrella educational ecosystem helping ambitious students across Egypt achieve their science, research, and innovation goals.
 ---
@@ -9,9 +9,10 @@ description: The umbrella educational ecosystem helping ambitious students acros
 
 | Platform | Domain | Purpose |
 | :--- | :--- | :--- |
-| **Foundation Portal** | `tfunions.org` | Public mission, Volunteer HR portal, Idea Incubator, and 100% Open-Book Financial Ledger |
-| **Unified SSO Hub** | `auth.tfunions.org` | Single sign-on passport across all `*.tfunions.org` services |
-| **TF News** | `news.tfunions.org` | Curated scholarships, olympiads, internships, and 1,500+ global university admission pathways |
-| **TF Connect** | `connect.tfunions.org` | Peer & senior mentorship cohorts |
-| **TF Guide** | `guide.tfunions.org` | Structured STEM & research study roadmaps |
-| **Certificate Verifier** | `verify.tfunions.org` | Cryptographic verification of volunteer & program completion credentials |
+| **Foundation Portal** | `tfunions.com` | Public mission, Volunteer HR portal, Idea Incubator, and 100% Open-Book Financial Ledger |
+| **Unified SSO Hub** | `auth.tfunions.com` | Single sign-on passport across all `*.tfunions.com` services |
+| **TF News** | `news.tfunions.com` | Curated scholarships, olympiads, internships, and 1,500+ global university admission pathways |
+| **TF Connect** | `connect.tfunions.com` | Peer & senior mentorship cohorts |
+| **TF Guide** | `guide.tfunions.com` | Structured STEM & research study roadmaps |
+| **Certificate Verifier** | `verify.tfunions.com` | Cryptographic verification of volunteer & program completion credentials |
+

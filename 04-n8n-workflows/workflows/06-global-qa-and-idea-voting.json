@@ -28,7 +28,7 @@
             { "fieldId": "source_service", "fieldValue": "={{ $json.body.service || 'Foundation_Portal' }}" },
             { "fieldId": "title", "fieldValue": "={{ $json.body.title }}" },
             { "fieldId": "description", "fieldValue": "={{ $json.body.description }}\n\n---\nUser-Agent: {{ $json.body.userAgent || 'Unknown' }}\nUID: {{ $json.body.uid || 'Anonymous' }}" },
-            { "fieldId": "page_url", "fieldValue": "={{ $json.body.pageUrl || 'https://tfunions.org' }}" },
+            { "fieldId": "page_url", "fieldValue": "={{ $json.body.pageUrl || 'https://tfunions.com' }}" },
             { "fieldId": "voter_uids_json", "fieldValue": "={{ JSON.stringify($json.body.uid ? [$json.body.uid] : []) }}" },
             { "fieldId": "upvote_count", "fieldValue": "1" },
             { "fieldId": "status", "fieldValue": "New_Triage" },
@@ -78,7 +78,7 @@
         "path": "idea-upvote",
         "responseMode": "responseNode",
         "options": {
-          "allowedOrigins": "https://tfunions.org"
+          "allowedOrigins": "https://tfunions.com"
         }
       },
       "id": "webhook-idea-upvote",

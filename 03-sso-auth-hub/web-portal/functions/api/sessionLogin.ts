@@ -1,4 +1,4 @@
-import {
+﻿import {
   Env,
   corsHeaders,
   getGoogleAccessToken,
@@ -10,12 +10,12 @@ const FOURTEEN_DAYS_SEC = 1209600;
 export const onRequestOptions: PagesFunction<Env> = async ({ request, env }) => {
   return new Response(null, {
     status: 204,
-    headers: corsHeaders(request.headers.get('Origin'), env.ROOT_DOMAIN || 'tfunions.org'),
+    headers: corsHeaders(request.headers.get('Origin'), env.ROOT_DOMAIN || 'tfunions.com'),
   });
 };
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
-  const rootDomain = env.ROOT_DOMAIN || 'tfunions.org';
+  const rootDomain = env.ROOT_DOMAIN || 'tfunions.com';
   const headers = {
     ...corsHeaders(request.headers.get('Origin'), rootDomain),
     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
       );
     }
 
-    // 3. Construct root-domain cookies (.tfunions.org)
+    // 3. Construct root-domain cookies (.tfunions.com)
     const userHintJson = encodeURIComponent(JSON.stringify({ uid, name, role }));
     const sessionCookieHeader = `tf_session=${sessionCookie}; HttpOnly; Secure; SameSite=Lax; Domain=.${rootDomain}; Path=/; Max-Age=${FOURTEEN_DAYS_SEC}`;
     const hintCookieHeader = `tf_user_hint=${userHintJson}; Secure; SameSite=Lax; Domain=.${rootDomain}; Path=/; Max-Age=${FOURTEEN_DAYS_SEC}`;
@@ -114,3 +114,4 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
     );
   }
 };
+

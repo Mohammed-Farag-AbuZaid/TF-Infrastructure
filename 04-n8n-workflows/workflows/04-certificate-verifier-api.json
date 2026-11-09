@@ -7,7 +7,7 @@
         "path": "verify-certificate",
         "responseMode": "responseNode",
         "options": {
-          "allowedOrigins": "https://verify.tfunions.org,https://tfunions.org"
+          "allowedOrigins": "https://verify.tfunions.com,https://tfunions.com"
         }
       },
       "id": "webhook-verify-cert",
@@ -84,7 +84,7 @@
           "responseCode": 200,
           "responseHeaders": {
             "entries": [
-              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.org" }
+              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.com" }
             ]
           }
         }
@@ -103,7 +103,7 @@
           "responseCode": 404,
           "responseHeaders": {
             "entries": [
-              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.org" }
+              { "name": "Access-Control-Allow-Origin", "value": "https://verify.tfunions.com" }
             ]
           }
         }

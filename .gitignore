@@ -1,29 +1,7 @@
-# Environment & Secrets
-.env
-.env.*
-!.env.example
-
-# Dependencies
 node_modules/
-.pnpm-store/
-
-# Astro / Cloudflare build outputs
 dist/
 .astro/
-.wrangler/
-
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
-# Backups & runtime volumes
-*.sql.gz
-*.dump
-
-# OS & Editor
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+.env
+*.local
+baserow-provisioned.json
+full_firebase_dump.json

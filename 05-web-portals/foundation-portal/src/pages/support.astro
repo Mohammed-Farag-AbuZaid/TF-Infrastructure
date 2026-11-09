@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Support & Sponsor TF Unions">
@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <span class="text-xs font-bold uppercase tracking-widest text-[#FFB800]">Sustain the Ecosystem</span>
     <h1 class="font-['Exo_2'] font-extrabold text-4xl sm:text-5xl mt-2">Support TF Unions</h1>
     <p class="mt-3 text-slate-300 max-w-2xl text-base leading-relaxed">
-      100% of community contributions and sponsorships go directly toward VPS hosting, domain renewals, and seasonal student programs — verified publicly on our <a href="/transparency" class="text-[#FFB800] underline">Open-Book Financial Ledger</a>.
+      100% of community contributions and sponsorships go directly toward VPS hosting, domain renewals, and seasonal student programs â€” verified publicly on our <a href="/transparency" class="text-[#FFB800] underline">Open-Book Financial Ledger</a>.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
@@ -55,7 +55,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Mask my name as "Anonymous Supporter" on the public ledger
           </label>
           <button type="submit" class="w-full py-2.5 rounded-xl bg-[#FFB800] text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-[#ffc633] transition">
-            Submit Transfer Receipt →
+            Submit Transfer Receipt â†’
           </button>
         </form>
       </div>
@@ -64,7 +64,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="bg-[#0C1636] border border-[#FFB800]/30 rounded-2xl p-7 flex flex-col justify-between">
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-[#FFB800]">Corporate &amp; Institutional Partners</span>
-          <h2 class="font-['Exo_2'] font-bold text-2xl mt-2">Sponsor Egypt’s STEM Pipeline</h2>
+          <h2 class="font-['Exo_2'] font-bold text-2xl mt-2">Sponsor Egyptâ€™s STEM Pipeline</h2>
           <p class="mt-2 text-xs text-slate-300 leading-relaxed">
             Partner with TF Unions to sponsor our annual VPS &amp; domain infrastructure, fund Olympiad preparation cohorts, or underwrite student research micro-grants.
           </p>
@@ -90,10 +90,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="mt-8 space-y-3">
           <a
-            href="mailto:founders@tfunions.org?subject=TF%20Unions%20Sponsorship%20Inquiry"
+            href="mailto:founders@tfunions.com?subject=TF%20Unions%20Sponsorship%20Inquiry"
             class="block text-center w-full py-3 rounded-xl bg-white text-[#070E24] font-['Exo_2'] font-bold text-xs hover:bg-slate-100 transition"
           >
-            Contact Founders (founders@tfunions.org) →
+            Contact Founders (founders@tfunions.com) â†’
           </a>
           <a
             href="/transparency"
@@ -111,7 +111,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       e.preventDefault();
       const alertEl = document.getElementById('don-alert');
       try {
-        const res = await fetch('https://auto.tfunions.org/webhook/submit-donation', {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/submit-donation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -126,15 +126,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           }),
         });
         if (!res.ok) throw new Error('Failed');
-        alertEl.textContent = '💛 Thank you! Your receipt was sent to the Founders for one-tap Telegram verification.';
+        alertEl.textContent = 'ðŸ’› Thank you! Your receipt was sent to the Founders for one-tap Telegram verification.';
         alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
         alertEl.classList.remove('hidden');
         e.target.reset();
       } catch {
-        alertEl.textContent = '⚠️ Could not reach verification webhook. Please try again shortly.';
+        alertEl.textContent = 'âš ï¸ Could not reach verification webhook. Please try again shortly.';
         alertEl.className = 'mb-3 p-3 rounded-xl text-xs bg-amber-500/20 text-amber-200 border border-amber-500/40';
         alertEl.classList.remove('hidden');
       }
     });
   </script>
 </BaseLayout>
+
