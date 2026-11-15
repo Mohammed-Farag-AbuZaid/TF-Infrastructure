@@ -50,13 +50,13 @@ const faviconSvg = encodeURIComponent(
 
         <div class="mt-12 lg:mt-16">
           <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
-            Self-hosted PostgreSQL identity hub
+            Firebase Auth &amp; Cloud Firestore identity hub
           </div>
           <h1 class="font-display mt-3 text-[32px] sm:text-[38px] font-bold leading-[1.08] tracking-[-0.025em] text-[#161A22]">
             One account across every TF Unions service.
           </h1>
           <p class="mt-4 text-[14.5px] leading-[1.62] text-[#525866] max-w-[420px]">
-            Sign in once to access curated scholarship lists, personal roadmap progress, study circles, and certificate verification. Your credentials stay on TF Unions infrastructure.
+            Sign in once with your TF Passport or Google account to access curated scholarship lists, personal roadmap progress, study circles, and certificate verification across all TF Unions apps.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ const faviconSvg = encodeURIComponent(
       </div>
 
       <div class="mt-8 pt-4 border-t border-[#DFDDD6] flex items-center justify-between text-[12px] text-[#767D8C]">
-        <span>14-day HttpOnly session cookie</span>
+        <span>Firebase Auth unified SSO</span>
         <a href="https://docs.tfunions.com#account" class="text-[#1B365D] font-medium hover:underline">SSO Documentation →</a>
       </div>
     </aside>
@@ -83,10 +83,13 @@ const faviconSvg = encodeURIComponent(
         <!-- Active Session Banner -->
         <section id="active-session-card" class="hidden mb-5 bg-white border border-[#0F766E]/40 rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
           <div class="flex items-start justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
-            <div>
-              <div class="font-code text-[11.5px] font-medium text-[#0F766E]">Active TF Passport Session</div>
-              <h2 id="session-user-name" class="font-display mt-1 text-[20px] font-bold text-[#161A22]">Signed in</h2>
-              <div id="session-user-meta" class="text-[13px] text-[#525866] mt-0.5"></div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-code text-[11.5px] font-medium text-[#0F766E]">Active Firebase Session</span>
+                <span id="verification-badge" class="hidden text-[11px] font-medium px-2 py-0.5 rounded-full"></span>
+              </div>
+              <h2 id="session-user-name" class="font-display mt-1 text-[20px] font-bold text-[#161A22] truncate">Signed in</h2>
+              <div id="session-user-meta" class="text-[13px] text-[#525866] mt-0.5 truncate"></div>
             </div>
             <button
               id="btn-signout"
@@ -96,8 +99,18 @@ const faviconSvg = encodeURIComponent(
               Sign out
             </button>
           </div>
+          <div id="verify-prompt-row" class="hidden mt-3 flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-[#FEF6EB] border border-[#FCD34D]/60 text-[12px] text-[#92400E]">
+            <span>Verify your email address to unlock all portals.</span>
+            <button
+              id="btn-resend-verify"
+              type="button"
+              class="font-semibold text-[#1B365D] hover:underline shrink-0"
+            >
+              Resend email
+            </button>
+          </div>
           <div class="mt-4 flex flex-wrap gap-2 text-[12.5px]">
-            <a href="https://www.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22] hover:border-[#1B365D]/40 transition">Continue to Foundation →</a>
+            <a id="continue-portal-btn" href="https://www.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#1B365D] text-white font-medium hover:bg-[#132847] transition">Continue to portal →</a>
             <a href="https://news.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22] hover:border-[#1B365D]/40 transition">Open TF News →</a>
           </div>
         </section>
@@ -115,8 +128,31 @@ const faviconSvg = encodeURIComponent(
             </div>
           </div>
 
+          <!-- Continue with Google -->
+          <div class="mt-5">
+            <button
+              id="google-signin-btn"
+              type="button"
+              class="w-full h-10 px-4 rounded-lg bg-white hover:bg-[#F3F2EE] text-[#161A22] border border-[#DFDDD6] font-medium text-[13.5px] flex items-center justify-center gap-2.5 transition"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h6.44a5.5 5.5 0 0 1-2.39 3.61v3h3.87c2.26-2.08 3.57-5.15 3.57-8.64z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.07 7.94-2.91l-3.87-3c-1.07.72-2.44 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.27v3.09A12 12 0 0 0 12 24z"/>
+                <path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.9 12c0-.79.14-1.56.37-2.28V6.63H1.27A12 12 0 0 0 0 12c0 1.94.46 3.77 1.27 5.37l4-3.09z"/>
+                <path fill="#EA4335" d="M12 4.75c1.76 0 3.34.61 4.58 1.8l3.44-3.44C17.95 1.19 15.24 0 12 0A12 12 0 0 0 1.27 6.63l4 3.09c.95-2.85 3.6-4.97 6.73-4.97z"/>
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+
+            <div class="relative my-4 flex items-center">
+              <div class="flex-grow border-t border-[#DFDDD6]"></div>
+              <span class="mx-3 text-[11.5px] font-medium text-[#767D8C]">or continue with email</span>
+              <div class="flex-grow border-t border-[#DFDDD6]"></div>
+            </div>
+          </div>
+
           <!-- Soft Stone Segmented Switch -->
-          <div class="mt-5 grid grid-cols-2 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg">
+          <div class="grid grid-cols-2 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg">
             <button
               id="tab-signin"
               type="button"
@@ -180,6 +216,12 @@ const faviconSvg = encodeURIComponent(
                   <option value="University">University</option>
                 </select>
               </div>
+              <input
+                id="stemSchool"
+                type="text"
+                placeholder="School / STEM Chapter (e.g., Maadi STEM School)"
+                class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+              />
               <select
                 id="gradeOrYear"
                 class="w-full h-10 px-3 rounded-lg bg-[#EAE8E1]/60 text-[13.5px] text-[#161A22] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
@@ -221,11 +263,21 @@ const faviconSvg = encodeURIComponent(
               </button>
             </div>
 
-            <div class="pt-2">
+            <div id="signin-helpers" class="flex items-center justify-end">
+              <button
+                id="forgot-password-btn"
+                type="button"
+                class="text-[12.5px] font-medium text-[#1B365D] hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            <div class="pt-1">
               <button
                 id="btn-submit"
                 type="submit"
-                class="w-full h-10 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+                class="w-full h-10 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition disabled:opacity-60"
               >
                 Sign in
               </button>
@@ -235,8 +287,43 @@ const faviconSvg = encodeURIComponent(
       </div>
     </main>
 
-    <script is:inline>
-      const VPS_API_BASE = 'https://n8n.tfunions.com/tf-api';
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        GoogleAuthProvider,
+        signInWithPopup,
+        sendPasswordResetEmail,
+        sendEmailVerification,
+        updateProfile,
+        onAuthStateChanged,
+        signOut,
+      } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp,
+      } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+      const firebaseConfig = {
+        apiKey: 'AIzaSyB0bILaWHg8QXuwl3Fhfht3BQnYLgTkWUk',
+        authDomain: 'tf-unions.firebaseapp.com',
+        projectId: 'tf-unions',
+        storageBucket: 'tf-unions.firebasestorage.app',
+        messagingSenderId: '879703010053',
+        appId: '1:879703010053:web:1fe4e4476ab1680a67a56c',
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const googleProvider = new GoogleAuthProvider();
+      googleProvider.addScope('email');
+      googleProvider.addScope('profile');
 
       function getValidatedRedirectUrl() {
         const params = new URLSearchParams(window.location.search);
@@ -260,75 +347,30 @@ const faviconSvg = encodeURIComponent(
       const redirectUrl = getValidatedRedirectUrl();
       const targetNameEl = document.getElementById('target-service-name');
       const backLink = document.getElementById('back-link');
+      const continuePortalBtn = document.getElementById('continue-portal-btn');
       try {
         targetNameEl.textContent = new URL(redirectUrl).hostname;
         backLink.href = redirectUrl;
+        continuePortalBtn.href = redirectUrl;
       } catch {}
 
-      try {
-        const match = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
-        const localUser = localStorage.getItem('tf_sso_user');
-        let userHint = null;
-        if (match) {
-          userHint = JSON.parse(decodeURIComponent(match[1]));
-        } else if (localUser) {
-          const p = JSON.parse(localUser);
-          userHint = { name: p.full_name || p.fullName || p.name, email: p.email, role: p.role };
-        }
-        if (userHint && userHint.name) {
-          document.getElementById('active-session-card').classList.remove('hidden');
-          document.getElementById('session-user-name').textContent = String(userHint.name);
-          document.getElementById('session-user-meta').textContent = userHint.email
-            ? `${userHint.email} (${userHint.role || 'member'})`
-            : String(userHint.role || 'member');
-        }
-      } catch {}
-
-      document.getElementById('btn-signout').addEventListener('click', async () => {
-        try {
-          await fetch(`${VPS_API_BASE}/api/sessionLogout`, { method: 'POST', credentials: 'include' });
-        } catch {}
-        document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';
-        localStorage.removeItem('tf_sso_token');
-        localStorage.removeItem('tf_sso_user');
-        window.location.reload();
-      });
-
+      const sessionCard = document.getElementById('active-session-card');
+      const sessionUserName = document.getElementById('session-user-name');
+      const sessionUserMeta = document.getElementById('session-user-meta');
+      const verificationBadge = document.getElementById('verification-badge');
+      const verifyPromptRow = document.getElementById('verify-prompt-row');
+      const statusAlert = document.getElementById('status-alert');
       const pwInput = document.getElementById('password');
       const pwToggle = document.getElementById('toggle-pw');
-      pwToggle.addEventListener('click', () => {
-        const show = pwInput.type === 'password';
-        pwInput.type = show ? 'text' : 'password';
-        pwToggle.textContent = show ? 'Hide' : 'Show';
-      });
-
-      let isRegisterMode = new URLSearchParams(window.location.search).get('mode') === 'register';
       const tabSignin = document.getElementById('tab-signin');
       const tabRegister = document.getElementById('tab-register');
       const registerFields = document.getElementById('register-fields');
+      const signinHelpers = document.getElementById('signin-helpers');
       const btnSubmit = document.getElementById('btn-submit');
+      const googleBtn = document.getElementById('google-signin-btn');
+      const forgotPwBtn = document.getElementById('forgot-password-btn');
+      const resendVerifyBtn = document.getElementById('btn-resend-verify');
       const formTitle = document.getElementById('form-title');
-      const statusAlert = document.getElementById('status-alert');
-
-      const activeTabCls = 'py-2 px-3 text-[13px] font-medium rounded-md bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
-      const inactiveTabCls = 'py-2 px-3 text-[13px] font-medium rounded-md text-[#525866] border border-transparent hover:text-[#161A22] transition';
-
-      function applyMode() {
-        if (isRegisterMode) {
-          registerFields.classList.remove('hidden');
-          tabRegister.className = activeTabCls;
-          tabSignin.className = inactiveTabCls;
-          formTitle.textContent = 'Create your TF Passport';
-          btnSubmit.textContent = 'Create account';
-        } else {
-          registerFields.classList.add('hidden');
-          tabSignin.className = activeTabCls;
-          tabRegister.className = inactiveTabCls;
-          formTitle.textContent = 'Welcome back';
-          btnSubmit.textContent = 'Sign in';
-        }
-      }
-      applyMode();
 
       function showStatus(msg, isError = false) {
         statusAlert.textContent = msg;
@@ -340,53 +382,263 @@ const faviconSvg = encodeURIComponent(
         statusAlert.classList.remove('hidden');
       }
 
+      function formatFirebaseError(err) {
+        const code = err?.code || '';
+        const map = {
+          'auth/invalid-email': 'Please enter a valid email address.',
+          'auth/user-disabled': 'This account has been disabled.',
+          'auth/user-not-found': 'No account found with this email.',
+          'auth/wrong-password': 'Incorrect password. Please try again.',
+          'auth/invalid-credential': 'Incorrect email or password.',
+          'auth/email-already-in-use': 'An account already exists with this email.',
+          'auth/weak-password': 'Password should be at least 6 characters.',
+          'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
+          'auth/popup-closed-by-user': 'Google sign-in popup was closed.',
+          'auth/network-request-failed': 'Network error. Please check your connection.',
+        };
+        return map[code] || err?.message || 'Authentication failed';
+      }
+
+      function setSessionArtifacts(profile, token) {
+        const hint = encodeURIComponent(JSON.stringify({
+          uid: profile.uid,
+          name: profile.fullName || profile.username || profile.email,
+          email: profile.email,
+          role: profile.role || 'student',
+        }));
+        document.cookie = `tf_user_hint=${hint}; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=1209600`;
+        if (token) {
+          localStorage.setItem('tf_sso_token', token);
+        }
+        localStorage.setItem('tf_sso_user', JSON.stringify(profile));
+      }
+
+      function clearSessionArtifacts() {
+        document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';
+        localStorage.removeItem('tf_sso_token');
+        localStorage.removeItem('tf_sso_user');
+      }
+
+      async function syncUserProfile(user, extraFields = null) {
+        const userRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(userRef);
+        const existing = snap.exists() ? snap.data() : {};
+
+        const fallbackName = (extraFields?.fullName || user.displayName || user.email?.split('@')[0] || 'Scholar').trim();
+        const nameParts = fallbackName.split(/\s+/);
+        const firstName = extraFields?.firstName || existing.firstName || nameParts[0] || '';
+        const lastName = extraFields?.lastName || existing.lastName || nameParts.slice(1).join(' ') || '';
+        const fullName = extraFields?.fullName || existing.fullName || [firstName, lastName].filter(Boolean).join(' ') || fallbackName;
+
+        const profile = {
+          id: user.uid,
+          uid: user.uid,
+          firstName,
+          lastName,
+          fullName,
+          username: existing.username || fullName,
+          email: user.email || existing.email || '',
+          phone: extraFields?.phone ?? existing.phone ?? user.phoneNumber ?? '',
+          governorate: extraFields?.governorate ?? existing.governorate ?? '',
+          academicLevel: extraFields?.academicLevel ?? existing.academicLevel ?? '',
+          grade: extraFields?.grade ?? existing.grade ?? '',
+          stemSchool: extraFields?.stemSchool ?? existing.stemSchool ?? '',
+          profilePicture: existing.profilePicture || user.photoURL || '',
+          role: existing.role || 'student',
+        };
+
+        await setDoc(
+          userRef,
+          {
+            ...profile,
+            ...(snap.exists() ? {} : { registrationDate: serverTimestamp() }),
+            updatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        );
+
+        const idToken = await user.getIdToken();
+        setSessionArtifacts(profile, idToken);
+        return profile;
+      }
+
+      function renderSessionCard(user, profile) {
+        const displayName = profile?.fullName || user.displayName || user.email?.split('@')[0] || 'Signed in';
+        const role = profile?.role || 'student';
+        sessionCard.classList.remove('hidden');
+        sessionUserName.textContent = displayName;
+        sessionUserMeta.textContent = user.email ? `${user.email} (${role})` : role;
+
+        verificationBadge.classList.remove('hidden');
+        if (user.emailVerified) {
+          verificationBadge.textContent = 'Verified';
+          verificationBadge.className = 'text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#EDF7F5] text-[#0F766E] border border-[#BCE3DC]';
+          verifyPromptRow.classList.add('hidden');
+        } else {
+          verificationBadge.textContent = 'Unverified';
+          verificationBadge.className = 'text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#FEF6EB] text-[#B45309] border border-[#FCD34D]/60';
+          verifyPromptRow.classList.remove('hidden');
+        }
+      }
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          sessionCard.classList.add('hidden');
+          clearSessionArtifacts();
+          return;
+        }
+        try {
+          const userRef = doc(db, 'users', user.uid);
+          const snap = await getDoc(userRef);
+          const data = snap.exists() ? snap.data() : {};
+          const fallbackName = user.displayName || user.email?.split('@')[0] || 'Scholar';
+          const fullName = data.fullName || [data.firstName, data.lastName].filter(Boolean).join(' ') || fallbackName;
+          const profile = {
+            uid: user.uid,
+            fullName,
+            email: user.email || data.email || '',
+            role: data.role || 'student',
+          };
+          const token = await user.getIdToken();
+          setSessionArtifacts(profile, token);
+          renderSessionCard(user, profile);
+        } catch {
+          renderSessionCard(user, { fullName: user.displayName || user.email, role: 'student' });
+        }
+      });
+
+      document.getElementById('btn-signout').addEventListener('click', async () => {
+        await signOut(auth);
+        clearSessionArtifacts();
+        sessionCard.classList.add('hidden');
+        showStatus('Signed out cleanly.');
+      });
+
+      resendVerifyBtn.addEventListener('click', async () => {
+        if (!auth.currentUser) return;
+        try {
+          resendVerifyBtn.disabled = true;
+          await sendEmailVerification(auth.currentUser);
+          showStatus(`Verification email sent to ${auth.currentUser.email}. Check your inbox or spam folder.`);
+        } catch (err) {
+          showStatus(formatFirebaseError(err), true);
+        } finally {
+          resendVerifyBtn.disabled = false;
+        }
+      });
+
+      pwToggle.addEventListener('click', () => {
+        const show = pwInput.type === 'password';
+        pwInput.type = show ? 'text' : 'password';
+        pwToggle.textContent = show ? 'Hide' : 'Show';
+      });
+
+      let isRegisterMode = new URLSearchParams(window.location.search).get('mode') === 'register';
+      const activeTabCls = 'py-2 px-3 text-[13px] font-medium rounded-md bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
+      const inactiveTabCls = 'py-2 px-3 text-[13px] font-medium rounded-md text-[#525866] border border-transparent hover:text-[#161A22] transition';
+
+      function applyMode() {
+        if (isRegisterMode) {
+          registerFields.classList.remove('hidden');
+          signinHelpers.classList.add('hidden');
+          tabRegister.className = activeTabCls;
+          tabSignin.className = inactiveTabCls;
+          formTitle.textContent = 'Create your TF Passport';
+          btnSubmit.textContent = 'Create account';
+          pwInput.autocomplete = 'new-password';
+        } else {
+          registerFields.classList.add('hidden');
+          signinHelpers.classList.remove('hidden');
+          tabSignin.className = activeTabCls;
+          tabRegister.className = inactiveTabCls;
+          formTitle.textContent = 'Welcome back';
+          btnSubmit.textContent = 'Sign in';
+          pwInput.autocomplete = 'current-password';
+        }
+      }
+      applyMode();
+
       tabSignin.addEventListener('click', () => { isRegisterMode = false; applyMode(); });
       tabRegister.addEventListener('click', () => { isRegisterMode = true; applyMode(); });
+
+      forgotPwBtn.addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+          showStatus('Enter your email address above first to receive a reset link.', true);
+          document.getElementById('email').focus();
+          return;
+        }
+        try {
+          showStatus('Sending password reset link...');
+          await sendPasswordResetEmail(auth, email);
+          showStatus(`Password reset email sent to ${email}.`);
+        } catch (err) {
+          showStatus(formatFirebaseError(err), true);
+        }
+      });
+
+      googleBtn.addEventListener('click', async () => {
+        try {
+          googleBtn.disabled = true;
+          showStatus('Signing in with Google...');
+          const cred = await signInWithPopup(auth, googleProvider);
+          const profile = await syncUserProfile(cred.user);
+          renderSessionCard(cred.user, profile);
+          showStatus('Signed in with Google. Redirecting...');
+          setTimeout(() => { window.location.href = redirectUrl; }, 450);
+        } catch (err) {
+          showStatus(formatFirebaseError(err), true);
+        } finally {
+          googleBtn.disabled = false;
+        }
+      });
 
       document.getElementById('sso-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
+        btnSubmit.disabled = true;
 
         try {
-          showStatus(isRegisterMode ? 'Creating your TF Passport...' : 'Verifying credentials...');
-          const endpoint = isRegisterMode ? `${VPS_API_BASE}/api/register` : `${VPS_API_BASE}/api/login`;
-          const payload = isRegisterMode
-            ? {
-                email,
-                password,
-                fullName: document.getElementById('fullName').value.trim() || email.split('@')[0],
-                phone: document.getElementById('phone').value.trim(),
-                governorate: document.getElementById('governorate').value,
-                educationSystem: document.getElementById('educationSystem').value,
-                gradeOrYear: document.getElementById('gradeOrYear').value,
-                interests: ['scholarships', 'research'],
-              }
-            : { email, password };
+          if (isRegisterMode) {
+            showStatus('Creating your Firebase TF Passport...');
+            const fullNameInput = document.getElementById('fullName').value.trim() || email.split('@')[0];
+            const nameParts = fullNameInput.split(/\s+/);
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ');
+            const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(cred.user, { displayName: fullNameInput });
 
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(payload),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Invalid credentials');
+            const profile = await syncUserProfile(cred.user, {
+              firstName,
+              lastName,
+              fullName: fullNameInput,
+              phone: document.getElementById('phone').value.trim(),
+              governorate: document.getElementById('governorate').value,
+              academicLevel: document.getElementById('educationSystem').value,
+              grade: document.getElementById('gradeOrYear').value,
+              stemSchool: document.getElementById('stemSchool').value.trim(),
+            });
 
-          const hint = encodeURIComponent(JSON.stringify({
-            uid: data.user.uid,
-            name: data.user.full_name || data.user.fullName || data.user.name,
-            email: data.user.email,
-            role: data.user.role || 'student',
-          }));
-          document.cookie = `tf_user_hint=${hint}; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=1209600`;
-          localStorage.setItem('tf_sso_token', data.token);
-          localStorage.setItem('tf_sso_user', JSON.stringify(data.user));
+            try {
+              await sendEmailVerification(cred.user);
+            } catch {}
 
-          showStatus('Signed in. Redirecting...');
-          setTimeout(() => { window.location.href = redirectUrl; }, 300);
+            renderSessionCard(cred.user, profile);
+            showStatus('Account created & verification email sent. Redirecting...');
+            setTimeout(() => { window.location.href = redirectUrl; }, 700);
+          } else {
+            showStatus('Verifying credentials with Firebase...');
+            const cred = await signInWithEmailAndPassword(auth, email, password);
+            const profile = await syncUserProfile(cred.user);
+            renderSessionCard(cred.user, profile);
+            showStatus('Signed in. Redirecting...');
+            setTimeout(() => { window.location.href = redirectUrl; }, 450);
+          }
         } catch (err) {
-          showStatus(err.message || 'Authentication failed', true);
+          showStatus(formatFirebaseError(err), true);
+        } finally {
+          btnSubmit.disabled = false;
         }
       });
     </script>
