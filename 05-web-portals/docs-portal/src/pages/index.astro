@@ -1,20 +1,20 @@
 ---
 /**
- * TF Unions Official Documentation, API & FAQ (`https://docs.tfunions.com`)
- * Styled with TF Sovereign Editorial tokens (#F8F9FB canvas, #FFFFFF cards, #E2E5EC borders, #002583 cobalt).
+ * TF Unions Official Documentation, Live API Explorer & FAQ (`https://docs.tfunions.com`)
+ * TF Oxford & Stone (#0A1931 Masthead + #ECEAE4 Stone Canvas + #FFFFFF Reference Sheets + Live Console).
  */
 const faviconSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0A1931"/><rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#1E3A6D" stroke-width="1.5"/><rect x="22" y="5" width="5" height="5" rx="1" fill="#C88A14"/><path d="M6.5 9.5h11.5v2.7h-4.2V23h-3V12.2H6.5V9.5zm10.8 0H25v2.7h-4.7v2.9h3.9v2.6h-3.9V23h-3V9.5z" fill="#fff"/></svg>`
 );
 
 const endpoints = [
-  { method: 'POST', path: '/api/login', desc: 'Authenticate with TF Passport and set *.tfunions.com HttpOnly SSO cookie.' },
-  { method: 'POST', path: '/api/register', desc: 'Create student account in PostgreSQL and sync to Baserow & onboarding.' },
-  { method: 'GET', path: '/api/me', desc: 'Inspect active JWT session and hydrate profile metadata.' },
-  { method: 'GET', path: '/api/verify-certificate?code=TFU-2026-8F92A1', desc: 'Verify volunteer or contributor credential serials.' },
-  { method: 'GET', path: '/api/ideas', desc: 'List public incubator proposals sorted by community upvote count.' },
-  { method: 'GET', path: '/api/ledger', desc: 'Fetch verified public financial inflows, outflows, and net reserve summary.' },
-  { method: 'GET', path: '/api/collections/:name', desc: 'Read synchronized ecosystem datasets (orgs, allProjects, opportunities).' },
+  { method: 'POST', path: '/api/login', desc: 'Authenticate with TF Passport and set *.tfunions.com HttpOnly SSO cookie.', testable: false },
+  { method: 'POST', path: '/api/register', desc: 'Create student account in PostgreSQL and sync onboarding workflows.', testable: false },
+  { method: 'GET', path: '/api/health', desc: 'Inspect live status of the self-hosted TF Unions API and user table.', testable: true },
+  { method: 'GET', path: '/api/team-directory', desc: 'Fetch public executive roster nodes for foundation pages.', testable: true },
+  { method: 'GET', path: '/api/ideas', desc: 'List community incubator proposals ordered by upvote count.', testable: true },
+  { method: 'GET', path: '/api/verify-certificate?code=TFU-2026-8F92A1', desc: 'Verify volunteer or contributor credential serials.', testable: true },
+  { method: 'GET', path: '/api/ledger', desc: 'Fetch verified public financial inflows, outflows, and net reserve summary.', testable: true },
 ];
 
 const faqs = [
@@ -42,48 +42,62 @@ const faqs = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Documentation &amp; API — TF Unions</title>
-    <meta name="theme-color" content="#002583" />
+    <meta name="theme-color" content="#0A1931" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .font-display { font-family: 'Newsreader', Georgia, serif; }
+      .font-code { font-family: 'JetBrains Mono', monospace; }
+    </style>
   </head>
-  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased flex flex-col">
-    <!-- Top Ecosystem Bar -->
-    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
-      <div class="max-w-[1080px] mx-auto px-5 h-9 flex items-center justify-between text-[12px]">
-        <a href="https://www.tfunions.com" class="font-semibold text-[#002583] hover:underline">‹ TF Unions Foundation</a>
-        <div class="flex items-center gap-4 text-[#525866]">
-          <a href="https://news.tfunions.com" class="hover:text-[#11141C]">News</a>
-          <a href="https://guides.tfunions.com" class="hover:text-[#11141C]">Guides</a>
-          <a href="https://connect.tfunions.com" class="hover:text-[#11141C]">Connect</a>
-          <a href="https://verify.tfunions.com" class="hover:text-[#11141C]">Verify</a>
+  <body class="min-h-screen bg-[#ECEAE4] text-[#12161F] antialiased flex flex-col">
+    <!-- Top Switcher -->
+    <div class="bg-[#061022] border-b border-[#1E3A6D] text-[#CBD5E1]">
+      <div class="max-w-[1180px] mx-auto px-4 sm:px-6 h-10 flex items-center justify-between text-[12px]">
+        <div class="flex items-stretch h-full gap-1">
+          <a href="https://www.tfunions.com" class="px-3 flex items-center hover:text-white">Foundation</a>
+          <a href="https://news.tfunions.com" class="px-3 flex items-center hover:text-white">TF News</a>
+          <a href="https://guides.tfunions.com" class="px-3 flex items-center hover:text-white">TF Guides</a>
+          <a href="https://connect.tfunions.com" class="px-3 flex items-center hover:text-white">TF Connect</a>
+          <a href="https://verify.tfunions.com" class="px-3 flex items-center hover:text-white">Verify Registry</a>
+          <span class="px-3.5 flex items-center font-semibold text-white bg-[#0A1931] border-t-2 border-t-[#C88A14] border-x border-[#1E3A6D]">Docs</span>
         </div>
+        <span class="hidden sm:inline text-[#94A3B8] font-code text-[11px]">https://n8n.tfunions.com/tf-api</span>
       </div>
     </div>
 
-    <!-- Header -->
-    <header class="bg-white border-b border-[#E2E5EC] sticky top-0 z-30">
-      <div class="max-w-[1080px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
-        <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
-            <rect width="32" height="32" rx="7" fill="#002583" />
-            <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
-            <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+    <!-- Navy Masthead -->
+    <header class="bg-[#0A1931] border-b border-[#1E3A6D] text-white sticky top-0 z-30">
+      <div class="max-w-[1180px] mx-auto px-4 sm:px-6 h-[70px] flex items-center justify-between gap-4">
+        <a href="https://www.tfunions.com" class="flex items-center gap-3">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-md">
+            <rect width="32" height="32" rx="6" fill="#14388C" />
+            <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" stroke="#1E3A6D" stroke-width="1.5" />
+            <rect x="22.5" y="5" width="4.5" height="4.5" rx="1" fill="#C88A14" />
+            <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
           </svg>
-          <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">TF Docs</span>
+          <div>
+            <span class="font-display text-[20px] font-bold text-white block leading-none">TF Docs</span>
+            <span class="text-[11px] text-[#94A3B8]">System Handbook &amp; Live API</span>
+          </div>
         </a>
 
         <div class="flex items-center gap-3">
           <input
             id="docs-search"
             type="search"
-            placeholder="Filter docs & API..."
-            class="w-44 sm:w-64 h-9 px-3 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] text-[13px] text-[#11141C] placeholder-[#7A8191] focus:border-[#002583] focus:bg-white focus:outline-none"
+            placeholder="Filter docs & routes..."
+            class="w-44 sm:w-64 h-9 px-3 rounded-md bg-[#102447] border border-[#1E3A6D] text-[13px] text-white placeholder-[#94A3B8] focus:border-[#C88A14] focus:outline-none"
           />
           <a
             href="https://auth.tfunions.com/?redirect_to=https://docs.tfunions.com"
-            class="h-9 px-4 inline-flex items-center rounded-xl bg-[#002583] hover:bg-[#001B61] text-white text-[13px] font-semibold transition"
+            class="h-9 px-4 inline-flex items-center rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition"
           >
             Sign in
           </a>
@@ -91,129 +105,130 @@ const faqs = [
       </div>
     </header>
 
-    <main class="flex-1 w-full max-w-[1080px] mx-auto px-5 py-8 sm:py-12">
-      <!-- Intro Hero Card -->
-      <section class="bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-        <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">ECOSYSTEM HANDBOOK &amp; API</div>
-        <h1 class="mt-2 text-[32px] sm:text-[44px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
-          Documentation &amp; Architecture.
-        </h1>
-        <p class="mt-3 text-[16px] leading-[1.55] text-[#525866] max-w-[660px]">
-          Reference guide for students, volunteer contributors, chapter leads, and developers integrating with TF Unions platforms and self-hosted endpoints.
-        </p>
-      </section>
-
-      <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-        <!-- Sidebar Nav Widget -->
-        <aside class="bg-white border border-[#E2E5EC] rounded-2xl p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] lg:sticky lg:top-24">
-          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7A8191] mb-3">SECTIONS</div>
-          <nav class="space-y-1 text-[14px]">
-            <a href="#platforms" class="block px-3 py-2 rounded-xl font-semibold text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC]">Platforms</a>
-            <a href="#account" class="block px-3 py-2 rounded-xl font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB]">Unified SSO Account</a>
-            <a href="#api" class="block px-3 py-2 rounded-xl font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB]">Public API Endpoints</a>
-            <a href="#faq" class="block px-3 py-2 rounded-xl font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB]">FAQ</a>
+    <main class="flex-1 w-full max-w-[1180px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Left 3 Cols: Sticky Navy Index -->
+        <aside class="lg:col-span-3 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-5 lg:sticky lg:top-24">
+          <div class="font-display text-[20px] font-bold text-white pb-3 border-b border-[#1E3A6D]">Reference Index</div>
+          <nav class="mt-3 space-y-1.5 text-[13.5px]">
+            <a href="#platforms" class="block px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white font-semibold transition">Subdomains &amp; Services</a>
+            <a href="#account" class="block px-3 py-2 rounded hover:bg-[#102447] text-[#CBD5E1] hover:text-white transition">TF Passport SSO</a>
+            <a href="#api" class="block px-3 py-2 rounded hover:bg-[#102447] text-[#CBD5E1] hover:text-white transition">REST Endpoints &amp; Live Tester</a>
+            <a href="#faq" class="block px-3 py-2 rounded hover:bg-[#102447] text-[#CBD5E1] hover:text-white transition">Frequently Asked Questions</a>
           </nav>
         </aside>
 
-        <!-- Main Docs Content -->
-        <div class="lg:col-span-3 space-y-6">
-          <!-- Platforms Card -->
-          <section id="platforms" class="doc-section bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">SUBDOMAINS</div>
-            <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Platforms Directory</h2>
-            <div class="mt-4 border-t border-[#E2E5EC] divide-y divide-[#E2E5EC]">
-              <a href="https://www.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
+        <!-- Right 9 Cols: Reference Sheets -->
+        <div class="lg:col-span-9 space-y-6">
+          <!-- Platforms Directory -->
+          <section id="platforms" class="bg-white border border-[#CFCBC2] rounded-lg p-6 sm:p-7 shadow-[0_2px_6px_rgba(10,25,49,0.04)] scroll-mt-24">
+            <h1 class="font-display text-[28px] font-bold text-[#12161F]">TF Unions Platform Directory</h1>
+            <p class="mt-1.5 text-[14px] text-[#4A5262]">All active student subdomains and self-hosted infrastructure services.</p>
+
+            <div class="mt-5 border-t border-[#CFCBC2] divide-y divide-[#E2DFD7]">
+              <a href="https://www.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition">
                 <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">www.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">TF Unions Foundation, Team Constellation &amp; Open Ledger</div>
+                  <span class="font-code text-[12px] text-[#14388C] font-semibold">www.tfunions.com</span>
+                  <div class="text-[14.5px] font-semibold text-[#12161F] mt-0.5">Foundation Hub, Interactive Team Graph &amp; Open Ledger</div>
                 </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
+                <span class="text-[13px] font-semibold text-[#14388C] shrink-0">Open ›</span>
               </a>
-              <a href="https://news.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
+              <a href="https://news.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition">
                 <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">news.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">TF News — Scholarships, Admissions &amp; Programs</div>
+                  <span class="font-code text-[12px] text-[#14388C] font-semibold">news.tfunions.com</span>
+                  <div class="text-[14.5px] font-semibold text-[#12161F] mt-0.5">TF News — Scholarships, University Admissions &amp; Programs</div>
                 </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
+                <span class="text-[13px] font-semibold text-[#14388C] shrink-0">Open ›</span>
               </a>
-              <a href="https://guides.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
+              <a href="https://guides.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition">
                 <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">guides.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Roadmaps</div>
+                  <span class="font-code text-[12px] text-[#14388C] font-semibold">guides.tfunions.com</span>
+                  <div class="text-[14.5px] font-semibold text-[#12161F] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Workbooks</div>
                 </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
+                <span class="text-[13px] font-semibold text-[#14388C] shrink-0">Open ›</span>
               </a>
-              <a href="https://connect.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
+              <a href="https://connect.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition">
                 <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">connect.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">TF Connect — Study Circles, School Chapters &amp; Guilds</div>
+                  <span class="font-code text-[12px] text-[#14388C] font-semibold">connect.tfunions.com</span>
+                  <div class="text-[14.5px] font-semibold text-[#12161F] mt-0.5">TF Connect — Egyptian Governorate Chapters &amp; Project Guilds</div>
                 </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
+                <span class="text-[13px] font-semibold text-[#14388C] shrink-0">Open ›</span>
               </a>
-              <a href="https://auth.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
+              <a href="https://verify.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition">
                 <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">auth.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">Unified Single Sign-On (TF Passport)</div>
+                  <span class="font-code text-[12px] text-[#14388C] font-semibold">verify.tfunions.com</span>
+                  <div class="text-[14.5px] font-semibold text-[#12161F] mt-0.5">Official Credential &amp; Certificate Registrar</div>
                 </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
-              </a>
-              <a href="https://verify.tfunions.com" class="doc-item py-3.5 flex items-center justify-between hover:bg-[#F8F9FB] px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <div class="text-[12px] font-mono text-[#7A8191]">verify.tfunions.com</div>
-                  <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">Certificate Verification Registry</div>
-                </div>
-                <span class="text-[13px] font-semibold text-[#002583] shrink-0">Open ›</span>
+                <span class="text-[13px] font-semibold text-[#14388C] shrink-0">Open ›</span>
               </a>
             </div>
           </section>
 
-          <!-- Unified Account Card -->
-          <section id="account" class="doc-section bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#D99B00]">IDENTITY ARCHITECTURE</div>
-            <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">One account across every portal</h2>
-            <p class="mt-3 text-[15px] leading-[1.6] text-[#525866]">
-              Signing in at <a href="https://auth.tfunions.com" class="text-[#002583] font-semibold hover:underline">auth.tfunions.com</a> authenticates against our dedicated PostgreSQL VPS engine (`tf_sso_db`), issuing an `HttpOnly`, `Secure` JWT cookie (`tf_session`) scoped to <span class="font-mono text-[#11141C]">*.tfunions.com</span> for 14 days.
+          <!-- Identity Architecture -->
+          <section id="account" class="doc-section bg-white border border-[#CFCBC2] rounded-lg p-6 sm:p-7 shadow-[0_2px_6px_rgba(10,25,49,0.04)] scroll-mt-24">
+            <h2 class="font-display text-[24px] font-bold text-[#12161F]">Unified TF Passport Identity</h2>
+            <p class="mt-2.5 text-[14.5px] leading-[1.65] text-[#4A5262] max-w-[70ch]">
+              Signing in at <a href="https://auth.tfunions.com" class="text-[#14388C] font-semibold hover:underline">auth.tfunions.com</a> authenticates against our dedicated PostgreSQL VPS engine (<span class="font-code text-[#12161F]">tf_sso_db</span>), issuing an <span class="font-code text-[#12161F]">HttpOnly</span>, <span class="font-code text-[#12161F]">Secure</span> JWT cookie scoped to <span class="font-code text-[#12161F]">*.tfunions.com</span> for 14 days.
             </p>
           </section>
 
-          <!-- Public API Endpoints Card -->
-          <section id="api" class="doc-section bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <div class="flex items-center justify-between gap-3">
+          <!-- REST API Reference + Live Inspector -->
+          <section id="api" class="bg-white border border-[#CFCBC2] rounded-lg p-6 sm:p-7 shadow-[0_2px_6px_rgba(10,25,49,0.04)] scroll-mt-24">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#CFCBC2]">
               <div>
-                <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">REST API REFERENCE</div>
-                <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Self-Hosted VPS Endpoints</h2>
+                <h2 class="font-display text-[24px] font-bold text-[#12161F]">Self-Hosted VPS Endpoints</h2>
+                <p class="text-[13.5px] text-[#4A5262] mt-0.5">Click any GET endpoint's Test button to inspect live JSON output from the server.</p>
               </div>
-              <span class="font-mono text-[12px] text-[#525866] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md">https://n8n.tfunions.com/tf-api</span>
+              <span class="font-code text-[12px] text-[#0A1931] bg-[#E2DFD7] border border-[#C8C3B8] px-3 py-1 rounded">
+                https://n8n.tfunions.com/tf-api
+              </span>
             </div>
-            <div class="mt-4 border-t border-[#E2E5EC] divide-y divide-[#E2E5EC]">
+
+            <div class="divide-y divide-[#E2DFD7]">
               {endpoints.map((ep) => (
-                <div class="doc-item py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="doc-item py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div class="flex items-center gap-2">
-                      <span class={`text-[11px] font-mono font-bold px-2 py-0.5 rounded border ${ep.method === 'GET' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#15803D]' : 'bg-[#EFF6FF] border-[#BFDBFE] text-[#002583]'}`}>
+                      <span class={`font-code text-[11px] font-bold px-2 py-0.5 rounded border ${ep.method === 'GET' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#15803D]' : 'bg-[#EFF6FF] border-[#BFDBFE] text-[#14388C]'}`}>
                         {ep.method}
                       </span>
-                      <code class="text-[13px] font-semibold text-[#11141C]">{ep.path}</code>
+                      <code class="font-code text-[13px] font-semibold text-[#12161F]">{ep.path}</code>
                     </div>
-                    <p class="mt-1 text-[13px] text-[#525866]">{ep.desc}</p>
+                    <p class="mt-1 text-[13px] text-[#4A5262]">{ep.desc}</p>
                   </div>
+                  {ep.testable && (
+                    <button
+                      type="button"
+                      data-endpoint={ep.path}
+                      class="test-api-btn h-8 px-3 rounded bg-[#E2DFD7] hover:bg-[#0A1931] hover:text-white border border-[#C8C3B8] text-[12px] font-semibold text-[#12161F] transition shrink-0"
+                    >
+                      Test live ›
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
+
+            <div id="api-output-wrap" class="hidden mt-5 rounded-md bg-[#0A1931] border border-[#1E3A6D] p-4 text-white">
+              <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#1E3A6D] text-[12px]">
+                <span id="api-output-url" class="font-code text-[#C88A14]"></span>
+                <span id="api-output-status" class="font-code text-[#CBD5E1]"></span>
+              </div>
+              <pre id="api-output-pre" class="font-code text-[12px] text-[#E2E8F0] overflow-x-auto max-h-60 whitespace-pre-wrap"></pre>
+            </div>
           </section>
 
-          <!-- Interactive FAQ Accordion Card -->
-          <section id="faq" class="doc-section bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">COMMON QUESTIONS</div>
-            <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Frequently asked questions</h2>
-            <div class="mt-4 border-t border-[#E2E5EC] divide-y divide-[#E2E5EC]">
+          <!-- FAQ Accordion -->
+          <section id="faq" class="bg-white border border-[#CFCBC2] rounded-lg p-6 sm:p-7 shadow-[0_2px_6px_rgba(10,25,49,0.04)] scroll-mt-24">
+            <h2 class="font-display text-[24px] font-bold text-[#12161F]">Frequently Asked Questions</h2>
+            <div class="mt-4 border-t border-[#CFCBC2] divide-y divide-[#E2DFD7]">
               {faqs.map((item, idx) => (
                 <details class="doc-item py-4 group" open={idx === 0}>
-                  <summary class="cursor-pointer list-none flex items-center justify-between gap-3 text-[15px] font-semibold text-[#11141C] hover:text-[#002583]">
+                  <summary class="cursor-pointer list-none flex items-center justify-between gap-3 text-[15px] font-semibold text-[#12161F] hover:text-[#14388C]">
                     <span>{item.q}</span>
-                    <span class="text-[#7A8191] group-open:rotate-45 transition-transform text-[18px] leading-none">+</span>
+                    <span class="text-[#4A5262] group-open:rotate-45 transition-transform text-[18px] leading-none">+</span>
                   </summary>
-                  <p class="mt-2.5 text-[14px] leading-[1.6] text-[#525866]">{item.a}</p>
+                  <p class="mt-2.5 text-[14px] leading-[1.6] text-[#4A5262]">{item.a}</p>
                 </details>
               ))}
             </div>
@@ -233,6 +248,35 @@ const faqs = [
           });
         });
       }
+
+      const outWrap = document.getElementById('api-output-wrap');
+      const outUrl = document.getElementById('api-output-url');
+      const outStatus = document.getElementById('api-output-status');
+      const outPre = document.getElementById('api-output-pre');
+
+      document.querySelectorAll('.test-api-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const ep = btn.getAttribute('data-endpoint');
+          const url = 'https://n8n.tfunions.com/tf-api' + ep;
+          outWrap.classList.remove('hidden');
+          outUrl.textContent = url;
+          outStatus.textContent = 'Fetching...';
+          outPre.textContent = '';
+          try {
+            const res = await fetch(url);
+            outStatus.textContent = `HTTP ${res.status}`;
+            const txt = await res.text();
+            try {
+              outPre.textContent = JSON.stringify(JSON.parse(txt), null, 2);
+            } catch {
+              outPre.textContent = txt.slice(0, 1500);
+            }
+          } catch (err) {
+            outStatus.textContent = 'Network Error';
+            outPre.textContent = String(err);
+          }
+        });
+      });
     </script>
   </body>
 </html>

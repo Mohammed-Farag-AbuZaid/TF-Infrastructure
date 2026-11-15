@@ -8,7 +8,7 @@ export interface Props {
 
 const {
   title,
-  description = 'TF Unions — Egyptian STEM & University Scholars Network. Open tools, verified university pathways, and study communities.',
+  description = 'TF Unions — Egyptian STEM & University Union. Verified admissions, Olympiad & research roadmaps, regional study chapters, and open financial ledger.',
   backLabel,
   backHref = '/',
 } = Astro.props;
@@ -29,12 +29,12 @@ const ecosystemLinks = [
   { label: 'TF News', href: 'https://news.tfunions.com' },
   { label: 'TF Guides', href: 'https://guides.tfunions.com' },
   { label: 'TF Connect', href: 'https://connect.tfunions.com' },
-  { label: 'Verify', href: 'https://verify.tfunions.com' },
+  { label: 'Verify Registry', href: 'https://verify.tfunions.com' },
   { label: 'Docs', href: 'https://docs.tfunions.com' },
 ];
 
 const faviconSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0A1931"/><rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#1E3A6D" stroke-width="1.5"/><rect x="22" y="5" width="5" height="5" rx="1" fill="#C88A14"/><path d="M6.5 9.5h11.5v2.7h-4.2V23h-3V12.2H6.5V9.5zm10.8 0H25v2.7h-4.7v2.9h3.9v2.6h-3.9V23h-3V9.5z" fill="#fff"/></svg>`
 );
 ---
 <!doctype html>
@@ -47,27 +47,58 @@ const faviconSvg = encodeURIComponent(
     <meta property="og:title" content={`${title} — TF Unions`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#002583" />
+    <meta name="theme-color" content="#0A1931" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500..700;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
+    <style is:global>
+      :root {
+        --tf-navy: #0A1931;
+        --tf-navy-mid: #102447;
+        --tf-navy-border: #1E3A6D;
+        --tf-stone: #ECEAE4;
+        --tf-sand: #E2DFD7;
+        --tf-paper: #FFFFFF;
+        --tf-border: #CFCBC2;
+        --tf-cobalt: #14388C;
+        --tf-brass: #C88A14;
+        --tf-ink: #12161F;
+        --tf-slate: #4A5262;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: #ECEAE4;
+        color: #12161F;
+      }
+      .font-display {
+        font-family: 'Newsreader', Georgia, serif;
+      }
+      .font-code {
+        font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      }
+      *:focus-visible {
+        outline: 2px solid #C88A14;
+        outline-offset: 2px;
+      }
+    </style>
   </head>
-  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased selection:bg-[#002583]/15 selection:text-[#002583] flex flex-col">
-    <!-- Top Ecosystem Bar -->
-    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
-      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 h-9 flex items-center justify-between gap-4 overflow-x-auto">
-        <div class="flex items-center gap-4 shrink-0 text-[12px]">
-          <span class="font-semibold uppercase tracking-[0.12em] text-[#525866]">TF Ecosystem</span>
-          <span class="text-[#C5CAD6]" aria-hidden="true">|</span>
+  <body class="min-h-screen bg-[#ECEAE4] text-[#12161F] antialiased selection:bg-[#14388C]/20 selection:text-[#0A1931] flex flex-col">
+    <!-- Top Institutional Portal Switcher -->
+    <div class="bg-[#061022] border-b border-[#1E3A6D] text-[#CBD5E1]">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 h-10 flex items-center justify-between gap-4 overflow-x-auto">
+        <div class="flex items-stretch h-full gap-1 shrink-0 text-[12px]">
           {ecosystemLinks.map((item) => (
             <a
               href={item.href}
               class={
                 item.active
-                  ? 'font-semibold text-[#002583] whitespace-nowrap'
-                  : 'text-[#525866] hover:text-[#11141C] transition whitespace-nowrap'
+                  ? 'px-3.5 flex items-center font-semibold text-white bg-[#0A1931] border-t-2 border-t-[#C88A14] border-x border-[#1E3A6D] whitespace-nowrap'
+                  : 'px-3 flex items-center text-[#94A3B8] hover:text-white hover:bg-[#102447]/60 transition whitespace-nowrap'
               }
             >
               {item.label}
@@ -76,34 +107,37 @@ const faviconSvg = encodeURIComponent(
         </div>
         <a
           href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-          class="hidden sm:inline-block text-[12px] font-medium text-[#525866] hover:text-[#002583] transition whitespace-nowrap"
+          class="hidden sm:inline-flex items-center gap-1.5 text-[12px] font-medium text-[#CBD5E1] hover:text-[#C88A14] transition whitespace-nowrap"
         >
-          SSO Hub ›
+          TF Passport SSO ›
         </a>
       </div>
     </div>
 
-    <!-- Main Navigation Header -->
-    <header class="bg-white border-b border-[#E2E5EC] sticky top-0 z-40">
-      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-6">
-          <a href={backLabel ? backHref : '/'} class="flex items-center gap-2.5 group shrink-0">
-            <!-- Custom Geometric TF Monogram -->
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="shrink-0 shadow-[0_1px_2px_rgba(15,23,42,0.08)] rounded-[7px]">
-              <rect width="32" height="32" rx="7" fill="#002583" />
-              <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
-              <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+    <!-- Main Deep Oxford Navy Masthead -->
+    <header class="bg-[#0A1931] border-b border-[#1E3A6D] text-white sticky top-0 z-40 shadow-[0_2px_10px_rgba(10,25,49,0.16)]">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 h-[72px] flex items-center justify-between gap-4">
+        <div class="flex items-center gap-7">
+          <a href={backLabel ? backHref : '/'} class="flex items-center gap-3 group shrink-0">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="shrink-0 rounded-md">
+              <rect width="32" height="32" rx="6" fill="#14388C" />
+              <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" stroke="#1E3A6D" stroke-width="1.5" />
+              <rect x="22.5" y="5" width="4.5" height="4.5" rx="1" fill="#C88A14" />
+              <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
             </svg>
-            <div class="flex items-baseline gap-2">
+            <div class="flex flex-col">
               {backLabel ? (
-                <span class="text-[15px] font-semibold text-[#002583] group-hover:text-[#001B61] transition">
+                <span class="font-display text-[19px] font-bold tracking-[-0.015em] text-white group-hover:text-[#C88A14] transition leading-tight">
                   ‹ {backLabel}
                 </span>
               ) : (
-                <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">
+                <span class="font-display text-[22px] font-bold tracking-[-0.02em] text-white leading-none">
                   TF Unions
                 </span>
               )}
+              <span class="text-[11px] text-[#94A3B8] font-medium mt-0.5 leading-none">
+                Egyptian STEM &amp; University Union
+              </span>
             </div>
           </a>
 
@@ -116,8 +150,8 @@ const faviconSvg = encodeURIComponent(
                   aria-current={isActive ? 'page' : undefined}
                   class={
                     isActive
-                      ? 'px-3 py-1.5 rounded-lg text-[14px] font-semibold text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC]'
-                      : 'px-3 py-1.5 rounded-lg text-[14px] font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB] transition'
+                      ? 'px-3.5 py-2 rounded-md text-[13.5px] font-semibold text-white bg-[#102447] border border-[#1E3A6D] border-b-2 border-b-[#C88A14]'
+                      : 'px-3.5 py-2 rounded-md text-[13.5px] font-medium text-[#CBD5E1] hover:text-white hover:bg-[#102447]/70 transition'
                   }
                 >
                   {link.label}
@@ -128,10 +162,10 @@ const faviconSvg = encodeURIComponent(
         </div>
 
         <div class="flex items-center gap-3">
-          <div id="sso-nav-slot" class="flex items-center gap-2.5">
+          <div id="sso-nav-slot" class="flex items-center gap-2">
             <a
               href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-              class="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white text-[13px] font-semibold transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
+              class="inline-flex items-center justify-center h-9 px-4 rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition"
             >
               Sign in
             </a>
@@ -143,7 +177,7 @@ const faviconSvg = encodeURIComponent(
             aria-expanded="false"
             aria-controls="mobile-nav-drawer"
             aria-label="Toggle navigation menu"
-            class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white border border-[#E2E5EC] text-[#11141C] hover:bg-[#F3F5F8] transition"
+            class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-md bg-[#102447] border border-[#1E3A6D] text-white hover:border-[#C88A14] transition"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <line x1="4" y1="7" x2="20" y2="7" />
@@ -155,7 +189,7 @@ const faviconSvg = encodeURIComponent(
       </div>
 
       <!-- Mobile Navigation Drawer -->
-      <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#E2E5EC] bg-white px-5 py-4 space-y-1">
+      <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#1E3A6D] bg-[#0A1931] px-4 py-4 space-y-1">
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -164,84 +198,84 @@ const faviconSvg = encodeURIComponent(
               aria-current={isActive ? 'page' : undefined}
               class={
                 isActive
-                  ? 'block px-3.5 py-2.5 rounded-xl text-[14px] font-semibold text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC]'
-                  : 'block px-3.5 py-2.5 rounded-xl text-[14px] font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB]'
+                  ? 'block px-3.5 py-2.5 rounded-md text-[14px] font-semibold text-white bg-[#102447] border-l-2 border-[#C88A14]'
+                  : 'block px-3.5 py-2.5 rounded-md text-[14px] font-medium text-[#CBD5E1] hover:text-white hover:bg-[#102447]'
               }
             >
               {link.label}
             </a>
           );
         })}
-        <div class="pt-3 mt-3 border-t border-[#E2E5EC] grid grid-cols-2 gap-2 text-[13px]">
-          <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">TF Guides</a>
-          <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">TF Connect</a>
-          <a href="https://verify.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">Verify Registry</a>
-          <a href="https://docs.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">Documentation</a>
+        <div class="pt-3 mt-3 border-t border-[#1E3A6D] grid grid-cols-2 gap-2 text-[13px]">
+          <a href="https://news.tfunions.com" class="px-3 py-2 rounded-md bg-[#102447] border border-[#1E3A6D] font-medium text-white">TF News</a>
+          <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-md bg-[#102447] border border-[#1E3A6D] font-medium text-white">TF Guides</a>
+          <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-md bg-[#102447] border border-[#1E3A6D] font-medium text-white">TF Connect</a>
+          <a href="https://verify.tfunions.com" class="px-3 py-2 rounded-md bg-[#102447] border border-[#1E3A6D] font-medium text-white">Verify Registry</a>
         </div>
       </div>
     </header>
 
-    <!-- Page Canvas Container -->
-    <main class="flex-1 w-full max-w-[1080px] mx-auto px-5 sm:px-6 pb-20">
+    <!-- Warm Stone Page Canvas Container -->
+    <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 pb-20">
       <slot />
     </main>
 
-    <!-- Multi-Column Institutional Footer -->
-    <footer class="bg-white border-t border-[#E2E5EC] mt-auto">
-      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-[13px]">
+    <!-- Dark Navy Institutional Footer -->
+    <footer class="bg-[#0A1931] text-[#CBD5E1] border-t-2 border-[#C88A14] mt-auto">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-[13px]">
         <div>
           <div class="flex items-center gap-2.5">
-            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[6px]">
-              <rect width="32" height="32" rx="7" fill="#002583" />
-              <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
-              <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-md">
+              <rect width="32" height="32" rx="6" fill="#14388C" />
+              <rect x="22.5" y="5" width="4.5" height="4.5" rx="1" fill="#C88A14" />
+              <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
             </svg>
-            <span class="text-[15px] font-bold text-[#11141C]">TF Unions</span>
+            <span class="font-display text-[17px] font-bold text-white">TF Unions</span>
           </div>
-          <p class="mt-3 text-[#525866] leading-[1.6]">
-            Independent non-profit educational foundation empowering ambitious students across all 27 Egyptian governorates.
+          <p class="mt-3 text-[#94A3B8] leading-[1.6]">
+            Independent non-profit student academic union empowering STEM and university scholars across all 27 Egyptian governorates.
           </p>
-          <p class="mt-3 text-[12px] text-[#7A8191]">
+          <p class="mt-3 text-[12px] text-[#CBD5E1]">
             Founded by Mohammed Farag &amp; Mohammed Abdelghany.
           </p>
         </div>
 
         <div>
-          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Platforms</div>
-          <ul class="mt-3 space-y-2 text-[#525866]">
-            <li><a href="https://news.tfunions.com" class="hover:text-[#002583] transition">TF News &amp; Admissions</a></li>
-            <li><a href="https://guides.tfunions.com" class="hover:text-[#002583] transition">TF Guides &amp; Roadmaps</a></li>
-            <li><a href="https://connect.tfunions.com" class="hover:text-[#002583] transition">TF Connect Chapters</a></li>
-            <li><a href="https://auth.tfunions.com" class="hover:text-[#002583] transition">Unified SSO Hub</a></li>
+          <div class="text-[12px] font-bold text-white border-b border-[#1E3A6D] pb-2">Student Platforms</div>
+          <ul class="mt-3 space-y-2 text-[#CBD5E1]">
+            <li><a href="https://news.tfunions.com" class="hover:text-[#C88A14] transition">TF News &amp; Admissions</a></li>
+            <li><a href="https://guides.tfunions.com" class="hover:text-[#C88A14] transition">TF Guides &amp; Roadmaps</a></li>
+            <li><a href="https://connect.tfunions.com" class="hover:text-[#C88A14] transition">TF Connect Chapters</a></li>
+            <li><a href="https://auth.tfunions.com" class="hover:text-[#C88A14] transition">TF Passport Single Sign-On</a></li>
           </ul>
         </div>
 
         <div>
-          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Foundation</div>
-          <ul class="mt-3 space-y-2 text-[#525866]">
-            <li><a href="/about" class="hover:text-[#002583] transition">About &amp; Mission</a></li>
-            <li><a href="/team" class="hover:text-[#002583] transition">Team Constellation</a></li>
-            <li><a href="/volunteer" class="hover:text-[#002583] transition">Volunteer Tracks</a></li>
-            <li><a href="/ideas" class="hover:text-[#002583] transition">Idea Incubator</a></li>
+          <div class="text-[12px] font-bold text-white border-b border-[#1E3A6D] pb-2">Foundation</div>
+          <ul class="mt-3 space-y-2 text-[#CBD5E1]">
+            <li><a href="/about" class="hover:text-[#C88A14] transition">About &amp; Mission</a></li>
+            <li><a href="/team" class="hover:text-[#C88A14] transition">71-Member Team Constellation</a></li>
+            <li><a href="/volunteer" class="hover:text-[#C88A14] transition">Volunteer Tracks</a></li>
+            <li><a href="/ideas" class="hover:text-[#C88A14] transition">Student Idea Incubator</a></li>
           </ul>
         </div>
 
         <div>
-          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Verification &amp; Trust</div>
-          <ul class="mt-3 space-y-2 text-[#525866]">
-            <li><a href="https://verify.tfunions.com" class="hover:text-[#002583] transition">Verify Certificate</a></li>
-            <li><a href="/transparency" class="hover:text-[#002583] transition">Open Financial Ledger</a></li>
-            <li><a href="/charter" class="hover:text-[#002583] transition">Non-Profit Charter</a></li>
-            <li><a href="https://docs.tfunions.com" class="hover:text-[#002583] transition">Documentation &amp; API</a></li>
-            <li><a href="https://status.tfunions.com" class="hover:text-[#002583] transition">System Status</a></li>
+          <div class="text-[12px] font-bold text-white border-b border-[#1E3A6D] pb-2">Accountability &amp; API</div>
+          <ul class="mt-3 space-y-2 text-[#CBD5E1]">
+            <li><a href="https://verify.tfunions.com" class="hover:text-[#C88A14] transition">Verify Certificate Serial</a></li>
+            <li><a href="/transparency" class="hover:text-[#C88A14] transition">Open Financial Ledger</a></li>
+            <li><a href="/charter" class="hover:text-[#C88A14] transition">Non-Profit Charter</a></li>
+            <li><a href="https://docs.tfunions.com" class="hover:text-[#C88A14] transition">Documentation &amp; API</a></li>
+            <li><a href="https://status.tfunions.com" class="hover:text-[#C88A14] transition">System Status</a></li>
           </ul>
         </div>
       </div>
 
-      <div class="border-t border-[#E2E5EC] bg-[#F8F9FB]">
-        <div class="max-w-[1080px] mx-auto px-5 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[12px] text-[#7A8191]">
-          <span>© 2025–2026 TF Unions Foundation. All student resources free and ad-free.</span>
-          <a href="/support" class="font-semibold text-[#002583] hover:underline">Support the Mission ›</a>
+      <div class="border-t border-[#1E3A6D] bg-[#061022]">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[12px] text-[#94A3B8]">
+          <span>© 2025–2026 TF Unions Foundation. Open access and ad-free for all students.</span>
+          <a href="/support" class="font-semibold text-[#C88A14] hover:underline">Support the Mission ›</a>
         </div>
       </div>
     </footer>
@@ -251,7 +285,6 @@ const faviconSvg = encodeURIComponent(
 
     <script is:inline>
       (function () {
-        // Mobile drawer toggle
         const toggleBtn = document.getElementById('mobile-menu-toggle');
         const drawer = document.getElementById('mobile-nav-drawer');
         if (toggleBtn && drawer) {
@@ -279,12 +312,12 @@ const faviconSvg = encodeURIComponent(
 
               const badge = document.createElement('a');
               badge.href = 'https://auth.tfunions.com';
-              badge.className = 'inline-flex items-center gap-2 h-9 px-3 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] text-[13px] font-semibold text-[#11141C] hover:border-[#002583]/40 transition';
+              badge.className = 'inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#102447] border border-[#1E3A6D] text-[13px] font-semibold text-white hover:border-[#C88A14] transition';
               badge.textContent = String(hint.name).slice(0, 32);
 
               const signOutBtn = document.createElement('button');
               signOutBtn.type = 'button';
-              signOutBtn.className = 'h-9 px-3 rounded-xl bg-white border border-[#E2E5EC] text-[12px] font-semibold text-[#525866] hover:text-[#B91C1C] hover:border-[#B91C1C]/30 transition';
+              signOutBtn.className = 'h-9 px-3 rounded-md bg-transparent border border-[#1E3A6D] text-[12px] font-semibold text-[#CBD5E1] hover:text-white hover:border-white/50 transition';
               signOutBtn.textContent = 'Sign out';
               signOutBtn.addEventListener('click', async () => {
                 try {

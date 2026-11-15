@@ -2,243 +2,237 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import teamData from '../data/team-nodes.json';
 ---
-<BaseLayout title="Team & Organizational Network" backLabel="TF Unions" backHref="/">
-  <!-- Header Title -->
-  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">
-      ORGANIZATIONAL ARCHITECTURE · OCT 2025 — NOV 2026
+<BaseLayout title="Team Constellation" backLabel="TF Unions" backHref="/">
+  <!-- Deep Oxford Navy Header Stage -->
+  <section class="mt-7 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-7 sm:p-9 shadow-[0_3px_12px_rgba(10,25,49,0.08)]">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+      <div>
+        <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] font-medium text-[#E2E8F0]">
+          Organizational evolution, October 2025 to November 2026
+        </div>
+        <h1 class="font-display mt-3 text-[32px] sm:text-[44px] font-bold tracking-[-0.025em] leading-[1.08] text-white">
+          Union cohort and leadership constellation.
+        </h1>
+        <p class="mt-3 text-[15.5px] leading-[1.55] text-[#CBD5E1] max-w-[700px]">
+          Trace how TF Unions grew from two founding systems architects in <strong class="text-white">October 2025</strong> to <strong class="text-[#C88A14]">71 student leaders</strong> across Egypt in <strong class="text-white">November 2026</strong>.
+        </p>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <button
+          id="play-btn"
+          type="button"
+          class="h-10 px-4 rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition flex items-center gap-1.5"
+        >
+          <span id="play-icon">▶</span>
+          <span id="play-label">Play Timeline</span>
+        </button>
+        <span class="font-code px-3 py-2 bg-[#102447] border border-[#1E3A6D] text-white text-[12px] font-semibold rounded-md" id="active-count-badge">
+          71 Members Active
+        </span>
+      </div>
     </div>
-    <h1 class="mt-2 text-[32px] sm:text-[44px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
-      Team &amp; Contributor Constellation.
-    </h1>
-    <p class="mt-3 text-[16px] leading-[1.55] text-[#525866] max-w-[760px]">
-      Explore the evolution of TF Unions from inception in <strong class="text-[#11141C]">October 2025</strong> to our nationwide network of 71 student leaders in <strong class="text-[#11141C]">November 2026</strong>.
-    </p>
+
+    <!-- Interactive Timeline Scrubber inside Navy Masthead -->
+    <div class="mt-7 pt-6 border-t border-[#1E3A6D]">
+      <div class="flex items-center justify-between text-[12px] font-semibold text-[#CBD5E1] mb-2.5">
+        <span class="font-code text-[#C88A14]">Oct 2025 (Inception)</span>
+        <span id="cohort-desc" class="text-center text-white hidden sm:inline">November 2026 — Nationwide Scale (71 Active Members Across Egypt)</span>
+        <span class="font-code text-[#C88A14]">Nov 2026 (71 Members)</span>
+      </div>
+
+      <input
+        id="timeline-slider"
+        type="range"
+        min="0"
+        max="4"
+        step="1"
+        value="4"
+        aria-label="Cohort timeline milestone slider"
+        class="w-full h-2 bg-[#1E3A6D] rounded appearance-none cursor-pointer accent-[#C88A14] focus:outline-none"
+      />
+
+      <div class="grid grid-cols-5 gap-2 text-[11.5px] text-[#94A3B8] mt-3">
+        <button type="button" class="text-left hover:text-white transition" onclick="setStep(0)">
+          <span class="font-code block">Oct 2025</span>
+          <strong class="text-white font-semibold">Founders</strong>
+        </button>
+        <button type="button" class="text-center hover:text-white transition" onclick="setStep(1)">
+          <span class="font-code block">Jan 2026</span>
+          <strong class="text-white font-semibold">Heads</strong>
+        </button>
+        <button type="button" class="text-center hover:text-white transition" onclick="setStep(2)">
+          <span class="font-code block">Apr 2026</span>
+          <strong class="text-white font-semibold">Vice Heads</strong>
+        </button>
+        <button type="button" class="text-center hover:text-white transition" onclick="setStep(3)">
+          <span class="font-code block">Jul 2026</span>
+          <strong class="text-white font-semibold">Committees</strong>
+        </button>
+        <button type="button" class="text-right hover:text-white transition" onclick="setStep(4)">
+          <span class="font-code block">Nov 2026</span>
+          <strong class="text-white font-semibold">Full Network</strong>
+        </button>
+      </div>
+    </div>
   </section>
 
-  <!-- Main Interactive Graph Container (As sketched) -->
-  <section class="mt-6 bg-white border border-[#E2E5EC] rounded-2xl shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden">
-    <!-- Top Interactive Timeline Strip (Matches Hand-Drawn Sketch) -->
-    <div class="p-6 sm:p-8 bg-[#F8F9FB] border-b border-[#E2E5EC]">
-      <div class="flex items-center justify-between text-[13px] font-bold uppercase tracking-wider text-[#11141C] mb-3">
-        <span class="flex items-center gap-2">
-          <span class="text-[#002583]">OCT 2025</span>
-          <span class="text-[#7A8191] font-normal">(Inception)</span>
-        </span>
-        <div class="flex items-center gap-3">
-          <button
-            id="play-btn"
-            type="button"
-            class="px-3.5 py-1.5 bg-white border border-[#E2E5EC] rounded-lg text-[12px] font-semibold text-[#11141C] hover:border-[#002583]/40 transition flex items-center gap-1.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
-          >
-            <span id="play-icon">▶</span>
-            <span id="play-label">Play Timeline</span>
-          </button>
-          <span class="px-2.5 py-1 bg-[#F3F5F8] border border-[#E2E5EC] text-[#002583] text-[11px] font-bold rounded-md" id="active-count-badge">
-            2 Members Active
-          </span>
-        </div>
-        <span class="flex items-center gap-2">
-          <span class="text-[#002583]">NOV 2026</span>
-          <span class="text-[#7A8191] font-normal">(71 Members)</span>
-        </span>
-      </div>
-
-      <!-- Scrubber Track & Thumb -->
-      <div class="relative py-2">
-        <input
-          id="timeline-slider"
-          type="range"
-          min="0"
-          max="4"
-          step="1"
-          value="4"
-          class="w-full h-2.5 bg-[#E5E5EA] rounded-lg appearance-none cursor-pointer accent-[#002583] focus:outline-none"
-        />
-        <!-- Timeline Tick Marks -->
-        <div class="flex justify-between text-[11px] text-[#86868B] mt-2 font-medium">
-          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(0)">Oct 2025<br/><strong class="text-[#1D1D1F]">Founders</strong></span>
-          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(1)">Jan 2026<br/><strong class="text-[#1D1D1F]">Heads</strong></span>
-          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(2)">Apr 2026<br/><strong class="text-[#1D1D1F]">Vice Heads</strong></span>
-          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(3)">Jul 2026<br/><strong class="text-[#1D1D1F]">Committees</strong></span>
-          <span class="cursor-pointer hover:text-[#002583]" onclick="setStep(4)">Nov 2026<br/><strong class="text-[#1D1D1F]">Full Network</strong></span>
-        </div>
-      </div>
-
-      <!-- Active Cohort Status Banner -->
-      <div class="mt-4 pt-3 border-t border-[#D2D2D7]/50 flex flex-wrap items-center justify-between gap-3 text-[13px]">
-        <div>
-          <span class="text-[#86868B]">Active Timeline Period:</span>
-          <strong id="cohort-desc" class="ml-1 text-[#1D1D1F]">November 2026 — Nationwide Ecosystem Scale</strong>
-        </div>
-        <div class="text-[12px] text-[#86868B]">
-          Drag slider or click any circle on the graph to inspect member profiles
-        </div>
-      </div>
-    </div>
-
-    <!-- Toolbar: Filters & Search -->
-    <div class="px-6 py-3.5 bg-white border-b border-[#D2D2D7]/60 flex flex-wrap items-center justify-between gap-3">
+  <!-- Main Interactive Constellation Widget -->
+  <section class="mt-6 bg-white border border-[#CFCBC2] rounded-lg shadow-[0_2px_6px_rgba(10,25,49,0.05)] overflow-hidden">
+    <!-- Filter & Search Bar -->
+    <div class="px-5 sm:px-6 py-4 bg-[#E2DFD7] border-b border-[#CFCBC2] flex flex-wrap items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-1.5" id="team-filter-buttons">
-        <button type="button" data-team="All" class="team-btn active px-3 py-1 rounded-full text-[12px] font-semibold bg-[#1D1D1F] text-white transition">All Teams (71)</button>
-        <button type="button" data-team="Founders" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Founders (2)</button>
-        <button type="button" data-team="HR Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">HR Team (26)</button>
-        <button type="button" data-team="Marketing Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Marketing (12)</button>
-        <button type="button" data-team="PR Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">PR &amp; Outreach (17)</button>
-        <button type="button" data-team="Social Media Team" class="team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition">Social Media (14)</button>
+        <button type="button" data-team="All" class="team-btn active px-3 py-1.5 rounded-md text-[12px] font-semibold bg-[#0A1931] text-white border border-[#0A1931] transition">All Teams (71)</button>
+        <button type="button" data-team="Founders" class="team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Founders (2)</button>
+        <button type="button" data-team="HR Team" class="team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">HR Team (26)</button>
+        <button type="button" data-team="Marketing Team" class="team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Marketing (12)</button>
+        <button type="button" data-team="PR Team" class="team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">PR &amp; Outreach (17)</button>
+        <button type="button" data-team="Social Media Team" class="team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Social Media (14)</button>
       </div>
 
-      <div class="relative w-full sm:w-64">
+      <div class="w-full sm:w-64">
         <input
           id="graph-search"
           type="text"
           placeholder="Search member or school..."
-          class="w-full px-3 py-1.5 bg-[#F5F5F7] border border-[#D2D2D7] rounded-lg text-[13px] text-[#1D1D1F] placeholder-[#86868B] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002583]"
+          class="w-full h-9 px-3 bg-white border border-[#CFCBC2] rounded-md text-[13px] text-[#12161F] placeholder-[#687082] focus:border-[#14388C] focus:outline-none"
         />
       </div>
     </div>
 
-    <!-- The Interactive Visual Constellation (SVG Graph) -->
-    <div class="relative bg-[#FAFAFC] overflow-hidden" style="min-height: 600px;">
+    <!-- Interactive Visual SVG Constellation -->
+    <div class="relative bg-[#FAFAF8] overflow-hidden" style="min-height: 600px;">
       <!-- Zoom Controls -->
-      <div class="absolute top-4 right-4 z-10 flex flex-col gap-1.5 bg-white/90 backdrop-blur-md p-1.5 rounded-xl border border-[#D2D2D7] shadow-sm">
-        <button id="btn-zoom-in" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] font-bold text-[16px]" title="Zoom In">+</button>
-        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] font-bold text-[16px]" title="Zoom Out">−</button>
-        <button id="btn-zoom-reset" type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-[#1D1D1F] hover:bg-[#F5F5F7] text-[11px] font-semibold" title="Reset View">100%</button>
+      <div class="absolute top-4 right-4 z-10 flex flex-col gap-1 bg-white p-1 rounded-md border border-[#CFCBC2] shadow-sm">
+        <button id="btn-zoom-in" type="button" class="w-8 h-8 rounded flex items-center justify-center text-[#12161F] hover:bg-[#ECEAE4] font-bold text-[16px]" title="Zoom In">+</button>
+        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded flex items-center justify-center text-[#12161F] hover:bg-[#ECEAE4] font-bold text-[16px]" title="Zoom Out">−</button>
+        <button id="btn-zoom-reset" type="button" class="w-8 h-8 rounded flex items-center justify-center text-[#12161F] hover:bg-[#ECEAE4] text-[11px] font-semibold" title="Reset View">100%</button>
       </div>
 
-      <!-- Graph Canvas Container -->
       <div id="graph-viewport" class="w-full h-full cursor-grab active:cursor-grabbing select-none" style="height: 620px;">
         <svg id="network-svg" viewBox="0 0 1000 680" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <!-- Founder Gradients -->
             <linearGradient id="grad-founder" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#002583" />
-              <stop offset="100%" stop-color="#001850" />
+              <stop offset="0%" stop-color="#0A1931" />
+              <stop offset="100%" stop-color="#14388C" />
             </linearGradient>
             <linearGradient id="grad-hr" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#8B5CF6" />
-              <stop offset="100%" stop-color="#6D28D9" />
+              <stop offset="0%" stop-color="#7C3AED" />
+              <stop offset="100%" stop-color="#5B21B6" />
             </linearGradient>
             <linearGradient id="grad-marketing" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#10B981" />
-              <stop offset="100%" stop-color="#059669" />
+              <stop offset="0%" stop-color="#059669" />
+              <stop offset="100%" stop-color="#065F46" />
             </linearGradient>
             <linearGradient id="grad-pr" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#0EA5E9" />
-              <stop offset="100%" stop-color="#0284C7" />
+              <stop offset="0%" stop-color="#0284C7" />
+              <stop offset="100%" stop-color="#075985" />
             </linearGradient>
             <linearGradient id="grad-social" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#F59E0B" />
-              <stop offset="100%" stop-color="#D97706" />
+              <stop offset="0%" stop-color="#C88A14" />
+              <stop offset="100%" stop-color="#92400E" />
             </linearGradient>
-            <!-- Drop Shadow Filter -->
             <filter id="node-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12" />
+              <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.14" />
             </filter>
             <filter id="glow-founder" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#002583" flood-opacity="0.35" />
+              <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#0A1931" flood-opacity="0.35" />
             </filter>
           </defs>
 
-          <!-- Dynamic SVG Group for Zoom/Pan -->
           <g id="graph-content">
-            <!-- Edges / Links Layer -->
             <g id="edges-layer"></g>
 
-            <!-- Hub Labels / Anchors Layer -->
             <g id="hubs-layer">
-              <!-- HR Hub Anchor -->
-              <circle cx="230" cy="170" r="32" fill="#8B5CF6" fill-opacity="0.08" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="3,3" />
-              <text x="230" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#6D28D9" letter-spacing="0.5">HR TEAM</text>
+              <circle cx="230" cy="170" r="32" fill="#7C3AED" fill-opacity="0.07" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="230" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#5B21B6">HR Team</text>
 
-              <!-- PR Hub Anchor -->
-              <circle cx="770" cy="170" r="32" fill="#0EA5E9" fill-opacity="0.08" stroke="#0EA5E9" stroke-width="1.5" stroke-dasharray="3,3" />
-              <text x="770" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#0284C7" letter-spacing="0.5">PR &amp; OUTREACH</text>
+              <circle cx="770" cy="170" r="32" fill="#0284C7" fill-opacity="0.07" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="770" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#075985">PR &amp; Outreach</text>
 
-              <!-- Marketing Hub Anchor -->
-              <circle cx="250" cy="480" r="32" fill="#10B981" fill-opacity="0.08" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3,3" />
-              <text x="250" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#059669" letter-spacing="0.5">MARKETING</text>
+              <circle cx="250" cy="480" r="32" fill="#059669" fill-opacity="0.07" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="250" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46">Marketing</text>
 
-              <!-- Social Media Hub Anchor -->
-              <circle cx="750" cy="480" r="32" fill="#F59E0B" fill-opacity="0.08" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="3,3" />
-              <text x="750" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#D97706" letter-spacing="0.5">SOCIAL MEDIA</text>
+              <circle cx="750" cy="480" r="32" fill="#C88A14" fill-opacity="0.08" stroke="#C88A14" stroke-width="1.5" stroke-dasharray="3,3" />
+              <text x="750" y="525" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E">Social Media</text>
             </g>
 
-            <!-- Nodes Layer -->
             <g id="nodes-layer"></g>
           </g>
         </svg>
       </div>
 
-      <!-- Floating Member Inspector Card (Appears on click/hover) -->
+      <!-- Floating Member Inspector Sheet -->
       <div
         id="member-inspector"
-        class="hidden absolute bottom-4 left-4 right-4 sm:right-auto sm:w-[420px] bg-white/95 backdrop-blur-md border border-[#D2D2D7] rounded-2xl p-5 shadow-xl transition-all duration-200 z-20"
+        class="hidden absolute bottom-4 left-4 right-4 sm:right-auto sm:w-[420px] bg-white border-2 border-[#0A1931] rounded-lg p-5 shadow-xl z-20"
       >
-        <div class="flex items-start justify-between">
+        <div class="flex items-start justify-between gap-3">
           <div class="flex items-center gap-3">
-            <div id="insp-avatar" class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-[16px] shadow-sm">
+            <div id="insp-avatar" class="w-11 h-11 rounded-md flex items-center justify-center font-bold text-white text-[15px]">
               MF
             </div>
             <div>
-              <div class="flex items-center gap-2">
-                <h3 id="insp-name" class="font-bold text-[18px] text-[#1D1D1F] leading-tight">Mohammed Farag</h3>
-                <span id="insp-team-badge" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#F5F5F7] text-[#1D1D1F]">Founders</span>
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 id="insp-name" class="font-display font-bold text-[19px] text-[#12161F] leading-tight">Mohammed Farag</h3>
+                <span id="insp-team-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#E2DFD7] text-[#12161F]">Founders</span>
               </div>
-              <div id="insp-role" class="text-[13px] font-semibold text-[#002583] mt-0.5">Co-Founder &amp; Principal Systems Architect</div>
+              <div id="insp-role" class="text-[13px] font-semibold text-[#14388C] mt-0.5">Co-Founder &amp; Principal Systems Architect</div>
             </div>
           </div>
-          <button id="close-inspector-btn" type="button" class="text-[#86868B] hover:text-[#1D1D1F] p-1 text-[16px]">&times;</button>
+          <button id="close-inspector-btn" type="button" class="text-[#4A5262] hover:text-[#12161F] px-2 py-1 text-[16px]" aria-label="Close inspector">&times;</button>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-[#E5E5EA] text-[13px] space-y-1.5 text-[#52555E]">
+        <div class="mt-4 pt-3 border-t border-[#CFCBC2] text-[13px] space-y-1.5 text-[#4A5262]">
           <div class="flex items-center justify-between">
-            <span class="text-[#86868B]">School / University:</span>
-            <strong id="insp-school" class="text-[#1D1D1F] text-right">TF Unions Core</strong>
+            <span>School / University</span>
+            <strong id="insp-school" class="text-[#12161F] text-right">TF Unions Core</strong>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-[#86868B]">Academic Grade:</span>
-            <span id="insp-grade" class="text-[#1D1D1F]">Founding Cohort</span>
+            <span>Academic Grade</span>
+            <span id="insp-grade" class="text-[#12161F]">Founding Cohort</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-[#86868B]">Joined Timeline:</span>
-            <span id="insp-cohort" class="text-[#002583] font-semibold">Oct 2025</span>
+            <span>Joined Timeline</span>
+            <span id="insp-cohort" class="font-code text-[#14388C] font-semibold">Oct 2025</span>
           </div>
         </div>
 
-        <div class="mt-3 p-3 bg-[#F5F5F7] rounded-xl text-[12.5px] text-[#52555E] leading-relaxed" id="insp-bio">
+        <div class="mt-3 p-3 bg-[#ECEAE4] border border-[#CFCBC2] rounded-md text-[12.5px] text-[#12161F] leading-relaxed" id="insp-bio">
           Principal Systems Architect leading cloud, backend, and portal infrastructure across Egypt.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Complete Directory Table / Cards (Synchronized with Timeline) -->
-  <section class="mt-14">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+  <!-- Directory Roster Synchronized with Timeline -->
+  <section class="mt-12">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b border-[#CFCBC2]">
       <div>
-        <h2 class="text-[26px] font-bold tracking-tight text-[#1D1D1F]">Directory Roster</h2>
-        <p class="text-[14px] text-[#6E6E73]">
-          Showing members active in the selected timeline period. Click any card to highlight on graph.
+        <h2 class="font-display text-[28px] font-bold tracking-[-0.02em] text-[#12161F]">Directory Roster</h2>
+        <p class="text-[14px] text-[#4A5262]">
+          Showing contributors active in the selected timeline milestone. Select any member card to highlight on the graph.
         </p>
       </div>
-      <div class="text-[13px] font-semibold text-[#002583]">
-        <span id="roster-count">71</span> Total Registered Members
+      <div class="font-code text-[13px] font-semibold text-[#14388C]">
+        <span id="roster-count">71</span> Active Contributors
       </div>
     </div>
 
-    <!-- Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="member-cards-container">
-      <!-- Injected dynamically by client JS -->
-    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="member-cards-container"></div>
   </section>
 
-  <!-- Client Script for Full Interactivity -->
   <script is:inline define:vars={{ teamData }}>
     const ALL_MEMBERS = teamData;
 
-    // Timeline step metadata
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     const STEPS = [
       { key: '2025-10', label: 'Oct 2025', desc: 'October 2025 — Co-Founders Inception (Mohammed Farag & Mohammed Abdelghany)' },
       { key: '2026-01', label: 'Jan 2026', desc: 'January 2026 — Executive Heads of HR, Marketing, PR & Social Media' },
@@ -254,7 +248,6 @@ import teamData from '../data/team-nodes.json';
     let isPlaying = false;
     let playInterval = null;
 
-    // Zoom/Pan State
     let zoomLevel = 1;
     let panX = 0;
     let panY = 0;
@@ -277,18 +270,16 @@ import teamData from '../data/team-nodes.json';
     const inspector = document.getElementById('member-inspector');
     const closeInspectorBtn = document.getElementById('close-inspector-btn');
 
-    // Color definitions per team
     const TEAM_COLORS = {
-      'Founders': { bg: '#002583', fill: 'url(#grad-founder)', stroke: '#001850', badge: 'bg-[#002583] text-white' },
-      'HR Team': { bg: '#8B5CF6', fill: 'url(#grad-hr)', stroke: '#6D28D9', badge: 'bg-[#8B5CF6]/15 text-[#6D28D9]' },
-      'Marketing Team': { bg: '#10B981', fill: 'url(#grad-marketing)', stroke: '#059669', badge: 'bg-[#10B981]/15 text-[#059669]' },
-      'PR Team': { bg: '#0EA5E9', fill: 'url(#grad-pr)', stroke: '#0284C7', badge: 'bg-[#0EA5E9]/15 text-[#0284C7]' },
-      'Social Media Team': { bg: '#F59E0B', fill: 'url(#grad-social)', stroke: '#D97706', badge: 'bg-[#F59E0B]/15 text-[#D97706]' }
+      'Founders': { bg: '#0A1931', fill: 'url(#grad-founder)', badge: 'bg-[#0A1931] text-white' },
+      'HR Team': { bg: '#5B21B6', fill: 'url(#grad-hr)', badge: 'bg-[#EDE9FE] text-[#5B21B6]' },
+      'Marketing Team': { bg: '#065F46', fill: 'url(#grad-marketing)', badge: 'bg-[#D1FAE5] text-[#065F46]' },
+      'PR Team': { bg: '#075985', fill: 'url(#grad-pr)', badge: 'bg-[#E0F2FE] text-[#075985]' },
+      'Social Media Team': { bg: '#92400E', fill: 'url(#grad-social)', badge: 'bg-[#FEF3C7] text-[#92400E]' }
     };
 
     function isMemberActiveAtStep(member, stepIdx) {
-      const stepKey = STEPS[stepIdx].key;
-      return member.cohortDate <= stepKey;
+      return member.cohortDate <= STEPS[stepIdx].key;
     }
 
     function getFilteredMembers() {
@@ -308,13 +299,10 @@ import teamData from '../data/team-nodes.json';
     function renderGraph() {
       const activeMembers = ALL_MEMBERS.filter(m => isMemberActiveAtStep(m, currentStepIndex));
       const activeIdSet = new Set(activeMembers.map(m => m.id));
-      const activeCount = activeMembers.length;
 
-      // Update counters
-      activeCountBadge.textContent = `${activeCount} Members Active`;
+      activeCountBadge.textContent = `${activeMembers.length} Members Active`;
       cohortDesc.textContent = STEPS[currentStepIndex].desc;
 
-      // Render Edges
       let edgesHtml = '';
       activeMembers.forEach(m => {
         if (m.parent && activeIdSet.has(m.parent)) {
@@ -326,11 +314,9 @@ import teamData from '../data/team-nodes.json';
               <line
                 x1="${m.x}" y1="${m.y}"
                 x2="${parent.x}" y2="${parent.y}"
-                stroke="${isFounderLink ? '#002583' : (isHighlighted ? '#1D1D1F' : '#D2D2D7')}"
-                stroke-width="${isFounderLink ? '3' : (isHighlighted ? '2' : '1.2')}"
-                stroke-dasharray="${isFounderLink ? 'none' : 'none'}"
-                stroke-opacity="${isHighlighted ? '1' : '0.6'}"
-                class="transition-all duration-300"
+                stroke="${isFounderLink ? '#0A1931' : (isHighlighted ? '#C88A14' : '#CFCBC2')}"
+                stroke-width="${isFounderLink ? '3' : (isHighlighted ? '2.2' : '1.3')}"
+                stroke-opacity="${isHighlighted ? '1' : '0.75'}"
               />
             `;
           }
@@ -338,26 +324,17 @@ import teamData from '../data/team-nodes.json';
       });
       edgesLayer.innerHTML = edgesHtml;
 
-      // Render Nodes
       let nodesHtml = '';
       activeMembers.forEach(m => {
         const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
         const isSelected = selectedMemberId === m.id;
         const isFounder = m.tier === 0;
         const initials = m.name.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+        const safeId = esc(m.id);
 
         nodesHtml += `
-          <g
-            class="node-group cursor-pointer transition-all duration-300"
-            data-id="${m.id}"
-            onclick="inspectMember('${m.id}')"
-          >
-            <!-- Glowing selection ring -->
-            ${isSelected ? `
-              <circle cx="${m.x}" cy="${m.y}" r="${m.r + 7}" fill="none" stroke="#002583" stroke-width="2.5" class="animate-pulse" />
-            ` : ''}
-
-            <!-- Main Circle -->
+          <g class="node-group cursor-pointer" data-id="${safeId}" onclick="inspectMember('${safeId}')">
+            ${isSelected ? `<circle cx="${m.x}" cy="${m.y}" r="${m.r + 7}" fill="none" stroke="#C88A14" stroke-width="2.5" />` : ''}
             <circle
               cx="${m.x}"
               cy="${m.y}"
@@ -366,10 +343,7 @@ import teamData from '../data/team-nodes.json';
               stroke="#FFFFFF"
               stroke-width="${isFounder ? '3' : '2'}"
               filter="${isFounder ? 'url(#glow-founder)' : 'url(#node-shadow)'}"
-              class="hover:opacity-90"
             />
-
-            <!-- Initials / Text inside node -->
             <text
               x="${m.x}"
               y="${m.y + (m.r > 16 ? 4 : 3)}"
@@ -378,22 +352,16 @@ import teamData from '../data/team-nodes.json';
               font-size="${m.r > 20 ? 11 : (m.r > 14 ? 9 : 8)}"
               font-weight="700"
               pointer-events="none"
-            >
-              ${initials}
-            </text>
-
-            <!-- Name Label below node -->
+            >${esc(initials)}</text>
             <text
               x="${m.x}"
               y="${m.y + m.r + 13}"
               text-anchor="middle"
-              fill="#1D1D1F"
+              fill="#12161F"
               font-size="${isFounder ? 12 : 10}"
               font-weight="${isFounder ? 700 : 600}"
               class="select-none pointer-events-none"
-            >
-              ${m.name.split(' ')[0]} ${isFounder ? m.name.split(' ')[1] || '' : ''}
-            </text>
+            >${esc(m.name.split(' ')[0])} ${isFounder ? esc(m.name.split(' ')[1] || '') : ''}</text>
           </g>
         `;
       });
@@ -408,36 +376,37 @@ import teamData from '../data/team-nodes.json';
         const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
         const isSelected = selectedMemberId === m.id;
         const initials = m.name.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase();
+        const safeId = esc(m.id);
 
         return `
           <div
-            class="p-5 rounded-2xl border transition-all cursor-pointer ${
+            class="p-5 rounded-lg border transition cursor-pointer ${
               isSelected
-                ? 'bg-[#002583]/5 border-[#002583] shadow-md ring-2 ring-[#002583]'
-                : 'bg-white border-[#D2D2D7]/70 hover:border-[#86868B] shadow-2xs'
+                ? 'bg-[#FFFDF7] border-[#C88A14] ring-2 ring-[#C88A14]/40'
+                : 'bg-white border-[#CFCBC2] hover:border-[#14388C]'
             }"
-            onclick="inspectMember('${m.id}')"
+            onclick="inspectMember('${safeId}')"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-[14px]" style="background-color: ${colors.bg};">
-                  ${initials}
+                <div class="w-10 h-10 rounded-md flex items-center justify-center font-bold text-white text-[13.5px] shrink-0" style="background-color: ${colors.bg};">
+                  ${esc(initials)}
                 </div>
                 <div>
-                  <h4 class="font-bold text-[16px] text-[#1D1D1F] leading-tight">${m.name}</h4>
-                  <div class="text-[12.5px] font-semibold text-[#002583] mt-0.5">${m.role}</div>
+                  <h4 class="font-display font-bold text-[17px] text-[#12161F] leading-tight">${esc(m.name)}</h4>
+                  <div class="text-[12.5px] font-semibold text-[#14388C] mt-0.5">${esc(m.role)}</div>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold ${colors.badge}">${m.team.replace(' Team', '')}</span>
+              <span class="px-2 py-0.5 rounded text-[11px] font-semibold shrink-0 ${colors.badge}">${esc(m.team.replace(' Team', ''))}</span>
             </div>
 
-            <div class="mt-3 pt-2.5 border-t border-[#F0F0F2] text-[12px] text-[#6E6E73] flex items-center justify-between">
-              <span>${m.school || 'TF Unions'}</span>
-              <span class="font-medium text-[#1D1D1F]">${m.cohortLabel || m.grade}</span>
+            <div class="mt-3 pt-2.5 border-t border-[#E2DFD7] text-[12px] text-[#4A5262] flex items-center justify-between gap-2">
+              <span>${esc(m.school || 'TF Unions')}</span>
+              <span class="font-code font-medium text-[#12161F]">${esc(m.cohortLabel || m.grade)}</span>
             </div>
 
-            <p class="mt-2 text-[12px] text-[#52555E] line-clamp-2 leading-relaxed">
-              ${m.bio}
+            <p class="mt-2 text-[12.5px] text-[#4A5262] line-clamp-2 leading-relaxed">
+              ${esc(m.bio)}
             </p>
           </div>
         `;
@@ -476,9 +445,7 @@ import teamData from '../data/team-nodes.json';
       renderRoster();
     };
 
-    timelineSlider.addEventListener('input', (e) => {
-      setStep(e.target.value);
-    });
+    timelineSlider.addEventListener('input', (e) => setStep(e.target.value));
 
     closeInspectorBtn.addEventListener('click', () => {
       inspector.classList.add('hidden');
@@ -487,13 +454,12 @@ import teamData from '../data/team-nodes.json';
       renderRoster();
     });
 
-    // Team Filter Buttons
     document.querySelectorAll('#team-filter-buttons .team-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#team-filter-buttons .team-btn').forEach(b => {
-          b.className = 'team-btn px-3 py-1 rounded-full text-[12px] font-semibold bg-[#F5F5F7] text-[#52555E] hover:bg-[#E5E5EA] transition';
+          b.className = 'team-btn px-3 py-1.5 rounded-md text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition';
         });
-        btn.className = 'team-btn active px-3 py-1 rounded-full text-[12px] font-semibold bg-[#1D1D1F] text-white transition';
+        btn.className = 'team-btn active px-3 py-1.5 rounded-md text-[12px] font-semibold bg-[#0A1931] text-white border border-[#0A1931] transition';
         selectedTeam = btn.dataset.team;
         renderRoster();
       });
@@ -504,7 +470,6 @@ import teamData from '../data/team-nodes.json';
       renderRoster();
     });
 
-    // Auto Play Timeline
     playBtn.addEventListener('click', () => {
       if (isPlaying) {
         clearInterval(playInterval);
@@ -522,25 +487,19 @@ import teamData from '../data/team-nodes.json';
       }
     });
 
-    // Zoom & Pan Logic
     function updateTransform() {
       graphContent.setAttribute('transform', `translate(${panX}, ${panY}) scale(${zoomLevel})`);
     }
-
     document.getElementById('btn-zoom-in').addEventListener('click', () => {
       zoomLevel = Math.min(zoomLevel + 0.2, 2.2);
       updateTransform();
     });
-
     document.getElementById('btn-zoom-out').addEventListener('click', () => {
       zoomLevel = Math.max(zoomLevel - 0.2, 0.6);
       updateTransform();
     });
-
     document.getElementById('btn-zoom-reset').addEventListener('click', () => {
-      zoomLevel = 1;
-      panX = 0;
-      panY = 0;
+      zoomLevel = 1; panX = 0; panY = 0;
       updateTransform();
     });
 
@@ -551,19 +510,14 @@ import teamData from '../data/team-nodes.json';
       startX = e.clientX - panX;
       startY = e.clientY - panY;
     });
-
     window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
       panX = e.clientX - startX;
       panY = e.clientY - startY;
       updateTransform();
     });
+    window.addEventListener('mouseup', () => { isDragging = false; });
 
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    // Initial render
     renderGraph();
     renderRoster();
   </script>

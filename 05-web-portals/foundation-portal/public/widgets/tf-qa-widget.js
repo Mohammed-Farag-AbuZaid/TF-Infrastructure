@@ -1,6 +1,6 @@
 /**
  * TF Unions Global Feedback & QA Web Component (<tf-qa-widget>)
- * Styled to match TF Sovereign Editorial tokens (#FFFFFF card, #E2E5EC border, #002583 accent).
+ * Styled to match TF Oxford & Stone (#0A1931 header, #FFFFFF sheet, #CFCBC2 border, #C88A14 brass accent).
  */
 class TfQaWidget extends HTMLElement {
   connectedCallback() {
@@ -9,30 +9,30 @@ class TfQaWidget extends HTMLElement {
 
     root.innerHTML = `
       <style>
-        * { box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
         .trigger {
           position: fixed;
           bottom: 20px;
           right: 20px;
           z-index: 9998;
-          height: 38px;
-          padding: 0 15px;
-          border-radius: 10px;
-          background: #FFFFFF;
-          color: #11141C;
-          border: 1px solid #E2E5EC;
-          box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+          height: 40px;
+          padding: 0 16px;
+          border-radius: 6px;
+          background: #0A1931;
+          color: #FFFFFF;
+          border: 1.5px solid #C88A14;
+          box-shadow: 0 4px 12px rgba(10, 25, 49, 0.18);
           font-size: 13px;
           font-weight: 600;
           cursor: pointer;
-          transition: border-color 0.15s ease, color 0.15s ease;
+          transition: background 0.15s ease;
         }
-        .trigger:hover { border-color: #002583; color: #002583; }
+        .trigger:hover { background: #14388C; }
         .backdrop {
           display: none;
           position: fixed;
           inset: 0;
-          background: rgba(17, 20, 28, 0.35);
+          background: rgba(10, 25, 49, 0.52);
           z-index: 9999;
           align-items: center;
           justify-content: center;
@@ -41,60 +41,71 @@ class TfQaWidget extends HTMLElement {
         .backdrop.open { display: flex; }
         .sheet {
           width: 100%;
-          max-width: 420px;
+          max-width: 440px;
           background: #FFFFFF;
-          border: 1px solid #E2E5EC;
-          border-radius: 16px;
-          padding: 24px;
-          color: #11141C;
-          box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+          border: 1px solid #CFCBC2;
+          border-radius: 8px;
+          overflow: hidden;
+          color: #12161F;
+          box-shadow: 0 18px 40px rgba(10, 25, 49, 0.24);
         }
-        .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
-        .close { background: #F3F5F8; border: 1px solid #E2E5EC; border-radius: 8px; color: #525866; font-size: 14px; cursor: pointer; width: 28px; height: 28px; }
+        .top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #0A1931;
+          color: #FFFFFF;
+          padding: 16px 20px;
+          border-bottom: 2px solid #C88A14;
+        }
+        .title { font-family: 'Newsreader', Georgia, serif; font-size: 20px; font-weight: 700; margin: 0; }
+        .close { background: #102447; border: 1px solid #1E3A6D; border-radius: 6px; color: #FFFFFF; font-size: 14px; cursor: pointer; width: 30px; height: 30px; }
+        .body { padding: 20px; }
         .field {
           width: 100%;
-          padding: 12px 14px;
-          border-radius: 12px;
-          background: #F8F9FB;
-          border: 1px solid #E2E5EC;
-          color: #11141C;
+          padding: 11px 13px;
+          border-radius: 6px;
+          background: #ECEAE4;
+          border: 1px solid #CFCBC2;
+          color: #12161F;
           font-size: 14px;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           outline: none;
         }
-        .field:focus { border-color: #002583; background: #FFFFFF; }
+        .field:focus { border-color: #14388C; background: #FFFFFF; }
         .btn {
           width: 100%;
-          height: 44px;
-          border-radius: 12px;
-          background: #002583;
+          height: 42px;
+          border-radius: 6px;
+          background: #14388C;
           color: #FFFFFF;
           border: none;
           font-size: 14px;
           font-weight: 600;
           cursor: pointer;
         }
-        .btn:hover { background: #001B61; }
-        .msg { font-size: 13px; color: #15803D; margin-top: 10px; display: none; font-weight: 500; }
+        .btn:hover { background: #0F2C70; }
+        .msg { font-size: 13px; color: #15803D; margin-top: 10px; display: none; font-weight: 600; }
       </style>
       <button class="trigger" id="open-btn">Feedback</button>
       <div class="backdrop" id="modal">
         <div class="sheet">
           <div class="top">
-            <h3 class="title">Report issue or idea</h3>
+            <h3 class="title">Report issue or suggestion</h3>
             <button class="close" id="close-btn" aria-label="Close">✕</button>
           </div>
-          <form id="qa-form">
-            <select class="field" id="type">
-              <option value="Bug_Report">Report an issue</option>
-              <option value="Project_Idea">Suggest an improvement</option>
-            </select>
-            <input class="field" id="title" type="text" required placeholder="Short summary" />
-            <textarea class="field" id="desc" rows="3" required placeholder="Details"></textarea>
-            <button class="btn" type="submit">Send to Engineering</button>
-            <div class="msg" id="msg">Sent. Thank you.</div>
-          </form>
+          <div class="body">
+            <form id="qa-form">
+              <select class="field" id="type">
+                <option value="Bug_Report">Report a technical issue</option>
+                <option value="Project_Idea">Suggest a portal improvement</option>
+              </select>
+              <input class="field" id="title" type="text" required placeholder="Short summary" />
+              <textarea class="field" id="desc" rows="3" required placeholder="Details and page context"></textarea>
+              <button class="btn" type="submit">Send to Engineering</button>
+              <div class="msg" id="msg">Sent to engineering queue. Thank you.</div>
+            </form>
+          </div>
         </div>
       </div>
     `;

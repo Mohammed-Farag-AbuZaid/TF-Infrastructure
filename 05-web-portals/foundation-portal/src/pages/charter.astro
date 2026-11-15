@@ -3,58 +3,75 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const articles = [
   {
-    num: 'ARTICLE I',
+    id: 'article-1',
+    num: 'Article I',
     title: 'Independent non-profit mandate',
-    body: 'TF Unions operates strictly as a non-profit educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled.',
+    body: 'TF Unions operates strictly as a non-profit student educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled or monetized with third-party advertising.',
   },
   {
-    num: 'ARTICLE II',
-    title: 'Student privacy & single unified account',
-    body: 'Student identity records are hosted on our dedicated PostgreSQL and Self-Hosted VPS infrastructure and are never sold or shared with third-party advertisers.',
+    id: 'article-2',
+    num: 'Article II',
+    title: 'Student data sovereignty & single TF Passport',
+    body: 'Student identity records reside in our self-hosted PostgreSQL database rather than commercial tracking networks. One session cookie scoped to *.tfunions.com grants access across portals and is never sold or shared.',
   },
   {
-    num: 'ARTICLE III',
-    title: 'Verifiable volunteer credentials',
-    body: 'Every volunteer and contributor certificate issued by TF Unions carries a permanent serial code verifiable at verify.tfunions.com.',
-    linkLabel: 'Open Registry ›',
+    id: 'article-3',
+    num: 'Article III',
+    title: 'Cryptographically verifiable contributor credentials',
+    body: 'Every volunteer, research author, and officer certificate issued by TF Unions carries a permanent serial code verifiable publicly at verify.tfunions.com.',
+    linkLabel: 'Open Credential Registry ›',
     linkHref: 'https://verify.tfunions.com',
   },
   {
-    num: 'ARTICLE IV',
-    title: 'Open-book financial ledger',
-    body: 'All incoming community contributions and outgoing server or program expenses are recorded publicly on the Open Ledger.',
-    linkLabel: 'View Open Ledger ›',
+    id: 'article-4',
+    num: 'Article IV',
+    title: 'Open-book treasury & infrastructure accountability',
+    body: 'Every incoming community contribution, hardware grant, and server expenditure is published with verification status and channel provenance on the public Open Financial Ledger.',
+    linkLabel: 'Inspect Open Financial Ledger ›',
     linkHref: '/transparency',
   },
 ];
 ---
 <BaseLayout title="Charter" backLabel="TF Unions" backHref="/">
-  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">INSTITUTIONAL GOVERNANCE</div>
-    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
-      Non-profit charter.
-    </h1>
-    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[700px]">
-      The governance rules, student data protections, and financial accountability commitments of TF Unions.
-    </p>
-  </section>
+  <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- Left 4 Cols: Sticky Navy Index -->
+    <aside class="lg:col-span-4 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-7 lg:sticky lg:top-24">
+      <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] font-medium text-[#E2E8F0]">
+        Governance framework
+      </div>
+      <h1 class="font-display mt-3 text-[34px] font-bold leading-[1.08] text-white">
+        Non-Profit Charter
+      </h1>
+      <p class="mt-3 text-[14px] leading-[1.6] text-[#CBD5E1]">
+        Binding institutional rules covering free student access, data sovereignty, verifiable service records, and open finances.
+      </p>
 
-  <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-    {articles.map((art) => (
-      <article class="bg-white border border-[#E2E5EC] rounded-2xl p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)] flex flex-col justify-between">
-        <div>
-          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#D99B00]">{art.num}</div>
-          <h2 class="mt-2 text-[20px] font-bold tracking-[-0.02em] text-[#11141C]">{art.title}</h2>
-          <p class="mt-2.5 text-[15px] leading-[1.6] text-[#525866]">{art.body}</p>
-        </div>
-        {art.linkHref && (
-          <div class="mt-5 pt-4 border-t border-[#E2E5EC]">
-            <a href={art.linkHref} class="text-[13px] font-semibold text-[#002583] hover:underline">
-              {art.linkLabel}
-            </a>
-          </div>
-        )}
-      </article>
-    ))}
+      <nav class="mt-6 pt-5 border-t border-[#1E3A6D] space-y-1.5 text-[13.5px]" aria-label="Charter Articles">
+        {articles.map((art) => (
+          <a href={`#${art.id}`} class="block px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white transition">
+            <span class="font-code text-[12px] text-[#C88A14] mr-2">{art.num}</span>
+            <span>{art.title}</span>
+          </a>
+        ))}
+      </nav>
+    </aside>
+
+    <!-- Right 8 Cols: Crisp Paper Charter Document -->
+    <div class="lg:col-span-8 bg-white border border-[#CFCBC2] rounded-lg divide-y divide-[#CFCBC2] shadow-[0_2px_6px_rgba(10,25,49,0.04)]">
+      {articles.map((art) => (
+        <article id={art.id} class="p-7 sm:p-9 scroll-mt-24">
+          <div class="font-code text-[12px] font-semibold text-[#C88A14]">{art.num}</div>
+          <h2 class="font-display mt-1.5 text-[25px] font-bold text-[#12161F] leading-snug">{art.title}</h2>
+          <p class="mt-3 text-[15.5px] leading-[1.7] text-[#4A5262] max-w-[66ch]">{art.body}</p>
+          {art.linkHref && (
+            <div class="mt-5">
+              <a href={art.linkHref} class="inline-flex items-center h-9 px-4 rounded-md bg-[#E2DFD7] hover:bg-[#D5D1C7] border border-[#C8C3B8] text-[13px] font-semibold text-[#12161F] transition">
+                {art.linkLabel}
+              </a>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
   </section>
 </BaseLayout>

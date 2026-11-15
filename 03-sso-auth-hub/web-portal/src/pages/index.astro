@@ -1,10 +1,10 @@
 ---
 /**
  * Central Unified SSO Login & Registration Hub (`https://auth.tfunions.com`)
- * Styled with TF Sovereign Editorial tokens (#F8F9FB canvas, #FFFFFF card, #E2E5EC border, #002583 cobalt, #D99B00 gold).
+ * TF Oxford & Stone full-viewport split design (#0A1931 Navy + #ECEAE4 Stone + #FFFFFF Desk + #C88A14 Brass).
  */
 const faviconSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0A1931"/><rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#1E3A6D" stroke-width="1.5"/><rect x="22" y="5" width="5" height="5" rx="1" fill="#C88A14"/><path d="M6.5 9.5h11.5v2.7h-4.2V23h-3V12.2H6.5V9.5zm10.8 0H25v2.7h-4.7v2.9h3.9v2.6h-3.9V23h-3V9.5z" fill="#fff"/></svg>`
 );
 ---
 <!doctype html>
@@ -12,102 +12,129 @@ const faviconSvg = encodeURIComponent(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Single Sign-On — TF Unions</title>
-    <meta name="theme-color" content="#002583" />
+    <title>TF Passport Single Sign-On — TF Unions</title>
+    <meta name="theme-color" content="#0A1931" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .font-display { font-family: 'Newsreader', Georgia, serif; }
+      .font-code { font-family: 'JetBrains Mono', monospace; }
+    </style>
   </head>
-  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased flex flex-col">
-    <!-- Top Ecosystem Return Bar -->
-    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
-      <div class="max-w-[960px] mx-auto px-5 h-10 flex items-center justify-between text-[12px]">
-        <a id="back-link" href="https://www.tfunions.com" class="font-semibold text-[#002583] hover:underline flex items-center gap-1.5">
-          <span>‹</span> Back to TF Unions
-        </a>
-        <div class="flex items-center gap-4 text-[#525866]">
-          <a href="https://verify.tfunions.com" class="hover:text-[#11141C]">Verify</a>
-          <a href="https://docs.tfunions.com" class="hover:text-[#11141C]">Docs</a>
+  <body class="min-h-screen bg-[#ECEAE4] text-[#12161F] antialiased grid grid-cols-1 lg:grid-cols-12">
+    <!-- Left 5 Cols: Full-Height Deep Oxford Navy Identity Anchor -->
+    <aside class="lg:col-span-5 bg-[#0A1931] text-white p-7 sm:p-11 flex flex-col justify-between border-b lg:border-b-0 lg:border-r-2 border-[#C88A14]">
+      <div>
+        <div class="flex items-center justify-between gap-4">
+          <a href="https://www.tfunions.com" class="flex items-center gap-3 group">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-md shrink-0">
+              <rect width="32" height="32" rx="6" fill="#14388C" />
+              <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" stroke="#1E3A6D" stroke-width="1.5" />
+              <rect x="22.5" y="5" width="4.5" height="4.5" rx="1" fill="#C88A14" />
+              <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
+            </svg>
+            <div>
+              <span class="font-display text-[20px] font-bold text-white block leading-none">TF Unions</span>
+              <span class="text-[11px] text-[#94A3B8]">Unified TF Passport</span>
+            </div>
+          </a>
+          <a id="back-link" href="https://www.tfunions.com" class="text-[12.5px] font-semibold text-[#C88A14] hover:underline">
+            ‹ Return to portal
+          </a>
+        </div>
+
+        <div class="mt-10 lg:mt-16">
+          <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] text-[#CBD5E1]">
+            Self-hosted PostgreSQL identity hub
+          </div>
+          <h1 class="font-display mt-4 text-[34px] sm:text-[42px] font-bold leading-[1.08] tracking-[-0.02em] text-white">
+            One account across every TF Unions service.
+          </h1>
+          <p class="mt-4 text-[15px] leading-[1.6] text-[#CBD5E1] max-w-[440px]">
+            Sign in once to access curated scholarship lists, personal roadmap progress, study circles, and certificate verification. Your credentials remain on TF Unions infrastructure—never sold to third parties.
+          </p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-[#1E3A6D]">
+          <div class="text-[12px] font-semibold text-[#94A3B8] mb-3">Connected portals on *.tfunions.com</div>
+          <div class="grid grid-cols-2 gap-2 text-[13px]">
+            <a href="https://www.tfunions.com" class="px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white transition">Foundation</a>
+            <a href="https://news.tfunions.com" class="px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white transition">TF News</a>
+            <a href="https://guides.tfunions.com" class="px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white transition">TF Guides</a>
+            <a href="https://connect.tfunions.com" class="px-3 py-2 rounded bg-[#102447] border border-[#1E3A6D] hover:border-[#C88A14] text-white transition">TF Connect</a>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Centered Auth Container -->
-    <main class="flex-1 flex items-center justify-center px-5 py-10">
-      <div class="w-full max-w-[440px]">
-        <!-- Active Session Banner (hidden unless user is already logged in) -->
-        <section id="active-session-card" class="hidden mb-5 bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-          <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+      <div class="mt-8 pt-4 border-t border-[#1E3A6D] flex items-center justify-between text-[12px] text-[#94A3B8]">
+        <span>14-day HttpOnly session cookie</span>
+        <a href="https://docs.tfunions.com#account" class="text-[#C88A14] font-semibold hover:underline">SSO Documentation ›</a>
+      </div>
+    </aside>
+
+    <!-- Right 7 Cols: Warm Stone Canvas + Crisp Paper Auth Desk -->
+    <main class="lg:col-span-7 p-5 sm:p-10 lg:p-14 flex items-center justify-center">
+      <div class="w-full max-w-[470px]">
+        <!-- Active Session Banner -->
+        <section id="active-session-card" class="hidden mb-5 bg-white border-2 border-[#0A1931] rounded-lg p-6 shadow-[0_3px_12px_rgba(10,25,49,0.06)]">
+          <div class="flex items-start justify-between gap-3 pb-4 border-b border-[#CFCBC2]">
             <div>
-              <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#15803D]">ACTIVE SSO SESSION</div>
-              <h2 id="session-user-name" class="mt-1 text-[18px] font-bold text-[#11141C]">Signed in</h2>
-              <div id="session-user-meta" class="text-[13px] text-[#525866] mt-0.5"></div>
+              <div class="font-code text-[11px] font-semibold text-[#15803D]">Active TF Passport Session</div>
+              <h2 id="session-user-name" class="font-display mt-1 text-[22px] font-bold text-[#12161F]">Signed in</h2>
+              <div id="session-user-meta" class="text-[13px] text-[#4A5262] mt-0.5"></div>
             </div>
             <button
               id="btn-signout"
               type="button"
-              class="h-9 px-3.5 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[12px] font-semibold hover:bg-[#FEE2E2] transition"
+              class="h-9 px-3.5 rounded-md bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[12.5px] font-semibold hover:bg-[#FEE2E2] transition shrink-0"
             >
               Sign out
             </button>
           </div>
-          <div class="mt-4">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191] mb-2.5">Quick Launch Ecosystem</div>
-            <div class="grid grid-cols-2 gap-2 text-[13px]">
-              <a href="https://www.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">Foundation</a>
-              <a href="https://news.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF News</a>
-              <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF Guides</a>
-              <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF Connect</a>
-            </div>
+          <div class="mt-4 flex flex-wrap gap-2 text-[12.5px]">
+            <a href="https://www.tfunions.com" class="px-3 py-1.5 rounded bg-[#E2DFD7] border border-[#C8C3B8] font-semibold text-[#12161F] hover:border-[#14388C]">Continue to Foundation ›</a>
+            <a href="https://news.tfunions.com" class="px-3 py-1.5 rounded bg-[#E2DFD7] border border-[#C8C3B8] font-semibold text-[#12161F] hover:border-[#14388C]">Open TF News ›</a>
           </div>
         </section>
 
-        <!-- Primary Elevated Auth Widget -->
-        <section class="bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-8 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-          <!-- Brand Header -->
-          <div class="flex items-center justify-between gap-3">
-            <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
-              <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
-                <rect width="32" height="32" rx="7" fill="#002583" />
-                <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
-                <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
-              </svg>
-              <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">TF Unions</span>
-            </a>
-            <span class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#D99B00] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md">
-              Unified SSO
-            </span>
+        <!-- Primary Crisp Paper Auth Sheet -->
+        <section class="bg-white border border-[#CFCBC2] rounded-lg p-7 sm:p-9 shadow-[0_3px_12px_rgba(10,25,49,0.06)]">
+          <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#CFCBC2]">
+            <div>
+              <h2 id="form-title" class="font-display text-[28px] font-bold text-[#12161F] leading-tight">
+                Welcome back
+              </h2>
+              <p id="form-subtitle" class="mt-1 text-[13.5px] text-[#4A5262]">
+                Continue to <span id="target-service-name" class="font-code text-[#14388C] font-semibold">www.tfunions.com</span>
+              </p>
+            </div>
           </div>
 
-          <div class="mt-7">
-            <h1 id="form-title" class="text-[28px] font-bold tracking-[-0.03em] leading-[1.12] text-[#11141C]">
-              Welcome back
-            </h1>
-            <p id="form-subtitle" class="mt-2 text-[14px] leading-[1.55] text-[#525866]">
-              Sign in with your TF Passport to continue to <span id="target-service-name" class="text-[#11141C] font-semibold">TF Unions</span>.
-            </p>
-          </div>
-
-          <!-- Segmented Mode Switch -->
-          <div class="mt-6 grid grid-cols-2 p-1 bg-[#F3F5F8] border border-[#E2E5EC] rounded-xl">
+          <!-- Warm Sand Segmented Switch -->
+          <div class="mt-5 grid grid-cols-2 p-1 bg-[#E2DFD7] border border-[#C8C3B8] rounded-md">
             <button
               id="tab-signin"
               type="button"
-              class="py-2 px-3 text-[13px] font-semibold rounded-lg bg-white text-[#11141C] border border-[#E2E5EC] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition"
+              class="py-2 px-3 text-[13px] font-semibold rounded bg-white text-[#0A1931] border border-[#CFCBC2] shadow-sm transition"
             >
               Sign in
             </button>
             <button
               id="tab-register"
               type="button"
-              class="py-2 px-3 text-[13px] font-semibold rounded-lg text-[#525866] border border-transparent hover:text-[#11141C] transition"
+              class="py-2 px-3 text-[13px] font-semibold rounded text-[#4A5262] border border-transparent hover:text-[#12161F] transition"
             >
               Create account
             </button>
           </div>
 
-          <div id="status-alert" class="hidden mt-5 px-3.5 py-3 rounded-xl border text-[13px] font-medium"></div>
+          <div id="status-alert" class="hidden mt-5 px-3.5 py-3 rounded-md border text-[13px] font-medium"></div>
 
           <form id="sso-form" class="mt-5 space-y-3.5">
             <div id="register-fields" class="hidden space-y-3.5">
@@ -115,18 +142,18 @@ const faviconSvg = encodeURIComponent(
                 id="fullName"
                 type="text"
                 placeholder="Full name"
-                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                class="w-full h-11 px-3.5 rounded-md bg-[#ECEAE4] text-[14.5px] text-[#12161F] placeholder-[#687082] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
               />
               <input
                 id="phone"
                 type="tel"
                 placeholder="WhatsApp / Phone (+20)"
-                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                class="w-full h-11 px-3.5 rounded-md bg-[#ECEAE4] text-[14.5px] text-[#12161F] placeholder-[#687082] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
               />
               <div class="grid grid-cols-2 gap-3">
                 <select
                   id="governorate"
-                  class="w-full px-3 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                  class="w-full h-11 px-3 rounded-md bg-[#ECEAE4] text-[14px] text-[#12161F] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
                 >
                   <option value="Cairo">Cairo</option>
                   <option value="Giza">Giza</option>
@@ -144,7 +171,7 @@ const faviconSvg = encodeURIComponent(
                 </select>
                 <select
                   id="educationSystem"
-                  class="w-full px-3 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                  class="w-full h-11 px-3 rounded-md bg-[#ECEAE4] text-[14px] text-[#12161F] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
                 >
                   <option value="STEM">STEM School</option>
                   <option value="Thanaweya_Amma">Thanaweya Amma</option>
@@ -156,7 +183,7 @@ const faviconSvg = encodeURIComponent(
               </div>
               <select
                 id="gradeOrYear"
-                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                class="w-full h-11 px-3 rounded-md bg-[#ECEAE4] text-[14px] text-[#12161F] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
               >
                 <option value="Prep_3">Prep 3</option>
                 <option value="G10">Grade 10</option>
@@ -173,7 +200,7 @@ const faviconSvg = encodeURIComponent(
               required
               autocomplete="email"
               placeholder="Email address"
-              class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              class="w-full h-11 px-3.5 rounded-md bg-[#ECEAE4] text-[14.5px] text-[#12161F] placeholder-[#687082] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
             />
 
             <div class="relative">
@@ -184,32 +211,27 @@ const faviconSvg = encodeURIComponent(
                 minlength="6"
                 autocomplete="current-password"
                 placeholder="Password (min 6 characters)"
-                class="w-full pl-3.5 pr-16 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                class="w-full h-11 pl-3.5 pr-16 rounded-md bg-[#ECEAE4] text-[14.5px] text-[#12161F] placeholder-[#687082] border border-[#CFCBC2] focus:border-[#14388C] focus:bg-white focus:outline-none transition"
               />
               <button
                 id="toggle-pw"
                 type="button"
-                class="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-[12px] font-semibold text-[#525866] hover:text-[#002583]"
+                class="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-[12px] font-semibold text-[#4A5262] hover:text-[#14388C]"
               >
                 Show
               </button>
             </div>
 
-            <div class="pt-1">
+            <div class="pt-2">
               <button
                 id="btn-submit"
                 type="submit"
-                class="w-full h-11 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
+                class="w-full h-11 rounded-md bg-[#14388C] hover:bg-[#0F2C70] text-white font-semibold text-[14.5px] transition"
               >
                 Sign in
               </button>
             </div>
           </form>
-
-          <div class="mt-6 pt-5 border-t border-[#E2E5EC] text-[12px] text-[#525866] flex items-center justify-between">
-            <span>Shared across all *.tfunions.com portals</span>
-            <a href="https://docs.tfunions.com#account" class="text-[#002583] font-semibold hover:underline">SSO Docs ›</a>
-          </div>
         </section>
       </div>
     </main>
@@ -244,7 +266,6 @@ const faviconSvg = encodeURIComponent(
         backLink.href = redirectUrl;
       } catch {}
 
-      // Hydrate active session card if signed in
       try {
         const match = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
         const localUser = localStorage.getItem('tf_sso_user');
@@ -259,7 +280,7 @@ const faviconSvg = encodeURIComponent(
           document.getElementById('active-session-card').classList.remove('hidden');
           document.getElementById('session-user-name').textContent = String(userHint.name);
           document.getElementById('session-user-meta').textContent = userHint.email
-            ? `${userHint.email} · ${userHint.role || 'member'}`
+            ? `${userHint.email} (${userHint.role || 'member'})`
             : String(userHint.role || 'member');
         }
       } catch {}
@@ -290,8 +311,8 @@ const faviconSvg = encodeURIComponent(
       const formTitle = document.getElementById('form-title');
       const statusAlert = document.getElementById('status-alert');
 
-      const activeTabCls = 'py-2 px-3 text-[13px] font-semibold rounded-lg bg-white text-[#11141C] border border-[#E2E5EC] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition';
-      const inactiveTabCls = 'py-2 px-3 text-[13px] font-semibold rounded-lg text-[#525866] border border-transparent hover:text-[#11141C] transition';
+      const activeTabCls = 'py-2 px-3 text-[13px] font-semibold rounded bg-white text-[#0A1931] border border-[#CFCBC2] shadow-sm transition';
+      const inactiveTabCls = 'py-2 px-3 text-[13px] font-semibold rounded text-[#4A5262] border border-transparent hover:text-[#12161F] transition';
 
       function applyMode() {
         if (isRegisterMode) {
@@ -312,7 +333,7 @@ const faviconSvg = encodeURIComponent(
 
       function showStatus(msg, isError = false) {
         statusAlert.textContent = msg;
-        statusAlert.className = `mt-5 px-3.5 py-3 rounded-xl border text-[13px] font-medium ${
+        statusAlert.className = `mt-5 px-3.5 py-3 rounded-md border text-[13px] font-medium ${
           isError
             ? 'bg-[#FEF2F2] border-[#FECACA] text-[#B91C1C]'
             : 'bg-[#F0FDF4] border-[#BBF7D0] text-[#15803D]'
@@ -320,15 +341,8 @@ const faviconSvg = encodeURIComponent(
         statusAlert.classList.remove('hidden');
       }
 
-      tabSignin.addEventListener('click', () => {
-        isRegisterMode = false;
-        applyMode();
-      });
-
-      tabRegister.addEventListener('click', () => {
-        isRegisterMode = true;
-        applyMode();
-      });
+      tabSignin.addEventListener('click', () => { isRegisterMode = false; applyMode(); });
+      tabRegister.addEventListener('click', () => { isRegisterMode = true; applyMode(); });
 
       document.getElementById('sso-form').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -358,9 +372,7 @@ const faviconSvg = encodeURIComponent(
             body: JSON.stringify(payload),
           });
           const data = await res.json();
-          if (!res.ok) {
-            throw new Error(data.error || 'Invalid credentials');
-          }
+          if (!res.ok) throw new Error(data.error || 'Invalid credentials');
 
           const hint = encodeURIComponent(JSON.stringify({
             uid: data.user.uid,
@@ -373,9 +385,7 @@ const faviconSvg = encodeURIComponent(
           localStorage.setItem('tf_sso_user', JSON.stringify(data.user));
 
           showStatus('Signed in. Redirecting...');
-          setTimeout(() => {
-            window.location.href = redirectUrl;
-          }, 300);
+          setTimeout(() => { window.location.href = redirectUrl; }, 300);
         } catch (err) {
           showStatus(err.message || 'Authentication failed', true);
         }

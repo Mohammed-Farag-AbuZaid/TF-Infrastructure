@@ -2,66 +2,81 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Open Ledger" backLabel="TF Unions" backHref="/">
-  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">FINANCIAL ACCOUNTABILITY</div>
-    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
-      Open financial ledger.
-    </h1>
-    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[660px]">
-      Every verified incoming contribution and outgoing self-hosted infrastructure expense is audited publicly.
-    </p>
-  </section>
-
-  <!-- Summary Metrics Cards -->
-  <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191]">Verified Inflows</div>
-      <div id="metric-inflows" class="mt-2 text-[26px] font-bold tracking-[-0.02em] text-[#11141C]">12,000 EGP</div>
-    </div>
-    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191]">Infrastructure Outflows</div>
-      <div id="metric-outflows" class="mt-2 text-[26px] font-bold tracking-[-0.02em] text-[#11141C]">4,200 EGP</div>
-    </div>
-    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191]">Net Reserve</div>
-      <div id="metric-reserve" class="mt-2 text-[26px] font-bold tracking-[-0.02em] text-[#002583]">7,800 EGP</div>
-    </div>
-    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191]">Commercial SaaS Overhead</div>
-      <div class="mt-2 text-[26px] font-bold tracking-[-0.02em] text-[#15803D]">$0 / mo</div>
-    </div>
-  </section>
-
-  <!-- Live Ledger Transactions Widget -->
-  <section class="mt-6 bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+  <!-- Deep Oxford Navy Treasury Band -->
+  <section class="mt-8 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-7 sm:p-9 shadow-[0_3px_12px_rgba(10,25,49,0.08)]">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">AUDIT TRAIL</div>
-        <h2 class="mt-0.5 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Ledger Transactions</h2>
+        <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] font-medium text-[#E2E8F0]">
+          Financial accountability registry
+        </div>
+        <h1 class="font-display mt-3 text-[34px] sm:text-[44px] font-bold leading-[1.08] text-white">
+          Open financial ledger
+        </h1>
+        <p class="mt-2.5 text-[15px] leading-[1.6] text-[#CBD5E1] max-w-[640px]">
+          Every verified contribution inflow and self-hosted server infrastructure expense is audited publicly in Egyptian Pounds.
+        </p>
       </div>
-      <a
-        href="/support"
-        class="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] hover:border-[#002583]/40 text-[13px] font-semibold text-[#002583] transition shrink-0"
-      >
-        Support TF Unions ›
-      </a>
+      <div class="flex flex-wrap gap-2.5 shrink-0">
+        <button
+          id="export-csv-btn"
+          type="button"
+          class="h-10 px-4 rounded-md bg-[#102447] hover:bg-[#1E3A6D] border border-[#1E3A6D] text-white text-[13px] font-semibold transition"
+        >
+          Export CSV
+        </button>
+        <a
+          href="/support"
+          class="h-10 px-4 inline-flex items-center rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition"
+        >
+          Support TF Unions ›
+        </a>
+      </div>
     </div>
 
-    <div class="divide-y divide-[#E2E5EC]" id="ledger-rows">
-      <div class="py-4 flex items-center justify-between gap-4">
-        <div>
-          <div class="text-[12px] text-[#7A8191]">2026-01-15 · Founders Allocation · Verified</div>
-          <div class="text-[16px] font-semibold text-[#11141C] mt-0.5">Founders Seed Allocation</div>
-        </div>
-        <span class="text-[14px] font-semibold text-[#15803D] shrink-0">+12,000 EGP</span>
+    <div class="mt-7 pt-6 border-t border-[#1E3A6D] grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-[#102447] border border-[#1E3A6D] rounded-md p-4">
+        <div class="text-[12px] text-[#94A3B8]">Verified Inflows</div>
+        <div id="metric-inflows" class="font-display mt-1 text-[26px] font-bold text-[#4ADE80]">12,000 EGP</div>
       </div>
-      <div class="py-4 flex items-center justify-between gap-4">
-        <div>
-          <div class="text-[12px] text-[#7A8191]">2026-02-01 · Infrastructure · Verified</div>
-          <div class="text-[16px] font-semibold text-[#11141C] mt-0.5">Dedicated Ubuntu VPS &amp; Domain Renewal</div>
-        </div>
-        <span class="text-[14px] font-semibold text-[#525866] shrink-0">-4,200 EGP</span>
+      <div class="bg-[#102447] border border-[#1E3A6D] rounded-md p-4">
+        <div class="text-[12px] text-[#94A3B8]">Infrastructure Outflows</div>
+        <div id="metric-outflows" class="font-display mt-1 text-[26px] font-bold text-white">4,200 EGP</div>
       </div>
+      <div class="bg-[#102447] border border-[#1E3A6D] rounded-md p-4">
+        <div class="text-[12px] text-[#94A3B8]">Net Reserve</div>
+        <div id="metric-reserve" class="font-display mt-1 text-[26px] font-bold text-[#C88A14]">7,800 EGP</div>
+      </div>
+      <div class="bg-[#102447] border border-[#1E3A6D] rounded-md p-4">
+        <div class="text-[12px] text-[#94A3B8]">Commercial SaaS Overhead</div>
+        <div class="font-display mt-1 text-[26px] font-bold text-white">$0 / mo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crisp Paper Audit Trail Table -->
+  <section class="mt-6 bg-white border border-[#CFCBC2] rounded-lg overflow-hidden shadow-[0_2px_6px_rgba(10,25,49,0.04)]">
+    <div class="px-6 py-4 bg-[#E2DFD7] border-b border-[#CFCBC2] flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap gap-1.5">
+        <button type="button" data-ledger-filter="all" class="ledger-tab active px-3.5 py-1.5 rounded text-[12.5px] font-semibold bg-[#0A1931] text-white transition">All Entries</button>
+        <button type="button" data-ledger-filter="inflow" class="ledger-tab px-3.5 py-1.5 rounded text-[12.5px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Inflows</button>
+        <button type="button" data-ledger-filter="outflow" class="ledger-tab px-3.5 py-1.5 rounded text-[12.5px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Outflows</button>
+      </div>
+      <span id="ledger-status-label" class="font-code text-[12px] text-[#4A5262]">Public Audit Trail</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-[14px]">
+        <thead>
+          <tr class="bg-[#ECEAE4] border-b border-[#CFCBC2] text-[12px] font-semibold text-[#4A5262]">
+            <th class="py-3 px-6">Date</th>
+            <th class="py-3 px-4">Contributor / Vendor</th>
+            <th class="py-3 px-4">Channel</th>
+            <th class="py-3 px-4">Status</th>
+            <th class="py-3 px-6 text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#E2DFD7]" id="ledger-rows"></tbody>
+      </table>
     </div>
   </section>
 
@@ -79,6 +94,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       return Number(n || 0).toLocaleString('en-US') + ' EGP';
     }
 
+    const FALLBACK_ENTRIES = [
+      {
+        txDate: '2026-01-15',
+        donorOrVendor: 'Founders Seed Allocation',
+        paymentChannel: 'Founders Allocation',
+        verificationStatus: 'Verified',
+        entryType: 'inflow',
+        amountEgp: 12000,
+      },
+      {
+        txDate: '2026-02-01',
+        donorOrVendor: 'Dedicated Ubuntu VPS & Domain Renewal',
+        paymentChannel: 'Infrastructure',
+        verificationStatus: 'Verified',
+        entryType: 'outflow',
+        amountEgp: 4200,
+      },
+    ];
+
+    let allEntries = [...FALLBACK_ENTRIES];
+    let currentFilter = 'all';
+
+    function renderTable() {
+      const tbody = document.getElementById('ledger-rows');
+      const filtered = allEntries.filter((e) => currentFilter === 'all' || e.entryType === currentFilter);
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 px-6 text-center text-[#4A5262]">No ledger entries in this view.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filtered
+        .map((e) => {
+          const isOutflow = e.entryType === 'outflow';
+          const sign = isOutflow ? '-' : '+';
+          const colorCls = isOutflow ? 'text-[#12161F]' : 'text-[#15803D]';
+          const statusLabel = String(e.verificationStatus || 'Verified').replace(/_/g, ' ');
+          const channelLabel = String(e.paymentChannel || '').replace(/_/g, ' ');
+          return `
+            <tr class="hover:bg-[#ECEAE4]/40 transition">
+              <td class="py-3.5 px-6 font-code text-[12.5px] text-[#4A5262] whitespace-nowrap">${esc(e.txDate)}</td>
+              <td class="py-3.5 px-4 font-semibold text-[#12161F]">${esc(e.donorOrVendor)}</td>
+              <td class="py-3.5 px-4 text-[#4A5262]">${esc(channelLabel)}</td>
+              <td class="py-3.5 px-4">
+                <span class="px-2 py-0.5 rounded bg-[#E2DFD7] border border-[#C8C3B8] text-[12px] font-medium text-[#12161F]">
+                  ${esc(statusLabel)}
+                </span>
+              </td>
+              <td class="py-3.5 px-6 text-right font-code font-semibold whitespace-nowrap ${colorCls}">
+                ${sign}${fmtEgp(e.amountEgp)}
+              </td>
+            </tr>
+          `;
+        })
+        .join('');
+    }
+
+    document.querySelectorAll('.ledger-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ledger-tab').forEach((b) => {
+          b.className = 'ledger-tab px-3.5 py-1.5 rounded text-[12.5px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition';
+        });
+        btn.className = 'ledger-tab active px-3.5 py-1.5 rounded text-[12.5px] font-semibold bg-[#0A1931] text-white transition';
+        currentFilter = btn.getAttribute('data-ledger-filter') || 'all';
+        renderTable();
+      });
+    });
+
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      const header = 'Date,Contributor_or_Vendor,Channel,Status,Type,Amount_EGP\n';
+      const lines = allEntries
+        .map((e) => [e.txDate, `"${String(e.donorOrVendor || '').replace(/"/g, '""')}"`, e.paymentChannel, e.verificationStatus, e.entryType, e.amountEgp].join(','))
+        .join('\n');
+      const blob = new Blob([header + lines], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'tfunions-open-ledger.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    renderTable();
+
     (async () => {
       try {
         const res = await fetch('https://n8n.tfunions.com/tf-api/api/ledger');
@@ -93,25 +190,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
 
         if (Array.isArray(data.entries) && data.entries.length > 0) {
-          const rowsEl = document.getElementById('ledger-rows');
-          rowsEl.innerHTML = data.entries
-            .map((e) => {
-              const isOutflow = e.entryType === 'outflow';
-              const sign = isOutflow ? '-' : '+';
-              const colorClass = isOutflow ? 'text-[#525866]' : 'text-[#15803D]';
-              const statusLabel = String(e.verificationStatus || 'Verified').replace(/_/g, ' ');
-              const channelLabel = String(e.paymentChannel || '').replace(/_/g, ' ');
-              return `
-                <div class="py-4 flex items-center justify-between gap-4">
-                  <div>
-                    <div class="text-[12px] text-[#7A8191]">${esc(e.txDate)} · ${esc(channelLabel)} · ${esc(statusLabel)}</div>
-                    <div class="text-[16px] font-semibold text-[#11141C] mt-0.5">${esc(e.donorOrVendor)}</div>
-                  </div>
-                  <span class="text-[14px] font-semibold ${colorClass} shrink-0">${sign}${fmtEgp(e.amountEgp)}</span>
-                </div>
-              `;
-            })
-            .join('');
+          allEntries = data.entries;
+          document.getElementById('ledger-status-label').textContent = `Live PostgreSQL Sync (${allEntries.length} entries)`;
+          renderTable();
         }
       } catch {}
     })();

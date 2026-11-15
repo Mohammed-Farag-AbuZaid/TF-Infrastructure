@@ -2,76 +2,101 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Ideas" backLabel="TF Unions" backHref="/">
-  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">COMMUNITY INCUBATOR</div>
-    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
-      Student Idea Incubator.
-    </h1>
-    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[660px]">
-      Propose and upvote open-source student tools, research utilities, and chapter initiatives across Egypt.
-    </p>
-  </section>
+  <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- Left 5 Cols: Deep Oxford Navy Sticky Proposal Composer -->
+    <aside class="lg:col-span-5 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-7 sm:p-8 lg:sticky lg:top-24 shadow-[0_3px_12px_rgba(10,25,49,0.08)]">
+      <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] font-medium text-[#E2E8F0]">
+        Community engineering backlog
+      </div>
+      <h1 class="font-display mt-3 text-[34px] font-bold leading-[1.08] text-white">
+        Student Idea Incubator
+      </h1>
+      <p class="mt-3 text-[14px] leading-[1.6] text-[#CBD5E1]">
+        Propose open-source student utilities, scholarship filters, or research guides. Top-upvoted proposals move into the engineering build queue.
+      </p>
 
-  <section class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-    <!-- Left 2 cols Widget: Proposed Ideas List -->
-    <div class="lg:col-span-2 bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+      <div id="idea-alert" class="hidden mt-5 px-4 py-3 rounded-md border text-[13.5px] font-medium"></div>
+
+      <form id="idea-form" class="mt-5 space-y-3.5 pt-5 border-t border-[#1E3A6D]">
         <div>
-          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">ACTIVE PROPOSALS</div>
-          <h2 class="mt-0.5 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Community Backlog</h2>
+          <label for="idea-title" class="block text-[12.5px] font-semibold text-[#CBD5E1] mb-1">Proposal title</label>
+          <input
+            id="idea-title"
+            type="text"
+            required
+            placeholder="Concise tool or feature title"
+            class="w-full h-11 px-3.5 rounded-md bg-[#102447] text-[14.5px] text-white placeholder-[#94A3B8] border border-[#1E3A6D] focus:border-[#C88A14] focus:outline-none transition"
+          />
         </div>
-        <span id="ideas-count" class="text-[12px] font-semibold text-[#525866] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md">1 Proposal</span>
+        <div>
+          <label for="idea-desc" class="block text-[12.5px] font-semibold text-[#CBD5E1] mb-1">Problem &amp; student benefit</label>
+          <textarea
+            id="idea-desc"
+            rows="4"
+            required
+            placeholder="What concrete problem does this solve for STEM or university applicants?"
+            class="w-full p-3.5 rounded-md bg-[#102447] text-[14.5px] text-white placeholder-[#94A3B8] border border-[#1E3A6D] focus:border-[#C88A14] focus:outline-none transition"
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          class="w-full h-11 rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] font-bold text-[14.5px] transition"
+        >
+          Publish Proposal
+        </button>
+      </form>
+    </aside>
+
+    <!-- Right 7 Cols: Crisp Paper Filterable Community Proposal Ledger -->
+    <div class="lg:col-span-7 bg-white border border-[#CFCBC2] rounded-lg overflow-hidden shadow-[0_2px_6px_rgba(10,25,49,0.04)]">
+      <div class="p-6 sm:p-7 border-b border-[#CFCBC2] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display text-[26px] font-bold text-[#12161F]">Community Backlog</h2>
+          <p class="text-[13px] text-[#4A5262] mt-0.5">Vote on student proposals stored in the union PostgreSQL queue.</p>
+        </div>
+        <span id="ideas-count" class="font-code text-[12px] font-semibold text-[#14388C] bg-[#E2DFD7] border border-[#C8C3B8] px-3 py-1 rounded-md shrink-0">
+          1 Proposal
+        </span>
       </div>
 
-      <div class="divide-y divide-[#E2E5EC]" id="ideas-list">
-        <div class="py-5 flex items-center justify-between gap-4">
+      <!-- Warm Sand Filter Bar -->
+      <div class="px-6 py-3 bg-[#E2DFD7] border-b border-[#CFCBC2] flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap gap-1.5" id="idea-filters">
+          <button type="button" data-status="all" class="idea-filter active px-3 py-1.5 rounded text-[12px] font-semibold bg-[#0A1931] text-white transition">All</button>
+          <button type="button" data-status="open" class="idea-filter px-3 py-1.5 rounded text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Open</button>
+          <button type="button" data-status="planned" class="idea-filter px-3 py-1.5 rounded text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition">Planned</button>
+        </div>
+        <input
+          id="idea-search"
+          type="search"
+          placeholder="Filter proposals..."
+          class="w-full sm:w-52 h-8 px-3 rounded bg-white border border-[#CFCBC2] text-[12.5px] text-[#12161F] placeholder-[#687082] focus:border-[#14388C] focus:outline-none"
+        />
+      </div>
+
+      <div class="divide-y divide-[#CFCBC2]" id="ideas-list">
+        <div class="p-6 flex items-center justify-between gap-4">
           <div>
-            <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">TF News · Planned</div>
-            <div class="text-[16px] font-semibold text-[#11141C] mt-1">
+            <div class="flex items-center gap-2 text-[12px]">
+              <span class="font-semibold text-[#14388C]">TF News</span>
+              <span class="px-2 py-0.5 rounded bg-[#E2DFD7] border border-[#C8C3B8] text-[#12161F] font-medium">Planned</span>
+            </div>
+            <div class="font-display text-[19px] font-bold text-[#12161F] mt-1">
               Arabic-to-English Research Abstract Reviewer &amp; LaTeX Template Pack
             </div>
-            <p class="text-[14px] text-[#525866] mt-1">
+            <p class="text-[14px] text-[#4A5262] mt-1">
               Checklist and peer review queue for ISEF and science fair students.
             </p>
           </div>
           <button
             type="button"
             data-id="1"
-            class="upvote-btn px-3.5 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583] text-[13px] font-semibold text-[#11141C] shrink-0 transition"
+            class="upvote-btn px-3.5 py-2 rounded-md bg-[#ECEAE4] border border-[#CFCBC2] hover:border-[#14388C] text-[13px] font-bold text-[#12161F] shrink-0 transition"
           >
             ▲ <span class="count">142</span>
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- Right col Widget: Propose Form -->
-    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">SUBMIT PROPOSAL</div>
-      <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Propose an idea</h2>
-      <div id="idea-alert" class="hidden mt-4 px-4 py-3 rounded-xl border text-[14px] font-medium"></div>
-      <form id="idea-form" class="mt-5 space-y-3.5">
-        <input
-          id="idea-title"
-          type="text"
-          required
-          placeholder="Concise title"
-          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
-        />
-        <textarea
-          id="idea-desc"
-          rows="4"
-          required
-          placeholder="What problem does this solve for students?"
-          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
-        ></textarea>
-        <button
-          type="submit"
-          class="w-full h-11 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
-        >
-          Submit idea
-        </button>
-      </form>
     </div>
   </section>
 
@@ -98,6 +123,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const countBadge = document.getElementById('ideas-count');
     const form = document.getElementById('idea-form');
     const alertBox = document.getElementById('idea-alert');
+    const searchInput = document.getElementById('idea-search');
+
+    let cachedIdeas = [
+      {
+        item_id: 1,
+        source_service: 'TF News',
+        status: 'Planned',
+        title: 'Arabic-to-English Research Abstract Reviewer & LaTeX Template Pack',
+        description: 'Checklist and peer review queue for ISEF and science fair students.',
+        upvote_count: 142,
+      },
+    ];
+    let statusFilter = 'all';
+    let searchTerm = '';
+
+    function renderList() {
+      const q = searchTerm.toLowerCase();
+      const filtered = cachedIdeas.filter((it) => {
+        const st = String(it.status || 'Open').toLowerCase();
+        const matchStatus = statusFilter === 'all' || st.includes(statusFilter);
+        const matchQ = !q || String(it.title || '').toLowerCase().includes(q) || String(it.description || '').toLowerCase().includes(q);
+        return matchStatus && matchQ;
+      });
+
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} Proposal${filtered.length === 1 ? '' : 's'}`;
+      }
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="p-8 text-center text-[14px] text-[#4A5262]">No proposals match this filter yet.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered
+        .map(
+          (item) => `
+          <div class="p-6 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/30 transition">
+            <div>
+              <div class="flex items-center gap-2 text-[12px]">
+                <span class="font-semibold text-[#14388C]">${esc(item.source_service || 'Ecosystem')}</span>
+                <span class="px-2 py-0.5 rounded bg-[#E2DFD7] border border-[#C8C3B8] text-[#12161F] font-medium">${esc(String(item.status || 'Open').replace(/_/g, ' '))}</span>
+              </div>
+              <div class="font-display text-[19px] font-bold text-[#12161F] mt-1">${esc(item.title)}</div>
+              <p class="text-[14px] text-[#4A5262] mt-1">${esc(item.description || '')}</p>
+            </div>
+            <button
+              type="button"
+              data-id="${Number(item.item_id)}"
+              class="upvote-btn px-3.5 py-2 rounded-md bg-[#ECEAE4] border border-[#CFCBC2] hover:border-[#14388C] text-[13px] font-bold text-[#12161F] shrink-0 transition"
+            >
+              ▲ <span class="count">${Number(item.upvote_count || 1)}</span>
+            </button>
+          </div>
+        `
+        )
+        .join('');
+      bindUpvotes();
+    }
 
     async function loadIdeas() {
       try {
@@ -105,28 +188,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         const data = await res.json();
         const items = data.ideas || [];
         if (items.length > 0) {
-          if (countBadge) countBadge.textContent = `${items.length} Proposal${items.length === 1 ? '' : 's'}`;
-          listEl.innerHTML = items
-            .map(
-              (item) => `
-              <div class="py-5 flex items-center justify-between gap-4">
-                <div>
-                  <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">${esc(item.source_service || 'Ecosystem')} · ${esc(String(item.status || 'Open').replace(/_/g, ' '))}</div>
-                  <div class="text-[16px] font-semibold text-[#11141C] mt-1">${esc(item.title)}</div>
-                  <p class="text-[14px] text-[#525866] mt-1">${esc(item.description || '')}</p>
-                </div>
-                <button
-                  type="button"
-                  data-id="${Number(item.item_id)}"
-                  class="upvote-btn px-3.5 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583] text-[13px] font-semibold text-[#11141C] shrink-0 transition"
-                >
-                  ▲ <span class="count">${Number(item.upvote_count || 1)}</span>
-                </button>
-              </div>
-            `
-            )
-            .join('');
-          bindUpvotes();
+          cachedIdeas = items;
+          renderList();
         }
       } catch {}
     }
@@ -145,17 +208,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             const data = await res.json();
             if (data.upvoteCount) {
               countEl.textContent = data.upvoteCount;
-              btn.classList.add('border-[#002583]', 'text-[#002583]');
+              btn.classList.add('border-[#14388C]', 'text-[#14388C]', 'bg-white');
             }
           } catch {}
         };
       });
     }
 
+    document.querySelectorAll('.idea-filter').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.idea-filter').forEach((b) => {
+          b.className = 'idea-filter px-3 py-1.5 rounded text-[12px] font-semibold bg-white text-[#12161F] border border-[#CFCBC2] hover:border-[#14388C] transition';
+        });
+        btn.className = 'idea-filter active px-3 py-1.5 rounded text-[12px] font-semibold bg-[#0A1931] text-white transition';
+        statusFilter = btn.getAttribute('data-status') || 'all';
+        renderList();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value.trim();
+        renderList();
+      });
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       alertBox.textContent = 'Publishing proposal...';
-      alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] text-[#525866] text-[14px] font-medium';
+      alertBox.className = 'mt-5 px-4 py-3 rounded-md bg-[#102447] border border-[#1E3A6D] text-[#CBD5E1] text-[13.5px] font-medium';
       alertBox.classList.remove('hidden');
       try {
         const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
@@ -172,12 +253,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         });
         if (!res.ok) throw new Error('Publish failed');
         alertBox.textContent = 'Idea published to the community backlog.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] text-[14px] font-medium';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-md bg-[#065F46] border border-[#34D399]/40 text-white text-[13.5px] font-medium';
         form.reset();
         loadIdeas();
       } catch {
         alertBox.textContent = 'Could not submit idea. Please try again.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[14px] font-medium';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-md bg-[#7F1D1D] border border-[#FCA5A5]/40 text-white text-[13.5px] font-medium';
       }
     });
 
