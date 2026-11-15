@@ -28,8 +28,8 @@ const faviconSvg = encodeURIComponent(
     </style>
   </head>
   <body class="min-h-screen bg-[#F3F2EE] text-[#161A22] antialiased grid grid-cols-1 lg:grid-cols-12">
-    <!-- Left 5 Cols: Calm Airy Identity Column -->
-    <aside class="lg:col-span-5 bg-white p-7 sm:p-11 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#DFDDD6]">
+    <!-- Left 5 Cols: Calm Airy Identity Column (Desktop only so phones go straight to auth) -->
+    <aside class="lg:col-span-5 bg-white p-7 sm:p-11 hidden lg:flex lg:flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#DFDDD6]">
       <div>
         <div class="flex items-center justify-between gap-4">
           <a href="https://www.tfunions.com" class="flex items-center gap-3 group">
@@ -78,8 +78,22 @@ const faviconSvg = encodeURIComponent(
     </aside>
 
     <!-- Right 7 Cols: Warm Alabaster Canvas + Crisp White Auth Sheet -->
-    <main class="lg:col-span-7 p-5 sm:p-10 lg:p-14 flex items-center justify-center">
+    <main class="lg:col-span-7 p-4 sm:p-10 lg:p-14 flex items-center justify-center">
       <div class="w-full max-w-[460px]">
+        <!-- Compact Inline Mobile Brand Row (no sticky top bar) -->
+        <div class="lg:hidden flex items-center justify-between gap-3 mb-4 px-1">
+          <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px] shrink-0">
+              <rect width="32" height="32" rx="7" fill="#1B365D" />
+              <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E" />
+              <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
+            </svg>
+            <span class="font-display text-[17px] font-bold text-[#161A22]">TF Passport</span>
+          </a>
+          <a id="mobile-back-link" href="https://www.tfunions.com" class="text-[12.5px] font-medium text-[#1B365D] hover:underline">
+            ← Return
+          </a>
+        </div>
         <!-- Active Session Banner -->
         <section id="active-session-card" class="hidden mb-5 bg-white border border-[#0F766E]/40 rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
           <div class="flex items-start justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
@@ -116,16 +130,22 @@ const faviconSvg = encodeURIComponent(
         </section>
 
         <!-- Primary Crisp White Auth Sheet -->
-        <section class="bg-white border border-[#DFDDD6] rounded-xl p-7 sm:p-9 shadow-[0_1px_3px_rgba(22,26,34,0.05)]">
+        <section class="bg-white border border-[#DFDDD6] rounded-xl p-5 sm:p-9 shadow-[0_1px_3px_rgba(22,26,34,0.05)]">
           <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
             <div>
-              <h2 id="form-title" class="font-display text-[26px] font-bold text-[#161A22] leading-tight">
+              <h2 id="form-title" class="font-display text-[23px] sm:text-[26px] font-bold text-[#161A22] leading-tight">
                 Welcome back
               </h2>
-              <p id="form-subtitle" class="mt-1 text-[13.5px] text-[#525866]">
+              <p id="form-subtitle" class="mt-1 text-[13px] sm:text-[13.5px] text-[#525866]">
                 Continue to <span id="target-service-name" class="font-code text-[#0F766E] font-medium">www.tfunions.com</span>
               </p>
             </div>
+          </div>
+
+          <!-- Saved Accounts on this Device -->
+          <div id="saved-accounts-box" class="hidden mt-4 p-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
+            <div class="text-[11.5px] font-semibold text-[#525866] mb-2">Saved accounts on this device</div>
+            <div id="saved-accounts-list" class="space-y-1.5"></div>
           </div>
 
           <!-- Continue with Google -->
@@ -295,6 +315,8 @@ const faviconSvg = encodeURIComponent(
         createUserWithEmailAndPassword,
         GoogleAuthProvider,
         signInWithPopup,
+        signInWithRedirect,
+        getRedirectResult,
         sendPasswordResetEmail,
         sendEmailVerification,
         updateProfile,
@@ -347,11 +369,13 @@ const faviconSvg = encodeURIComponent(
       const redirectUrl = getValidatedRedirectUrl();
       const targetNameEl = document.getElementById('target-service-name');
       const backLink = document.getElementById('back-link');
+      const mobileBackLink = document.getElementById('mobile-back-link');
       const continuePortalBtn = document.getElementById('continue-portal-btn');
       try {
         targetNameEl.textContent = new URL(redirectUrl).hostname;
-        backLink.href = redirectUrl;
-        continuePortalBtn.href = redirectUrl;
+        if (backLink) backLink.href = redirectUrl;
+        if (mobileBackLink) mobileBackLink.href = redirectUrl;
+        if (continuePortalBtn) continuePortalBtn.href = redirectUrl;
       } catch {}
 
       const sessionCard = document.getElementById('active-session-card');
@@ -394,10 +418,115 @@ const faviconSvg = encodeURIComponent(
           'auth/weak-password': 'Password should be at least 6 characters.',
           'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
           'auth/popup-closed-by-user': 'Google sign-in popup was closed.',
+          'auth/popup-blocked': 'Popup blocked on this browser. Switching to Google redirect...',
+          'auth/unauthorized-domain': 'This domain needs authorization in Firebase Console -> Authentication -> Authorized domains.',
+          'auth/operation-not-supported-in-this-environment': 'Switching to Google redirect sign-in...',
           'auth/network-request-failed': 'Network error. Please check your connection.',
         };
         return map[code] || err?.message || 'Authentication failed';
       }
+
+      const SAVED_ACCOUNTS_KEY = 'tf_saved_accounts';
+
+      function getSavedAccounts() {
+        try {
+          const raw = localStorage.getItem(SAVED_ACCOUNTS_KEY);
+          const list = raw ? JSON.parse(raw) : [];
+          return Array.isArray(list) ? list : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveAccountLocally(entry) {
+        if (!entry?.email) return;
+        const emailLower = String(entry.email).trim().toLowerCase();
+        const existing = getSavedAccounts().filter((a) => String(a.email || '').toLowerCase() !== emailLower);
+        existing.unshift({
+          email: entry.email.trim(),
+          name: entry.name || entry.email.split('@')[0],
+          provider: entry.provider || 'password',
+          uid: entry.uid || '',
+          lastUsedAt: Date.now(),
+        });
+        try {
+          localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(existing.slice(0, 6)));
+        } catch {}
+        renderSavedAccounts();
+      }
+
+      function removeSavedAccount(email) {
+        const target = String(email || '').trim().toLowerCase();
+        const filtered = getSavedAccounts().filter((a) => String(a.email || '').toLowerCase() !== target);
+        try {
+          localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(filtered));
+        } catch {}
+        renderSavedAccounts();
+      }
+
+      function renderSavedAccounts() {
+        const box = document.getElementById('saved-accounts-box');
+        const listEl = document.getElementById('saved-accounts-list');
+        if (!box || !listEl) return;
+        const items = getSavedAccounts();
+        if (!items.length) {
+          box.classList.add('hidden');
+          listEl.replaceChildren();
+          return;
+        }
+        box.classList.remove('hidden');
+        listEl.replaceChildren();
+        for (const item of items) {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between gap-2 px-2.5 py-2 rounded-md bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 transition';
+
+          const pickBtn = document.createElement('button');
+          pickBtn.type = 'button';
+          pickBtn.className = 'flex-1 min-w-0 text-left flex items-center gap-2.5';
+
+          const avatar = document.createElement('span');
+          avatar.className = 'w-7 h-7 rounded-full bg-[#1B365D] text-white text-[11px] font-bold flex items-center justify-center shrink-0';
+          avatar.textContent = (item.name || item.email || 'T').charAt(0).toUpperCase();
+
+          const meta = document.createElement('span');
+          meta.className = 'min-w-0 block';
+          const nameEl = document.createElement('span');
+          nameEl.className = 'block text-[12.5px] font-semibold text-[#161A22] truncate';
+          nameEl.textContent = item.name || item.email;
+          const emailEl = document.createElement('span');
+          emailEl.className = 'block text-[11px] text-[#525866] truncate';
+          emailEl.textContent = item.provider === 'google' ? `${item.email} · Google` : item.email;
+          meta.appendChild(nameEl);
+          meta.appendChild(emailEl);
+
+          pickBtn.appendChild(avatar);
+          pickBtn.appendChild(meta);
+          pickBtn.addEventListener('click', () => {
+            if (item.provider === 'google') {
+              googleBtn.click();
+              return;
+            }
+            isRegisterMode = false;
+            applyMode();
+            const emailInput = document.getElementById('email');
+            if (emailInput) emailInput.value = item.email;
+            pwInput.focus();
+            showStatus(`Loaded ${item.email}. Enter your password or use Google Sign-In.`);
+          });
+
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.title = 'Remove saved account';
+          removeBtn.className = 'px-1.5 py-0.5 text-[13px] text-[#767D8C] hover:text-[#B91C1C] shrink-0';
+          removeBtn.textContent = '×';
+          removeBtn.addEventListener('click', () => removeSavedAccount(item.email));
+
+          row.appendChild(pickBtn);
+          row.appendChild(removeBtn);
+          listEl.appendChild(row);
+        }
+      }
+      renderSavedAccounts();
 
       function setSessionArtifacts(profile, token) {
         const hint = encodeURIComponent(JSON.stringify({
@@ -459,6 +588,13 @@ const faviconSvg = encodeURIComponent(
 
         const idToken = await user.getIdToken();
         setSessionArtifacts(profile, idToken);
+        const providerId = user.providerData?.[0]?.providerId || '';
+        saveAccountLocally({
+          email: profile.email || user.email,
+          name: profile.fullName || user.displayName,
+          provider: providerId.includes('google') ? 'google' : 'password',
+          uid: user.uid,
+        });
         return profile;
       }
 
@@ -577,6 +713,59 @@ const faviconSvg = encodeURIComponent(
         }
       });
 
+      // Handle return from Google mobile redirect sign-in
+      getRedirectResult(auth)
+        .then(async (result) => {
+          if (result?.user) {
+            const profile = await syncUserProfile(result.user);
+            renderSessionCard(result.user, profile);
+            showStatus('Signed in with Google. Redirecting...');
+            setTimeout(() => { window.location.href = redirectUrl; }, 450);
+          }
+        })
+        .catch((err) => {
+          if (err?.code) showStatus(formatFirebaseError(err), true);
+        });
+
+      async function tryMigrateVpsAccount(email, password) {
+        try {
+          const ctrl = new AbortController();
+          const timer = setTimeout(() => ctrl.abort(), 4000);
+          const res = await fetch('https://n8n.tfunions.com/tf-api/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+            signal: ctrl.signal,
+          });
+          clearTimeout(timer);
+          if (!res.ok) return null;
+          const body = await res.json();
+          const vpsUser = body.user || {};
+          const fullName = String(vpsUser.fullName || vpsUser.name || email.split('@')[0]).trim();
+          const parts = fullName.split(/\s+/).filter(Boolean);
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (fullName) {
+            try { await updateProfile(cred.user, { displayName: fullName }); } catch {}
+          }
+          const profile = await syncUserProfile(cred.user, {
+            firstName: vpsUser.firstName || parts[0] || fullName,
+            lastName: vpsUser.lastName || parts.slice(1).join(' '),
+            fullName,
+            phone: vpsUser.phone || '',
+            governorate: vpsUser.governorate || '',
+            academicLevel: vpsUser.academicLevel || '',
+            grade: vpsUser.grade || '',
+            stemSchool: vpsUser.stemSchool || '',
+          });
+          return { cred, profile };
+        } catch (err) {
+          if (err?.code === 'auth/email-already-in-use') {
+            throw { message: 'This email is linked to an existing account. Try Continue with Google or Forgot password.' };
+          }
+          return null;
+        }
+      }
+
       googleBtn.addEventListener('click', async () => {
         try {
           googleBtn.disabled = true;
@@ -587,6 +776,14 @@ const faviconSvg = encodeURIComponent(
           showStatus('Signed in with Google. Redirecting...');
           setTimeout(() => { window.location.href = redirectUrl; }, 450);
         } catch (err) {
+          if (
+            err?.code === 'auth/popup-blocked' ||
+            err?.code === 'auth/operation-not-supported-in-this-environment'
+          ) {
+            showStatus('Redirecting to Google Sign-In...');
+            await signInWithRedirect(auth, googleProvider);
+            return;
+          }
           showStatus(formatFirebaseError(err), true);
         } finally {
           googleBtn.disabled = false;
@@ -625,15 +822,32 @@ const faviconSvg = encodeURIComponent(
             } catch {}
 
             renderSessionCard(cred.user, profile);
-            showStatus('Account created & verification email sent. Redirecting...');
-            setTimeout(() => { window.location.href = redirectUrl; }, 700);
+            showStatus('Account created! Redirecting...');
+            setTimeout(() => { window.location.href = redirectUrl; }, 500);
           } else {
             showStatus('Verifying credentials with Firebase...');
-            const cred = await signInWithEmailAndPassword(auth, email, password);
-            const profile = await syncUserProfile(cred.user);
-            renderSessionCard(cred.user, profile);
-            showStatus('Signed in. Redirecting...');
-            setTimeout(() => { window.location.href = redirectUrl; }, 450);
+            try {
+              const cred = await signInWithEmailAndPassword(auth, email, password);
+              const profile = await syncUserProfile(cred.user);
+              renderSessionCard(cred.user, profile);
+              showStatus('Signed in. Redirecting...');
+              setTimeout(() => { window.location.href = redirectUrl; }, 450);
+            } catch (signErr) {
+              if (
+                signErr?.code === 'auth/user-not-found' ||
+                signErr?.code === 'auth/invalid-credential' ||
+                signErr?.code === 'auth/wrong-password'
+              ) {
+                const migrated = await tryMigrateVpsAccount(email, password);
+                if (migrated) {
+                  renderSessionCard(migrated.cred.user, migrated.profile);
+                  showStatus('Account retrieved & signed in. Redirecting...');
+                  setTimeout(() => { window.location.href = redirectUrl; }, 450);
+                  return;
+                }
+              }
+              throw signErr;
+            }
           }
         } catch (err) {
           showStatus(formatFirebaseError(err), true);

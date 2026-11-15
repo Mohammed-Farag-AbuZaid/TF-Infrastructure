@@ -90,36 +90,9 @@ const faviconSvg = encodeURIComponent(
     </style>
   </head>
   <body class="min-h-screen bg-[#F3F2EE] text-[#161A22] antialiased selection:bg-[#1B365D]/15 selection:text-[#161A22] flex flex-col">
-    <!-- Calm Recessed Ecosystem Utility Strip -->
-    <div class="bg-[#EAE8E1] border-b border-[#DFDDD6] text-[#525866]">
-      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-9 flex items-center justify-between gap-4 overflow-x-auto">
-        <div class="flex items-center gap-1 shrink-0 text-[12px]">
-          {ecosystemLinks.map((item) => (
-            <a
-              href={item.href}
-              class={
-                item.active
-                  ? 'px-2.5 py-1 rounded-md font-semibold text-[#161A22] bg-white border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.03)] whitespace-nowrap'
-                  : 'px-2.5 py-1 rounded-md font-medium text-[#525866] hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap'
-              }
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-        <a
-          href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-          class="hidden sm:inline-flex items-center gap-1.5 text-[12px] font-medium text-[#525866] hover:text-[#1B365D] transition whitespace-nowrap"
-        >
-          <span>TF Passport SSO</span>
-          <span aria-hidden="true" class="text-[#767D8C]">→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Calm White Architectural Masthead -->
-    <header class="bg-white/95 backdrop-blur-sm border-b border-[#DFDDD6] sticky top-0 z-40">
-      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-[64px] flex items-center justify-between gap-4">
+    <!-- Calm Inline Architectural Header (non-sticky on mobile for clean vertical breathing room) -->
+    <header class="bg-white border-b border-[#DFDDD6]">
+      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-[56px] sm:h-[64px] flex items-center justify-between gap-3">
         <div class="flex items-center gap-7">
           <a href={backLabel ? backHref : '/'} class="flex items-center gap-3 group shrink-0">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="shrink-0 rounded-[7px]">
@@ -163,13 +136,19 @@ const faviconSvg = encodeURIComponent(
           </nav>
         </div>
 
-        <div class="flex items-center gap-2.5">
-          <div id="sso-nav-slot" class="flex items-center gap-2">
+        <div class="flex items-center gap-2">
+          <div id="sso-nav-slot" class="flex items-center gap-1.5">
             <a
               href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-              class="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition shadow-[0_1px_2px_rgba(22,26,34,0.06)]"
+              class="inline-flex items-center justify-center h-8 sm:h-9 px-3 sm:px-3.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#161A22] text-[12.5px] sm:text-[13px] font-medium transition"
             >
               Sign in
+            </a>
+            <a
+              href="https://auth.tfunions.com/?mode=register&redirect_to=https://www.tfunions.com"
+              class="hidden sm:inline-flex items-center justify-center h-9 px-3.5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition shadow-[0_1px_2px_rgba(22,26,34,0.06)]"
+            >
+              Create account
             </a>
           </div>
 
@@ -209,6 +188,8 @@ const faviconSvg = encodeURIComponent(
           );
         })}
         <div class="pt-3 mt-3 border-t border-[#DFDDD6] grid grid-cols-2 gap-2 text-[13px]">
+          <a href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com" class="px-3 py-2 rounded-lg bg-white border border-[#DFDDD6] text-center font-medium text-[#161A22]">Sign in</a>
+          <a href="https://auth.tfunions.com/?mode=register&redirect_to=https://www.tfunions.com" class="px-3 py-2 rounded-lg bg-[#1B365D] text-center font-medium text-white">Create account</a>
           <a href="https://news.tfunions.com" class="px-3 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22]">News</a>
           <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22]">Guides</a>
           <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22]">Connect</a>
@@ -321,13 +302,7 @@ const faviconSvg = encodeURIComponent(
               signOutBtn.type = 'button';
               signOutBtn.className = 'h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12px] font-medium text-[#525866] hover:text-[#161A22] hover:border-[#B8B4A8] transition';
               signOutBtn.textContent = 'Sign out';
-              signOutBtn.addEventListener('click', async () => {
-                try {
-                  await fetch('https://n8n.tfunions.com/tf-api/api/sessionLogout', {
-                    method: 'POST',
-                    credentials: 'include',
-                  });
-                } catch {}
+              signOutBtn.addEventListener('click', () => {
                 document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';
                 localStorage.removeItem('tf_sso_token');
                 localStorage.removeItem('tf_sso_user');
