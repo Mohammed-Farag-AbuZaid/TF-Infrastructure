@@ -40,26 +40,26 @@
     .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
     .container { max-width: 1160px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    .switcher { background: var(--well); border-bottom: 1px solid var(--border); color: var(--slate); font-size: 12px; }
-    .switcher-inner { height: 36px; display: flex; align-items: center; justify-content: space-between; overflow-x: auto; }
-    .switcher-tabs { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-    .switcher-tabs a { padding: 4px 10px; border-radius: 6px; color: var(--slate); font-weight: 500; transition: all 0.15s; }
-    .switcher-tabs a:hover { color: var(--ink); background: rgba(255,255,255,0.6); }
-    .switcher-tabs a.active {
-      color: var(--ink); font-weight: 600; background: var(--paper);
-      border: 1px solid var(--border); box-shadow: 0 1px 1px rgba(22,26,34,0.03);
+    .inline-head {
+      padding: 24px 0 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-
-    .masthead { background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 30; }
-    .masthead-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .brand { display: flex; align-items: center; gap: 12px; }
+    .head-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .btn-outline {
+      display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 14px;
+      border-radius: 8px; background: var(--paper); color: var(--ink); border: 1px solid var(--border);
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--primary); }
     .btn-primary {
       display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px;
       border-radius: 8px; background: var(--primary); color: #FFFFFF; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s;
     }
     .btn-primary:hover { background: var(--primary-hover); }
 
-    .layout { margin-top: 32px; margin-bottom: 64px; display: grid; grid-template-columns: 310px 1fr; gap: 24px; align-items: start; }
+    .layout { margin-top: 28px; margin-bottom: 64px; display: grid; grid-template-columns: 310px 1fr; gap: 24px; align-items: start; }
     @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
     .rail {
@@ -133,24 +133,8 @@
   </style>
 </head>
 <body>
-  <div class="switcher">
-    <div class="container switcher-inner">
-      <div class="switcher-tabs">
-        <a href="https://www.tfunions.com">Foundation</a>
-        <a href="https://news.tfunions.com">News</a>
-        <a href="https://guides.tfunions.com">Guides</a>
-        <a href="https://connect.tfunions.com" class="active">Connect</a>
-        <a href="https://verify.tfunions.com">Verify</a>
-        <a href="https://docs.tfunions.com">Docs</a>
-      </div>
-      <div style="display:flex;align-items:center;">
-        <span id="live-sync-status" class="font-code" style="color:var(--teal);font-size:11px;">Synchronized atlas</span>
-      </div>
-    </div>
-  </div>
-
-  <header class="masthead">
-    <div class="container masthead-inner">
+  <div class="container">
+    <div class="inline-head">
       <a href="https://connect.tfunions.com" class="brand">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="border-radius:7px;">
           <rect width="32" height="32" rx="7" fill="#1B365D"/>
@@ -162,9 +146,14 @@
           <span style="font-size:11px;color:var(--muted);">Governorate Chapters &amp; Guilds</span>
         </div>
       </a>
-      <a href="https://auth.tfunions.com/?redirect_to=https://connect.tfunions.com" class="btn-primary">Sign in</a>
+      <div class="head-actions">
+        <span id="live-sync-status" class="font-code" style="color:var(--teal);font-size:11.5px;margin-right:4px;">Synchronized atlas</span>
+        <a href="/propose.html" class="btn-outline">Propose a study group →</a>
+        <a href="https://www.tfunions.com" class="btn-outline">Foundation</a>
+        <a href="https://auth.tfunions.com/?redirect_to=https://connect.tfunions.com" class="btn-primary">Sign in</a>
+      </div>
     </div>
-  </header>
+  </div>
 
   <main class="container layout">
     <aside class="rail">

@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const divisions = [
+  {
+    index: '01',
+    title: 'TF News & Admissions',
+    domain: 'news.tfunions.com',
+    desc: 'Searchable database of verified full-need university scholarships, summer research institutes, internships, and Olympiad competitions with deadline tracking.',
+    tags: ['1,500+ universities', 'Deadline triage', 'Summer fellowships'],
+    metric: 'Updated daily',
+    href: 'https://news.tfunions.com',
+    cta: 'Open TF News',
+    primary: true,
+  },
+  {
+    index: '02',
+    title: 'TF Guides & Roadmaps',
+    domain: 'guides.tfunions.com',
+    desc: 'Interactive milestone workbooks authored by alumni finalists covering Regeneron ISEF methodology, Olympiad training plans, and Overleaf paper drafting.',
+    tags: ['ISEF methodology', 'EOI & Physics prep', 'Local progress sync'],
+    metric: '6 curatorial tracks',
+    href: 'https://guides.tfunions.com',
+    cta: 'Browse Guides',
+    primary: false,
+  },
+  {
+    index: '03',
+    title: 'TF Connect Chapters',
+    domain: 'connect.tfunions.com',
+    desc: 'Directory of STEM school chapters, governorate study circles, and student-built technical guilds coordinating peer mentorship across Egypt.',
+    tags: ['27 governorates', 'Study circles', 'Research guilds'],
+    metric: 'Synchronized network',
+    href: 'https://connect.tfunions.com',
+    cta: 'Explore Chapters',
+    primary: false,
+  },
+  {
+    index: '04',
+    title: 'STEM Shop & Hardware Labs',
+    domain: '/volunteer',
+    desc: 'Zero-markup electronics kits, sensors, and lab resources paired with our contributor onboarding pipeline for builders across high school & university teams.',
+    tags: ['Capstone components', 'Volunteer cohorts', 'Verified certificates'],
+    metric: 'Winter 2026 open',
+    href: '/volunteer',
+    cta: 'Join Cohort',
+    primary: false,
+  },
+];
+---
+<BaseLayout title="Divisions & Platforms" backLabel="Home" backHref="/">
+  <section class="mt-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+      <div>
+        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+          Public ecosystem registries
+        </div>
+        <h1 class="font-display mt-2 text-[30px] sm:text-[36px] font-bold tracking-[-0.025em] text-[#161A22]">
+          Union divisions and platforms
+        </h1>
+        <p class="text-[14.5px] text-[#525866] mt-1">
+          Purpose-built student systems running under one unified TF Passport session.
+        </p>
+      </div>
+      <a href="https://docs.tfunions.com" class="text-[13px] font-medium text-[#1B365D] hover:underline shrink-0">
+        System architecture reference →
+      </a>
+    </div>
+
+    <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.04)] divide-y divide-[#DFDDD6]">
+      {divisions.map((d) => (
+        <div class="p-6 sm:px-7 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center hover:bg-[#FAF9F6] transition">
+          <div class="lg:col-span-4 flex items-start gap-3.5">
+            <span class="font-code text-[12px] text-[#767D8C] pt-1 shrink-0">{d.index}</span>
+            <div>
+              <div class="font-code text-[12px] text-[#0F766E] font-medium">{d.domain}</div>
+              <h2 class="font-display text-[19px] font-semibold text-[#161A22] mt-0.5 leading-snug">
+                {d.title}
+              </h2>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <p class="text-[13.5px] leading-[1.6] text-[#525866]">{d.desc}</p>
+            <div class="mt-2.5 flex flex-wrap gap-1.5">
+              {d.tags.map((t) => (
+                <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] text-[#525866] border border-[#DCD9D0]">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div class="lg:col-span-3 flex lg:flex-col items-center lg:items-end justify-between gap-2.5">
+            <span class="text-[12px] font-medium text-[#767D8C]">{d.metric}</span>
+            <a
+              href={d.href}
+              class={
+                d.primary
+                  ? 'h-9 px-4 inline-flex items-center justify-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition'
+                  : 'h-9 px-4 inline-flex items-center justify-center rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition'
+              }
+            >
+              {d.cta} →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

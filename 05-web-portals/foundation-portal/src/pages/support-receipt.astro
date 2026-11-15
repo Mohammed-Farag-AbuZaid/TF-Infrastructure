@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Log Transfer Receipt" backLabel="Support Channels" backHref="/support">
+  <section class="mt-8 max-w-[640px] bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="pb-4 border-b border-[#DFDDD6]">
+      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[12.5px] font-medium text-[#525866]">
+        Open Ledger Verification
+      </div>
+      <h1 class="font-display mt-2 text-[28px] font-bold text-[#161A22]">Log transfer receipt</h1>
+      <p class="text-[13.5px] text-[#525866] mt-1">
+        Submit your transfer details so our treasury team can verify and post it to the Open Ledger.
+      </p>
+    </div>
+
+    <div id="don-alert" class="hidden mt-4 px-4 py-3 rounded-lg border text-[13.5px] font-medium"></div>
+
+    <form id="don-form" class="mt-5 space-y-4">
+      <div>
+        <label for="don-name" class="block text-[13px] font-medium text-[#161A22] mb-1">Contributor name (optional)</label>
+        <input
+          id="don-name"
+          type="text"
+          placeholder="Leave blank to post anonymously"
+          class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="don-channel" class="block text-[13px] font-medium text-[#161A22] mb-1">Channel</label>
+          <select
+            id="don-channel"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          >
+            <option value="InstaPay">InstaPay</option>
+            <option value="Vodafone_Cash">Vodafone Cash</option>
+            <option value="Bank_Transfer">Bank Transfer</option>
+          </select>
+        </div>
+        <div>
+          <label for="don-amount" class="block text-[13px] font-medium text-[#161A22] mb-1">Amount (EGP)</label>
+          <input
+            id="don-amount"
+            type="number"
+            required
+            min="10"
+            placeholder="e.g. 250"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+      <div>
+        <label for="don-proof" class="block text-[13px] font-medium text-[#161A22] mb-1">Receipt reference or image link (optional)</label>
+        <input
+          id="don-proof"
+          type="url"
+          placeholder="https://..."
+          class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        />
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <a href="/support" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">← Back to channels</a>
+        <button
+          type="submit"
+          class="h-10 px-6 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+        >
+          Submit receipt for audit
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById('don-form');
+    const alertBox = document.getElementById('don-alert');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.textContent = 'Recording receipt...';
+      alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
+      alertBox.classList.remove('hidden');
+      try {
+        const nameVal = document.getElementById('don-name').value.trim();
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/submit-donation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            donorName: nameVal || 'Anonymous Supporter',
+            isAnonymous: !nameVal,
+            paymentChannel: document.getElementById('don-channel').value,
+            amountEgp: Number(document.getElementById('don-amount').value),
+            proofUrl: document.getElementById('don-proof').value.trim(),
+          }),
+        });
+        if (!res.ok) throw new Error('Receipt log failed');
+        alertBox.textContent = 'Thank you. Your receipt has been logged for verification.';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
+        form.reset();
+      } catch {
+        alertBox.textContent = 'Could not submit receipt.';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
+      }
+    });
+  </script>
+</BaseLayout>

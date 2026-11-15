@@ -32,7 +32,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </dl>
 
       <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-col gap-2">
-        <a href="/team" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+        <a href="/commitments" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+          <span>Operating commitments</span>
+          <span>→</span>
+        </a>
+        <a href="/team" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition">
           <span>Inspect 71-member constellation</span>
           <span>→</span>
         </a>
@@ -43,58 +47,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </aside>
 
-    <!-- Right 8 Cols: Crisp Paper Mandate & Principles -->
-    <div class="lg:col-span-8 space-y-6">
+    <!-- Right 8 Cols: Clean Mandate Sheet -->
+    <div class="lg:col-span-8">
       <article class="bg-white border border-[#DFDDD6] rounded-xl p-7 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
         <h2 class="font-display text-[26px] font-bold text-[#161A22] tracking-[-0.02em]">Answer before they ask</h2>
         <p class="mt-3 text-[15px] leading-[1.68] text-[#525866] max-w-[66ch]">
           Most ambitious high school and university students in Egypt lose critical scholarship deadlines, Olympiad training plans, or research mentors simply because information sits scattered across private chats. TF Unions centralizes admissions intelligence, scientific writing guides, and chapter networks into open, fast, permanent public infrastructure.
         </p>
 
-        <div class="mt-7 pt-6 border-t border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="p-5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
-            <h3 class="font-display text-[18px] font-semibold text-[#161A22]">Every educational track included</h3>
-            <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
-              Thanaweya Amma, STEM High Schools, IGCSE, American Diploma, Al-Azhar, Preparatory schools, and universities share identical free access.
-            </p>
-          </div>
-          <div class="p-5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
-            <h3 class="font-display text-[18px] font-semibold text-[#161A22]">Built for long-term memory</h3>
-            <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
-              Research blueprinted by alumni cohorts remains online permanently so each incoming class starts ahead of the previous one.
-            </p>
-          </div>
+        <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
+          <span class="text-[13px] text-[#767D8C]">Open across Thanaweya Amma, STEM, IGCSE, American, and Azhar tracks.</span>
+          <a href="/commitments" class="text-[13.5px] font-semibold text-[#1B365D] hover:underline">
+            Explore operating commitments →
+          </a>
         </div>
       </article>
-
-      <section class="bg-white border border-[#DFDDD6] rounded-xl p-7 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-        <h2 class="font-display text-[22px] font-bold text-[#161A22] pb-3.5 border-b border-[#DFDDD6]">
-          Operating commitments
-        </h2>
-        <div class="divide-y divide-[#EAE8E1]">
-          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[15px] font-semibold text-[#161A22]">Ambition over examination cutoffs</div>
-              <div class="text-[13.5px] text-[#525866] mt-0.5">Opportunity access is determined by curiosity, build logs, and initiative rather than geography or school track.</div>
-            </div>
-            <span class="font-code text-[12px] px-2.5 py-1 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">01</span>
-          </div>
-          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[15px] font-semibold text-[#161A22]">Zero recurring commercial SaaS lock-in</div>
-              <div class="text-[13.5px] text-[#525866] mt-0.5">Databases, SSO authentication, analytics, and automated workflows run on dedicated Linux containers controlled by the union.</div>
-            </div>
-            <span class="font-code text-[12px] px-2.5 py-1 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">02</span>
-          </div>
-          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[15px] font-semibold text-[#161A22]">Verifiable public accountability</div>
-              <div class="text-[13.5px] text-[#525866] mt-0.5">Volunteer certificates carry public serials and all inflows/outflows are audited on the Open Ledger.</div>
-            </div>
-            <span class="font-code text-[12px] px-2.5 py-1 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">03</span>
-          </div>
-        </div>
-      </section>
     </div>
   </section>
 </BaseLayout>

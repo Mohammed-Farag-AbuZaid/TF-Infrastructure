@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Propose an Idea" backLabel="Ideas Backlog" backHref="/ideas">
+  <section class="mt-8 max-w-[640px] bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      Student proposal composer
+    </div>
+    <h1 class="font-display mt-2.5 text-[28px] sm:text-[32px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+      Propose a student utility
+    </h1>
+    <p class="mt-2.5 text-[14.5px] leading-[1.6] text-[#525866]">
+      Propose open-source student utilities, scholarship filters, or research guides. Top-upvoted proposals move into the engineering build queue.
+    </p>
+
+    <div id="idea-alert" class="hidden mt-5 px-4 py-3 rounded-lg border text-[13.5px] font-medium"></div>
+
+    <form id="idea-form" class="mt-6 space-y-4 pt-5 border-t border-[#DFDDD6]">
+      <div>
+        <label for="idea-title" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Proposal title</label>
+        <input
+          id="idea-title"
+          type="text"
+          required
+          placeholder="Concise tool or feature title"
+          class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        />
+      </div>
+      <div>
+        <label for="idea-desc" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Problem &amp; student benefit</label>
+        <textarea
+          id="idea-desc"
+          rows="5"
+          required
+          placeholder="What concrete problem does this solve for STEM or university applicants?"
+          class="w-full p-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        ></textarea>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <a href="/ideas" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">← Back to backlog</a>
+        <button
+          type="submit"
+          class="h-10 px-6 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+        >
+          Publish proposal
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <script is:inline>
+    function getVoterId() {
+      let id = localStorage.getItem('tf_voter_id');
+      if (!id) {
+        id = 'web_' + Math.random().toString(36).slice(2) + Date.now();
+        localStorage.setItem('tf_voter_id', id);
+      }
+      return id;
+    }
+
+    const form = document.getElementById('idea-form');
+    const alertBox = document.getElementById('idea-alert');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.textContent = 'Publishing proposal...';
+      alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
+      alertBox.classList.remove('hidden');
+      try {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            submissionType: 'Project_Idea',
+            service: 'Foundation_Portal',
+            title: document.getElementById('idea-title').value.trim(),
+            description: document.getElementById('idea-desc').value.trim(),
+            pageUrl: window.location.href,
+            uid: getVoterId(),
+          }),
+        });
+        if (!res.ok) throw new Error('Publish failed');
+        alertBox.textContent = 'Idea published to the community backlog.';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
+        form.reset();
+      } catch {
+        alertBox.textContent = 'Could not submit idea. Please try again.';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
+      }
+    });
+  </script>
+</BaseLayout>

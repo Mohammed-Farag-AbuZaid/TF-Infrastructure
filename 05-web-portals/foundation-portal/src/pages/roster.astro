@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import teamData from '../data/team-nodes.json';
+---
+<BaseLayout title="Directory Roster" backLabel="Team Constellation" backHref="/team">
+  <section class="mt-8 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-[#DFDDD6]">
+      <div>
+        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+          71 active contributors
+        </div>
+        <h1 class="font-display mt-2 text-[28px] sm:text-[34px] font-bold tracking-[-0.025em] text-[#161A22]">
+          Member directory roster
+        </h1>
+        <p class="mt-1.5 text-[14.5px] text-[#525866]">
+          Search or filter every TF Unions leader across HR, Marketing, PR &amp; Outreach, and Social Media.
+        </p>
+      </div>
+      <div class="flex items-center gap-2.5 shrink-0">
+        <a
+          href="/team"
+          class="h-9 px-4 inline-flex items-center rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition"
+        >
+          Interactive constellation →
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-1 p-1 rounded-lg bg-[#EAE8E1] border border-[#DCD9D0]" id="roster-team-filters">
+        <button type="button" data-team="All" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition">All teams</button>
+        <button type="button" data-team="Founders" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Founders</button>
+        <button type="button" data-team="HR Team" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">HR team</button>
+        <button type="button" data-team="Marketing Team" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Marketing</button>
+        <button type="button" data-team="PR Team" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">PR &amp; Outreach</button>
+        <button type="button" data-team="Social Media Team" class="roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Social Media</button>
+      </div>
+
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <input
+          id="roster-search"
+          type="search"
+          placeholder="Search name, role, school..."
+          class="w-full sm:w-64 h-9 px-3 bg-[#EAE8E1]/60 border border-[#DFDDD6] rounded-lg text-[13px] text-[#161A22] placeholder-[#767D8C] focus:bg-white focus:border-[#1B365D] focus:outline-none"
+        />
+        <span class="font-code text-[12px] font-medium text-[#0F766E] shrink-0">
+          <span id="roster-count">71</span> shown
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="member-cards-container"></section>
+
+  <script is:inline define:vars={{ teamData }}>
+    const ALL_MEMBERS = teamData;
+    const TEAM_COLORS = {
+      'Founders': { bg: '#1B365D', badge: 'bg-[#EEF2F6] text-[#1B365D]' },
+      'HR Team': { bg: '#334155', badge: 'bg-[#EAE8E1] text-[#334155]' },
+      'Marketing Team': { bg: '#0F766E', badge: 'bg-[#EDF7F5] text-[#0F766E]' },
+      'PR Team': { bg: '#2563EB', badge: 'bg-[#EFF6FF] text-[#1D4ED8]' },
+      'Social Media Team': { bg: '#B45309', badge: 'bg-[#FEF6EB] text-[#B45309]' }
+    };
+
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    let selectedTeam = 'All';
+    let searchQuery = '';
+
+    const cardsContainer = document.getElementById('member-cards-container');
+    const rosterCount = document.getElementById('roster-count');
+
+    function renderRoster() {
+      const q = searchQuery.toLowerCase().trim();
+      const filtered = ALL_MEMBERS.filter((m) => {
+        const matchTeam = selectedTeam === 'All' || m.team === selectedTeam;
+        const matchQ = !q ||
+          m.name.toLowerCase().includes(q) ||
+          (m.arabicName && m.arabicName.includes(q)) ||
+          m.role.toLowerCase().includes(q) ||
+          m.school.toLowerCase().includes(q);
+        return matchTeam && matchQ;
+      });
+
+      rosterCount.textContent = filtered.length;
+      if (filtered.length === 0) {
+        cardsContainer.innerHTML = `<div class="sm:col-span-2 lg:col-span-3 p-10 text-center bg-white border border-[#DFDDD6] rounded-xl text-[14px] text-[#767D8C]">No contributors match your filter.</div>`;
+        return;
+      }
+
+      cardsContainer.innerHTML = filtered.map((m) => {
+        const colors = TEAM_COLORS[m.team] || TEAM_COLORS['Founders'];
+        const initials = m.name.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+        return `
+          <div class="p-5 rounded-xl bg-white border border-[#DFDDD6] shadow-[0_1px_2px_rgba(22,26,34,0.03)]">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-white text-[13px] shrink-0" style="background-color: ${colors.bg};">
+                  ${esc(initials)}
+                </div>
+                <div>
+                  <h2 class="font-display font-semibold text-[16px] text-[#161A22] leading-tight">${esc(m.name)}</h2>
+                  <div class="text-[12.5px] font-medium text-[#525866] mt-0.5">${esc(m.role)}</div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-medium shrink-0 ${colors.badge}">${esc(m.team.replace(' Team', ''))}</span>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-[#EAE8E1] text-[12px] text-[#767D8C] flex items-center justify-between gap-2">
+              <span>${esc(m.school || 'TF Unions')}</span>
+              <span class="font-code font-medium text-[#161A22]">${esc(m.cohortLabel || m.grade)}</span>
+            </div>
+            <p class="mt-2 text-[12.5px] text-[#525866] leading-relaxed">${esc(m.bio)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.querySelectorAll('#roster-team-filters .roster-team-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#roster-team-filters .roster-team-btn').forEach((b) => {
+          b.className = 'roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
+        });
+        btn.className = 'roster-team-btn px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
+        selectedTeam = btn.dataset.team;
+        renderRoster();
+      });
+    });
+
+    document.getElementById('roster-search').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderRoster();
+    });
+
+    renderRoster();
+  </script>
+</BaseLayout>

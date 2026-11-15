@@ -28,186 +28,44 @@ const tracks = [
   },
 ];
 ---
-<BaseLayout title="Volunteer" backLabel="TF Unions" backHref="/">
-  <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-    <!-- Left 5 Cols: Calm Light Track Selector -->
-    <aside class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
-        Winter 2026 contributor cohort
+<BaseLayout title="Volunteer Tracks" backLabel="Home" backHref="/">
+  <section class="mt-8 max-w-[900px]">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      <div>
+        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+          Winter 2026 contributor cohort
+        </div>
+        <h1 class="font-display mt-2 text-[30px] sm:text-[36px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+          Choose a volunteer track
+        </h1>
+        <p class="mt-2 text-[14.5px] leading-[1.6] text-[#525866] max-w-[60ch]">
+          Select any contributor division below to proceed directly to the application form. Approved contributors receive a verifiable TF Unions credential.
+        </p>
       </div>
-      <h1 class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
-        Volunteer with us
-      </h1>
-      <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
-        Select a seasonal track below to review responsibilities and pre-fill your application. Approved contributors receive a verifiable TF Unions credential.
-      </p>
+      <a
+        href="https://verify.tfunions.com"
+        class="font-code text-[12px] px-3 py-1.5 rounded-lg bg-white border border-[#DFDDD6] text-[#525866] hover:border-[#1B365D] transition shrink-0"
+      >
+        Credential-backed
+      </a>
+    </div>
 
-      <div class="mt-6 space-y-2.5" id="track-selector">
-        {tracks.map((t, idx) => (
-          <button
-            type="button"
-            data-track-id={t.id}
-            data-track-name={t.name}
-            class={
-              idx === 0
-                ? 'track-card w-full text-left p-4 rounded-xl bg-[#EDF7F5]/50 border border-[#0F766E] ring-1 ring-[#0F766E]/25 transition'
-                : 'track-card w-full text-left p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#B8B4A8] transition'
-            }
-          >
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[14.5px] font-semibold text-[#161A22]">{t.name}</span>
-              <span class="text-[11.5px] font-medium text-[#0F766E]">{t.division}</span>
-            </div>
-            <p class="text-[13px] text-[#525866] mt-1.5 leading-relaxed">{t.summary}</p>
-          </button>
-        ))}
-      </div>
-    </aside>
-
-    <!-- Right 7 Cols: Crisp Paper Application Form -->
-    <div class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="pb-4 border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h2 class="font-display text-[24px] font-bold text-[#161A22]">Submit application</h2>
-          <p class="text-[13.5px] text-[#525866] mt-0.5">
-            Applying for: <strong id="selected-track-label" class="text-[#1B365D] font-semibold">TF News Researcher</strong>
-          </p>
-        </div>
-        <a href="https://verify.tfunions.com" class="font-code text-[11.5px] px-2.5 py-1 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866]">
-          Credential-backed
-        </a>
-      </div>
-
-      <div id="vol-alert" class="hidden mt-5 px-4 py-3 rounded-lg border text-[13.5px] font-medium"></div>
-
-      <form id="vol-form" class="mt-6 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="vol-name" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Full name</label>
-            <input
-              id="vol-name"
-              type="text"
-              required
-              placeholder="Your full name"
-              class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
-            />
-          </div>
-          <div>
-            <label for="vol-email" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Email address</label>
-            <input
-              id="vol-email"
-              type="email"
-              required
-              placeholder="you@example.com"
-              class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
-            />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="vol-track" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Target contributor track</label>
-            <select
-              id="vol-track"
-              class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
-            >
-              <option value="TF_News_Researcher">TF News Researcher</option>
-              <option value="TF_Guide_Author">TF Guides Author</option>
-              <option value="Engineering_Flutter">Engineering &amp; Flutter</option>
-              <option value="Community_Ambassador">Community &amp; Chapters</option>
-            </select>
-          </div>
-          <div>
-            <label for="vol-cv" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Portfolio, GitHub, or CV URL</label>
-            <input
-              id="vol-cv"
-              type="url"
-              placeholder="https://..."
-              class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label for="vol-motivation" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Relevant experience &amp; motivation</label>
-          <textarea
-            id="vol-motivation"
-            rows="5"
-            required
-            placeholder="Describe relevant research, articles, codebases, or school leadership work you have shipped."
-            class="w-full p-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
-          ></textarea>
-        </div>
-
-        <button
-          type="submit"
-          class="w-full h-10 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {tracks.map((t) => (
+        <a
+          href={`/volunteer-apply?track=${encodeURIComponent(t.id)}`}
+          class="group bg-white border border-[#DFDDD6] hover:border-[#0F766E] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between transition"
         >
-          Submit volunteer application
-        </button>
-      </form>
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-code text-[12px] font-medium text-[#0F766E]">{t.division}</span>
+              <span class="text-[#767D8C] group-hover:text-[#0F766E] transition">Apply →</span>
+            </div>
+            <h2 class="font-display text-[20px] font-bold text-[#161A22] mt-2">{t.name}</h2>
+            <p class="text-[13.5px] text-[#525866] mt-2 leading-[1.6]">{t.summary}</p>
+          </div>
+        </a>
+      ))}
     </div>
   </section>
-
-  <script is:inline>
-    const trackSelect = document.getElementById('vol-track');
-    const selectedLabel = document.getElementById('selected-track-label');
-
-    function syncTrackCards(trackId) {
-      document.querySelectorAll('.track-card').forEach((card) => {
-        const match = card.getAttribute('data-track-id') === trackId;
-        card.className = match
-          ? 'track-card w-full text-left p-4 rounded-xl bg-[#EDF7F5]/50 border border-[#0F766E] ring-1 ring-[#0F766E]/25 transition'
-          : 'track-card w-full text-left p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#B8B4A8] transition';
-        if (match && selectedLabel) {
-          selectedLabel.textContent = card.getAttribute('data-track-name') || trackId;
-        }
-      });
-    }
-
-    document.querySelectorAll('.track-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-track-id');
-        if (trackSelect && id) {
-          trackSelect.value = id;
-          syncTrackCards(id);
-        }
-      });
-    });
-
-    if (trackSelect) {
-      trackSelect.addEventListener('change', () => syncTrackCards(trackSelect.value));
-    }
-
-    const form = document.getElementById('vol-form');
-    const alertBox = document.getElementById('vol-alert');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertBox.textContent = 'Submitting application...';
-      alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
-      alertBox.classList.remove('hidden');
-      try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/volunteer-apply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            full_name: document.getElementById('vol-name').value.trim(),
-            applicant_email: document.getElementById('vol-email').value.trim(),
-            season_cohort: 'Winter_2026',
-            target_track: document.getElementById('vol-track').value,
-            portfolio_or_cv_url: document.getElementById('vol-cv').value.trim(),
-            motivation_answer: document.getElementById('vol-motivation').value.trim(),
-          }),
-        });
-        if (!res.ok) throw new Error('Submission failed');
-        alertBox.textContent = 'Application received. Our HR committee will review and follow up by email.';
-        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
-        form.reset();
-        syncTrackCards(trackSelect.value);
-      } catch (err) {
-        alertBox.textContent = err.message || 'Could not submit application.';
-        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
-      }
-    });
-  </script>
 </BaseLayout>

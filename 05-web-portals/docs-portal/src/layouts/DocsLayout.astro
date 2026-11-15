@@ -1,0 +1,141 @@
+---
+/**
+ * Calm Alabaster & Fjord Slate layout for TF Docs (`https://docs.tfunions.com`).
+ * Zero top ecosystem switcher or sticky header bars — uses clean inline canvas navigation across 4 dedicated pages.
+ */
+export interface Props {
+  title: string;
+  activeTab: 'platforms' | 'sso' | 'api' | 'faq';
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+}
+
+const {
+  title,
+  activeTab,
+  showSearch = false,
+  searchPlaceholder = 'Filter items...',
+} = Astro.props;
+
+const tabs = [
+  { id: 'platforms', label: 'Platforms', href: '/' },
+  { id: 'sso', label: 'SSO Passport', href: '/sso' },
+  { id: 'api', label: 'REST API', href: '/api' },
+  { id: 'faq', label: 'FAQ', href: '/faq' },
+];
+
+const faviconSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
+);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — TF Docs</title>
+    <meta name="theme-color" content="#F3F2EE" />
+    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .font-display { font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-[#F3F2EE] text-[#161A22] antialiased flex flex-col">
+    <main class="flex-1 w-full max-w-[1040px] mx-auto px-4 sm:px-6 py-7 sm:py-10">
+      <!-- Inline Identity + Action Row (No full-width top bar) -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-[#DFDDD6]">
+        <a href="/" class="flex items-center gap-3">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
+            <rect width="32" height="32" rx="7" fill="#1B365D" />
+            <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E" />
+            <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
+          </svg>
+          <div>
+            <span class="font-display text-[19px] font-bold text-[#161A22] block leading-none">TF Docs</span>
+            <span class="text-[11px] text-[#767D8C]">System Handbook &amp; Live API</span>
+          </div>
+        </a>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          {showSearch && (
+            <div class="relative">
+              <input
+                id="docs-search"
+                type="search"
+                placeholder={searchPlaceholder}
+                class="w-44 sm:w-56 h-9 pl-3 pr-8 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#161A22] placeholder-[#767D8C] focus:border-[#1B365D] focus:outline-none transition"
+              />
+              <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[10.5px] font-code text-[#767D8C]">/</kbd>
+            </div>
+          )}
+          <a
+            href="https://www.tfunions.com"
+            class="h-9 px-3.5 inline-flex items-center rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22] hover:bg-white/70 transition"
+          >
+            Foundation
+          </a>
+          <a
+            href="https://auth.tfunions.com/?redirect_to=https://docs.tfunions.com"
+            class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
+          >
+            Sign in
+          </a>
+        </div>
+      </div>
+
+      <!-- Clean Section Route Switcher Inside Page Flow -->
+      <nav aria-label="Documentation sections" class="mt-5 mb-7 flex flex-wrap items-center gap-1.5">
+        {tabs.map((tab) => (
+          <a
+            href={tab.href}
+            class={`px-3.5 py-2 rounded-lg text-[13px] font-medium transition ${
+              activeTab === tab.id
+                ? 'bg-white border border-[#DFDDD6] text-[#161A22] font-semibold shadow-[0_1px_1px_rgba(22,26,34,0.03)]'
+                : 'text-[#525866] hover:text-[#161A22] hover:bg-white/60'
+            }`}
+          >
+            {tab.label}
+          </a>
+        ))}
+      </nav>
+
+      <slot />
+    </main>
+
+    <footer class="bg-white border-t border-[#DFDDD6] text-[#525866] py-5 mt-auto">
+      <div class="max-w-[1040px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 text-[12px]">
+        <span>TF Unions System Handbook</span>
+        <span class="font-code text-[#767D8C]">https://n8n.tfunions.com/tf-api</span>
+      </div>
+    </footer>
+
+    {showSearch && (
+      <script is:inline>
+        const searchInput = document.getElementById('docs-search');
+        if (searchInput) {
+          document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+              e.preventDefault();
+              searchInput.focus();
+            }
+          });
+          searchInput.addEventListener('input', (e) => {
+            const q = e.target.value.trim().toLowerCase();
+            document.querySelectorAll('.doc-item').forEach((el) => {
+              const match = !q || el.textContent.toLowerCase().includes(q);
+              el.style.display = match ? '' : 'none';
+            });
+          });
+        }
+      </script>
+    )}
+  </body>
+</html>

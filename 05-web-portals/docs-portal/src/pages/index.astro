@@ -1,290 +1,62 @@
 ---
 /**
- * TF Unions Official Documentation, Live API Explorer & FAQ (`https://docs.tfunions.com`)
- * Calm Alabaster & Fjord Slate (#F3F2EE canvas, #FFFFFF sticky header & docs cards, #EAE8E1 wells, #0F766E accents).
+ * Platform Directory (`https://docs.tfunions.com/`)
+ * Clean single-purpose directory listing all active *.tfunions.com services.
  */
-const faviconSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
-);
-
-const endpoints = [
-  { method: 'POST', path: '/api/login', desc: 'Authenticate with TF Passport and set *.tfunions.com HttpOnly SSO cookie.', testable: false },
-  { method: 'POST', path: '/api/register', desc: 'Create student account in PostgreSQL and sync onboarding workflows.', testable: false },
-  { method: 'GET', path: '/api/health', desc: 'Inspect live status of the self-hosted TF Unions API and user table.', testable: true },
-  { method: 'GET', path: '/api/team-directory', desc: 'Fetch public executive roster nodes for foundation pages.', testable: true },
-  { method: 'GET', path: '/api/ideas', desc: 'List community incubator proposals ordered by upvote count.', testable: true },
-  { method: 'GET', path: '/api/verify-certificate?code=TFU-2026-8F92A1', desc: 'Verify volunteer or contributor credential serials.', testable: true },
-  { method: 'GET', path: '/api/ledger', desc: 'Fetch verified public financial inflows, outflows, and net reserve summary.', testable: true },
-];
-
-const faqs = [
-  {
-    q: 'What is TF Unions?',
-    a: 'An independent non-profit educational foundation founded by Mohammed Farag and Mohammed Abdelghany to help ambitious students across Egypt achieve their science, research, and university admission goals.',
-  },
-  {
-    q: 'Do I need to attend a STEM school?',
-    a: 'No. TF Unions is open to students across Thanaweya Amma, STEM schools, IGCSE, American Diploma, Al-Azhar, preparatory schools, and Egyptian/international universities.',
-  },
-  {
-    q: 'How does the Single Sign-On account work?',
-    a: 'Your TF Passport at auth.tfunions.com issues a scoped session cookie for *.tfunions.com so you can sign in once and use TF News, TF Guides, TF Connect, and contributor tools seamlessly.',
-  },
-  {
-    q: 'Is every TF Unions student platform free?',
-    a: 'Yes. Core student access to university data, opportunities, academic roadmaps, and chapters is completely free of charge and free of advertisements.',
-  },
-];
+import DocsLayout from '../layouts/DocsLayout.astro';
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentation &amp; API — TF Unions</title>
-    <meta name="theme-color" content="#F3F2EE" />
-    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style is:global>
-      body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
-      .font-display { font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif; }
-      .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
-    </style>
-  </head>
-  <body class="min-h-screen bg-[#F3F2EE] text-[#161A22] antialiased flex flex-col">
-    <!-- Top Switcher -->
-    <div class="bg-[#EAE8E1] border-b border-[#DFDDD6] text-[#525866]">
-      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-9 flex items-center justify-between text-[12px]">
-        <div class="flex items-center gap-1 overflow-x-auto">
-          <a href="https://www.tfunions.com" class="px-2.5 py-1 rounded-md hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap">Foundation</a>
-          <a href="https://news.tfunions.com" class="px-2.5 py-1 rounded-md hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap">News</a>
-          <a href="https://guides.tfunions.com" class="px-2.5 py-1 rounded-md hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap">Guides</a>
-          <a href="https://connect.tfunions.com" class="px-2.5 py-1 rounded-md hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap">Connect</a>
-          <a href="https://verify.tfunions.com" class="px-2.5 py-1 rounded-md hover:text-[#161A22] hover:bg-white/60 transition whitespace-nowrap">Verify</a>
-          <span class="px-2.5 py-1 rounded-md font-semibold text-[#161A22] bg-white border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.03)] whitespace-nowrap">Docs</span>
+<DocsLayout title="Platform Directory" activeTab="platforms" showSearch={true} searchPlaceholder="Filter platforms (/)...">
+  <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">
+      TF Unions platform directory
+    </h1>
+    <p class="mt-1.5 text-[14.5px] text-[#525866]">
+      Active student subdomains and self-hosted infrastructure services.
+    </p>
+
+    <div class="mt-6 border-t border-[#DFDDD6] divide-y divide-[#EAE8E1]">
+      <a href="https://www.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">www.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">Foundation Hub, Interactive Team Graph &amp; Open Ledger</div>
         </div>
-        <span class="hidden sm:inline text-[#767D8C] font-code text-[11px]">https://n8n.tfunions.com/tf-api</span>
-      </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://news.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">news.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF News — Scholarships, University Admissions &amp; Programs</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://guides.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">guides.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Workbooks</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://connect.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">connect.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Connect — Egyptian Governorate Chapters &amp; Project Guilds</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://verify.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">verify.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">Official Credential &amp; Certificate Registrar</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://auth.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0F766E] font-medium">auth.tfunions.com</span>
+          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Passport — Unified Firebase Authentication Hub</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
     </div>
-
-    <!-- Calm White Header -->
-    <header class="bg-white/95 backdrop-blur-sm border-b border-[#DFDDD6] sticky top-0 z-30">
-      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-[64px] flex items-center justify-between gap-4">
-        <a href="https://www.tfunions.com" class="flex items-center gap-3">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
-            <rect width="32" height="32" rx="7" fill="#1B365D" />
-            <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E" />
-            <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
-          </svg>
-          <div>
-            <span class="font-display text-[19px] font-bold text-[#161A22] block leading-none">TF Docs</span>
-            <span class="text-[11px] text-[#767D8C]">System Handbook &amp; Live API</span>
-          </div>
-        </a>
-
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <input
-              id="docs-search"
-              type="search"
-              placeholder="Filter docs & routes..."
-              class="w-44 sm:w-64 h-9 pl-3 pr-8 rounded-lg bg-[#EAE8E1]/60 border border-[#DFDDD6] text-[13px] text-[#161A22] placeholder-[#767D8C] focus:bg-white focus:border-[#1B365D] focus:outline-none transition"
-            />
-            <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[10.5px] font-code text-[#767D8C]">/</kbd>
-          </div>
-          <a
-            href="https://auth.tfunions.com/?redirect_to=https://docs.tfunions.com"
-            class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
-          >
-            Sign in
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <main class="flex-1 w-full max-w-[1160px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Left 3 Cols: Sticky Calm Light Index -->
-        <aside class="lg:col-span-3 bg-white border border-[#DFDDD6] rounded-xl p-5 lg:sticky lg:top-24 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-          <div class="font-display text-[17px] font-semibold text-[#161A22] pb-3 border-b border-[#DFDDD6]">Reference index</div>
-          <nav class="mt-3 space-y-1 text-[13px]">
-            <a href="#platforms" class="block px-3 py-2 rounded-lg bg-[#EAE8E1] border border-[#DCD9D0] text-[#161A22] font-medium transition">Subdomains &amp; services</a>
-            <a href="#account" class="block px-3 py-2 rounded-lg text-[#525866] hover:text-[#161A22] hover:bg-[#F3F2EE] transition">TF Passport SSO</a>
-            <a href="#api" class="block px-3 py-2 rounded-lg text-[#525866] hover:text-[#161A22] hover:bg-[#F3F2EE] transition">REST endpoints &amp; live tester</a>
-            <a href="#faq" class="block px-3 py-2 rounded-lg text-[#525866] hover:text-[#161A22] hover:bg-[#F3F2EE] transition">Frequently asked questions</a>
-          </nav>
-        </aside>
-
-        <!-- Right 9 Cols: Reference Sheets -->
-        <div class="lg:col-span-9 space-y-6">
-          <!-- Platforms Directory -->
-          <section id="platforms" class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] scroll-mt-24">
-            <h1 class="font-display text-[26px] font-bold text-[#161A22] tracking-[-0.02em]">TF Unions platform directory</h1>
-            <p class="mt-1 text-[14px] text-[#525866]">All active student subdomains and self-hosted infrastructure services.</p>
-
-            <div class="mt-5 border-t border-[#DFDDD6] divide-y divide-[#EAE8E1]">
-              <a href="https://www.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <span class="font-code text-[12px] text-[#0F766E] font-medium">www.tfunions.com</span>
-                  <div class="text-[14px] font-semibold text-[#161A22] mt-0.5">Foundation Hub, Interactive Team Graph &amp; Open Ledger</div>
-                </div>
-                <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
-              </a>
-              <a href="https://news.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <span class="font-code text-[12px] text-[#0F766E] font-medium">news.tfunions.com</span>
-                  <div class="text-[14px] font-semibold text-[#161A22] mt-0.5">TF News — Scholarships, University Admissions &amp; Programs</div>
-                </div>
-                <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
-              </a>
-              <a href="https://guides.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <span class="font-code text-[12px] text-[#0F766E] font-medium">guides.tfunions.com</span>
-                  <div class="text-[14px] font-semibold text-[#161A22] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Workbooks</div>
-                </div>
-                <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
-              </a>
-              <a href="https://connect.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <span class="font-code text-[12px] text-[#0F766E] font-medium">connect.tfunions.com</span>
-                  <div class="text-[14px] font-semibold text-[#161A22] mt-0.5">TF Connect — Egyptian Governorate Chapters &amp; Project Guilds</div>
-                </div>
-                <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
-              </a>
-              <a href="https://verify.tfunions.com" class="doc-item py-3.5 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition">
-                <div>
-                  <span class="font-code text-[12px] text-[#0F766E] font-medium">verify.tfunions.com</span>
-                  <div class="text-[14px] font-semibold text-[#161A22] mt-0.5">Official Credential &amp; Certificate Registrar</div>
-                </div>
-                <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
-              </a>
-            </div>
-          </section>
-
-          <!-- Identity Architecture -->
-          <section id="account" class="doc-section bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] scroll-mt-24">
-            <h2 class="font-display text-[22px] font-bold text-[#161A22]">Unified TF Passport identity</h2>
-            <p class="mt-2.5 text-[14.5px] leading-[1.65] text-[#525866] max-w-[68ch]">
-              Signing in at <a href="https://auth.tfunions.com" class="text-[#1B365D] font-medium hover:underline">auth.tfunions.com</a> authenticates against our dedicated PostgreSQL VPS engine (<span class="font-code text-[#161A22]">tf_sso_db</span>), issuing an <span class="font-code text-[#161A22]">HttpOnly</span>, <span class="font-code text-[#161A22]">Secure</span> JWT cookie scoped to <span class="font-code text-[#161A22]">*.tfunions.com</span> for 14 days.
-            </p>
-          </section>
-
-          <!-- REST API Reference + Live Inspector -->
-          <section id="api" class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] scroll-mt-24">
-            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
-              <div>
-                <h2 class="font-display text-[22px] font-bold text-[#161A22]">Self-hosted VPS endpoints</h2>
-                <p class="text-[13.5px] text-[#525866] mt-0.5">Click any GET endpoint's Test button to inspect live JSON output from the server.</p>
-              </div>
-              <span class="font-code text-[12px] text-[#525866] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1 rounded-lg">
-                https://n8n.tfunions.com/tf-api
-              </span>
-            </div>
-
-            <div class="divide-y divide-[#EAE8E1]">
-              {endpoints.map((ep) => (
-                <div class="doc-item py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <div class="flex items-center gap-2">
-                      <span class={`font-code text-[11px] font-semibold px-2 py-0.5 rounded-md border ${ep.method === 'GET' ? 'bg-[#EDF7F5] border-[#BCE3DC] text-[#0F766E]' : 'bg-[#EEF2F6] border-[#CBD5E1] text-[#1B365D]'}`}>
-                        {ep.method}
-                      </span>
-                      <code class="font-code text-[13px] font-medium text-[#161A22]">{ep.path}</code>
-                    </div>
-                    <p class="mt-1 text-[13px] text-[#525866]">{ep.desc}</p>
-                  </div>
-                  {ep.testable && (
-                    <button
-                      type="button"
-                      data-endpoint={ep.path}
-                      class="test-api-btn h-8 px-3 rounded-lg bg-[#F3F2EE] hover:bg-[#1B365D] hover:text-white border border-[#DFDDD6] text-[12px] font-medium text-[#161A22] transition shrink-0"
-                    >
-                      Test live →
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div id="api-output-wrap" class="hidden mt-5 rounded-xl bg-[#FAF9F6] border border-[#DFDDD6] p-4">
-              <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#DFDDD6] text-[12px]">
-                <span id="api-output-url" class="font-code text-[#1B365D] font-medium"></span>
-                <span id="api-output-status" class="font-code text-[#0F766E] font-medium"></span>
-              </div>
-              <pre id="api-output-pre" class="font-code text-[12px] text-[#161A22] overflow-x-auto max-h-60 whitespace-pre-wrap"></pre>
-            </div>
-          </section>
-
-          <!-- FAQ Accordion -->
-          <section id="faq" class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] scroll-mt-24">
-            <h2 class="font-display text-[22px] font-bold text-[#161A22]">Frequently asked questions</h2>
-            <div class="mt-4 border-t border-[#DFDDD6] divide-y divide-[#EAE8E1]">
-              {faqs.map((item, idx) => (
-                <details class="doc-item py-4 group" open={idx === 0}>
-                  <summary class="cursor-pointer list-none flex items-center justify-between gap-3 text-[14.5px] font-semibold text-[#161A22] hover:text-[#1B365D]">
-                    <span>{item.q}</span>
-                    <span class="text-[#767D8C] group-open:rotate-45 transition-transform text-[18px] leading-none">+</span>
-                  </summary>
-                  <p class="mt-2.5 text-[14px] leading-[1.6] text-[#525866]">{item.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
-
-    <script is:inline>
-      const searchInput = document.getElementById('docs-search');
-      if (searchInput) {
-        document.addEventListener('keydown', (e) => {
-          if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
-            e.preventDefault();
-            searchInput.focus();
-          }
-        });
-        searchInput.addEventListener('input', (e) => {
-          const q = e.target.value.trim().toLowerCase();
-          document.querySelectorAll('.doc-item').forEach((el) => {
-            const match = !q || el.textContent.toLowerCase().includes(q);
-            el.style.display = match ? '' : 'none';
-          });
-        });
-      }
-
-      const outWrap = document.getElementById('api-output-wrap');
-      const outUrl = document.getElementById('api-output-url');
-      const outStatus = document.getElementById('api-output-status');
-      const outPre = document.getElementById('api-output-pre');
-
-      document.querySelectorAll('.test-api-btn').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          const ep = btn.getAttribute('data-endpoint');
-          const url = 'https://n8n.tfunions.com/tf-api' + ep;
-          outWrap.classList.remove('hidden');
-          outUrl.textContent = url;
-          outStatus.textContent = 'Fetching...';
-          outPre.textContent = '';
-          try {
-            const res = await fetch(url);
-            outStatus.textContent = `HTTP ${res.status}`;
-            const txt = await res.text();
-            try {
-              outPre.textContent = JSON.stringify(JSON.parse(txt), null, 2);
-            } catch {
-              outPre.textContent = txt.slice(0, 1500);
-            }
-          } catch (err) {
-            outStatus.textContent = 'Network Error';
-            outPre.textContent = String(err);
-          }
-        });
-      });
-    </script>
-  </body>
-</html>
+  </section>
+</DocsLayout>

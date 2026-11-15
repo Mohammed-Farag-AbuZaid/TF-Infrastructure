@@ -42,26 +42,26 @@
     .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
     .container { max-width: 1160px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    .switcher { background: var(--well); border-bottom: 1px solid var(--border); color: var(--slate); font-size: 12px; }
-    .switcher-inner { height: 36px; display: flex; align-items: center; justify-content: space-between; overflow-x: auto; }
-    .switcher-tabs { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-    .switcher-tabs a { padding: 4px 10px; border-radius: 6px; color: var(--slate); font-weight: 500; transition: all 0.15s; }
-    .switcher-tabs a:hover { color: var(--ink); background: rgba(255,255,255,0.6); }
-    .switcher-tabs a.active {
-      color: var(--ink); font-weight: 600; background: var(--paper);
-      border: 1px solid var(--border); box-shadow: 0 1px 1px rgba(22,26,34,0.03);
+    .inline-head {
+      padding: 24px 0 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-
-    .masthead { background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 30; }
-    .masthead-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .brand { display: flex; align-items: center; gap: 12px; }
+    .head-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .btn-outline {
+      display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 14px;
+      border-radius: 8px; background: var(--paper); color: var(--ink); border: 1px solid var(--border);
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--primary); }
     .btn-primary {
       display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px;
       border-radius: 8px; background: var(--primary); color: #FFFFFF; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s;
     }
     .btn-primary:hover { background: var(--primary-hover); }
 
-    .layout { margin-top: 32px; margin-bottom: 64px; display: grid; grid-template-columns: 310px 1fr; gap: 24px; align-items: start; }
+    .layout { margin-top: 28px; margin-bottom: 64px; display: grid; grid-template-columns: 310px 1fr; gap: 24px; align-items: start; }
     @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
     .rail {
@@ -127,21 +127,21 @@
     }
     .guide-row:hover .open-btn { background: var(--primary); border-color: var(--primary); color: #FFFFFF; }
 
-    .modal-backdrop {
-      display: none; position: fixed; inset: 0; background: rgba(22, 26, 34, 0.42);
-      z-index: 50; align-items: center; justify-content: center; padding: 16px;
+    .reader-view {
+      display: none;
+      margin-top: 28px;
+      margin-bottom: 64px;
     }
-    .modal-backdrop.open { display: flex; }
-    .modal-sheet {
-      width: 100%; max-width: 640px; max-height: 88vh;
+    .reader-view.open { display: block; }
+    .reader-card {
+      max-width: 780px;
       background: var(--paper); border: 1px solid var(--border); border-radius: 14px;
-      box-shadow: 0 20px 44px rgba(22, 26, 34, 0.14); overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 1px 2px rgba(22, 26, 34, 0.04); overflow: hidden;
     }
-    .modal-top {
-      background: var(--canvas); color: var(--ink); padding: 20px 24px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 14px;
+    .reader-top {
+      background: var(--canvas); color: var(--ink); padding: 22px 26px; border-bottom: 1px solid var(--border);
     }
-    .modal-body { padding: 24px; overflow-y: auto; }
+    .reader-body { padding: 26px; }
     .step-item {
       display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 10px;
       background: var(--canvas); border: 1px solid var(--border); margin-top: 10px; cursor: pointer; transition: all 0.15s;
@@ -153,22 +153,9 @@
   </style>
 </head>
 <body>
-  <div class="switcher">
-    <div class="container switcher-inner">
-      <div class="switcher-tabs">
-        <a href="https://www.tfunions.com">Foundation</a>
-        <a href="https://news.tfunions.com">News</a>
-        <a href="https://guides.tfunions.com" class="active">Guides</a>
-        <a href="https://connect.tfunions.com">Connect</a>
-        <a href="https://verify.tfunions.com">Verify</a>
-        <a href="https://docs.tfunions.com">Docs</a>
-      </div>
-    </div>
-  </div>
-
-  <header class="masthead">
-    <div class="container masthead-inner">
-      <a href="https://guides.tfunions.com" class="brand">
+  <div class="container">
+    <div class="inline-head">
+      <a href="https://guides.tfunions.com" class="brand" id="brand-home-link">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="border-radius:7px;">
           <rect width="32" height="32" rx="7" fill="#1B365D"/>
           <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/>
@@ -179,11 +166,14 @@
           <span style="font-size:11px;color:var(--muted);">Academic &amp; Research Workbooks</span>
         </div>
       </a>
-      <a href="https://auth.tfunions.com/?redirect_to=https://guides.tfunions.com" class="btn-primary">Sign in</a>
+      <div class="head-actions">
+        <a href="https://www.tfunions.com" class="btn-outline">Foundation</a>
+        <a href="https://auth.tfunions.com/?redirect_to=https://guides.tfunions.com" class="btn-primary">Sign in</a>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <main class="container layout">
+  <main class="container layout" id="catalog-view">
     <aside class="rail">
       <div class="rail-tag">Curatorial STEM syllabus</div>
       <h1 class="font-display">Research and Olympiad roadmaps</h1>
@@ -219,22 +209,22 @@
     </section>
   </main>
 
-  <div class="modal-backdrop" id="guide-modal" role="dialog" aria-modal="true">
-    <div class="modal-sheet">
-      <div class="modal-top">
-        <div>
-          <div id="modal-cat" class="font-code" style="font-size:12px;color:var(--teal);font-weight:500;"></div>
-          <h2 id="modal-title" class="font-display" style="margin:6px 0 0;font-size:22px;line-height:1.2;"></h2>
-        </div>
-        <button id="modal-close" type="button" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--paper);color:var(--slate);cursor:pointer;font-size:14px;">✕</button>
+  <section class="container reader-view" id="reader-view">
+    <div style="margin-bottom:18px;">
+      <button id="reader-back" type="button" class="btn-outline">← All workbooks</button>
+    </div>
+    <div class="reader-card">
+      <div class="reader-top">
+        <div id="reader-cat" class="font-code" style="font-size:12px;color:var(--teal);font-weight:500;"></div>
+        <h1 id="reader-title" class="font-display" style="margin:6px 0 0;font-size:26px;line-height:1.2;"></h1>
       </div>
-      <div class="modal-body">
-        <p id="modal-summary" style="margin:0;font-size:14px;line-height:1.65;color:var(--slate);"></p>
-        <div style="margin-top:20px;font-size:13px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);padding-bottom:8px;">Actionable milestones</div>
-        <div id="modal-steps"></div>
+      <div class="reader-body">
+        <p id="reader-summary" style="margin:0;font-size:14.5px;line-height:1.65;color:var(--slate);"></p>
+        <div style="margin-top:22px;font-size:13px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border);padding-bottom:8px;">Actionable milestones</div>
+        <div id="reader-steps"></div>
       </div>
     </div>
-  </div>
+  </section>
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
@@ -413,15 +403,28 @@
     window.openGuide = function(id) {
       const g = ROADMAPS.find((x) => x.id === id);
       if (!g) return;
-      document.getElementById('modal-cat').textContent = `${g.category} · ${g.level}`;
-      document.getElementById('modal-title').textContent = g.title;
-      document.getElementById('modal-summary').textContent = g.summary;
-      renderModalSteps(g);
-      document.getElementById('guide-modal').classList.add('open');
+      document.getElementById('reader-cat').textContent = `${g.category} · ${g.level}`;
+      document.getElementById('reader-title').textContent = g.title;
+      document.getElementById('reader-summary').textContent = g.summary;
+      renderReaderSteps(g);
+      document.getElementById('catalog-view').style.display = 'none';
+      document.getElementById('reader-view').classList.add('open');
+      if (window.location.hash !== `#guide-${g.id}`) {
+        history.pushState(null, '', `#guide-${g.id}`);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    function renderModalSteps(g) {
-      const wrap = document.getElementById('modal-steps');
+    function showCatalog() {
+      document.getElementById('reader-view').classList.remove('open');
+      document.getElementById('catalog-view').style.display = '';
+      if (window.location.hash) {
+        history.pushState(null, '', window.location.pathname);
+      }
+    }
+
+    function renderReaderSteps(g) {
+      const wrap = document.getElementById('reader-steps');
       const doneArr = progress[g.id] || [];
       wrap.innerHTML = g.steps.map((step, i) => {
         const isDone = Boolean(doneArr[i]);
@@ -439,17 +442,27 @@
           if (!Array.isArray(progress[g.id])) progress[g.id] = [];
           progress[g.id][idx] = cb.checked;
           saveProgress();
-          renderModalSteps(g);
+          renderReaderSteps(g);
           renderGrid();
         });
       });
     }
 
-    document.getElementById('modal-close').addEventListener('click', () => {
-      document.getElementById('guide-modal').classList.remove('open');
+    document.getElementById('reader-back').addEventListener('click', showCatalog);
+    document.getElementById('brand-home-link').addEventListener('click', (e) => {
+      if (document.getElementById('reader-view').classList.contains('open')) {
+        e.preventDefault();
+        showCatalog();
+      }
     });
-    document.getElementById('guide-modal').addEventListener('click', (e) => {
-      if (e.target.id === 'guide-modal') document.getElementById('guide-modal').classList.remove('open');
+    window.addEventListener('hashchange', () => {
+      const h = window.location.hash;
+      if (h.startsWith('#guide-')) {
+        window.openGuide(h.replace('#guide-', ''));
+      } else {
+        document.getElementById('reader-view').classList.remove('open');
+        document.getElementById('catalog-view').style.display = '';
+      }
     });
 
     document.querySelectorAll('#cat-tabs .tab-btn').forEach((btn) => {
@@ -467,6 +480,9 @@
     });
 
     renderGrid();
+    if (window.location.hash.startsWith('#guide-')) {
+      window.openGuide(window.location.hash.replace('#guide-', ''));
+    }
   </script>
 </body>
 </html>

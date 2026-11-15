@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Live Union Desk" backLabel="Home" backHref="/">
+  <section class="mt-8 max-w-[760px]">
+    <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      Real-time ecosystem feed
+    </div>
+    <h1 class="font-display mt-2 text-[30px] sm:text-[36px] font-bold tracking-[-0.025em] text-[#161A22]">
+      Live union desk
+    </h1>
+    <p class="mt-2 text-[14.5px] text-[#525866]">
+      Inspect synchronized opportunity deadlines, active governorate chapters, and live treasury balance snapshots.
+    </p>
+
+    <div class="mt-6 bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#0F766E]" aria-hidden="true"></span>
+          <span class="font-display text-[17px] font-semibold text-[#161A22]">Live status</span>
+        </div>
+        <span class="font-code text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] text-[#525866] border border-[#DCD9D0]">
+          Season 2
+        </span>
+      </div>
+
+      <div class="mt-4 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg grid grid-cols-3 gap-1">
+        <button type="button" data-desk="deadlines" class="desk-tab py-2 px-3 rounded-md text-[13px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition">
+          Deadlines
+        </button>
+        <button type="button" data-desk="chapters" class="desk-tab py-2 px-3 rounded-md text-[13px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">
+          Chapters
+        </button>
+        <button type="button" data-desk="ledger" class="desk-tab py-2 px-3 rounded-md text-[13px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">
+          Treasury
+        </button>
+      </div>
+
+      <div id="desk-deadlines" class="desk-pane mt-5 divide-y divide-[#EAE8E1]">
+        <div class="py-4 text-[13.5px] text-[#767D8C]">Synchronizing live feed from TF API...</div>
+      </div>
+
+      <div id="desk-chapters" class="desk-pane hidden mt-5 divide-y divide-[#EAE8E1]">
+        <a href="https://connect.tfunions.com" class="py-3.5 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition">
+          <div>
+            <div class="text-[14px] font-medium text-[#161A22]">STEM 6th of October Chapter</div>
+            <div class="text-[12.5px] text-[#767D8C]">ISEF &amp; Olympiad Mentorship Circle</div>
+          </div>
+          <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Giza</span>
+        </a>
+        <a href="https://connect.tfunions.com" class="py-3.5 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition">
+          <div>
+            <div class="text-[14px] font-medium text-[#161A22]">STEM Maadi Research Collective</div>
+            <div class="text-[12.5px] text-[#767D8C]">Scientific Writing &amp; Global Summer Aid</div>
+          </div>
+          <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Cairo</span>
+        </a>
+        <a href="https://connect.tfunions.com" class="py-3.5 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition">
+          <div>
+            <div class="text-[14px] font-medium text-[#161A22]">Alexandria Robotics &amp; AI Club</div>
+            <div class="text-[12.5px] text-[#767D8C]">Hardware CAD &amp; Competitive Informatics</div>
+          </div>
+          <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Alexandria</span>
+        </a>
+        <a href="https://connect.tfunions.com" class="py-3.5 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition">
+          <div>
+            <div class="text-[14px] font-medium text-[#161A22]">Upper Egypt STEM &amp; Thanaweya Bridge</div>
+            <div class="text-[12.5px] text-[#767D8C]">Admissions &amp; Research Access Program</div>
+          </div>
+          <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Assiut</span>
+        </a>
+      </div>
+
+      <div id="desk-ledger" class="desk-pane hidden mt-5 space-y-3.5">
+        <div class="p-4 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-3 gap-3 text-center">
+          <div>
+            <div class="text-[11.5px] text-[#767D8C]">Inflows</div>
+            <div id="home-ledger-in" class="font-code text-[15px] font-semibold text-[#0F766E] mt-0.5">12,000 EGP</div>
+          </div>
+          <div>
+            <div class="text-[11.5px] text-[#767D8C]">Outflows</div>
+            <div id="home-ledger-out" class="font-code text-[15px] font-semibold text-[#161A22] mt-0.5">4,200 EGP</div>
+          </div>
+          <div>
+            <div class="text-[11.5px] text-[#767D8C]">Reserve</div>
+            <div id="home-ledger-net" class="font-code text-[15px] font-semibold text-[#1B365D] mt-0.5">7,800 EGP</div>
+          </div>
+        </div>
+        <div class="text-[13.5px] text-[#525866] leading-[1.6]">
+          100% of funds cover self-hosted Ubuntu VPS computing and domain renewals. Inspect receipts and transaction proofs publicly.
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-[#DFDDD6] flex items-center justify-between text-[13px]">
+        <a id="desk-footer-link" href="https://news.tfunions.com" class="font-medium text-[#1B365D] hover:underline">
+          View all open deadlines →
+        </a>
+        <a href="/transparency" class="text-[#767D8C] hover:text-[#161A22] font-medium transition">
+          Audit ledger
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    const footerLinks = {
+      deadlines: { text: 'View all open deadlines →', href: 'https://news.tfunions.com' },
+      chapters: { text: 'Browse all regional chapters →', href: 'https://connect.tfunions.com' },
+      ledger: { text: 'Open full audit trail →', href: '/transparency' },
+    };
+    const deskFooterLink = document.getElementById('desk-footer-link');
+
+    document.querySelectorAll('.desk-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const desk = btn.getAttribute('data-desk');
+        document.querySelectorAll('.desk-tab').forEach((b) => {
+          b.className = 'desk-tab py-2 px-3 rounded-md text-[13px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
+        });
+        btn.className = 'desk-tab py-2 px-3 rounded-md text-[13px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
+        document.querySelectorAll('.desk-pane').forEach((p) => p.classList.add('hidden'));
+        const pane = document.getElementById('desk-' + desk);
+        if (pane) pane.classList.remove('hidden');
+        if (deskFooterLink && footerLinks[desk]) {
+          deskFooterLink.textContent = footerLinks[desk].text;
+          deskFooterLink.href = footerLinks[desk].href;
+        }
+      });
+    });
+
+    const FALLBACK_OPPS = [
+      { category: 'Research', title: 'Pioneer Academics Research Mentorship Pathways', topic: 'Global' },
+      { category: 'Olympiad', title: 'Egyptian International Science & Engineering Fair (ISEF)', topic: 'STEM' },
+      { category: 'Scholarships', title: 'US & European Need-Blind University Aid Directory', topic: 'Admissions' },
+      { category: 'Engineering', title: 'Open Hardware & Robotics Capstone Grants', topic: 'Labs' },
+    ];
+
+    function renderOpps(container, list) {
+      container.innerHTML = list
+        .slice(0, 6)
+        .map(
+          (o) => `
+          <a href="https://news.tfunions.com" class="py-3.5 flex items-center justify-between gap-3 hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition group">
+            <div class="min-w-0">
+              <div class="text-[12px] font-medium text-[#0F766E]">${esc(o.category || o.section || 'Opportunity')}</div>
+              <div class="text-[14px] font-medium text-[#161A22] group-hover:text-[#1B365D] truncate mt-0.5">${esc(o.title)}</div>
+            </div>
+            <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">${esc(o.topic || 'Open')}</span>
+          </a>
+        `
+        )
+        .join('');
+    }
+
+    (async () => {
+      const container = document.getElementById('desk-deadlines');
+      if (container) {
+        try {
+          const res = await fetch('https://n8n.tfunions.com/tf-api/api/opportunities');
+          const data = await res.json();
+          const list = (data.opportunities || []).slice(0, 6);
+          renderOpps(container, list.length > 0 ? list : FALLBACK_OPPS);
+        } catch {
+          renderOpps(container, FALLBACK_OPPS);
+        }
+      }
+
+      try {
+        const lRes = await fetch('https://n8n.tfunions.com/tf-api/api/ledger');
+        if (lRes.ok) {
+          const lData = await lRes.json();
+          if (lData.ok && lData.summary) {
+            document.getElementById('home-ledger-in').textContent = Number(lData.summary.totalInflowsEgp || 0).toLocaleString('en-US') + ' EGP';
+            document.getElementById('home-ledger-out').textContent = Number(lData.summary.totalOutflowsEgp || 0).toLocaleString('en-US') + ' EGP';
+            document.getElementById('home-ledger-net').textContent = Number(lData.summary.netBalanceEgp || 0).toLocaleString('en-US') + ' EGP';
+          }
+        }
+      } catch {}
+    })();
+  </script>
+</BaseLayout>

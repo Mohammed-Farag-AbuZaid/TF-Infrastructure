@@ -1,0 +1,93 @@
+---
+/**
+ * REST API Reference & Live Inspector (`https://docs.tfunions.com/api`)
+ */
+import DocsLayout from '../layouts/DocsLayout.astro';
+
+const endpoints = [
+  { method: 'GET', path: '/api/health', desc: 'Inspect live status of the self-hosted TF Unions API and database.', testable: true },
+  { method: 'GET', path: '/api/team-directory', desc: 'Fetch public executive roster nodes for foundation pages.', testable: true },
+  { method: 'GET', path: '/api/ideas', desc: 'List community incubator proposals ordered by upvote count.', testable: true },
+  { method: 'GET', path: '/api/verify-certificate?code=TFU-2026-8F92A1', desc: 'Verify volunteer or contributor credential serials.', testable: true },
+  { method: 'GET', path: '/api/ledger', desc: 'Fetch verified public financial inflows, outflows, and net reserve summary.', testable: true },
+  { method: 'POST', path: '/api/ideas', desc: 'Submit a new community initiative proposal.', testable: false },
+  { method: 'POST', path: '/api/volunteers', desc: 'Submit a contributor track application.', testable: false },
+];
+---
+<DocsLayout title="REST API Explorer" activeTab="api" showSearch={true} searchPlaceholder="Filter endpoints (/)...">
+  <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-[#DFDDD6]">
+      <div>
+        <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">Self-hosted VPS endpoints</h1>
+        <p class="text-[14px] text-[#525866] mt-1">Click any GET endpoint's Test button to inspect live JSON output from the server.</p>
+      </div>
+      <span class="font-code text-[12px] text-[#525866] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
+        https://n8n.tfunions.com/tf-api
+      </span>
+    </div>
+
+    <div class="divide-y divide-[#EAE8E1]">
+      {endpoints.map((ep) => (
+        <div class="doc-item py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class={`font-code text-[11px] font-semibold px-2 py-0.5 rounded-md border ${ep.method === 'GET' ? 'bg-[#EDF7F5] border-[#BCE3DC] text-[#0F766E]' : 'bg-[#EEF2F6] border-[#CBD5E1] text-[#1B365D]'}`}>
+                {ep.method}
+              </span>
+              <code class="font-code text-[13px] font-medium text-[#161A22]">{ep.path}</code>
+            </div>
+            <p class="mt-1.5 text-[13.5px] text-[#525866]">{ep.desc}</p>
+          </div>
+          {ep.testable && (
+            <button
+              type="button"
+              data-endpoint={ep.path}
+              class="test-api-btn h-8 px-3.5 rounded-lg bg-[#F3F2EE] hover:bg-[#1B365D] hover:text-white border border-[#DFDDD6] text-[12px] font-medium text-[#161A22] transition shrink-0"
+            >
+              Test live →
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <div id="api-output-wrap" class="hidden mt-5 rounded-xl bg-[#FAF9F6] border border-[#DFDDD6] p-4">
+      <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#DFDDD6] text-[12px]">
+        <span id="api-output-url" class="font-code text-[#1B365D] font-medium"></span>
+        <span id="api-output-status" class="font-code text-[#0F766E] font-medium"></span>
+      </div>
+      <pre id="api-output-pre" class="font-code text-[12px] text-[#161A22] overflow-x-auto max-h-72 whitespace-pre-wrap"></pre>
+    </div>
+  </section>
+
+  <script is:inline>
+    const outWrap = document.getElementById('api-output-wrap');
+    const outUrl = document.getElementById('api-output-url');
+    const outStatus = document.getElementById('api-output-status');
+    const outPre = document.getElementById('api-output-pre');
+
+    document.querySelectorAll('.test-api-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const ep = btn.getAttribute('data-endpoint');
+        const url = 'https://n8n.tfunions.com/tf-api' + ep;
+        outWrap.classList.remove('hidden');
+        outUrl.textContent = url;
+        outStatus.textContent = 'Fetching...';
+        outPre.textContent = '';
+        try {
+          const res = await fetch(url);
+          outStatus.textContent = `HTTP ${res.status}`;
+          const txt = await res.text();
+          try {
+            outPre.textContent = JSON.stringify(JSON.parse(txt), null, 2);
+          } catch {
+            outPre.textContent = txt.slice(0, 1500);
+          }
+        } catch (err) {
+          outStatus.textContent = 'Network Error';
+          outPre.textContent = String(err);
+        }
+      });
+    });
+  </script>
+</DocsLayout>

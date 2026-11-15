@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Volunteer Application" backLabel="Volunteer Tracks" backHref="/volunteer">
+  <section class="mt-8 max-w-[700px] bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="pb-4 border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[12.5px] font-medium text-[#525866]">
+          Winter 2026 cohort
+        </div>
+        <h1 class="font-display mt-2 text-[28px] font-bold text-[#161A22]">Submit volunteer application</h1>
+        <p class="text-[13.5px] text-[#525866] mt-0.5">
+          Applying for: <strong id="selected-track-label" class="text-[#1B365D] font-semibold">TF News Researcher</strong>
+        </p>
+      </div>
+      <a href="/volunteer" class="text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">← Change track</a>
+    </div>
+
+    <div id="vol-alert" class="hidden mt-5 px-4 py-3 rounded-lg border text-[13.5px] font-medium"></div>
+
+    <form id="vol-form" class="mt-6 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="vol-name" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Full name</label>
+          <input
+            id="vol-name"
+            type="text"
+            required
+            placeholder="Your full name"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+        <div>
+          <label for="vol-email" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Email address</label>
+          <input
+            id="vol-email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="vol-track" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Target contributor track</label>
+          <select
+            id="vol-track"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          >
+            <option value="TF_News_Researcher">TF News Researcher</option>
+            <option value="TF_Guide_Author">TF Guides Author</option>
+            <option value="Engineering_Flutter">Engineering &amp; Flutter</option>
+            <option value="Community_Ambassador">Community &amp; Chapters</option>
+          </select>
+        </div>
+        <div>
+          <label for="vol-cv" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Portfolio, GitHub, or CV URL</label>
+          <input
+            id="vol-cv"
+            type="url"
+            placeholder="https://..."
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="vol-motivation" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Relevant experience &amp; motivation</label>
+        <textarea
+          id="vol-motivation"
+          rows="5"
+          required
+          placeholder="Describe relevant research, articles, codebases, or school leadership work you have shipped."
+          class="w-full p-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full h-10 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+      >
+        Submit volunteer application
+      </button>
+    </form>
+  </section>
+
+  <script is:inline>
+    const trackNames = {
+      TF_News_Researcher: 'TF News Researcher',
+      TF_Guide_Author: 'TF Guides Author',
+      Engineering_Flutter: 'Engineering & Flutter',
+      Community_Ambassador: 'Community & Chapters',
+    };
+
+    const trackSelect = document.getElementById('vol-track');
+    const selectedLabel = document.getElementById('selected-track-label');
+
+    function syncTrackLabel(val) {
+      if (selectedLabel && trackNames[val]) {
+        selectedLabel.textContent = trackNames[val];
+      }
+    }
+
+    const urlTrack = new URLSearchParams(window.location.search).get('track');
+    if (urlTrack && trackNames[urlTrack] && trackSelect) {
+      trackSelect.value = urlTrack;
+      syncTrackLabel(urlTrack);
+    }
+
+    if (trackSelect) {
+      trackSelect.addEventListener('change', () => syncTrackLabel(trackSelect.value));
+    }
+
+    const form = document.getElementById('vol-form');
+    const alertBox = document.getElementById('vol-alert');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.textContent = 'Submitting application...';
+      alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
+      alertBox.classList.remove('hidden');
+      try {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/volunteer-apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: document.getElementById('vol-name').value.trim(),
+            applicant_email: document.getElementById('vol-email').value.trim(),
+            season_cohort: 'Winter_2026',
+            target_track: document.getElementById('vol-track').value,
+            portfolio_or_cv_url: document.getElementById('vol-cv').value.trim(),
+            motivation_answer: document.getElementById('vol-motivation').value.trim(),
+          }),
+        });
+        if (!res.ok) throw new Error('Submission failed');
+        alertBox.textContent = 'Application received. Our HR committee will review and follow up by email.';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
+        form.reset();
+        syncTrackLabel(trackSelect.value);
+      } catch (err) {
+        alertBox.textContent = err.message || 'Could not submit application.';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
+      }
+    });
+  </script>
+</BaseLayout>

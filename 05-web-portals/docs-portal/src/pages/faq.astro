@@ -1,0 +1,51 @@
+---
+/**
+ * Frequently Asked Questions (`https://docs.tfunions.com/faq`)
+ */
+import DocsLayout from '../layouts/DocsLayout.astro';
+
+const faqs = [
+  {
+    q: 'What is TF Unions?',
+    a: 'An independent non-profit educational foundation founded by Mohammed Farag and Mohammed Abdelghany to help ambitious students across Egypt achieve their science, research, and university admission goals.',
+  },
+  {
+    q: 'Do I need to attend a STEM school?',
+    a: 'No. TF Unions is open to students across Thanaweya Amma, STEM schools, IGCSE, American Diploma, Al-Azhar, preparatory schools, and Egyptian or international universities.',
+  },
+  {
+    q: 'How does the Single Sign-On account work?',
+    a: 'Your TF Passport at auth.tfunions.com supports email/password creation, saved account switching, and Google Sign-In via Firebase Authentication so you can seamlessly access TF News, TF Guides, TF Connect, and contributor portals.',
+  },
+  {
+    q: 'Is every TF Unions student platform free?',
+    a: 'Yes. Core student access to university data, opportunities, academic roadmaps, and regional study chapters is completely free of charge and free of advertisements.',
+  },
+  {
+    q: 'How can institutions verify volunteer certificates?',
+    a: 'Every official certificate prints a TFU-YYYY-XXXXXX serial code. Admissions committees can inspect it directly at verify.tfunions.com or query the JSON API.',
+  },
+];
+---
+<DocsLayout title="Frequently Asked Questions" activeTab="faq" showSearch={true} searchPlaceholder="Search questions (/)...">
+  <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">
+      Frequently asked questions
+    </h1>
+    <p class="mt-1.5 text-[14.5px] text-[#525866]">
+      Answers to common questions about student eligibility, accounts, and platform access.
+    </p>
+
+    <div class="mt-6 border-t border-[#DFDDD6] divide-y divide-[#EAE8E1]">
+      {faqs.map((item, idx) => (
+        <details class="doc-item py-4 group" open={idx === 0}>
+          <summary class="cursor-pointer list-none flex items-center justify-between gap-3 text-[15px] font-semibold text-[#161A22] hover:text-[#1B365D]">
+            <span>{item.q}</span>
+            <span class="text-[#767D8C] group-open:rotate-45 transition-transform text-[18px] leading-none">+</span>
+          </summary>
+          <p class="mt-2.5 text-[14px] leading-[1.65] text-[#525866]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</DocsLayout>

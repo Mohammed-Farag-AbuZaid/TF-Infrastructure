@@ -1,0 +1,47 @@
+---
+/**
+ * SSO & TF Passport Architecture (`https://docs.tfunions.com/sso`)
+ */
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+<DocsLayout title="SSO Passport" activeTab="sso">
+  <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      Authentication architecture
+    </div>
+    <h1 class="font-display mt-2.5 text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">
+      Unified TF Passport identity
+    </h1>
+    <p class="mt-3 text-[15px] leading-[1.65] text-[#525866] max-w-[68ch]">
+      Signing in at <a href="https://auth.tfunions.com" class="text-[#1B365D] font-medium hover:underline">auth.tfunions.com</a> authenticates students cleanly with Firebase Authentication (Email/Password registration and Google Sign-In) and synchronizes their student profile across <span class="font-code text-[#161A22]">*.tfunions.com</span> portals.
+    </p>
+
+    <div class="mt-7 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-5 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6]">
+        <div class="font-code text-[12px] font-semibold text-[#0F766E]">01 · Registration &amp; Recovery</div>
+        <h2 class="font-display mt-1.5 text-[17px] font-bold text-[#161A22]">Self-serve student onboarding</h2>
+        <p class="mt-1.5 text-[13.5px] leading-[1.6] text-[#525866]">
+          Students can register a new account, switch smoothly between saved accounts on the device, or reset forgotten passwords directly on <span class="font-code text-[#161A22]">auth.tfunions.com</span> and Flutter web apps.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6]">
+        <div class="font-code text-[12px] font-semibold text-[#0F766E]">02 · Cross-Portal Handoff</div>
+        <h2 class="font-display mt-1.5 text-[17px] font-bold text-[#161A22]">Token-verified redirect</h2>
+        <p class="mt-1.5 text-[13.5px] leading-[1.6] text-[#525866]">
+          Portals accept a verified <span class="font-code text-[#161A22]">?redirect_to=</span> parameter so students return directly to the handbook, chapter, or volunteer form they started from.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-7 pt-6 border-t border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
+      <span class="text-[13px] text-[#525866]">Ready to create or manage your TF Passport?</span>
+      <a
+        href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
+        class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
+      >
+        Open auth hub →
+      </a>
+    </div>
+  </section>
+</DocsLayout>
