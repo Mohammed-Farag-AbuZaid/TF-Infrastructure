@@ -1,0 +1,7 @@
+# Conflict-guard / audit exemptions, reviewed by a human.
+# Format: <repo-relative path>:<distinctive substring of the line>
+references/charts.md:animate gridlines/axes
+references/animation.md:purposeful short motion
+references/dashboards.md:whole-page scroll
+references/dashboards.md:purple/indigo accent
+references/dashboards.md:| `transition: all` |
