@@ -2,61 +2,76 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Volunteer" backLabel="TF Unions" backHref="/">
-  <section class="mt-14 sm:mt-20 max-w-[640px]">
-    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
+  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">SEASONAL COHORTS</div>
+    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
       Volunteer with us.
     </h1>
-    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
-      Join a seasonal contributor cohort, research global opportunities, and earn a verifiable TF Unions credential.
+    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[680px]">
+      Join a seasonal contributor cohort, research global opportunities, build student software, and earn a cryptographically verifiable TF Unions credential.
     </p>
   </section>
 
-  <section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-14">
-    <!-- Left: Open Tracks -->
-    <div>
-      <h2 class="text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Open tracks</h2>
-      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
+  <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+    <!-- Left Widget: Open Tracks -->
+    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">ACTIVE TRACKS</div>
+      <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Open contributor roles</h2>
+      <div class="mt-4 border-t border-[#E2E5EC] divide-y divide-[#E2E5EC]">
         <div class="py-4">
-          <div class="text-[16px] font-semibold text-[#1D1D1F]">TF News Researcher</div>
-          <div class="text-[14px] text-[#6E6E73] mt-0.5">Verify university scholarships, admissions pathways, and deadlines.</div>
+          <div class="flex items-center justify-between">
+            <span class="text-[16px] font-semibold text-[#11141C]">TF News Researcher</span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC] px-2 py-0.5 rounded">Research</span>
+          </div>
+          <div class="text-[14px] text-[#525866] mt-1">Verify university scholarships, admissions pathways, and deadlines.</div>
         </div>
         <div class="py-4">
-          <div class="text-[16px] font-semibold text-[#1D1D1F]">TF Guides Author</div>
-          <div class="text-[14px] text-[#6E6E73] mt-0.5">Write structured STEM, Olympiad, and scientific research roadmaps.</div>
+          <div class="flex items-center justify-between">
+            <span class="text-[16px] font-semibold text-[#11141C]">TF Guides Author</span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC] px-2 py-0.5 rounded">Editorial</span>
+          </div>
+          <div class="text-[14px] text-[#525866] mt-1">Write structured STEM, Olympiad, and scientific research roadmaps.</div>
         </div>
         <div class="py-4">
-          <div class="text-[16px] font-semibold text-[#1D1D1F]">Engineering &amp; Flutter</div>
-          <div class="text-[14px] text-[#6E6E73] mt-0.5">Build minimalist student tools across web and mobile.</div>
+          <div class="flex items-center justify-between">
+            <span class="text-[16px] font-semibold text-[#11141C]">Engineering &amp; Flutter</span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC] px-2 py-0.5 rounded">Systems</span>
+          </div>
+          <div class="text-[14px] text-[#525866] mt-1">Build fast, clean student tools across Astro web portals, Node APIs, and Flutter apps.</div>
         </div>
         <div class="py-4">
-          <div class="text-[16px] font-semibold text-[#1D1D1F]">Community &amp; Cohorts</div>
-          <div class="text-[14px] text-[#6E6E73] mt-0.5">Coordinate study circles and mentorship sessions on TF Connect.</div>
+          <div class="flex items-center justify-between">
+            <span class="text-[16px] font-semibold text-[#11141C]">Community &amp; Cohorts</span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-[#D99B00] bg-[#F3F5F8] border border-[#E2E5EC] px-2 py-0.5 rounded">Outreach</span>
+          </div>
+          <div class="text-[14px] text-[#525866] mt-1">Coordinate regional study circles and mentorship sessions on TF Connect.</div>
         </div>
       </div>
     </div>
 
-    <!-- Right: Minimalist Application Form -->
-    <div>
-      <h2 class="text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Apply</h2>
-      <div id="vol-alert" class="hidden mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[14px] font-medium"></div>
-      <form id="vol-form" class="mt-4 space-y-3.5">
+    <!-- Right Widget: Application Form -->
+    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">WINTER 2026 COHORT</div>
+      <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Submit application</h2>
+      <div id="vol-alert" class="hidden mt-4 px-4 py-3 rounded-xl border text-[14px] font-medium"></div>
+      <form id="vol-form" class="mt-5 space-y-3.5">
         <input
           id="vol-name"
           type="text"
           required
           placeholder="Full name"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         />
         <input
           id="vol-email"
           type="email"
           required
           placeholder="Email address"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         />
         <select
           id="vol-track"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         >
           <option value="TF_News_Researcher">TF News Researcher</option>
           <option value="TF_Guide_Author">TF Guides Author</option>
@@ -67,18 +82,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           id="vol-cv"
           type="url"
           placeholder="Portfolio, LinkedIn, or CV link (https://...)"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         />
         <textarea
           id="vol-motivation"
           rows="4"
           required
           placeholder="How would you like to contribute?"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         ></textarea>
         <button
           type="submit"
-          class="w-full h-12 rounded-[12px] bg-[#002583] hover:opacity-95 text-white font-semibold text-[15px] transition"
+          class="w-full h-11 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
         >
           Submit application
         </button>
@@ -91,8 +106,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const alertBox = document.getElementById('vol-alert');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alertBox.textContent = 'Submitting...';
-      alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#6E6E73] text-[14px] font-medium';
+      alertBox.textContent = 'Submitting application...';
+      alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] text-[#525866] text-[14px] font-medium';
       alertBox.classList.remove('hidden');
       try {
         const res = await fetch('https://n8n.tfunions.com/tf-api/api/volunteer-apply', {
@@ -108,12 +123,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           }),
         });
         if (!res.ok) throw new Error('Submission failed');
-        alertBox.textContent = 'Application received. We will review and follow up by email.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#15803D] text-[14px] font-medium';
+        alertBox.textContent = 'Application received. Our HR committee will review and follow up by email.';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] text-[14px] font-medium';
         form.reset();
       } catch (err) {
         alertBox.textContent = err.message || 'Could not submit application.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#B91C1C] text-[14px] font-medium';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[14px] font-medium';
       }
     });
   </script>

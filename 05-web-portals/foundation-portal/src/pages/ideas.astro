@@ -2,34 +2,42 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Ideas" backLabel="TF Unions" backHref="/">
-  <section class="mt-14 sm:mt-20 max-w-[640px]">
-    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
-      Idea incubator.
+  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">COMMUNITY INCUBATOR</div>
+    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
+      Student Idea Incubator.
     </h1>
-    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
-      Propose and upvote tools, study resources, and community initiatives for students in Egypt.
+    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[660px]">
+      Propose and upvote open-source student tools, research utilities, and chapter initiatives across Egypt.
     </p>
   </section>
 
-  <section class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-12">
-    <!-- Left 2 cols: Ideas List -->
-    <div class="md:col-span-2">
-      <h2 class="text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Proposed ideas</h2>
-      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70" id="ideas-list">
+  <section class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+    <!-- Left 2 cols Widget: Proposed Ideas List -->
+    <div class="lg:col-span-2 bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">ACTIVE PROPOSALS</div>
+          <h2 class="mt-0.5 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Community Backlog</h2>
+        </div>
+        <span id="ideas-count" class="text-[12px] font-semibold text-[#525866] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md">1 Proposal</span>
+      </div>
+
+      <div class="divide-y divide-[#E2E5EC]" id="ideas-list">
         <div class="py-5 flex items-center justify-between gap-4">
           <div>
-            <div class="text-[12px] text-[#6E6E73]">TF News • Planned</div>
-            <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">
+            <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">TF News · Planned</div>
+            <div class="text-[16px] font-semibold text-[#11141C] mt-1">
               Arabic-to-English Research Abstract Reviewer &amp; LaTeX Template Pack
             </div>
-            <p class="text-[14px] text-[#6E6E73] mt-1">
+            <p class="text-[14px] text-[#525866] mt-1">
               Checklist and peer review queue for ISEF and science fair students.
             </p>
           </div>
           <button
             type="button"
             data-id="1"
-            class="upvote-btn px-3.5 py-2 rounded-[10px] bg-[#F5F5F7] hover:bg-[#ECECEE] text-[13px] font-semibold text-[#1D1D1F] shrink-0 transition"
+            class="upvote-btn px-3.5 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583] text-[13px] font-semibold text-[#11141C] shrink-0 transition"
           >
             ▲ <span class="count">142</span>
           </button>
@@ -37,28 +45,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- Right col: Propose Form -->
-    <div>
-      <h2 class="text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">Propose an idea</h2>
-      <div id="idea-alert" class="hidden mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[14px] font-medium"></div>
-      <form id="idea-form" class="mt-4 space-y-3.5">
+    <!-- Right col Widget: Propose Form -->
+    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">SUBMIT PROPOSAL</div>
+      <h2 class="mt-1 text-[22px] font-bold tracking-[-0.02em] text-[#11141C]">Propose an idea</h2>
+      <div id="idea-alert" class="hidden mt-4 px-4 py-3 rounded-xl border text-[14px] font-medium"></div>
+      <form id="idea-form" class="mt-5 space-y-3.5">
         <input
           id="idea-title"
           type="text"
           required
-          placeholder="Title"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          placeholder="Concise title"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         />
         <textarea
           id="idea-desc"
           rows="4"
           required
           placeholder="What problem does this solve for students?"
-          class="w-full px-4 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+          class="w-full px-4 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
         ></textarea>
         <button
           type="submit"
-          class="w-full h-12 rounded-[12px] bg-[#002583] hover:opacity-95 text-white font-semibold text-[15px] transition"
+          class="w-full h-11 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
         >
           Submit idea
         </button>
@@ -67,7 +76,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <script is:inline>
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getVoterId() {
+      let id = localStorage.getItem('tf_voter_id');
+      if (!id) {
+        id = 'web_' + Math.random().toString(36).slice(2) + Date.now();
+        localStorage.setItem('tf_voter_id', id);
+      }
+      return id;
+    }
+
     const listEl = document.getElementById('ideas-list');
+    const countBadge = document.getElementById('ideas-count');
     const form = document.getElementById('idea-form');
     const alertBox = document.getElementById('idea-alert');
 
@@ -77,21 +105,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         const data = await res.json();
         const items = data.ideas || [];
         if (items.length > 0) {
+          if (countBadge) countBadge.textContent = `${items.length} Proposal${items.length === 1 ? '' : 's'}`;
           listEl.innerHTML = items
             .map(
               (item) => `
               <div class="py-5 flex items-center justify-between gap-4">
                 <div>
-                  <div class="text-[12px] text-[#6E6E73]">${item.source_service || 'Ecosystem'} • ${item.status || 'Open'}</div>
-                  <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">${item.title}</div>
-                  <p class="text-[14px] text-[#6E6E73] mt-1">${item.description || ''}</p>
+                  <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">${esc(item.source_service || 'Ecosystem')} · ${esc(String(item.status || 'Open').replace(/_/g, ' '))}</div>
+                  <div class="text-[16px] font-semibold text-[#11141C] mt-1">${esc(item.title)}</div>
+                  <p class="text-[14px] text-[#525866] mt-1">${esc(item.description || '')}</p>
                 </div>
                 <button
                   type="button"
-                  data-id="${item.item_id}"
-                  class="upvote-btn px-3.5 py-2 rounded-[10px] bg-[#F5F5F7] hover:bg-[#ECECEE] text-[13px] font-semibold text-[#1D1D1F] shrink-0 transition"
+                  data-id="${Number(item.item_id)}"
+                  class="upvote-btn px-3.5 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583] text-[13px] font-semibold text-[#11141C] shrink-0 transition"
                 >
-                  ▲ <span class="count">${item.upvote_count || 1}</span>
+                  ▲ <span class="count">${Number(item.upvote_count || 1)}</span>
                 </button>
               </div>
             `
@@ -111,10 +140,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             const res = await fetch('https://n8n.tfunions.com/tf-api/api/idea-upvote', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ itemId, uid: localStorage.getItem('tf_voter_id') || 'web_' + Date.now() }),
+              body: JSON.stringify({ itemId, uid: getVoterId() }),
             });
             const data = await res.json();
-            if (data.upvoteCount) countEl.textContent = data.upvoteCount;
+            if (data.upvoteCount) {
+              countEl.textContent = data.upvoteCount;
+              btn.classList.add('border-[#002583]', 'text-[#002583]');
+            }
           } catch {}
         };
       });
@@ -122,11 +154,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alertBox.textContent = 'Submitting...';
-      alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#6E6E73] text-[14px] font-medium';
+      alertBox.textContent = 'Publishing proposal...';
+      alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] text-[#525866] text-[14px] font-medium';
       alertBox.classList.remove('hidden');
       try {
-        await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -135,15 +167,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             title: document.getElementById('idea-title').value.trim(),
             description: document.getElementById('idea-desc').value.trim(),
             pageUrl: window.location.href,
+            uid: getVoterId(),
           }),
         });
-        alertBox.textContent = 'Idea published.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#15803D] text-[14px] font-medium';
+        if (!res.ok) throw new Error('Publish failed');
+        alertBox.textContent = 'Idea published to the community backlog.';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] text-[14px] font-medium';
         form.reset();
         loadIdeas();
       } catch {
-        alertBox.textContent = 'Could not submit idea.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-[12px] bg-[#F5F5F7] text-[#B91C1C] text-[14px] font-medium';
+        alertBox.textContent = 'Could not submit idea. Please try again.';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[14px] font-medium';
       }
     });
 

@@ -8,10 +8,34 @@ export interface Props {
 
 const {
   title,
-  description = 'TF Unions — Helping ambitious students in Egypt achieve their science, research, and university goals.',
+  description = 'TF Unions — Egyptian STEM & University Scholars Network. Open tools, verified university pathways, and study communities.',
   backLabel,
   backHref = '/',
 } = Astro.props;
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const navLinks = [
+  { label: 'About', href: '/about' },
+  { label: 'Team', href: '/team' },
+  { label: 'Volunteer', href: '/volunteer' },
+  { label: 'Ideas', href: '/ideas' },
+  { label: 'Ledger', href: '/transparency' },
+  { label: 'Support', href: '/support' },
+];
+
+const ecosystemLinks = [
+  { label: 'Foundation', href: 'https://www.tfunions.com', active: true },
+  { label: 'TF News', href: 'https://news.tfunions.com' },
+  { label: 'TF Guides', href: 'https://guides.tfunions.com' },
+  { label: 'TF Connect', href: 'https://connect.tfunions.com' },
+  { label: 'Verify', href: 'https://verify.tfunions.com' },
+  { label: 'Docs', href: 'https://docs.tfunions.com' },
+];
+
+const faviconSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+);
 ---
 <!doctype html>
 <html lang="en">
@@ -20,71 +44,224 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — TF Unions</title>
     <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} — TF Unions`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#002583" />
+    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
   </head>
-  <body class="min-h-screen bg-white text-[#1D1D1F] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased selection:bg-[#002583]/15 selection:text-[#002583]">
-    <div class="max-w-[1000px] mx-auto px-6 pb-20">
-      <!-- TfTopBar (64px height, 0.5px #D2D2D7 bottom hairline) -->
-      <header class="h-16 border-b border-[#D2D2D7]/70 flex items-center justify-between gap-4">
+  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased selection:bg-[#002583]/15 selection:text-[#002583] flex flex-col">
+    <!-- Top Ecosystem Bar -->
+    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
+      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 h-9 flex items-center justify-between gap-4 overflow-x-auto">
+        <div class="flex items-center gap-4 shrink-0 text-[12px]">
+          <span class="font-semibold uppercase tracking-[0.12em] text-[#525866]">TF Ecosystem</span>
+          <span class="text-[#C5CAD6]" aria-hidden="true">|</span>
+          {ecosystemLinks.map((item) => (
+            <a
+              href={item.href}
+              class={
+                item.active
+                  ? 'font-semibold text-[#002583] whitespace-nowrap'
+                  : 'text-[#525866] hover:text-[#11141C] transition whitespace-nowrap'
+              }
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+        <a
+          href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
+          class="hidden sm:inline-block text-[12px] font-medium text-[#525866] hover:text-[#002583] transition whitespace-nowrap"
+        >
+          SSO Hub ›
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="bg-white border-b border-[#E2E5EC] sticky top-0 z-40">
+      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between gap-4">
         <div class="flex items-center gap-6">
-          {backLabel ? (
-            <a href={backHref} class="text-[15px] font-medium text-[#002583] hover:opacity-75 transition flex items-center gap-1">
-              <span>‹</span> {backLabel}
-            </a>
-          ) : (
-            <a href="/" class="text-[17px] font-bold tracking-[-0.2px] text-[#1D1D1F]">
-              TF Unions
-            </a>
-          )}
-          <nav class="hidden md:flex items-center gap-6 text-[14px] text-[#6E6E73]">
-            <a href="/about" class="hover:text-[#1D1D1F] transition">About</a>
-            <a href="/team" class="hover:text-[#1D1D1F] transition">Team</a>
-            <a href="/volunteer" class="hover:text-[#1D1D1F] transition">Volunteer</a>
-            <a href="/ideas" class="hover:text-[#1D1D1F] transition">Ideas</a>
-            <a href="/transparency" class="hover:text-[#1D1D1F] transition">Ledger</a>
-            <a href="https://docs.tfunions.com" class="hover:text-[#1D1D1F] transition">Docs</a>
+          <a href={backLabel ? backHref : '/'} class="flex items-center gap-2.5 group shrink-0">
+            <!-- Custom Geometric TF Monogram -->
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="shrink-0 shadow-[0_1px_2px_rgba(15,23,42,0.08)] rounded-[7px]">
+              <rect width="32" height="32" rx="7" fill="#002583" />
+              <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
+              <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+            </svg>
+            <div class="flex items-baseline gap-2">
+              {backLabel ? (
+                <span class="text-[15px] font-semibold text-[#002583] group-hover:text-[#001B61] transition">
+                  ‹ {backLabel}
+                </span>
+              ) : (
+                <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">
+                  TF Unions
+                </span>
+              )}
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <a
+                  href={link.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  class={
+                    isActive
+                      ? 'px-3 py-1.5 rounded-lg text-[14px] font-semibold text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC]'
+                      : 'px-3 py-1.5 rounded-lg text-[14px] font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB] transition'
+                  }
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
         </div>
 
-        <div class="flex items-center gap-5" id="sso-nav-slot">
-          <a
-            href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-            class="text-[14px] font-semibold text-[#002583] hover:opacity-75 transition"
+        <div class="flex items-center gap-3">
+          <div id="sso-nav-slot" class="flex items-center gap-2.5">
+            <a
+              href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
+              class="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white text-[13px] font-semibold transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
+            >
+              Sign in
+            </a>
+          </div>
+
+          <button
+            id="mobile-menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-nav-drawer"
+            aria-label="Toggle navigation menu"
+            class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white border border-[#E2E5EC] text-[#11141C] hover:bg-[#F3F5F8] transition"
           >
-            Sign in
-          </a>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="17" x2="20" y2="17" />
+            </svg>
+          </button>
         </div>
-      </header>
+      </div>
 
-      <main>
-        <slot />
-      </main>
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#E2E5EC] bg-white px-5 py-4 space-y-1">
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <a
+              href={link.href}
+              aria-current={isActive ? 'page' : undefined}
+              class={
+                isActive
+                  ? 'block px-3.5 py-2.5 rounded-xl text-[14px] font-semibold text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC]'
+                  : 'block px-3.5 py-2.5 rounded-xl text-[14px] font-medium text-[#525866] hover:text-[#11141C] hover:bg-[#F8F9FB]'
+              }
+            >
+              {link.label}
+            </a>
+          );
+        })}
+        <div class="pt-3 mt-3 border-t border-[#E2E5EC] grid grid-cols-2 gap-2 text-[13px]">
+          <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">TF Guides</a>
+          <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">TF Connect</a>
+          <a href="https://verify.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">Verify Registry</a>
+          <a href="https://docs.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] font-medium text-[#11141C]">Documentation</a>
+        </div>
+      </div>
+    </header>
 
-      <!-- Minimal Hairline Footer -->
-      <footer class="mt-24 pt-8 border-t border-[#D2D2D7]/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-[13px] text-[#6E6E73]">
+    <!-- Page Canvas Container -->
+    <main class="flex-1 w-full max-w-[1080px] mx-auto px-5 sm:px-6 pb-20">
+      <slot />
+    </main>
+
+    <!-- Multi-Column Institutional Footer -->
+    <footer class="bg-white border-t border-[#E2E5EC] mt-auto">
+      <div class="max-w-[1080px] mx-auto px-5 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-[13px]">
         <div>
-          <span class="font-semibold text-[#1D1D1F]">TF Unions</span> — Founded by Mohammed Farag &amp; Mohammed Abdelghany.
+          <div class="flex items-center gap-2.5">
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[6px]">
+              <rect width="32" height="32" rx="7" fill="#002583" />
+              <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
+              <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+            </svg>
+            <span class="text-[15px] font-bold text-[#11141C]">TF Unions</span>
+          </div>
+          <p class="mt-3 text-[#525866] leading-[1.6]">
+            Independent non-profit educational foundation empowering ambitious students across all 27 Egyptian governorates.
+          </p>
+          <p class="mt-3 text-[12px] text-[#7A8191]">
+            Founded by Mohammed Farag &amp; Mohammed Abdelghany.
+          </p>
         </div>
-        <div class="flex flex-wrap items-center gap-5">
-          <a href="https://news.tfunions.com" class="hover:text-[#1D1D1F] transition">TF News</a>
-          <a href="https://guides.tfunions.com" class="hover:text-[#1D1D1F] transition">TF Guides</a>
-          <a href="https://connect.tfunions.com" class="hover:text-[#1D1D1F] transition">TF Connect</a>
-          <a href="https://verify.tfunions.com" class="hover:text-[#1D1D1F] transition">Verify</a>
-          <a href="/charter" class="hover:text-[#1D1D1F] transition">Charter</a>
-          <a href="/support" class="hover:text-[#1D1D1F] transition">Support</a>
-          <a href="https://status.tfunions.com" class="hover:text-[#1D1D1F] transition">Status</a>
+
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Platforms</div>
+          <ul class="mt-3 space-y-2 text-[#525866]">
+            <li><a href="https://news.tfunions.com" class="hover:text-[#002583] transition">TF News &amp; Admissions</a></li>
+            <li><a href="https://guides.tfunions.com" class="hover:text-[#002583] transition">TF Guides &amp; Roadmaps</a></li>
+            <li><a href="https://connect.tfunions.com" class="hover:text-[#002583] transition">TF Connect Chapters</a></li>
+            <li><a href="https://auth.tfunions.com" class="hover:text-[#002583] transition">Unified SSO Hub</a></li>
+          </ul>
         </div>
-      </footer>
-    </div>
+
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Foundation</div>
+          <ul class="mt-3 space-y-2 text-[#525866]">
+            <li><a href="/about" class="hover:text-[#002583] transition">About &amp; Mission</a></li>
+            <li><a href="/team" class="hover:text-[#002583] transition">Team Constellation</a></li>
+            <li><a href="/volunteer" class="hover:text-[#002583] transition">Volunteer Tracks</a></li>
+            <li><a href="/ideas" class="hover:text-[#002583] transition">Idea Incubator</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#525866]">Verification &amp; Trust</div>
+          <ul class="mt-3 space-y-2 text-[#525866]">
+            <li><a href="https://verify.tfunions.com" class="hover:text-[#002583] transition">Verify Certificate</a></li>
+            <li><a href="/transparency" class="hover:text-[#002583] transition">Open Financial Ledger</a></li>
+            <li><a href="/charter" class="hover:text-[#002583] transition">Non-Profit Charter</a></li>
+            <li><a href="https://docs.tfunions.com" class="hover:text-[#002583] transition">Documentation &amp; API</a></li>
+            <li><a href="https://status.tfunions.com" class="hover:text-[#002583] transition">System Status</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-[#E2E5EC] bg-[#F8F9FB]">
+        <div class="max-w-[1080px] mx-auto px-5 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[12px] text-[#7A8191]">
+          <span>© 2025–2026 TF Unions Foundation. All student resources free and ad-free.</span>
+          <a href="/support" class="font-semibold text-[#002583] hover:underline">Support the Mission ›</a>
+        </div>
+      </div>
+    </footer>
 
     <script src="/widgets/tf-qa-widget.js" defer></script>
     <tf-qa-widget service="Foundation_Portal"></tf-qa-widget>
 
     <script is:inline>
       (function () {
+        // Mobile drawer toggle
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const drawer = document.getElementById('mobile-nav-drawer');
+        if (toggleBtn && drawer) {
+          toggleBtn.addEventListener('click', () => {
+            const isHidden = drawer.classList.toggle('hidden');
+            toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+          });
+        }
+
+        // XSS-safe SSO session display + sign out
         try {
           const match = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
           const localUser = localStorage.getItem('tf_sso_user');
@@ -98,7 +275,32 @@ const {
           if (hint && hint.name) {
             const slot = document.getElementById('sso-nav-slot');
             if (slot) {
-              slot.innerHTML = `<span class="text-[14px] text-[#6E6E73]">${hint.name}</span>`;
+              slot.replaceChildren();
+
+              const badge = document.createElement('a');
+              badge.href = 'https://auth.tfunions.com';
+              badge.className = 'inline-flex items-center gap-2 h-9 px-3 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] text-[13px] font-semibold text-[#11141C] hover:border-[#002583]/40 transition';
+              badge.textContent = String(hint.name).slice(0, 32);
+
+              const signOutBtn = document.createElement('button');
+              signOutBtn.type = 'button';
+              signOutBtn.className = 'h-9 px-3 rounded-xl bg-white border border-[#E2E5EC] text-[12px] font-semibold text-[#525866] hover:text-[#B91C1C] hover:border-[#B91C1C]/30 transition';
+              signOutBtn.textContent = 'Sign out';
+              signOutBtn.addEventListener('click', async () => {
+                try {
+                  await fetch('https://n8n.tfunions.com/tf-api/api/sessionLogout', {
+                    method: 'POST',
+                    credentials: 'include',
+                  });
+                } catch {}
+                document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';
+                localStorage.removeItem('tf_sso_token');
+                localStorage.removeItem('tf_sso_user');
+                window.location.reload();
+              });
+
+              slot.appendChild(badge);
+              slot.appendChild(signOutBtn);
             }
           }
         } catch {}

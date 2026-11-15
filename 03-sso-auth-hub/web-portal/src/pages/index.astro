@@ -1,161 +1,216 @@
 ---
 /**
  * Central Unified SSO Login & Registration Hub (`https://auth.tfunions.com`)
- * Built with the exact `tf_minimal` design system (`auth_kit.dart`):
- * White page (#FFFFFF), 420px centered column, #F5F5F7 borderless inputs, single #002583 accent.
+ * Styled with TF Sovereign Editorial tokens (#F8F9FB canvas, #FFFFFF card, #E2E5EC border, #002583 cobalt, #D99B00 gold).
  */
+const faviconSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+);
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in — TF Unions</title>
+    <title>Single Sign-On — TF Unions</title>
+    <meta name="theme-color" content="#002583" />
+    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-white text-[#1D1D1F] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased flex items-center justify-center px-6 py-12">
-    <main class="w-full max-w-[420px]">
-      <div class="flex items-center justify-between">
-        <a href="https://www.tfunions.com" class="text-[17px] font-bold tracking-[-0.2px] text-[#1D1D1F] hover:opacity-75 transition">
-          TF Unions
+  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased flex flex-col">
+    <!-- Top Ecosystem Return Bar -->
+    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
+      <div class="max-w-[960px] mx-auto px-5 h-10 flex items-center justify-between text-[12px]">
+        <a id="back-link" href="https://www.tfunions.com" class="font-semibold text-[#002583] hover:underline flex items-center gap-1.5">
+          <span>‹</span> Back to TF Unions
         </a>
-        <a id="back-link" href="https://www.tfunions.com" class="text-[14px] font-medium text-[#002583] hover:opacity-75 transition">
-          Back
-        </a>
+        <div class="flex items-center gap-4 text-[#525866]">
+          <a href="https://verify.tfunions.com" class="hover:text-[#11141C]">Verify</a>
+          <a href="https://docs.tfunions.com" class="hover:text-[#11141C]">Docs</a>
+        </div>
       </div>
+    </div>
 
-      <div class="mt-10">
-        <h1 id="form-title" class="text-[34px] font-bold tracking-[-1px] leading-[1.1] text-[#1D1D1F]">
-          Welcome back
-        </h1>
-        <p id="form-subtitle" class="mt-3 text-[16px] leading-[1.5] text-[#6E6E73]">
-          Sign in with your TF account to continue to <span id="target-service-name" class="text-[#1D1D1F] font-medium">TF Unions</span>.
-        </p>
-      </div>
+    <!-- Centered Auth Container -->
+    <main class="flex-1 flex items-center justify-center px-5 py-10">
+      <div class="w-full max-w-[440px]">
+        <!-- Active Session Banner (hidden unless user is already logged in) -->
+        <section id="active-session-card" class="hidden mb-5 bg-white border border-[#E2E5EC] rounded-2xl p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#15803D]">ACTIVE SSO SESSION</div>
+              <h2 id="session-user-name" class="mt-1 text-[18px] font-bold text-[#11141C]">Signed in</h2>
+              <div id="session-user-meta" class="text-[13px] text-[#525866] mt-0.5"></div>
+            </div>
+            <button
+              id="btn-signout"
+              type="button"
+              class="h-9 px-3.5 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[12px] font-semibold hover:bg-[#FEE2E2] transition"
+            >
+              Sign out
+            </button>
+          </div>
+          <div class="mt-4">
+            <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7A8191] mb-2.5">Quick Launch Ecosystem</div>
+            <div class="grid grid-cols-2 gap-2 text-[13px]">
+              <a href="https://www.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">Foundation</a>
+              <a href="https://news.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF News</a>
+              <a href="https://guides.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF Guides</a>
+              <a href="https://connect.tfunions.com" class="px-3 py-2 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 font-medium text-[#11141C]">TF Connect</a>
+            </div>
+          </div>
+        </section>
 
-      <!-- TfSegmented Switch -->
-      <div class="mt-7 inline-flex p-[3px] bg-[#F5F5F7] rounded-[11px] w-full">
-        <button
-          id="tab-signin"
-          type="button"
-          class="flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] bg-white text-[#1D1D1F] border border-[#D2D2D7]/60 transition"
-        >
-          Sign in
-        </button>
-        <button
-          id="tab-register"
-          type="button"
-          class="flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] text-[#6E6E73] border border-transparent hover:text-[#1D1D1F] transition"
-        >
-          Create account
-        </button>
-      </div>
+        <!-- Primary Elevated Auth Widget -->
+        <section class="bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-8 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <!-- Brand Header -->
+          <div class="flex items-center justify-between gap-3">
+            <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
+                <rect width="32" height="32" rx="7" fill="#002583" />
+                <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
+                <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+              </svg>
+              <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">TF Unions</span>
+            </a>
+            <span class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#D99B00] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md">
+              Unified SSO
+            </span>
+          </div>
 
-      <div id="status-alert" class="hidden mt-5 px-3.5 py-3 rounded-[12px] text-[13px] font-medium"></div>
+          <div class="mt-7">
+            <h1 id="form-title" class="text-[28px] font-bold tracking-[-0.03em] leading-[1.12] text-[#11141C]">
+              Welcome back
+            </h1>
+            <p id="form-subtitle" class="mt-2 text-[14px] leading-[1.55] text-[#525866]">
+              Sign in with your TF Passport to continue to <span id="target-service-name" class="text-[#11141C] font-semibold">TF Unions</span>.
+            </p>
+          </div>
 
-      <form id="sso-form" class="mt-6 space-y-3.5">
-        <div id="register-fields" class="hidden space-y-3.5">
-          <div>
+          <!-- Segmented Mode Switch -->
+          <div class="mt-6 grid grid-cols-2 p-1 bg-[#F3F5F8] border border-[#E2E5EC] rounded-xl">
+            <button
+              id="tab-signin"
+              type="button"
+              class="py-2 px-3 text-[13px] font-semibold rounded-lg bg-white text-[#11141C] border border-[#E2E5EC] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition"
+            >
+              Sign in
+            </button>
+            <button
+              id="tab-register"
+              type="button"
+              class="py-2 px-3 text-[13px] font-semibold rounded-lg text-[#525866] border border-transparent hover:text-[#11141C] transition"
+            >
+              Create account
+            </button>
+          </div>
+
+          <div id="status-alert" class="hidden mt-5 px-3.5 py-3 rounded-xl border text-[13px] font-medium"></div>
+
+          <form id="sso-form" class="mt-5 space-y-3.5">
+            <div id="register-fields" class="hidden space-y-3.5">
+              <input
+                id="fullName"
+                type="text"
+                placeholder="Full name"
+                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              />
+              <input
+                id="phone"
+                type="tel"
+                placeholder="WhatsApp / Phone (+20)"
+                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              />
+              <div class="grid grid-cols-2 gap-3">
+                <select
+                  id="governorate"
+                  class="w-full px-3 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                >
+                  <option value="Cairo">Cairo</option>
+                  <option value="Giza">Giza</option>
+                  <option value="Alexandria">Alexandria</option>
+                  <option value="Dakahlia">Dakahlia</option>
+                  <option value="Sharqia">Sharqia</option>
+                  <option value="Gharbia">Gharbia</option>
+                  <option value="Menofia">Menofia</option>
+                  <option value="Qalyubia">Qalyubia</option>
+                  <option value="Ismailia">Ismailia</option>
+                  <option value="Assiut">Assiut</option>
+                  <option value="Luxor">Luxor</option>
+                  <option value="Red Sea">Red Sea</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select
+                  id="educationSystem"
+                  class="w-full px-3 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+                >
+                  <option value="STEM">STEM School</option>
+                  <option value="Thanaweya_Amma">Thanaweya Amma</option>
+                  <option value="IGCSE">IGCSE</option>
+                  <option value="American">American</option>
+                  <option value="Azhar">Azhar</option>
+                  <option value="University">University</option>
+                </select>
+              </div>
+              <select
+                id="gradeOrYear"
+                class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[14px] text-[#11141C] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              >
+                <option value="Prep_3">Prep 3</option>
+                <option value="G10">Grade 10</option>
+                <option value="G11" selected>Grade 11</option>
+                <option value="G12">Grade 12</option>
+                <option value="Undergrad">Undergraduate</option>
+                <option value="Grad">Graduate</option>
+              </select>
+            </div>
+
             <input
-              id="fullName"
-              type="text"
-              placeholder="Full name"
-              class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              id="email"
+              type="email"
+              required
+              autocomplete="email"
+              placeholder="Email address"
+              class="w-full px-3.5 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
             />
-          </div>
-          <div>
-            <input
-              id="phone"
-              type="tel"
-              placeholder="Phone number (+20)"
-              class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-            />
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <select
-              id="governorate"
-              class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[14px] text-[#1D1D1F] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-            >
-              <option value="Cairo">Cairo</option>
-              <option value="Giza">Giza</option>
-              <option value="Alexandria">Alexandria</option>
-              <option value="Dakahlia">Dakahlia</option>
-              <option value="Sharqia">Sharqia</option>
-              <option value="Gharbia">Gharbia</option>
-              <option value="Menofia">Menofia</option>
-              <option value="Qalyubia">Qalyubia</option>
-              <option value="Ismailia">Ismailia</option>
-              <option value="Assiut">Assiut</option>
-              <option value="Luxor">Luxor</option>
-              <option value="Red Sea">Red Sea</option>
-              <option value="Other">Other</option>
-            </select>
-            <select
-              id="educationSystem"
-              class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[14px] text-[#1D1D1F] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-            >
-              <option value="STEM">STEM School</option>
-              <option value="Thanaweya_Amma">Thanaweya Amma</option>
-              <option value="IGCSE">IGCSE</option>
-              <option value="American">American</option>
-              <option value="Azhar">Azhar</option>
-              <option value="University">University</option>
-            </select>
-          </div>
-          <div>
-            <select
-              id="gradeOrYear"
-              class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[14px] text-[#1D1D1F] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-            >
-              <option value="Prep_3">Prep 3</option>
-              <option value="G10">Grade 10</option>
-              <option value="G11" selected>Grade 11</option>
-              <option value="G12">Grade 12</option>
-              <option value="Undergrad">Undergraduate</option>
-              <option value="Grad">Graduate</option>
-            </select>
-          </div>
-        </div>
 
-        <div>
-          <input
-            id="email"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="Email"
-            class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-          />
-        </div>
+            <div class="relative">
+              <input
+                id="password"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="current-password"
+                placeholder="Password (min 6 characters)"
+                class="w-full pl-3.5 pr-16 py-3.5 rounded-xl bg-[#F8F9FB] text-[15px] text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
+              />
+              <button
+                id="toggle-pw"
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-[12px] font-semibold text-[#525866] hover:text-[#002583]"
+              >
+                Show
+              </button>
+            </div>
 
-        <div>
-          <input
-            id="password"
-            type="password"
-            required
-            minlength="6"
-            autocomplete="current-password"
-            placeholder="Password"
-            class="w-full px-3.5 py-4 rounded-[12px] bg-[#F5F5F7] text-[15px] text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
-          />
-        </div>
+            <div class="pt-1">
+              <button
+                id="btn-submit"
+                type="submit"
+                class="w-full h-11 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
+              >
+                Sign in
+              </button>
+            </div>
+          </form>
 
-        <div class="pt-2">
-          <button
-            id="btn-submit"
-            type="submit"
-            class="w-full h-12 rounded-[12px] bg-[#002583] hover:opacity-95 text-white font-semibold text-[15px] transition"
-          >
-            Sign in
-          </button>
-        </div>
-      </form>
-
-      <div class="mt-8 pt-6 border-t border-[#D2D2D7]/60 text-[13px] text-[#6E6E73] flex items-center justify-between">
-        <span>One account across all TF Unions services</span>
-        <a href="https://docs.tfunions.com" class="text-[#002583] font-medium hover:underline">Help</a>
+          <div class="mt-6 pt-5 border-t border-[#E2E5EC] text-[12px] text-[#525866] flex items-center justify-between">
+            <span>Shared across all *.tfunions.com portals</span>
+            <a href="https://docs.tfunions.com#account" class="text-[#002583] font-semibold hover:underline">SSO Docs ›</a>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -164,7 +219,7 @@
 
       function getValidatedRedirectUrl() {
         const params = new URLSearchParams(window.location.search);
-        const raw = params.get('redirect_to');
+        const raw = params.get('redirect_to') || params.get('redirect');
         if (!raw) return 'https://www.tfunions.com';
         try {
           const parsed = new URL(raw);
@@ -189,6 +244,44 @@
         backLink.href = redirectUrl;
       } catch {}
 
+      // Hydrate active session card if signed in
+      try {
+        const match = document.cookie.match(/(?:^|;\s*)tf_user_hint=([^;]*)/);
+        const localUser = localStorage.getItem('tf_sso_user');
+        let userHint = null;
+        if (match) {
+          userHint = JSON.parse(decodeURIComponent(match[1]));
+        } else if (localUser) {
+          const p = JSON.parse(localUser);
+          userHint = { name: p.full_name || p.fullName || p.name, email: p.email, role: p.role };
+        }
+        if (userHint && userHint.name) {
+          document.getElementById('active-session-card').classList.remove('hidden');
+          document.getElementById('session-user-name').textContent = String(userHint.name);
+          document.getElementById('session-user-meta').textContent = userHint.email
+            ? `${userHint.email} · ${userHint.role || 'member'}`
+            : String(userHint.role || 'member');
+        }
+      } catch {}
+
+      document.getElementById('btn-signout').addEventListener('click', async () => {
+        try {
+          await fetch(`${VPS_API_BASE}/api/sessionLogout`, { method: 'POST', credentials: 'include' });
+        } catch {}
+        document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';
+        localStorage.removeItem('tf_sso_token');
+        localStorage.removeItem('tf_sso_user');
+        window.location.reload();
+      });
+
+      const pwInput = document.getElementById('password');
+      const pwToggle = document.getElementById('toggle-pw');
+      pwToggle.addEventListener('click', () => {
+        const show = pwInput.type === 'password';
+        pwInput.type = show ? 'text' : 'password';
+        pwToggle.textContent = show ? 'Hide' : 'Show';
+      });
+
       let isRegisterMode = new URLSearchParams(window.location.search).get('mode') === 'register';
       const tabSignin = document.getElementById('tab-signin');
       const tabRegister = document.getElementById('tab-register');
@@ -197,17 +290,20 @@
       const formTitle = document.getElementById('form-title');
       const statusAlert = document.getElementById('status-alert');
 
+      const activeTabCls = 'py-2 px-3 text-[13px] font-semibold rounded-lg bg-white text-[#11141C] border border-[#E2E5EC] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition';
+      const inactiveTabCls = 'py-2 px-3 text-[13px] font-semibold rounded-lg text-[#525866] border border-transparent hover:text-[#11141C] transition';
+
       function applyMode() {
         if (isRegisterMode) {
           registerFields.classList.remove('hidden');
-          tabRegister.className = 'flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] bg-white text-[#1D1D1F] border border-[#D2D2D7]/60 transition';
-          tabSignin.className = 'flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] text-[#6E6E73] border border-transparent hover:text-[#1D1D1F] transition';
-          formTitle.textContent = 'Create account';
+          tabRegister.className = activeTabCls;
+          tabSignin.className = inactiveTabCls;
+          formTitle.textContent = 'Create your TF Passport';
           btnSubmit.textContent = 'Create account';
         } else {
           registerFields.classList.add('hidden');
-          tabSignin.className = 'flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] bg-white text-[#1D1D1F] border border-[#D2D2D7]/60 transition';
-          tabRegister.className = 'flex-1 py-2.5 px-4 text-[13px] font-semibold rounded-[8px] text-[#6E6E73] border border-transparent hover:text-[#1D1D1F] transition';
+          tabSignin.className = activeTabCls;
+          tabRegister.className = inactiveTabCls;
           formTitle.textContent = 'Welcome back';
           btnSubmit.textContent = 'Sign in';
         }
@@ -216,8 +312,10 @@
 
       function showStatus(msg, isError = false) {
         statusAlert.textContent = msg;
-        statusAlert.className = `mt-5 px-3.5 py-3 rounded-[12px] text-[13px] font-medium ${
-          isError ? 'bg-[#F5F5F7] text-[#B91C1C]' : 'bg-[#F5F5F7] text-[#15803D]'
+        statusAlert.className = `mt-5 px-3.5 py-3 rounded-xl border text-[13px] font-medium ${
+          isError
+            ? 'bg-[#FEF2F2] border-[#FECACA] text-[#B91C1C]'
+            : 'bg-[#F0FDF4] border-[#BBF7D0] text-[#15803D]'
         }`;
         statusAlert.classList.remove('hidden');
       }
@@ -238,7 +336,7 @@
         const password = document.getElementById('password').value;
 
         try {
-          showStatus(isRegisterMode ? 'Creating your account...' : 'Signing in...');
+          showStatus(isRegisterMode ? 'Creating your TF Passport...' : 'Verifying credentials...');
           const endpoint = isRegisterMode ? `${VPS_API_BASE}/api/register` : `${VPS_API_BASE}/api/login`;
           const payload = isRegisterMode
             ? {
@@ -267,6 +365,7 @@
           const hint = encodeURIComponent(JSON.stringify({
             uid: data.user.uid,
             name: data.user.full_name || data.user.fullName || data.user.name,
+            email: data.user.email,
             role: data.user.role || 'student',
           }));
           document.cookie = `tf_user_hint=${hint}; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=1209600`;

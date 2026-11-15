@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TF Connect — Student Chapters &amp; Project Guilds</title>
+  <meta name="description" content="Directory of regional STEM chapters, research study circles, and student-led technical guilds connected across Egypt." />
+  <meta name="theme-color" content="#002583" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23002583%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%225%22%20width%3D%224%22%20height%3D%224%22%20rx%3D%221%22%20fill%3D%22%23D99B00%22%2F%3E%3Cpath%20d%3D%22M7%209.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8%200H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --canvas: #F8F9FB;
+      --surface: #FFFFFF;
+      --inset: #F3F5F8;
+      --border: #E2E5EC;
+      --border-hover: #C5CAD6;
+      --ink: #11141C;
+      --slate: #525866;
+      --muted: #7A8191;
+      --cobalt: #002583;
+      --cobalt-dark: #001B61;
+      --gold: #D99B00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+    .eco-bar { background: var(--inset); border-bottom: 1px solid var(--border); font-size: 12px; }
+    .eco-inner { height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 16px; overflow-x: auto; }
+    .eco-links { display: flex; align-items: center; gap: 16px; white-space: nowrap; }
+    .eco-links a { color: var(--slate); font-weight: 500; }
+    .eco-links a:hover, .eco-links a.active { color: var(--cobalt); font-weight: 600; }
+
+    .site-header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 30; }
+    .header-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 36px; padding: 0 16px; border-radius: 10px;
+      background: var(--cobalt); color: #FFFFFF; font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer; transition: background 0.15s ease;
+    }
+    .btn-primary:hover { background: var(--cobalt-dark); }
+
+    .hero-card {
+      margin-top: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .overline { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobalt); }
+    .hero-title { margin: 8px 0 0; font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
+    .hero-desc { margin: 12px 0 0; font-size: 16px; line-height: 1.55; color: var(--slate); max-width: 660px; }
+
+    .controls-card {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tab-btn {
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--inset);
+      color: var(--slate);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .tab-btn.active { background: var(--cobalt); color: #FFFFFF; border-color: var(--cobalt); }
+
+    .filter-right { display: flex; flex-wrap: wrap; gap: 8px; }
+    .input-ctrl {
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 10px;
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--ink);
+      outline: none;
+    }
+    .input-ctrl:focus { border-color: var(--cobalt); background: var(--surface); }
+
+    .grid {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .chapter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .chapter-card:hover {
+      border-color: rgba(0, 37, 131, 0.45);
+      box-shadow: 0 6px 16px rgba(0, 37, 131, 0.06);
+    }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .type-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cobalt); }
+    .gov-tag { font-size: 11px; font-weight: 600; color: var(--slate); background: var(--inset); border: 1px solid var(--border); padding: 3px 8px; border-radius: 6px; }
+    .card-title { margin: 12px 0 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .card-desc { margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: var(--slate); }
+    .card-footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(17, 20, 28, 0.45);
+      z-index: 50; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-sheet {
+      width: 100%; max-width: 520px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 26px; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
+    }
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px 0; margin-top: auto; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="eco-bar">
+    <div class="container eco-inner">
+      <div class="eco-links">
+        <a href="https://www.tfunions.com">‹ TF Unions</a>
+        <span>|</span>
+        <a href="https://news.tfunions.com">TF News</a>
+        <a href="https://guides.tfunions.com">TF Guides</a>
+        <a href="https://connect.tfunions.com" class="active">TF Connect</a>
+        <a href="https://verify.tfunions.com">Verify</a>
+        <a href="https://docs.tfunions.com">Docs</a>
+      </div>
+      <span id="live-sync-status" style="color:#7A8191;">Network Directory</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="https://connect.tfunions.com" class="brand">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="border-radius:7px;">
+          <rect width="32" height="32" rx="7" fill="#002583"/>
+          <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/>
+          <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF"/>
+        </svg>
+        <span>TF Connect</span>
+      </a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://connect.tfunions.com" class="btn-primary">Sign in</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-card">
+      <div class="overline">EGYPTWIDE MENTORSHIP &amp; CHAPTERS</div>
+      <h1 class="hero-title">Chapters, Unions &amp; Project Guilds.</h1>
+      <p class="hero-desc">
+        Discover STEM school chapters, governorate study circles, and student-built scientific collectives synchronized across Egypt.
+      </p>
+    </section>
+
+    <section class="controls-card">
+      <div class="tabs" id="type-tabs">
+        <button type="button" class="tab-btn active" data-type="All">All</button>
+        <button type="button" class="tab-btn" data-type="School Chapter">School Chapters</button>
+        <button type="button" class="tab-btn" data-type="Project Guild">Project Guilds</button>
+        <button type="button" class="tab-btn" data-type="Research Lab">Research Labs</button>
+      </div>
+      <div class="filter-right">
+        <select id="gov-filter" class="input-ctrl">
+          <option value="All">All Governorates</option>
+          <option value="Cairo">Cairo</option>
+          <option value="Giza">Giza</option>
+          <option value="Alexandria">Alexandria</option>
+          <option value="Dakahlia">Dakahlia</option>
+          <option value="Sharqia">Sharqia</option>
+          <option value="Ismailia">Ismailia</option>
+          <option value="Assiut">Assiut</option>
+          <option value="Red Sea">Red Sea</option>
+          <option value="Nationwide">Nationwide</option>
+        </select>
+        <input id="connect-search" class="input-ctrl" type="search" placeholder="Search chapter or guild..." />
+      </div>
+    </section>
+
+    <section class="grid" id="connect-grid"></section>
+  </main>
+
+  <div class="modal-backdrop" id="chapter-modal" role="dialog" aria-modal="true">
+    <div class="modal-sheet">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+        <div>
+          <div class="type-tag" id="m-type"></div>
+          <h2 id="m-title" style="margin:6px 0 0;font-size:21px;"></h2>
+        </div>
+        <button id="m-close" type="button" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--inset);cursor:pointer;">✕</button>
+      </div>
+      <p id="m-desc" style="margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--slate);"></p>
+      <div style="margin-top:16px;padding:14px;border-radius:12px;background:var(--canvas);border:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;">
+        <span style="color:var(--muted);">Governorate / Scope</span>
+        <strong id="m-gov"></strong>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:flex-end;">
+        <a href="https://www.tfunions.com/volunteer" class="btn-primary">Join via Volunteer Hub ›</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <span>TF Connect · Part of the TF Unions Foundation Ecosystem</span>
+      <a href="https://www.tfunions.com/team" style="color:var(--cobalt);font-weight:600;">View 71-Member Leadership Constellation ›</a>
+    </div>
+  </footer>
+
+  <script>
+    const BASELINE_ITEMS = [
+      { id: 'c1', type: 'School Chapter', gov: 'Giza', name: 'STEM 6th of October Union Chapter', desc: 'Flagship student research & Olympiad study circle coordinating ISEF mentorship and weekly peer reviews.', focus: 'ISEF & Olympiad Mentorship' },
+      { id: 'c2', type: 'School Chapter', gov: 'Cairo', name: 'STEM Maadi Research Collective', desc: 'Student-led scientific writing and international summer programs advising circle for young women in STEM.', focus: 'Scientific Writing & Summer Aid' },
+      { id: 'c3', type: 'School Chapter', gov: 'Alexandria', name: 'Alexandria STEM Robotics & AI Club', desc: 'Autonomous robotics, CAD hardware design, and competitive informatics practice group.', focus: 'Robotics & Informatics' },
+      { id: 'c4', type: 'School Chapter', gov: 'Dakahlia', name: 'Dakahlia STEM Scholars Guild', desc: 'Connecting Delta governorates with chemistry, biology, and international admissions workshops.', focus: 'Regional Study Circles' },
+      { id: 'c5', type: 'Research Lab', gov: 'Ismailia', name: 'Suez Canal Energy & Sustainability Lab', desc: 'Open student research group prototyping low-cost desalination, clean water, and solar storage capstones.', focus: 'Clean Energy & Water' },
+      { id: 'c6', type: 'Project Guild', gov: 'Nationwide', name: 'TF Systems & Open-Source Engineering Guild', desc: 'Building self-hosted student infrastructure, Dart/Flutter apps, Astro web portals, and open APIs.', focus: 'Full-Stack & Mobile' },
+      { id: 'c7', type: 'School Chapter', gov: 'Assiut', name: 'Upper Egypt STEM & Thanaweya Bridge', desc: 'Extending curated university admissions databases and research mentorship to Upper Egypt students.', focus: 'Upper Egypt Access' },
+      { id: 'c8', type: 'Research Lab', gov: 'Red Sea', name: 'Red Sea Marine & Earth Sciences Circle', desc: 'Coastal ecology modeling and remote sensing environmental capstones.', focus: 'Earth & Marine Science' }
+    ];
+
+    let allItems = [...BASELINE_ITEMS];
+    let activeType = 'All';
+    let activeGov = 'All';
+    let searchQuery = '';
+
+    function esc(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function render() {
+      const grid = document.getElementById('connect-grid');
+      const filtered = allItems.filter((it) => {
+        const matchType = activeType === 'All' || it.type === activeType;
+        const matchGov = activeGov === 'All' || it.gov === activeGov;
+        const q = searchQuery.toLowerCase();
+        const matchQ = !q || it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q) || it.gov.toLowerCase().includes(q);
+        return matchType && matchGov && matchQ;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;color:var(--slate);">No chapters or guilds match this filter.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((it) => `
+        <article class="chapter-card" onclick="openItem('${esc(it.id)}')">
+          <div>
+            <div class="card-top">
+              <span class="type-tag">${esc(it.type)}</span>
+              <span class="gov-tag">${esc(it.gov)}</span>
+            </div>
+            <h2 class="card-title">${esc(it.name)}</h2>
+            <p class="card-desc">${esc(it.desc)}</p>
+          </div>
+          <div class="card-footer">
+            <span>${esc(it.focus || 'Student Network')}</span>
+            <span style="color:var(--cobalt);font-weight:600;">Inspect ›</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    window.openItem = function(id) {
+      const it = allItems.find((x) => x.id === id);
+      if (!it) return;
+      document.getElementById('m-type').textContent = `${it.type} · ${it.focus || 'Verified'}`;
+      document.getElementById('m-title').textContent = it.name;
+      document.getElementById('m-desc').textContent = it.desc;
+      document.getElementById('m-gov').textContent = it.gov;
+      document.getElementById('chapter-modal').classList.add('open');
+    };
+
+    document.getElementById('m-close').addEventListener('click', () => {
+      document.getElementById('chapter-modal').classList.remove('open');
+    });
+    document.getElementById('chapter-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'chapter-modal') document.getElementById('chapter-modal').classList.remove('open');
+    });
+
+    document.querySelectorAll('#type-tabs .tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#type-tabs .tab-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeType = btn.getAttribute('data-type');
+        render();
+      });
+    });
+
+    document.getElementById('gov-filter').addEventListener('change', (e) => {
+      activeGov = e.target.value;
+      render();
+    });
+
+    document.getElementById('connect-search').addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      render();
+    });
+
+    (async () => {
+      try {
+        const [orgsRes, projRes] = await Promise.all([
+          fetch('https://n8n.tfunions.com/tf-api/api/collections/orgs').then((r) => r.json()).catch(() => ({})),
+          fetch('https://n8n.tfunions.com/tf-api/api/collections/allProjects').then((r) => r.json()).catch(() => ({}))
+        ]);
+        const extra = [];
+        const seen = new Set(allItems.map((x) => x.name.toLowerCase()));
+        (orgsRes.documents || []).forEach((doc, idx) => {
+          const name = doc.name || doc.title;
+          if (name && !seen.has(name.toLowerCase())) {
+            seen.add(name.toLowerCase());
+            extra.push({
+              id: 'org-' + (doc.id || idx),
+              type: 'School Chapter',
+              gov: doc.governorate || doc.city || 'Nationwide',
+              name,
+              desc: doc.description || doc.bio || 'Connected student union chapter in the TF Unions ecosystem.',
+              focus: doc.category || 'Verified Organization'
+            });
+          }
+        });
+        (projRes.documents || []).forEach((doc, idx) => {
+          const name = doc.title || doc.name;
+          if (name && !seen.has(name.toLowerCase())) {
+            seen.add(name.toLowerCase());
+            extra.push({
+              id: 'proj-' + (doc.id || idx),
+              type: 'Project Guild',
+              gov: doc.governorate || 'Nationwide',
+              name,
+              desc: doc.description || doc.subtitle || 'Student-led scientific or software project initiative.',
+              focus: doc.category || 'Open Project'
+            });
+          }
+        });
+        if (extra.length > 0) {
+          allItems = [...extra, ...BASELINE_ITEMS];
+          document.getElementById('live-sync-status').textContent = `Synced (${allItems.length} entries)`;
+        }
+      } catch {}
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,114 +1,273 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const sections = [
+const platforms = [
   {
-    title: 'TF News',
-    subtitle: 'Scholarships, internships, programs, and admission pathways for 1,500+ universities.',
-    stat: '1,500+ universities',
+    code: 'PORTAL · NEWS',
+    title: 'TF News & Admissions',
+    subtitle: 'Curated scholarships, international summer programs, internships, and admission pathways across 1,500+ universities.',
+    stat: '1,500+ university pathways',
     href: 'https://news.tfunions.com',
+    cta: 'Open TF News',
   },
   {
+    code: 'ROADMAPS · GUIDES',
     title: 'TF Guides',
-    subtitle: 'Step-by-step roadmaps for Olympiads, scientific research, and university preparation.',
+    subtitle: 'Structured, step-by-step protocols for STEM research, ISEF fairs, scientific writing, and international Olympiads.',
     stat: 'guides.tfunions.com',
     href: 'https://guides.tfunions.com',
+    cta: 'Browse Guides',
   },
   {
+    code: 'NETWORK · CONNECT',
     title: 'TF Connect',
-    subtitle: 'Peer study circles and senior mentorship cohorts connecting students across Egypt.',
+    subtitle: 'Peer study circles, regional student union chapters, project guilds, and alumni mentorship cohorts across Egypt.',
     stat: 'connect.tfunions.com',
     href: 'https://connect.tfunions.com',
+    cta: 'Explore Chapters',
   },
   {
-    title: 'Volunteer & Incubator',
-    subtitle: 'Join seasonal contributor tracks or propose and upvote student-built tools.',
-    stat: '27 governorates',
+    code: 'STOREFRONT · LABS',
+    title: 'STEM Shop & Resources',
+    subtitle: 'Student hardware kits, lab components, and zero-markup technical supplies curated for STEM & Capstone builds.',
+    stat: 'Volunteer & Idea Hub',
     href: '/volunteer',
+    cta: 'Join & Build',
   },
 ];
 
 const foundationRows = [
-  { category: 'Mission', title: 'About TF Unions & Charter', meta: 'Non-profit', href: '/about' },
-  { category: 'People', title: 'Founders & Contributors Directory', meta: 'Team', href: '/team' },
+  { category: 'People', title: 'Interactive Team Constellation (71 Members)', meta: 'team', href: '/team' },
+  { category: 'Mission', title: 'About TF Unions & Institutional Charter', meta: 'charter', href: '/about' },
   { category: 'Join', title: 'Apply for Seasonal Volunteer Tracks', meta: 'Open', href: '/volunteer' },
   { category: 'Community', title: 'Student Project & Idea Incubator', meta: 'Vote', href: '/ideas' },
-  { category: 'Registry', title: 'Verify a TF Unions Certificate', meta: 'verify.tfunions.com', href: 'https://verify.tfunions.com' },
+  { category: 'Registry', title: 'Verify a TF Unions Certificate Serial', meta: 'verify.tfunions.com', href: 'https://verify.tfunions.com' },
   { category: 'Finances', title: 'Open-Book Financial Ledger & Support', meta: '100% public', href: '/transparency' },
+];
+
+const metrics = [
+  { label: 'Active Leaders & Contributors', value: '71', accent: 'text-[#002583]' },
+  { label: 'University Pathways', value: '1,500+', accent: 'text-[#11141C]' },
+  { label: 'Egyptian Governorates', value: '27', accent: 'text-[#11141C]' },
+  { label: 'Recurring SaaS Overhead', value: '$0 / mo', accent: 'text-[#15803D]' },
 ];
 ---
 <BaseLayout title="Home">
-  <!-- Intro (matches _intro in home_page.dart) -->
-  <section class="mt-14 sm:mt-[88px]">
+  <!-- Elevated Hero Architectural Card -->
+  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-11 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">
+      TF UNIONS FOUNDATION · EGYPTIAN STEM &amp; UNIVERSITY SCHOLARS NETWORK
+    </div>
     <h1
-      class="font-bold text-[#1D1D1F] leading-[1.08] tracking-[-1.5px] sm:tracking-[-2px]"
-      style="font-size: clamp(36px, 6vw, 64px);"
+      class="mt-4 font-bold text-[#11141C] leading-[1.06] tracking-[-0.035em]"
+      style="font-size: clamp(34px, 5.2vw, 56px);"
     >
-      Science &amp; opportunity,<br />all in one place.
+      Science &amp; opportunity,<br />built for every student.
     </h1>
-    <p class="mt-[18px] text-[18px] leading-[1.45] text-[#6E6E73] max-w-[640px]">
-      Open tools, verified university pathways, and study communities for ambitious students across Egypt.
+    <p class="mt-4 text-[17px] leading-[1.55] text-[#525866] max-w-[660px]">
+      An independent non-profit ecosystem uniting verified university admissions, Olympia &amp; research roadmaps, regional study chapters, and open educational tools across Egypt.
     </p>
-  </section>
 
-  <!-- Four Equal Section Tiles (matches _SectionTile in home_page.dart) -->
-  <section class="mt-14 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 gap-4">
-    {sections.map((s) => (
+    <div class="mt-7 flex flex-wrap items-center gap-3">
       <a
-        href={s.href}
-        class="group flex flex-col justify-between bg-[#F5F5F7] hover:bg-[#ECECEE] rounded-[20px] p-7 min-h-[216px] transition"
+        href="/team"
+        class="inline-flex items-center justify-center h-11 px-5 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white text-[14px] font-semibold transition shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
       >
-        <div>
-          <h2 class="text-[24px] font-bold tracking-[-0.5px] leading-[1.2] text-[#1D1D1F]">
-            {s.title}
-          </h2>
-          <p class="mt-2 text-[15px] leading-[1.45] text-[#6E6E73]">
-            {s.subtitle}
-          </p>
-        </div>
-        <div class="mt-6 flex items-center justify-between">
-          <span class="text-[13px] text-[#6E6E73]">{s.stat}</span>
-          <span class="text-[15px] font-semibold text-[#002583] flex items-center gap-1">
-            Explore <span class="text-[18px] leading-none">›</span>
-          </span>
-        </div>
+        Explore Team Constellation ›
       </a>
-    ))}
+      <a
+        href="https://verify.tfunions.com"
+        class="inline-flex items-center justify-center h-11 px-5 rounded-xl bg-white border border-[#E2E5EC] hover:border-[#002583]/40 text-[#11141C] text-[14px] font-semibold transition"
+      >
+        Verify a Certificate
+      </a>
+      <a
+        href="/volunteer"
+        class="inline-flex items-center justify-center h-11 px-5 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] hover:border-[#D99B00] text-[#11141C] text-[14px] font-semibold transition"
+      >
+        Volunteer
+      </a>
+    </div>
+
+    <!-- Key Metrics Strip inside Hero Widget -->
+    <div class="mt-9 pt-7 border-t border-[#E2E5EC] grid grid-cols-2 md:grid-cols-4 gap-5">
+      {metrics.map((m) => (
+        <div class="bg-[#F8F9FB] border border-[#E2E5EC] rounded-xl px-4 py-3.5">
+          <div class={`text-[24px] sm:text-[26px] font-bold tracking-[-0.02em] ${m.accent}`}>{m.value}</div>
+          <div class="text-[12px] font-medium text-[#525866] mt-0.5">{m.label}</div>
+        </div>
+      ))}
+    </div>
   </section>
 
-  <!-- Two Plain Lists (matches _lists in home_page.dart) -->
-  <section class="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 gap-14">
-    <!-- Left Column: Live Opportunities from VPS PostgreSQL -->
-    <div>
-      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Latest opportunities</h2>
-      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70" id="live-opps-list">
-        <div class="py-4 flex items-center justify-between">
+  <!-- Four Distinct Division Widget Cards -->
+  <section class="mt-10">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">CORE PLATFORMS</div>
+        <h2 class="mt-1 text-[24px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#11141C]">Ecosystem Divisions</h2>
+      </div>
+      <a href="https://docs.tfunions.com" class="text-[13px] font-semibold text-[#002583] hover:underline shrink-0">
+        Architecture Docs ›
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {platforms.map((s) => (
+        <a
+          href={s.href}
+          class="group flex flex-col justify-between bg-white border border-[#E2E5EC] hover:border-[#002583]/40 rounded-2xl p-6 sm:p-7 min-h-[210px] transition shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_6px_16px_rgba(0,37,131,0.06)]"
+        >
           <div>
-            <div class="text-[12px] text-[#6E6E73]">Loading</div>
-            <div class="text-[16px] font-semibold text-[#1D1D1F] mt-0.5">Fetching live opportunities...</div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#002583]">{s.code}</span>
+              <span class="w-2 h-2 rounded-sm bg-[#D99B00]" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-3 text-[21px] font-bold tracking-[-0.02em] text-[#11141C] group-hover:text-[#002583] transition">
+              {s.title}
+            </h3>
+            <p class="mt-2 text-[14px] leading-[1.55] text-[#525866]">
+              {s.subtitle}
+            </p>
           </div>
+          <div class="mt-6 pt-4 border-t border-[#E2E5EC] flex items-center justify-between">
+            <span class="text-[12px] font-mono text-[#7A8191]">{s.stat}</span>
+            <span class="text-[13px] font-semibold text-[#002583] flex items-center gap-1">
+              {s.cta} <span class="transition-transform group-hover:translate-x-0.5">›</span>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Two Elevated List Widgets: Live Opportunities + Foundation Directory -->
+  <section class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <!-- Left Widget: Live Opportunities -->
+    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">LIVE FEED</div>
+          <h2 class="mt-0.5 text-[20px] font-bold tracking-[-0.02em] text-[#11141C]">Latest Opportunities</h2>
+        </div>
+        <a href="https://news.tfunions.com" class="text-[13px] font-semibold text-[#002583] hover:underline shrink-0">
+          All ›
+        </a>
+      </div>
+
+      <div class="divide-y divide-[#E2E5EC]" id="live-opps-list">
+        <div class="py-4">
+          <div class="text-[12px] text-[#7A8191]">Syncing registry</div>
+          <div class="text-[15px] font-semibold text-[#11141C] mt-0.5">Loading live opportunities...</div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Foundation & Ecosystem Directory -->
-    <div>
-      <h2 class="text-[28px] font-bold tracking-[-0.6px] text-[#1D1D1F]">Foundation</h2>
-      <div class="mt-3 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
+    <!-- Right Widget: Foundation & Governance -->
+    <div class="bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div class="flex items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">GOVERNANCE</div>
+          <h2 class="mt-0.5 text-[20px] font-bold tracking-[-0.02em] text-[#11141C]">Foundation Directory</h2>
+        </div>
+        <a href="/charter" class="text-[13px] font-semibold text-[#002583] hover:underline shrink-0">
+          Charter ›
+        </a>
+      </div>
+
+      <div class="divide-y divide-[#E2E5EC]">
         {foundationRows.map((r) => (
-          <a href={r.href} class="py-4 px-0.5 flex items-center justify-between hover:bg-black/[0.02] transition">
+          <a href={r.href} class="py-3.5 px-2 -mx-2 rounded-lg flex items-center justify-between hover:bg-[#F8F9FB] transition group">
             <div class="pr-4">
-              <div class="text-[12px] text-[#6E6E73]">{r.category}</div>
-              <div class="text-[16px] font-semibold text-[#1D1D1F] leading-[1.3] mt-0.5">{r.title}</div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">{r.category}</div>
+              <div class="text-[15px] font-semibold text-[#11141C] group-hover:text-[#002583] leading-[1.35] mt-0.5 transition">
+                {r.title}
+              </div>
             </div>
-            <span class="text-[13px] text-[#6E6E73] shrink-0">{r.meta}</span>
+            <span class="text-[12px] font-medium text-[#525866] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md shrink-0">
+              {r.meta}
+            </span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
+  <!-- Ecosystem Quick Launch Directory Bar -->
+  <section class="mt-10 bg-white border border-[#E2E5EC] rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#E2E5EC]">
+      <div>
+        <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">SUBDOMAIN ARCHITECTURE</div>
+        <h2 class="mt-0.5 text-[20px] font-bold tracking-[-0.02em] text-[#11141C]">Every TF Unions Service in One Place</h2>
+      </div>
+      <a
+        href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
+        class="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] hover:border-[#002583]/40 text-[13px] font-semibold text-[#11141C] transition shrink-0"
+      >
+        Single Sign-On ›
+      </a>
+    </div>
+    <div class="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <a href="/team" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">/team</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">Team Graph</div>
+      </a>
+      <a href="https://guides.tfunions.com" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">guides.tf</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">Roadmaps</div>
+      </a>
+      <a href="https://connect.tfunions.com" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">connect.tf</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">Chapters</div>
+      </a>
+      <a href="https://verify.tfunions.com" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">verify.tf</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">Credentials</div>
+      </a>
+      <a href="https://docs.tfunions.com" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">docs.tf</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">API &amp; Docs</div>
+      </a>
+      <a href="/transparency" class="p-3.5 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC] hover:border-[#002583]/40 transition">
+        <div class="text-[11px] font-mono text-[#7A8191]">/ledger</div>
+        <div class="mt-1 text-[14px] font-semibold text-[#11141C]">Open Ledger</div>
+      </a>
+    </div>
+  </section>
+
   <script is:inline>
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    const FALLBACK_OPPS = [
+      { category: 'Research Program', title: 'Pioneer Academics & Research Mentorship Pathways', topic: 'Global' },
+      { category: 'Olympiad', title: 'Egyptian International Science & Engineering Fair (ISEF) Prep', topic: 'STEM' },
+      { category: 'Scholarship', title: 'US & European Need-Blind Financial Aid Guide 2026–2027', topic: 'Admissions' },
+      { category: 'Engineering', title: 'Open Hardware & Robotics Capstone Grant Directory', topic: 'Engineering' },
+    ];
+
+    function renderOpps(container, list) {
+      container.innerHTML = list
+        .map(
+          (o) => `
+          <a href="https://news.tfunions.com" class="py-3.5 px-2 -mx-2 rounded-lg flex items-center justify-between hover:bg-[#F8F9FB] transition group">
+            <div class="pr-4">
+              <div class="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#7A8191]">${esc(o.category || o.section || 'Opportunity')}</div>
+              <div class="text-[15px] font-semibold text-[#11141C] group-hover:text-[#002583] leading-[1.35] mt-0.5 line-clamp-1 transition">${esc(o.title)}</div>
+            </div>
+            <span class="text-[12px] font-medium text-[#002583] bg-[#F3F5F8] border border-[#E2E5EC] px-2.5 py-1 rounded-md shrink-0">${esc(o.topic || 'Explore')}</span>
+          </a>
+        `
+        )
+        .join('');
+    }
+
     (async () => {
       const container = document.getElementById('live-opps-list');
       if (!container) return;
@@ -116,25 +275,9 @@ const foundationRows = [
         const res = await fetch('https://n8n.tfunions.com/tf-api/api/opportunities');
         const data = await res.json();
         const list = (data.opportunities || []).slice(0, 6);
-        if (list.length === 0) {
-          container.innerHTML = `<div class="py-6 text-[15px] text-[#6E6E73]">No opportunities listed right now.</div>`;
-          return;
-        }
-        container.innerHTML = list
-          .map(
-            (o) => `
-            <a href="https://news.tfunions.com" class="py-4 px-0.5 flex items-center justify-between hover:bg-black/[0.02] transition">
-              <div class="pr-4">
-                <div class="text-[12px] text-[#6E6E73]">${o.category || o.section || 'Opportunity'}</div>
-                <div class="text-[16px] font-semibold text-[#1D1D1F] leading-[1.3] mt-0.5 line-clamp-1">${o.title}</div>
-              </div>
-              <span class="text-[13px] text-[#6E6E73] shrink-0">${o.topic || 'Explore'}</span>
-            </a>
-          `
-          )
-          .join('');
+        renderOpps(container, list.length > 0 ? list : FALLBACK_OPPS);
       } catch {
-        container.innerHTML = `<div class="py-6 text-[15px] text-[#6E6E73]">Explore all opportunities on <a href="https://news.tfunions.com" class="text-[#002583] font-medium">news.tfunions.com</a>.</div>`;
+        renderOpps(container, FALLBACK_OPPS);
       }
     })();
   </script>

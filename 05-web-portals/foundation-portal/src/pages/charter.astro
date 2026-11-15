@@ -1,44 +1,60 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const articles = [
+  {
+    num: 'ARTICLE I',
+    title: 'Independent non-profit mandate',
+    body: 'TF Unions operates strictly as a non-profit educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled.',
+  },
+  {
+    num: 'ARTICLE II',
+    title: 'Student privacy & single unified account',
+    body: 'Student identity records are hosted on our dedicated PostgreSQL and Self-Hosted VPS infrastructure and are never sold or shared with third-party advertisers.',
+  },
+  {
+    num: 'ARTICLE III',
+    title: 'Verifiable volunteer credentials',
+    body: 'Every volunteer and contributor certificate issued by TF Unions carries a permanent serial code verifiable at verify.tfunions.com.',
+    linkLabel: 'Open Registry ›',
+    linkHref: 'https://verify.tfunions.com',
+  },
+  {
+    num: 'ARTICLE IV',
+    title: 'Open-book financial ledger',
+    body: 'All incoming community contributions and outgoing server or program expenses are recorded publicly on the Open Ledger.',
+    linkLabel: 'View Open Ledger ›',
+    linkHref: '/transparency',
+  },
+];
 ---
 <BaseLayout title="Charter" backLabel="TF Unions" backHref="/">
-  <section class="mt-14 sm:mt-20 max-w-[720px]">
-    <h1 class="text-[36px] sm:text-[52px] font-bold tracking-[-1.6px] leading-[1.08] text-[#1D1D1F]">
+  <section class="mt-8 sm:mt-12 bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">INSTITUTIONAL GOVERNANCE</div>
+    <h1 class="mt-2 text-[32px] sm:text-[46px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
       Non-profit charter.
     </h1>
-    <p class="mt-4 text-[17px] leading-[1.5] text-[#6E6E73]">
-      The governance rules, student data protections, and financial commitments of TF Unions.
+    <p class="mt-4 text-[16px] sm:text-[17px] leading-[1.55] text-[#525866] max-w-[700px]">
+      The governance rules, student data protections, and financial accountability commitments of TF Unions.
     </p>
   </section>
 
-  <section class="mt-12 border-t border-[#D2D2D7]/70 divide-y divide-[#D2D2D7]/70">
-    <div class="py-6">
-      <div class="text-[12px] text-[#6E6E73]">Article I</div>
-      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Independent non-profit mandate</h2>
-      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
-        TF Unions operates strictly as a non-profit educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled.
-      </p>
-    </div>
-    <div class="py-6">
-      <div class="text-[12px] text-[#6E6E73]">Article II</div>
-      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Student privacy &amp; single account</h2>
-      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
-        Student identity records are hosted on our dedicated infrastructure and are never sold or shared with third-party advertisers.
-      </p>
-    </div>
-    <div class="py-6">
-      <div class="text-[12px] text-[#6E6E73]">Article III</div>
-      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Verifiable volunteer credentials</h2>
-      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
-        Every volunteer and contributor certificate issued by TF Unions carries a permanent serial code verifiable at <a href="https://verify.tfunions.com" class="text-[#002583] font-medium hover:underline">verify.tfunions.com</a>.
-      </p>
-    </div>
-    <div class="py-6">
-      <div class="text-[12px] text-[#6E6E73]">Article IV</div>
-      <h2 class="mt-1 text-[20px] font-bold text-[#1D1D1F]">Open-book ledger</h2>
-      <p class="mt-2 text-[15px] leading-[1.6] text-[#6E6E73]">
-        All incoming community contributions and outgoing server or program expenses are recorded publicly on the <a href="/transparency" class="text-[#002583] font-medium hover:underline">Open Ledger</a>.
-      </p>
-    </div>
+  <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    {articles.map((art) => (
+      <article class="bg-white border border-[#E2E5EC] rounded-2xl p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)] flex flex-col justify-between">
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#D99B00]">{art.num}</div>
+          <h2 class="mt-2 text-[20px] font-bold tracking-[-0.02em] text-[#11141C]">{art.title}</h2>
+          <p class="mt-2.5 text-[15px] leading-[1.6] text-[#525866]">{art.body}</p>
+        </div>
+        {art.linkHref && (
+          <div class="mt-5 pt-4 border-t border-[#E2E5EC]">
+            <a href={art.linkHref} class="text-[13px] font-semibold text-[#002583] hover:underline">
+              {art.linkLabel}
+            </a>
+          </div>
+        )}
+      </article>
+    ))}
   </section>
 </BaseLayout>

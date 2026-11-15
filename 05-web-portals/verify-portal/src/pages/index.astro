@@ -1,9 +1,11 @@
 ---
 /**
  * Official Credential & Certificate Verifier (`https://verify.tfunions.com`)
- * Built with the `tf_minimal` design system: white page (#FFFFFF), 1000px frame,
- * thin top bar (#D2D2D7), #F5F5F7 borderless inputs, single #002583 accent.
+ * Styled with TF Sovereign Editorial tokens (#F8F9FB canvas, #FFFFFF card, #E2E5EC border, #002583 cobalt, #D99B00 gold).
  */
+const faviconSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#002583"/><rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00"/><path d="M7 9.5h11.5v2.7h-4.3V23h-3V12.2H7V9.5zm10.8 0H25v2.7h-4.2v2.9h3.7v2.6h-3.7V23h-3V9.5z" fill="#fff"/></svg>`
+);
 ---
 <!doctype html>
 <html lang="en">
@@ -11,63 +13,106 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify Credential — TF Unions</title>
+    <meta name="theme-color" content="#002583" />
+    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-white text-[#1D1D1F] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased">
-    <div class="max-w-[1000px] mx-auto px-6 pb-20">
-      <!-- TfTopBar -->
-      <header class="h-16 border-b border-[#D2D2D7]/70 flex items-center justify-between">
-        <a href="https://www.tfunions.com" class="text-[15px] font-medium text-[#002583] hover:opacity-75 transition flex items-center gap-1">
-          <span>‹</span> Back to TF Unions
-        </a>
-        <a href="https://www.tfunions.com" class="text-[17px] font-bold tracking-[-0.2px] text-[#1D1D1F]">
-          TF Unions
-        </a>
-      </header>
+  <body class="min-h-screen bg-[#F8F9FB] text-[#11141C] font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] antialiased flex flex-col">
+    <!-- Top Ecosystem Bar -->
+    <div class="bg-[#F3F5F8] border-b border-[#E2E5EC]">
+      <div class="max-w-[960px] mx-auto px-5 h-9 flex items-center justify-between text-[12px]">
+        <a href="https://www.tfunions.com" class="font-semibold text-[#002583] hover:underline">‹ TF Unions Foundation</a>
+        <div class="flex items-center gap-4 text-[#525866]">
+          <a href="https://guides.tfunions.com" class="hover:text-[#11141C]">Guides</a>
+          <a href="https://connect.tfunions.com" class="hover:text-[#11141C]">Connect</a>
+          <a href="https://docs.tfunions.com" class="hover:text-[#11141C]">Docs</a>
+        </div>
+      </div>
+    </div>
 
-      <main class="mt-16 sm:mt-24 max-w-[560px]">
-        <h1 class="text-[36px] sm:text-[48px] font-bold tracking-[-1.5px] leading-[1.08] text-[#1D1D1F]">
+    <!-- Header -->
+    <header class="bg-white border-b border-[#E2E5EC]">
+      <div class="max-w-[960px] mx-auto px-5 h-16 flex items-center justify-between">
+        <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px]">
+            <rect width="32" height="32" rx="7" fill="#002583" />
+            <rect x="23" y="5" width="4" height="4" rx="1" fill="#D99B00" />
+            <path d="M7 9.5H18.5V12.2H14.2V23H11.2V12.2H7V9.5ZM17.8 9.5H25V12.2H20.8V15.1H24.5V17.7H20.8V23H17.8V9.5Z" fill="#FFFFFF" />
+          </svg>
+          <span class="text-[16px] font-bold tracking-[-0.02em] text-[#11141C]">TF Verify</span>
+        </a>
+        <a
+          href="https://auth.tfunions.com/?redirect_to=https://verify.tfunions.com"
+          class="h-9 px-4 inline-flex items-center rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] hover:border-[#002583]/40 text-[13px] font-semibold text-[#11141C] transition"
+        >
+          Sign in
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[960px] mx-auto px-5 py-10 sm:py-14">
+      <!-- Lookup Card Widget -->
+      <section class="bg-white border border-[#E2E5EC] rounded-2xl p-7 sm:p-10 shadow-[0_1px_2px_rgba(15,23,42,0.04)] max-w-[680px]">
+        <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#002583]">OFFICIAL CREDENTIAL REGISTRY</div>
+        <h1 class="mt-2 text-[32px] sm:text-[42px] font-bold tracking-[-0.03em] leading-[1.08] text-[#11141C]">
           Verify a certificate.
         </h1>
-        <p class="mt-4 text-[17px] leading-[1.45] text-[#6E6E73]">
-          Enter the serial code printed on a TF Unions credential (for example, <span class="text-[#1D1D1F] font-mono text-[15px]">TFU-2026-8F92A1</span>).
+        <p class="mt-3 text-[16px] leading-[1.55] text-[#525866]">
+          Enter the permanent serial code printed on a TF Unions volunteer or leadership credential (format <span class="font-mono text-[#11141C]">TFU-YYYY-XXXXXX</span>).
         </p>
 
-        <form id="verify-form" class="mt-8 flex flex-col sm:flex-row gap-3">
+        <form id="verify-form" class="mt-7 flex flex-col sm:flex-row gap-3">
           <input
             id="serial-input"
             type="text"
             required
             placeholder="TFU-2026-8F92A1"
-            class="flex-1 px-4 py-3.5 rounded-[12px] bg-[#F5F5F7] font-mono text-[15px] uppercase text-[#1D1D1F] placeholder-[#6E6E73] border-[1.5px] border-transparent focus:border-[#002583] focus:bg-white focus:outline-none transition"
+            class="flex-1 px-4 py-3.5 rounded-xl bg-[#F8F9FB] font-mono text-[15px] uppercase text-[#11141C] placeholder-[#7A8191] border border-[#E2E5EC] focus:border-[#002583] focus:bg-white focus:outline-none transition"
           />
           <button
             type="submit"
-            class="h-12 px-6 rounded-[12px] bg-[#002583] hover:opacity-95 text-white font-semibold text-[15px] transition shrink-0"
+            class="h-12 px-6 rounded-xl bg-[#002583] hover:bg-[#001B61] text-white font-semibold text-[15px] transition shrink-0 shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
           >
-            Verify
+            Verify Serial
           </button>
         </form>
 
-        <div class="mt-4 flex items-center gap-4 text-[13px] text-[#6E6E73]">
-          <span>Sample codes:</span>
-          <button type="button" data-code="TFU-2026-8F92A1" class="sample-btn text-[#002583] font-medium hover:underline">TFU-2026-8F92A1</button>
-          <button type="button" data-code="TFU-2026-000001" class="sample-btn text-[#002583] font-medium hover:underline">TFU-2026-000001</button>
+        <div class="mt-4 flex flex-wrap items-center gap-2.5 text-[12px] text-[#525866]">
+          <span>Test sample serials:</span>
+          <button type="button" data-code="TFU-2026-8F92A1" class="sample-btn font-mono px-2.5 py-1 rounded-lg bg-[#F3F5F8] border border-[#E2E5EC] text-[#002583] font-semibold hover:border-[#002583] transition">TFU-2026-8F92A1</button>
+          <button type="button" data-code="TFU-2026-000001" class="sample-btn font-mono px-2.5 py-1 rounded-lg bg-[#F3F5F8] border border-[#E2E5EC] text-[#002583] font-semibold hover:border-[#002583] transition">TFU-2026-000001</button>
         </div>
+      </section>
 
-        <div id="result-box" class="hidden mt-10 rounded-[20px] bg-[#F5F5F7] p-7"></div>
-      </main>
-    </div>
+      <!-- Verification Output Widget -->
+      <section id="result-box" class="hidden mt-6 max-w-[680px] bg-white border border-[#E2E5EC] rounded-2xl p-7 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"></section>
+    </main>
+
+    <footer class="bg-white border-t border-[#E2E5EC] py-5">
+      <div class="max-w-[960px] mx-auto px-5 flex flex-wrap items-center justify-between gap-3 text-[12px] text-[#7A8191]">
+        <span>TF Unions Credential Verification Registry · Backed by VPS PostgreSQL</span>
+        <a href="https://docs.tfunions.com#api" class="text-[#002583] font-semibold hover:underline">Verification API Docs ›</a>
+      </div>
+    </footer>
 
     <script is:inline>
+      function esc(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
       const form = document.getElementById('verify-form');
       const input = document.getElementById('serial-input');
       const resultBox = document.getElementById('result-box');
 
       async function verifySerial(code) {
-        const clean = code.trim().toUpperCase();
+        const clean = String(code || '').trim().toUpperCase();
         resultBox.classList.remove('hidden');
 
         if (!/^TFU-\d{4}-[A-Z0-9]{6}$/.test(clean)) {
@@ -75,39 +120,54 @@
           return;
         }
 
-        resultBox.innerHTML = `<p class="text-[15px] text-[#6E6E73]">Checking registry...</p>`;
+        resultBox.innerHTML = `<p class="text-[15px] text-[#525866]">Checking registry...</p>`;
 
         try {
           const res = await fetch(`https://n8n.tfunions.com/tf-api/api/verify-certificate?code=${encodeURIComponent(clean)}`);
           const data = await res.json();
           if (res.ok && data.valid) {
+            const shareUrl = `https://verify.tfunions.com/?code=${encodeURIComponent(data.serialCode)}`;
             resultBox.innerHTML = `
-              <div class="flex items-center justify-between pb-4 border-b border-[#D2D2D7]/70">
-                <span class="text-[13px] font-semibold text-[#15803D]">Verified credential</span>
-                <span class="font-mono text-[13px] text-[#6E6E73]">${data.serialCode}</span>
+              <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E2E5EC]">
+                <span class="px-2.5 py-1 rounded-md bg-[#F0FDF4] border border-[#BBF7D0] text-[12px] font-semibold text-[#15803D]">VERIFIED CREDENTIAL</span>
+                <span class="font-mono text-[13px] font-semibold text-[#D99B00] bg-[#FFFBEB] border border-[#FDE68A] px-2.5 py-1 rounded-md">${esc(data.serialCode)}</span>
               </div>
-              <h2 class="mt-5 text-[24px] font-bold tracking-[-0.5px] text-[#1D1D1F]">${data.recipientName}</h2>
-              <p class="mt-1 text-[15px] text-[#6E6E73]">${data.roleTitle}</p>
-              <div class="mt-6 pt-4 border-t border-[#D2D2D7]/70 grid grid-cols-2 sm:grid-cols-3 gap-4 text-[13px]">
-                <div>
-                  <div class="text-[#6E6E73]">Type</div>
-                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.credentialType}</div>
+              <h2 class="mt-5 text-[24px] font-bold tracking-[-0.02em] text-[#11141C]">${esc(data.recipientName)}</h2>
+              <p class="mt-1 text-[15px] text-[#525866]">${esc(data.roleTitle)}</p>
+              <div class="mt-6 pt-5 border-t border-[#E2E5EC] grid grid-cols-2 sm:grid-cols-3 gap-4 text-[13px]">
+                <div class="p-3 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC]">
+                  <div class="text-[#7A8191] text-[11px] font-semibold uppercase tracking-wider">Credential Type</div>
+                  <div class="font-semibold text-[#11141C] mt-1">${esc(data.credentialType)}</div>
                 </div>
-                <div>
-                  <div class="text-[#6E6E73]">Hours</div>
-                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.hoursCredited} hrs</div>
+                <div class="p-3 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC]">
+                  <div class="text-[#7A8191] text-[11px] font-semibold uppercase tracking-wider">Hours Credited</div>
+                  <div class="font-semibold text-[#11141C] mt-1">${Number(data.hoursCredited || 0)} hrs</div>
                 </div>
-                <div>
-                  <div class="text-[#6E6E73]">Issued</div>
-                  <div class="font-semibold text-[#1D1D1F] mt-0.5">${data.issueDate}</div>
+                <div class="p-3 rounded-xl bg-[#F8F9FB] border border-[#E2E5EC]">
+                  <div class="text-[#7A8191] text-[11px] font-semibold uppercase tracking-wider">Issue Date</div>
+                  <div class="font-semibold text-[#11141C] mt-1">${esc(data.issueDate)}</div>
                 </div>
+              </div>
+              <div class="mt-5 flex flex-wrap items-center gap-3">
+                <button type="button" id="copy-verify-url" class="h-9 px-4 rounded-xl bg-[#F3F5F8] border border-[#E2E5EC] hover:border-[#002583]/40 text-[13px] font-semibold text-[#002583] transition">
+                  Copy Verification URL
+                </button>
               </div>
             `;
+            const copyBtn = document.getElementById('copy-verify-url');
+            if (copyBtn && navigator.clipboard) {
+              copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                  copyBtn.textContent = 'Copied!';
+                  setTimeout(() => { copyBtn.textContent = 'Copy Verification URL'; }, 1500);
+                });
+              });
+            }
           } else {
             throw new Error(data.message || 'No active credential matches this serial code.');
           }
         } catch (err) {
-          resultBox.innerHTML = `<p class="text-[15px] text-[#B91C1C] font-medium">${err.message || 'Certificate not found.'}</p>`;
+          resultBox.innerHTML = `<p class="text-[15px] text-[#B91C1C] font-medium">${esc(err.message || 'Certificate not found.')}</p>`;
         }
       }
 

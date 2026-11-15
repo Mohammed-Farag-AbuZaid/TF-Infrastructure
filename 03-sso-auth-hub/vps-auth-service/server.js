@@ -100,6 +100,9 @@ function buildCorsHeaders(origin) {
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-TF-Webhook-Secret',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
     Vary: 'Origin',
   };
 }
@@ -316,12 +319,12 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 1. Native VPS Registration (No Firebase Required)
-    if (path === '/api/register' && req.method === 'POST') {
+    if ((path === '/api/register' || path === '/api/sso/register') && req.method === 'POST') {
       const body = await readJsonBody(req);
-      const email = (body.email || '').trim().toLowerCase();
-      const password = body.password || '';
-      const fullName = (body.fullName || email.split('@')[0]).trim();
-      if (!email || password.length < 6) {
+      const email = String(body.email || '').trim().toLowerCase();
+      const password = String(body.password || '');
+      const fullName = String(body.fullName || email.split('@')[0]).trim().slice(0, 120);
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
         return sendJson(res, 400, { error: 'Valid email and password (min 6 chars) required' }, cors);
       }
 
@@ -389,10 +392,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 2. Native VPS Login (No Firebase Required)
-    if (path === '/api/login' && req.method === 'POST') {
+    if ((path === '/api/login' || path === '/api/sso/login') && req.method === 'POST') {
       const body = await readJsonBody(req);
-      const email = (body.email || '').trim().toLowerCase();
-      const password = body.password || '';
+      const email = String(body.email || '').trim().toLowerCase();
+      const password = String(body.password || '');
 
       const userRes = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
       if (userRes.rows.length === 0) {
@@ -430,7 +433,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 3. Session Check / Custom Token Hydration across *.tfunions.com
-    if ((path === '/api/me' || path === '/api/mintCustomToken') && req.method === 'GET') {
+    if ((path === '/api/me' || path === '/api/sso/me' || path === '/api/mintCustomToken') && req.method === 'GET') {
       const cookies = parseCookies(req.headers.cookie);
       const authHeader = req.headers.authorization || '';
       const rawToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : cookies['tf_session'];
@@ -447,7 +450,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     // 4. Logout across *.tfunions.com
-    if (path === '/api/sessionLogout' && req.method === 'POST') {
+    if ((path === '/api/logout' || path === '/api/sessionLogout') && req.method === 'POST') {
       return sendJson(
         res,
         200,
@@ -650,13 +653,101 @@ const server = http.createServer(async (req, res) => {
       );
     }
 
-    // 12. Team Directory (`GET /api/team-directory`)
+    // 12. Public Financial Ledger (`GET /api/ledger`)
+    if (path === '/api/ledger' && req.method === 'GET') {
+      const r = await pool.query(
+        'SELECT tx_id, tx_type, payment_channel, amount_egp, amount_usd, donor_or_vendor_name, is_anonymous, category, verification_status, tx_date, created_at FROM financial_ledger ORDER BY tx_id DESC LIMIT 50'
+      );
+      const baselineEntries = [
+        {
+          id: 'seed-1',
+          entryType: 'inflow',
+          txType: 'Incoming_Donation',
+          paymentChannel: 'Founders_Allocation',
+          amountEgp: 12000,
+          amountUsd: 240,
+          donorOrVendor: 'Founders Seed Allocation',
+          category: 'Infrastructure_Seed',
+          verificationStatus: 'Verified',
+          txDate: '2026-01-15',
+        },
+        {
+          id: 'seed-2',
+          entryType: 'outflow',
+          txType: 'Outgoing_Expense',
+          paymentChannel: 'Infrastructure',
+          amountEgp: 4200,
+          amountUsd: 84,
+          donorOrVendor: 'Dedicated Ubuntu VPS & Domain Renewal',
+          category: 'Hosting_And_Domains',
+          verificationStatus: 'Verified',
+          txDate: '2026-02-01',
+        },
+      ];
+
+      const dbEntries = r.rows.map((row) => {
+        const typeLower = String(row.tx_type || '').toLowerCase();
+        const isOutflow = typeLower.includes('outflow') || typeLower.includes('expense') || typeLower.includes('vendor');
+        return {
+          id: row.tx_id,
+          entryType: isOutflow ? 'outflow' : 'inflow',
+          txType: row.tx_type,
+          paymentChannel: row.payment_channel,
+          amountEgp: Number(row.amount_egp || 0),
+          amountUsd: Number(row.amount_usd || 0),
+          donorOrVendor: row.is_anonymous ? 'Anonymous Supporter' : row.donor_or_vendor_name,
+          category: String(row.category || 'General_Support').replace(/_/g, ' '),
+          verificationStatus: row.verification_status || 'Pending_Review',
+          txDate: row.tx_date,
+        };
+      });
+
+      const entries = [...dbEntries, ...baselineEntries];
+      const totalInflowsEgp = entries
+        .filter((e) => e.entryType === 'inflow' && e.verificationStatus !== 'Rejected')
+        .reduce((acc, e) => acc + Number(e.amountEgp || 0), 0);
+      const totalOutflowsEgp = entries
+        .filter((e) => e.entryType === 'outflow' && e.verificationStatus !== 'Rejected')
+        .reduce((acc, e) => acc + Number(e.amountEgp || 0), 0);
+
+      return sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          summary: {
+            totalInflowsEgp,
+            totalOutflowsEgp,
+            netBalanceEgp: totalInflowsEgp - totalOutflowsEgp,
+            saasOverheadUsd: 0,
+          },
+          entries,
+        },
+        cors
+      );
+    }
+
+    // 13. Team Directory (`GET /api/team-directory`)
     if (path === '/api/team-directory' && req.method === 'GET') {
       const brRes = await baserowInternalRequest(
         'GET',
         `/api/database/rows/table/${BASEROW_TABLES.Public_Team_Directory}/?user_field_names=true`
       );
-      return sendJson(res, 200, { ok: true, members: brRes.results || [] }, cors);
+      const members =
+        Array.isArray(brRes.results) && brRes.results.length > 0
+          ? brRes.results
+          : [
+              { id: 'founder-1', full_name: 'Mohammed Farag', role: 'Co-Founder & Systems Architect', committee: 'Founders', cohort: '2025-10' },
+              { id: 'founder-2', full_name: 'Mohammed Abdelghany', role: 'Co-Founder & Head of Operations', committee: 'Founders', cohort: '2025-10' },
+              { id: 'hr-head-1', full_name: 'آلاء رمضان حسن', role: 'Head', committee: 'HR Team', cohort: '2026-01' },
+              { id: 'hr-head-2', full_name: 'أسماء عبد المجيد خورشيد', role: 'Head', committee: 'HR Team', cohort: '2026-01' },
+              { id: 'mkt-head-1', full_name: 'Mohamed Hussein Mohamed', role: 'Head of Marketing', committee: 'Marketing Team', cohort: '2026-01' },
+              { id: 'mkt-head-2', full_name: 'Omar Mohammed Salah', role: 'Head of Marketing', committee: 'Marketing Team', cohort: '2026-01' },
+              { id: 'pr-head-1', full_name: 'Habiba Khaled Elshazly', role: 'Head', committee: 'PR Team', cohort: '2026-01' },
+              { id: 'pr-head-2', full_name: 'Ziad Omar Mohamed', role: 'Head', committee: 'PR Team', cohort: '2026-01' },
+              { id: 'sm-head-1', full_name: 'رغد محمود الحلموشي', role: 'Head of Social media', committee: 'Social Media Team', cohort: '2026-01' },
+            ];
+      return sendJson(res, 200, { ok: true, count: members.length, members }, cors);
     }
 
     return sendJson(res, 404, { error: 'Not found' }, cors);

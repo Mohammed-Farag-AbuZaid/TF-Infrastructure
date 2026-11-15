@@ -1,6 +1,6 @@
 /**
- * Minimalist Feedback & QA Web Component (`<tf-qa-widget>`)
- * Matches `tf_minimal.dart`: quiet pill button, white modal with hairline border, #F5F5F7 inputs, #002583 button.
+ * TF Unions Global Feedback & QA Web Component (<tf-qa-widget>)
+ * Styled to match TF Sovereign Editorial tokens (#FFFFFF card, #E2E5EC border, #002583 accent).
  */
 class TfQaWidget extends HTMLElement {
   connectedCallback() {
@@ -16,22 +16,23 @@ class TfQaWidget extends HTMLElement {
           right: 20px;
           z-index: 9998;
           height: 38px;
-          padding: 0 14px;
-          border-radius: 999px;
-          background: #F5F5F7;
-          color: #1D1D1F;
-          border: 1px solid #D2D2D7;
+          padding: 0 15px;
+          border-radius: 10px;
+          background: #FFFFFF;
+          color: #11141C;
+          border: 1px solid #E2E5EC;
+          box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
           font-size: 13px;
           font-weight: 600;
           cursor: pointer;
-          transition: background 0.15s ease;
+          transition: border-color 0.15s ease, color 0.15s ease;
         }
-        .trigger:hover { background: #E8E8ED; }
+        .trigger:hover { border-color: #002583; color: #002583; }
         .backdrop {
           display: none;
           position: fixed;
           inset: 0;
-          background: rgba(29, 29, 31, 0.25);
+          background: rgba(17, 20, 28, 0.35);
           z-index: 9999;
           align-items: center;
           justify-content: center;
@@ -40,23 +41,24 @@ class TfQaWidget extends HTMLElement {
         .backdrop.open { display: flex; }
         .sheet {
           width: 100%;
-          max-width: 400px;
+          max-width: 420px;
           background: #FFFFFF;
-          border: 1px solid #D2D2D7;
-          border-radius: 20px;
+          border: 1px solid #E2E5EC;
+          border-radius: 16px;
           padding: 24px;
-          color: #1D1D1F;
+          color: #11141C;
+          box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
         }
         .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin: 0; }
-        .close { background: none; border: none; color: #6E6E73; font-size: 18px; cursor: pointer; padding: 4px; }
+        .title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+        .close { background: #F3F5F8; border: 1px solid #E2E5EC; border-radius: 8px; color: #525866; font-size: 14px; cursor: pointer; width: 28px; height: 28px; }
         .field {
           width: 100%;
-          padding: 13px 14px;
+          padding: 12px 14px;
           border-radius: 12px;
-          background: #F5F5F7;
-          border: 1.5px solid transparent;
-          color: #1D1D1F;
+          background: #F8F9FB;
+          border: 1px solid #E2E5EC;
+          color: #11141C;
           font-size: 14px;
           margin-bottom: 10px;
           outline: none;
@@ -73,14 +75,15 @@ class TfQaWidget extends HTMLElement {
           font-weight: 600;
           cursor: pointer;
         }
-        .msg { font-size: 13px; color: #15803D; margin-top: 8px; display: none; }
+        .btn:hover { background: #001B61; }
+        .msg { font-size: 13px; color: #15803D; margin-top: 10px; display: none; font-weight: 500; }
       </style>
       <button class="trigger" id="open-btn">Feedback</button>
       <div class="backdrop" id="modal">
         <div class="sheet">
           <div class="top">
             <h3 class="title">Report issue or idea</h3>
-            <button class="close" id="close-btn">✕</button>
+            <button class="close" id="close-btn" aria-label="Close">✕</button>
           </div>
           <form id="qa-form">
             <select class="field" id="type">
@@ -89,7 +92,7 @@ class TfQaWidget extends HTMLElement {
             </select>
             <input class="field" id="title" type="text" required placeholder="Short summary" />
             <textarea class="field" id="desc" rows="3" required placeholder="Details"></textarea>
-            <button class="btn" type="submit">Send</button>
+            <button class="btn" type="submit">Send to Engineering</button>
             <div class="msg" id="msg">Sent. Thank you.</div>
           </form>
         </div>

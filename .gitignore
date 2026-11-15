@@ -1,5 +1,9 @@
 node_modules/
 dist/
+!05-web-portals/guides-portal/dist/
+!05-web-portals/guides-portal/dist/**
+!05-web-portals/connect-portal/dist/
+!05-web-portals/connect-portal/dist/**
 .astro/
 .env
 *.local
