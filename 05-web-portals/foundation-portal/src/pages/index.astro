@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const divisions = [
   {
+    index: '01',
     title: 'TF News & Admissions',
     domain: 'news.tfunions.com',
     desc: 'Searchable database of verified full-need university scholarships, summer research institutes, internships, and Olympiad competitions with deadline tracking.',
@@ -13,6 +14,7 @@ const divisions = [
     primary: true,
   },
   {
+    index: '02',
     title: 'TF Guides & Roadmaps',
     domain: 'guides.tfunions.com',
     desc: 'Interactive milestone workbooks authored by alumni finalists covering Regeneron ISEF methodology, Olympiad training plans, and Overleaf paper drafting.',
@@ -23,6 +25,7 @@ const divisions = [
     primary: false,
   },
   {
+    index: '03',
     title: 'TF Connect Chapters',
     domain: 'connect.tfunions.com',
     desc: 'Directory of STEM school chapters, governorate study circles, and student-built technical guilds coordinating peer mentorship across Egypt.',
@@ -33,6 +36,7 @@ const divisions = [
     primary: false,
   },
   {
+    index: '04',
     title: 'STEM Shop & Hardware Labs',
     domain: '/volunteer',
     desc: 'Zero-markup electronics kits, sensors, and lab resources paired with our contributor onboarding pipeline for builders across high school & university teams.',
@@ -45,60 +49,60 @@ const divisions = [
 ];
 
 const leadershipSummary = [
-  { role: 'Founders & Architecture', names: 'Mohammed Farag, Mohammed Abdelghany', cohort: 'Oct 2025' },
-  { role: 'HR & Talent Selection', names: '26 committee members & interviewers', cohort: 'Jan 2026' },
-  { role: 'PR & External Outreach', names: '17 school & university ambassadors', cohort: 'Apr 2026' },
-  { role: 'Marketing & Social Media', names: '26 editorial & campaign leads', cohort: 'Jul 2026' },
+  { role: 'Founders & architecture', names: 'Mohammed Farag, Mohammed Abdelghany', cohort: 'Oct 2025' },
+  { role: 'HR & talent selection', names: '26 committee members & interviewers', cohort: 'Jan 2026' },
+  { role: 'PR & external outreach', names: '17 school & university ambassadors', cohort: 'Apr 2026' },
+  { role: 'Marketing & social media', names: '26 editorial & campaign leads', cohort: 'Jul 2026' },
 ];
 
 const governanceRows = [
-  { label: 'About & Foundation Mandate', desc: 'Mission, founding story, and educational inclusivity', href: '/about' },
-  { label: 'Non-Profit Charter', desc: 'Data sovereignty and forever-free student access articles', href: '/charter' },
-  { label: 'Open Financial Ledger', desc: 'Audited EGP inflows, VPS infrastructure costs, net reserve', href: '/transparency' },
-  { label: 'Student Idea Incubator', desc: 'Propose and upvote open student utilities and research tools', href: '/ideas' },
-  { label: 'Seasonal Volunteer Tracks', desc: 'Apply to Research, Editorial, Engineering, or Outreach', href: '/volunteer' },
-  { label: 'Support & Hardware Grants', desc: 'Direct contribution channels with zero overhead', href: '/support' },
+  { label: 'About & foundation mandate', desc: 'Mission, founding story, and educational inclusivity', href: '/about' },
+  { label: 'Non-profit charter', desc: 'Data sovereignty and forever-free student access articles', href: '/charter' },
+  { label: 'Open financial ledger', desc: 'Audited EGP inflows, VPS infrastructure costs, net reserve', href: '/transparency' },
+  { label: 'Student idea incubator', desc: 'Propose and upvote open student utilities and research tools', href: '/ideas' },
+  { label: 'Seasonal volunteer tracks', desc: 'Apply to research, editorial, engineering, or outreach', href: '/volunteer' },
+  { label: 'Support & hardware grants', desc: 'Direct contribution channels with zero overhead', href: '/support' },
 ];
 ---
 <BaseLayout title="Home">
-  <!-- Section 1: Asymmetric 12-Column Split Architectural Hero + Interactive Union Desk -->
-  <section class="mt-7 border border-[#CFCBC2] rounded-lg overflow-hidden shadow-[0_3px_12px_rgba(10,25,49,0.08)] grid grid-cols-1 lg:grid-cols-12">
-    <!-- Left 7 Cols: Deep Oxford Navy Anchor Stage -->
-    <div class="lg:col-span-7 bg-[#0A1931] text-white p-7 sm:p-10 flex flex-col justify-between">
+  <!-- Section 1: Airy Architectural Split Hero + Crisp Live Union Desk -->
+  <section class="pt-9 sm:pt-12 pb-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+    <!-- Left 7 Cols: Calm Open Canvas Typography & Interactive Console -->
+    <div class="lg:col-span-7 flex flex-col justify-between">
       <div>
-        <div class="inline-block pl-3 border-l-2 border-[#C88A14] text-[13px] font-medium text-[#E2E8F0]">
+        <div class="inline-flex items-center gap-2 pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
           Egyptian student academic and scientific union
         </div>
 
-        <h1 class="font-display mt-5 font-bold text-white leading-[1.06] tracking-[-0.025em]" style="font-size: clamp(34px, 4.4vw, 54px);">
+        <h1 class="font-display mt-4 font-bold text-[#161A22] leading-[1.06] tracking-[-0.03em]" style="font-size: clamp(32px, 4.2vw, 50px);">
           Where Egypt’s STEM scholars research, build, and reach the world’s universities.
         </h1>
 
-        <p class="mt-4 text-[16px] leading-[1.6] text-[#CBD5E1] max-w-[600px]">
-          Founded in October 2025 to equip ambitious high school and university students across all 27 governorates with verified admission datasets, research roadmaps, regional study circles, and credential infrastructure.
+        <p class="mt-4 text-[15.5px] leading-[1.62] text-[#525866] max-w-[580px]">
+          Founded in October 2025 to equip high school and university students across all 27 governorates with verified admission datasets, research roadmaps, regional study circles, and credential infrastructure.
         </p>
 
-        <!-- Interactive Command Console -->
-        <div class="mt-7 bg-[#102447] border border-[#1E3A6D] rounded-lg p-4 sm:p-5">
-          <div class="flex flex-wrap items-center gap-1.5 pb-3 border-b border-[#1E3A6D]" role="tablist" aria-label="Quick Union Actions">
+        <!-- Interactive Command Well -->
+        <div class="mt-7 bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+          <div class="flex flex-wrap items-center gap-1 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg w-fit" role="tablist" aria-label="Quick Union Actions">
             <button
               type="button"
               data-console-tab="verify"
-              class="console-tab px-3 py-1.5 rounded text-[12.5px] font-semibold bg-[#C88A14] text-[#0A1931] transition"
+              class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition"
             >
-              Verify a certificate
+              Verify certificate
             </button>
             <button
               type="button"
               data-console-tab="opps"
-              class="console-tab px-3 py-1.5 rounded text-[12.5px] font-semibold text-[#CBD5E1] hover:text-white hover:bg-[#1E3A6D]/50 transition"
+              class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition"
             >
               Browse admissions
             </button>
             <button
               type="button"
               data-console-tab="team"
-              class="console-tab px-3 py-1.5 rounded text-[12.5px] font-semibold text-[#CBD5E1] hover:text-white hover:bg-[#1E3A6D]/50 transition"
+              class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition"
             >
               Team timeline
             </button>
@@ -107,25 +111,28 @@ const governanceRows = [
           <!-- Mode 1: Verify Certificate -->
           <div id="console-verify" class="console-pane pt-4">
             <form id="hero-verify-form" class="flex flex-col sm:flex-row gap-2.5">
-              <input
-                id="hero-serial-input"
-                type="text"
-                placeholder="Enter serial code (e.g. TFU-2026-8F92A1)"
-                class="font-code flex-1 h-10 px-3.5 rounded bg-[#0A1931] border border-[#1E3A6D] text-[13px] text-white placeholder-[#94A3B8] focus:border-[#C88A14] focus:outline-none uppercase"
-              />
+              <div class="relative flex-1">
+                <input
+                  id="hero-serial-input"
+                  type="text"
+                  placeholder="Enter serial code (e.g. TFU-2026-8F92A1)"
+                  class="font-code w-full h-10 pl-3.5 pr-9 rounded-lg bg-[#EAE8E1]/60 border border-[#DFDDD6] text-[13px] text-[#161A22] placeholder-[#767D8C] focus:bg-white focus:border-[#1B365D] focus:outline-none uppercase transition"
+                />
+                <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[11px] font-code text-[#767D8C]" title="Press / to focus">/</kbd>
+              </div>
               <button
                 type="submit"
-                class="h-10 px-5 rounded bg-[#14388C] hover:bg-[#1D4ED8] border border-[#3B82F6]/30 text-white text-[13px] font-semibold transition shrink-0"
+                class="h-10 px-5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition shrink-0"
               >
                 Inspect credential
               </button>
             </form>
-            <div class="mt-2.5 flex flex-wrap items-center gap-2 text-[12px] text-[#94A3B8]">
+            <div class="mt-2.5 flex flex-wrap items-center gap-2 text-[12px] text-[#767D8C]">
               <span>Sample serials:</span>
-              <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#0A1931] border border-[#1E3A6D] text-[#E2E8F0] hover:border-[#C88A14] transition" data-serial="TFU-2026-8F92A1">
+              <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition" data-serial="TFU-2026-8F92A1">
                 TFU-2026-8F92A1
               </button>
-              <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#0A1931] border border-[#1E3A6D] text-[#E2E8F0] hover:border-[#C88A14] transition" data-serial="TFU-2026-000001">
+              <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition" data-serial="TFU-2026-000001">
                 TFU-2026-000001
               </button>
             </div>
@@ -133,193 +140,199 @@ const governanceRows = [
 
           <!-- Mode 2: Search Scholarships / Admissions -->
           <div id="console-opps" class="console-pane hidden pt-4">
-            <p class="text-[13px] text-[#CBD5E1] mb-3">
+            <p class="text-[13.5px] text-[#525866] mb-3">
               Jump directly to TF News university pathways, full-need financial aid filters, or active seasonal deadlines.
             </p>
             <div class="flex flex-wrap gap-2.5">
-              <a href="https://news.tfunions.com" class="h-10 px-4 inline-flex items-center rounded bg-[#14388C] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition">
-                Open TF News directory ›
+              <a href="https://news.tfunions.com" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                Open TF News directory →
               </a>
-              <a href="https://guides.tfunions.com" class="h-10 px-4 inline-flex items-center rounded bg-[#0A1931] border border-[#1E3A6D] hover:border-[#C88A14] text-white text-[13px] font-semibold transition">
-                Read admissions dossier ›
+              <a href="https://guides.tfunions.com" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] border border-[#DCD9D0] text-[#161A22] text-[13px] font-medium transition">
+                Read admissions guide
               </a>
             </div>
           </div>
 
           <!-- Mode 3: Cohort Timeline -->
           <div id="console-team" class="console-pane hidden pt-4">
-            <p class="text-[13px] text-[#CBD5E1] mb-3">
+            <p class="text-[13.5px] text-[#525866] mb-3">
               Scrub across five milestones from October 2025 founding to 71 contributors nationwide in November 2026.
             </p>
-            <a href="/team" class="h-10 px-4 inline-flex items-center rounded bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition">
-              Launch interactive constellation ›
+            <a href="/team" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+              Launch team constellation →
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Institutional Telemetry Row -->
-      <div class="mt-8 pt-6 border-t border-[#1E3A6D] grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <!-- Quiet Telemetry Strip -->
+      <div class="mt-7 pt-5 border-t border-[#DFDDD6] grid grid-cols-2 sm:grid-cols-4 gap-5">
         <div>
-          <div class="font-display text-[26px] font-bold text-[#C88A14] leading-none">71</div>
-          <div class="text-[12px] text-[#CBD5E1] mt-1">Cohort leaders</div>
+          <div class="font-display text-[24px] font-bold text-[#161A22] leading-none font-code">71</div>
+          <div class="text-[12px] text-[#767D8C] mt-1.5">Cohort leaders</div>
         </div>
         <div>
-          <div class="font-display text-[26px] font-bold text-white leading-none">1,500+</div>
-          <div class="text-[12px] text-[#CBD5E1] mt-1">University pathways</div>
+          <div class="font-display text-[24px] font-bold text-[#161A22] leading-none font-code">1,500+</div>
+          <div class="text-[12px] text-[#767D8C] mt-1.5">University pathways</div>
         </div>
         <div>
-          <div class="font-display text-[26px] font-bold text-white leading-none">27</div>
-          <div class="text-[12px] text-[#CBD5E1] mt-1">Egyptian governorates</div>
+          <div class="font-display text-[24px] font-bold text-[#161A22] leading-none font-code">27</div>
+          <div class="text-[12px] text-[#767D8C] mt-1.5">Governorates</div>
         </div>
         <div>
-          <div class="font-display text-[26px] font-bold text-[#4ADE80] leading-none">$0 / mo</div>
-          <div class="text-[12px] text-[#CBD5E1] mt-1">Commercial SaaS spend</div>
+          <div class="font-display text-[24px] font-bold text-[#0F766E] leading-none font-code">$0</div>
+          <div class="text-[12px] text-[#767D8C] mt-1.5">Commercial fees</div>
         </div>
       </div>
     </div>
 
-    <!-- Right 5 Cols: Crisp Paper Interactive Live Union Desk -->
-    <div class="lg:col-span-5 bg-white p-6 sm:p-8 border-t lg:border-t-0 lg:border-l border-[#CFCBC2] flex flex-col justify-between">
+    <!-- Right 5 Cols: Crisp White Live Union Desk Widget -->
+    <div class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)] flex flex-col justify-between">
       <div>
         <div class="flex items-center justify-between gap-3">
-          <h2 class="font-display text-[22px] font-bold text-[#12161F]">Live Union Desk</h2>
-          <span class="font-code text-[11px] font-medium px-2 py-0.5 rounded bg-[#E2DFD7] text-[#12161F] border border-[#C8C3B8]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#0F766E]" aria-hidden="true"></span>
+            <h2 class="font-display text-[19px] font-semibold text-[#161A22]">Live union desk</h2>
+          </div>
+          <span class="font-code text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] text-[#525866] border border-[#DCD9D0]">
             Season 2
           </span>
         </div>
 
-        <!-- Warm Sand Segmented Switch -->
-        <div class="mt-4 p-1 bg-[#E2DFD7] border border-[#C8C3B8] rounded-lg grid grid-cols-3 gap-1">
-          <button type="button" data-desk="deadlines" class="desk-tab py-1.5 px-2 rounded text-[12.5px] font-semibold bg-white text-[#0A1931] border border-[#CFCBC2] shadow-sm transition">
+        <!-- Soft Stone Segmented Switch -->
+        <div class="mt-4 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg grid grid-cols-3 gap-1">
+          <button type="button" data-desk="deadlines" class="desk-tab py-1.5 px-2 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition">
             Deadlines
           </button>
-          <button type="button" data-desk="chapters" class="desk-tab py-1.5 px-2 rounded text-[12.5px] font-semibold text-[#4A5262] hover:text-[#12161F] border border-transparent transition">
+          <button type="button" data-desk="chapters" class="desk-tab py-1.5 px-2 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">
             Chapters
           </button>
-          <button type="button" data-desk="ledger" class="desk-tab py-1.5 px-2 rounded text-[12.5px] font-semibold text-[#4A5262] hover:text-[#12161F] border border-transparent transition">
+          <button type="button" data-desk="ledger" class="desk-tab py-1.5 px-2 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">
             Treasury
           </button>
         </div>
 
         <!-- Desk Pane 1: Live Opportunities -->
-        <div id="desk-deadlines" class="desk-pane mt-4 divide-y divide-[#E2DFD7]">
-          <div class="py-4 text-[13px] text-[#4A5262]">Synchronizing live feed from TF API...</div>
+        <div id="desk-deadlines" class="desk-pane mt-4 divide-y divide-[#EAE8E1]">
+          <div class="py-4 text-[13px] text-[#767D8C]">Synchronizing live feed from TF API...</div>
         </div>
 
         <!-- Desk Pane 2: Active Chapters -->
-        <div id="desk-chapters" class="desk-pane hidden mt-4 divide-y divide-[#E2DFD7]">
-          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#ECEAE4]/50 px-2 -mx-2 rounded transition">
+        <div id="desk-chapters" class="desk-pane hidden mt-4 divide-y divide-[#EAE8E1]">
+          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2 -mx-2 rounded-lg transition">
             <div>
-              <div class="text-[14px] font-semibold text-[#12161F]">STEM 6th of October Chapter</div>
-              <div class="text-[12px] text-[#4A5262]">ISEF &amp; Olympiad Mentorship Circle</div>
+              <div class="text-[13.5px] font-medium text-[#161A22]">STEM 6th of October Chapter</div>
+              <div class="text-[12px] text-[#767D8C]">ISEF &amp; Olympiad Mentorship Circle</div>
             </div>
-            <span class="text-[11.5px] font-semibold px-2 py-0.5 rounded bg-[#E2DFD7] text-[#12161F]">Giza</span>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Giza</span>
           </a>
-          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#ECEAE4]/50 px-2 -mx-2 rounded transition">
+          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2 -mx-2 rounded-lg transition">
             <div>
-              <div class="text-[14px] font-semibold text-[#12161F]">STEM Maadi Research Collective</div>
-              <div class="text-[12px] text-[#4A5262]">Scientific Writing &amp; Global Summer Aid</div>
+              <div class="text-[13.5px] font-medium text-[#161A22]">STEM Maadi Research Collective</div>
+              <div class="text-[12px] text-[#767D8C]">Scientific Writing &amp; Global Summer Aid</div>
             </div>
-            <span class="text-[11.5px] font-semibold px-2 py-0.5 rounded bg-[#E2DFD7] text-[#12161F]">Cairo</span>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Cairo</span>
           </a>
-          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#ECEAE4]/50 px-2 -mx-2 rounded transition">
+          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2 -mx-2 rounded-lg transition">
             <div>
-              <div class="text-[14px] font-semibold text-[#12161F]">Alexandria Robotics &amp; AI Club</div>
-              <div class="text-[12px] text-[#4A5262]">Hardware CAD &amp; Competitive Informatics</div>
+              <div class="text-[13.5px] font-medium text-[#161A22]">Alexandria Robotics &amp; AI Club</div>
+              <div class="text-[12px] text-[#767D8C]">Hardware CAD &amp; Competitive Informatics</div>
             </div>
-            <span class="text-[11.5px] font-semibold px-2 py-0.5 rounded bg-[#E2DFD7] text-[#12161F]">Alexandria</span>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Alexandria</span>
           </a>
-          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#ECEAE4]/50 px-2 -mx-2 rounded transition">
+          <a href="https://connect.tfunions.com" class="py-3 flex items-center justify-between hover:bg-[#F3F2EE]/70 px-2 -mx-2 rounded-lg transition">
             <div>
-              <div class="text-[14px] font-semibold text-[#12161F]">Upper Egypt STEM &amp; Thanaweya Bridge</div>
-              <div class="text-[12px] text-[#4A5262]">Admissions &amp; Research Access Program</div>
+              <div class="text-[13.5px] font-medium text-[#161A22]">Upper Egypt STEM &amp; Thanaweya Bridge</div>
+              <div class="text-[12px] text-[#767D8C]">Admissions &amp; Research Access Program</div>
             </div>
-            <span class="text-[11.5px] font-semibold px-2 py-0.5 rounded bg-[#E2DFD7] text-[#12161F]">Assiut</span>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Assiut</span>
           </a>
         </div>
 
         <!-- Desk Pane 3: Open Ledger Snapshot -->
         <div id="desk-ledger" class="desk-pane hidden mt-4 space-y-3">
-          <div class="p-3.5 rounded-lg bg-[#ECEAE4] border border-[#CFCBC2] grid grid-cols-3 gap-2 text-center">
+          <div class="p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-3 gap-2 text-center">
             <div>
-              <div class="text-[11px] text-[#4A5262]">Inflows</div>
-              <div id="home-ledger-in" class="text-[14px] font-bold text-[#15803D] mt-0.5">12,000 EGP</div>
+              <div class="text-[11px] text-[#767D8C]">Inflows</div>
+              <div id="home-ledger-in" class="font-code text-[13.5px] font-semibold text-[#0F766E] mt-0.5">12,000 EGP</div>
             </div>
             <div>
-              <div class="text-[11px] text-[#4A5262]">Outflows</div>
-              <div id="home-ledger-out" class="text-[14px] font-bold text-[#12161F] mt-0.5">4,200 EGP</div>
+              <div class="text-[11px] text-[#767D8C]">Outflows</div>
+              <div id="home-ledger-out" class="font-code text-[13.5px] font-semibold text-[#161A22] mt-0.5">4,200 EGP</div>
             </div>
             <div>
-              <div class="text-[11px] text-[#4A5262]">Reserve</div>
-              <div id="home-ledger-net" class="text-[14px] font-bold text-[#14388C] mt-0.5">7,800 EGP</div>
+              <div class="text-[11px] text-[#767D8C]">Reserve</div>
+              <div id="home-ledger-net" class="font-code text-[13.5px] font-semibold text-[#1B365D] mt-0.5">7,800 EGP</div>
             </div>
           </div>
-          <div class="text-[13px] text-[#4A5262] leading-[1.55]">
+          <div class="text-[13px] text-[#525866] leading-[1.6]">
             100% of funds cover self-hosted Ubuntu VPS computing and domain renewals. Inspect receipts and transaction proofs publicly.
           </div>
         </div>
       </div>
 
-      <div class="mt-6 pt-4 border-t border-[#CFCBC2] flex items-center justify-between text-[13px]">
-        <a id="desk-footer-link" href="https://news.tfunions.com" class="font-semibold text-[#14388C] hover:underline">
-          View all open deadlines ›
+      <div class="mt-6 pt-4 border-t border-[#DFDDD6] flex items-center justify-between text-[13px]">
+        <a id="desk-footer-link" href="https://news.tfunions.com" class="font-medium text-[#1B365D] hover:underline">
+          View all open deadlines →
         </a>
-        <a href="/transparency" class="text-[#4A5262] hover:text-[#12161F] font-medium">
+        <a href="/transparency" class="text-[#767D8C] hover:text-[#161A22] font-medium transition">
           Audit ledger
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Section 2: Union Divisions Architectural Ledger (12-col Horizontal Index Rows, NOT a 2x2 SaaS card grid) -->
-  <section class="mt-10">
+  <!-- Section 2: Union Divisions Ledger with Crafted Mono Index Numbers -->
+  <section class="mt-8">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
       <div>
-        <h2 class="font-display text-[28px] sm:text-[32px] font-bold tracking-[-0.02em] text-[#12161F]">
+        <h2 class="font-display text-[24px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#161A22]">
           Union divisions and public registries
         </h2>
-        <p class="text-[14px] text-[#4A5262] mt-0.5">
-          Purpose-built web and mobile systems running under one unified TF Passport session.
+        <p class="text-[14px] text-[#525866] mt-0.5">
+          Purpose-built systems running under one unified TF Passport session.
         </p>
       </div>
-      <a href="https://docs.tfunions.com" class="text-[13px] font-semibold text-[#14388C] hover:underline shrink-0">
-        System architecture reference ›
+      <a href="https://docs.tfunions.com" class="text-[13px] font-medium text-[#1B365D] hover:underline shrink-0">
+        System architecture reference →
       </a>
     </div>
 
-    <div class="bg-white border border-[#CFCBC2] rounded-lg overflow-hidden shadow-[0_2px_6px_rgba(10,25,49,0.04)] divide-y divide-[#CFCBC2]">
+    <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.04)] divide-y divide-[#DFDDD6]">
       {divisions.map((d) => (
-        <div class="p-6 sm:px-8 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center hover:bg-[#ECEAE4]/35 transition">
-          <div class="lg:col-span-4">
-            <div class="font-code text-[12px] text-[#14388C] font-medium">{d.domain}</div>
-            <h3 class="font-display text-[22px] font-bold text-[#12161F] mt-1 leading-tight">
-              {d.title}
-            </h3>
+        <div class="p-6 sm:px-7 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center hover:bg-[#FAF9F6] transition">
+          <div class="lg:col-span-4 flex items-start gap-3.5">
+            <span class="font-code text-[12px] text-[#767D8C] pt-1 shrink-0">{d.index}</span>
+            <div>
+              <div class="font-code text-[12px] text-[#0F766E] font-medium">{d.domain}</div>
+              <h3 class="font-display text-[19px] font-semibold text-[#161A22] mt-0.5 leading-snug">
+                {d.title}
+              </h3>
+            </div>
           </div>
 
           <div class="lg:col-span-5">
-            <p class="text-[14px] leading-[1.55] text-[#4A5262]">{d.desc}</p>
+            <p class="text-[13.5px] leading-[1.6] text-[#525866]">{d.desc}</p>
             <div class="mt-2.5 flex flex-wrap gap-1.5">
               {d.tags.map((t) => (
-                <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded bg-[#E2DFD7] text-[#12161F] border border-[#C8C3B8]">
+                <span class="text-[11.5px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] text-[#525866] border border-[#DCD9D0]">
                   {t}
                 </span>
               ))}
             </div>
           </div>
 
-          <div class="lg:col-span-3 flex lg:flex-col items-center lg:items-end justify-between gap-3">
-            <span class="text-[12px] font-medium text-[#4A5262]">{d.metric}</span>
+          <div class="lg:col-span-3 flex lg:flex-col items-center lg:items-end justify-between gap-2.5">
+            <span class="text-[12px] font-medium text-[#767D8C]">{d.metric}</span>
             <a
               href={d.href}
               class={
                 d.primary
-                  ? 'h-10 px-5 inline-flex items-center justify-center rounded-md bg-[#14388C] hover:bg-[#0F2C70] text-white text-[13px] font-semibold transition'
-                  : 'h-10 px-5 inline-flex items-center justify-center rounded-md bg-[#E2DFD7] hover:bg-[#D5D1C7] border border-[#C8C3B8] text-[#12161F] text-[13px] font-semibold transition'
+                  ? 'h-9 px-4 inline-flex items-center justify-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition'
+                  : 'h-9 px-4 inline-flex items-center justify-center rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition'
               }
             >
-              {d.cta} ›
+              {d.cta} →
             </a>
           </div>
         </div>
@@ -327,65 +340,65 @@ const governanceRows = [
     </div>
   </section>
 
-  <!-- Section 3: Split Constellation Preview & Institutional Governance Directory -->
+  <!-- Section 3: Calm Light Constellation Preview & Governance Index -->
   <section class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-    <!-- Left 7 Cols: Deep Oxford Navy Leadership Constellation Preview -->
-    <div class="lg:col-span-7 bg-[#0A1931] text-white border border-[#1E3A6D] rounded-lg p-7 sm:p-8 flex flex-col justify-between">
+    <!-- Left 7 Cols: Crisp White Leadership Constellation Card -->
+    <div class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] flex flex-col justify-between">
       <div>
-        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1E3A6D]">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
           <div>
-            <h2 class="font-display text-[25px] font-bold text-white leading-tight">
+            <h2 class="font-display text-[22px] font-bold text-[#161A22] leading-tight">
               Interactive 71-member cohort constellation
             </h2>
-            <p class="text-[13.5px] text-[#CBD5E1] mt-1">
+            <p class="text-[13.5px] text-[#525866] mt-1">
               Inspect every contributor from October 2025 inception through November 2026 scale.
             </p>
           </div>
-          <span class="font-code text-[11.5px] px-2.5 py-1 rounded bg-[#102447] border border-[#1E3A6D] text-[#C88A14]">
+          <span class="font-code text-[11.5px] px-2.5 py-1 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] font-medium">
             Oct 2025 – Nov 2026
           </span>
         </div>
 
         <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {leadershipSummary.map((item) => (
-            <div class="bg-[#102447] border border-[#1E3A6D] rounded-md p-4">
-              <div class="flex items-center justify-between gap-2 text-[11.5px] text-[#C88A14] font-semibold">
-                <span>{item.role}</span>
-                <span class="font-code text-[#94A3B8]">{item.cohort}</span>
+            <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4 hover:border-[#B8B4A8] transition">
+              <div class="flex items-center justify-between gap-2 text-[12px]">
+                <span class="font-semibold text-[#1B365D]">{item.role}</span>
+                <span class="font-code text-[#767D8C]">{item.cohort}</span>
               </div>
-              <div class="mt-1.5 text-[14px] font-medium text-white">{item.names}</div>
+              <div class="mt-1.5 text-[13.5px] font-medium text-[#161A22]">{item.names}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div class="mt-6 pt-5 border-t border-[#1E3A6D] flex flex-wrap items-center justify-between gap-3">
-        <span class="text-[13px] text-[#94A3B8]">Timeline scrubber · Division filters · Profile inspector</span>
+      <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
+        <span class="text-[13px] text-[#767D8C]">Timeline scrubber · Division filters · Profile inspector</span>
         <a
           href="/team"
-          class="h-10 px-5 inline-flex items-center justify-center rounded-md bg-[#C88A14] hover:bg-[#B2790E] text-[#0A1931] text-[13px] font-bold transition"
+          class="h-9 px-4 inline-flex items-center justify-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
         >
-          Open Team Graph ›
+          Open team graph →
         </a>
       </div>
     </div>
 
-    <!-- Right 5 Cols: Crisp Paper Governance & Participation Index -->
-    <div class="lg:col-span-5 bg-white border border-[#CFCBC2] rounded-lg p-6 sm:p-7 flex flex-col justify-between">
+    <!-- Right 5 Cols: Calm Governance & Participation Index -->
+    <div class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] flex flex-col justify-between">
       <div>
-        <h2 class="font-display text-[24px] font-bold text-[#12161F] pb-3 border-b border-[#CFCBC2]">
+        <h2 class="font-display text-[22px] font-bold text-[#161A22] pb-3.5 border-b border-[#DFDDD6]">
           Governance and participation
         </h2>
-        <div class="divide-y divide-[#E2DFD7]">
+        <div class="divide-y divide-[#EAE8E1]">
           {governanceRows.map((row) => (
-            <a href={row.href} class="py-3 flex items-center justify-between gap-4 hover:bg-[#ECEAE4]/40 px-2 -mx-2 rounded transition group">
+            <a href={row.href} class="py-3 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2 -mx-2 rounded-lg transition group">
               <div>
-                <div class="text-[14.5px] font-semibold text-[#12161F] group-hover:text-[#14388C] transition">
+                <div class="text-[14px] font-medium text-[#161A22] group-hover:text-[#1B365D] transition">
                   {row.label}
                 </div>
-                <div class="text-[12.5px] text-[#4A5262] mt-0.5">{row.desc}</div>
+                <div class="text-[12.5px] text-[#767D8C] mt-0.5">{row.desc}</div>
               </div>
-              <span class="text-[15px] font-semibold text-[#14388C] shrink-0 group-hover:translate-x-0.5 transition-transform">›</span>
+              <span class="text-[14px] font-medium text-[#767D8C] group-hover:text-[#1B365D] shrink-0 group-hover:translate-x-0.5 transition-all">→</span>
             </a>
           ))}
         </div>
@@ -403,14 +416,25 @@ const governanceRows = [
         .replace(/'/g, '&#39;');
     }
 
+    // Keyboard shortcut '/' focuses serial input
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        const input = document.getElementById('hero-serial-input');
+        if (input) {
+          e.preventDefault();
+          input.focus();
+        }
+      }
+    });
+
     // Hero Console Tabs
     document.querySelectorAll('.console-tab').forEach((btn) => {
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-console-tab');
         document.querySelectorAll('.console-tab').forEach((b) => {
-          b.className = 'console-tab px-3 py-1.5 rounded text-[12.5px] font-semibold text-[#CBD5E1] hover:text-white hover:bg-[#1E3A6D]/50 transition';
+          b.className = 'console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
         });
-        btn.className = 'console-tab px-3 py-1.5 rounded text-[12.5px] font-semibold bg-[#C88A14] text-[#0A1931] transition';
+        btn.className = 'console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
         document.querySelectorAll('.console-pane').forEach((p) => p.classList.add('hidden'));
         const pane = document.getElementById('console-' + target);
         if (pane) pane.classList.remove('hidden');
@@ -440,9 +464,9 @@ const governanceRows = [
 
     // Live Union Desk Switcher
     const footerLinks = {
-      deadlines: { text: 'View all open deadlines ›', href: 'https://news.tfunions.com' },
-      chapters: { text: 'Browse all regional chapters ›', href: 'https://connect.tfunions.com' },
-      ledger: { text: 'Open full audit trail ›', href: '/transparency' },
+      deadlines: { text: 'View all open deadlines →', href: 'https://news.tfunions.com' },
+      chapters: { text: 'Browse all regional chapters →', href: 'https://connect.tfunions.com' },
+      ledger: { text: 'Open full audit trail →', href: '/transparency' },
     };
     const deskFooterLink = document.getElementById('desk-footer-link');
 
@@ -450,9 +474,9 @@ const governanceRows = [
       btn.addEventListener('click', () => {
         const desk = btn.getAttribute('data-desk');
         document.querySelectorAll('.desk-tab').forEach((b) => {
-          b.className = 'desk-tab py-1.5 px-2 rounded text-[12.5px] font-semibold text-[#4A5262] hover:text-[#12161F] border border-transparent transition';
+          b.className = 'desk-tab py-1.5 px-2 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
         });
-        btn.className = 'desk-tab py-1.5 px-2 rounded text-[12.5px] font-semibold bg-white text-[#0A1931] border border-[#CFCBC2] shadow-sm transition';
+        btn.className = 'desk-tab py-1.5 px-2 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
         document.querySelectorAll('.desk-pane').forEach((p) => p.classList.add('hidden'));
         const pane = document.getElementById('desk-' + desk);
         if (pane) pane.classList.remove('hidden');
@@ -476,12 +500,12 @@ const governanceRows = [
         .slice(0, 4)
         .map(
           (o) => `
-          <a href="https://news.tfunions.com" class="py-3 flex items-center justify-between gap-3 hover:bg-[#ECEAE4]/50 px-2 -mx-2 rounded transition group">
+          <a href="https://news.tfunions.com" class="py-3 flex items-center justify-between gap-3 hover:bg-[#F3F2EE]/70 px-2 -mx-2 rounded-lg transition group">
             <div class="min-w-0">
-              <div class="text-[11.5px] font-semibold text-[#14388C]">${esc(o.category || o.section || 'Opportunity')}</div>
-              <div class="text-[14px] font-semibold text-[#12161F] group-hover:text-[#14388C] truncate mt-0.5">${esc(o.title)}</div>
+              <div class="text-[11.5px] font-medium text-[#0F766E]">${esc(o.category || o.section || 'Opportunity')}</div>
+              <div class="text-[13.5px] font-medium text-[#161A22] group-hover:text-[#1B365D] truncate mt-0.5">${esc(o.title)}</div>
             </div>
-            <span class="text-[11.5px] font-medium px-2.5 py-1 rounded bg-[#E2DFD7] border border-[#C8C3B8] text-[#12161F] shrink-0">${esc(o.topic || 'Open')}</span>
+            <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">${esc(o.topic || 'Open')}</span>
           </a>
         `
         )

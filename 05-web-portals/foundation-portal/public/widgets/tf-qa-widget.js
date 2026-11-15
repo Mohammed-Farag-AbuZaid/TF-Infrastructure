@@ -1,6 +1,6 @@
 /**
  * TF Unions Global Feedback & QA Web Component (<tf-qa-widget>)
- * Styled to match TF Oxford & Stone (#0A1931 header, #FFFFFF sheet, #CFCBC2 border, #C88A14 brass accent).
+ * Styled to match Calm Alabaster & Fjord Slate (#FFFFFF sheet, #DFDDD6 border, #1B365D action).
  */
 class TfQaWidget extends HTMLElement {
   connectedCallback() {
@@ -15,24 +15,24 @@ class TfQaWidget extends HTMLElement {
           bottom: 20px;
           right: 20px;
           z-index: 9998;
-          height: 40px;
-          padding: 0 16px;
-          border-radius: 6px;
-          background: #0A1931;
-          color: #FFFFFF;
-          border: 1.5px solid #C88A14;
-          box-shadow: 0 4px 12px rgba(10, 25, 49, 0.18);
+          height: 38px;
+          padding: 0 15px;
+          border-radius: 9px;
+          background: #FFFFFF;
+          color: #161A22;
+          border: 1px solid #DFDDD6;
+          box-shadow: 0 2px 8px rgba(22, 26, 34, 0.08);
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 500;
           cursor: pointer;
-          transition: background 0.15s ease;
+          transition: all 0.15s ease;
         }
-        .trigger:hover { background: #14388C; }
+        .trigger:hover { border-color: #1B365D; color: #1B365D; }
         .backdrop {
           display: none;
           position: fixed;
           inset: 0;
-          background: rgba(10, 25, 49, 0.52);
+          background: rgba(22, 26, 34, 0.42);
           z-index: 9999;
           align-items: center;
           justify-content: center;
@@ -43,49 +43,50 @@ class TfQaWidget extends HTMLElement {
           width: 100%;
           max-width: 440px;
           background: #FFFFFF;
-          border: 1px solid #CFCBC2;
-          border-radius: 8px;
+          border: 1px solid #DFDDD6;
+          border-radius: 12px;
           overflow: hidden;
-          color: #12161F;
-          box-shadow: 0 18px 40px rgba(10, 25, 49, 0.24);
+          color: #161A22;
+          box-shadow: 0 16px 36px rgba(22, 26, 34, 0.14);
         }
         .top {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background: #0A1931;
-          color: #FFFFFF;
+          background: #F3F2EE;
+          color: #161A22;
           padding: 16px 20px;
-          border-bottom: 2px solid #C88A14;
+          border-bottom: 1px solid #DFDDD6;
         }
-        .title { font-family: 'Newsreader', Georgia, serif; font-size: 20px; font-weight: 700; margin: 0; }
-        .close { background: #102447; border: 1px solid #1E3A6D; border-radius: 6px; color: #FFFFFF; font-size: 14px; cursor: pointer; width: 30px; height: 30px; }
+        .title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 18px; font-weight: 700; margin: 0; }
+        .close { background: #FFFFFF; border: 1px solid #DFDDD6; border-radius: 8px; color: #525866; font-size: 13px; cursor: pointer; width: 28px; height: 28px; }
+        .close:hover { color: #161A22; border-color: #B8B4A8; }
         .body { padding: 20px; }
         .field {
           width: 100%;
-          padding: 11px 13px;
-          border-radius: 6px;
-          background: #ECEAE4;
-          border: 1px solid #CFCBC2;
-          color: #12161F;
-          font-size: 14px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          background: #EAE8E1;
+          border: 1px solid #DFDDD6;
+          color: #161A22;
+          font-size: 13.5px;
           margin-bottom: 12px;
           outline: none;
         }
-        .field:focus { border-color: #14388C; background: #FFFFFF; }
+        .field:focus { border-color: #1B365D; background: #FFFFFF; }
         .btn {
           width: 100%;
-          height: 42px;
-          border-radius: 6px;
-          background: #14388C;
+          height: 40px;
+          border-radius: 8px;
+          background: #1B365D;
           color: #FFFFFF;
           border: none;
-          font-size: 14px;
-          font-weight: 600;
+          font-size: 13.5px;
+          font-weight: 500;
           cursor: pointer;
         }
-        .btn:hover { background: #0F2C70; }
-        .msg { font-size: 13px; color: #15803D; margin-top: 10px; display: none; font-weight: 600; }
+        .btn:hover { background: #132847; }
+        .msg { font-size: 13px; color: #0F766E; margin-top: 10px; display: none; font-weight: 500; }
       </style>
       <button class="trigger" id="open-btn">Feedback</button>
       <div class="backdrop" id="modal">

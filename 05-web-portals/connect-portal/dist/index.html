@@ -5,31 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TF Connect — Governorate Chapters &amp; Project Guilds</title>
   <meta name="description" content="Directory of regional STEM chapters, research study circles, and student-led technical guilds across Egypt." />
-  <meta name="theme-color" content="#0A1931" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%230A1931%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%225%22%20width%3D%225%22%20height%3D%225%22%20rx%3D%221%22%20fill%3D%22%23C88A14%22%2F%3E%3Cpath%20d%3D%22M6.5%209.5h11.5v2.7h-4.2V23h-3V12.2H6.5V9.5zm10.8%200H25v2.7h-4.7v2.9h3.9v2.6h-3.9V23h-3V9.5z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" />
+  <meta name="theme-color" content="#F3F2EE" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%231B365D%22%2F%3E%3Crect%20x%3D%2222%22%20y%3D%225%22%20width%3D%225%22%20height%3D%225%22%20rx%3D%221.5%22%20fill%3D%22%230F766E%22%2F%3E%3Cpath%20d%3D%22M6.8%209.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8%200H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #0A1931;
-      --navy-mid: #102447;
-      --navy-border: #1E3A6D;
-      --stone: #ECEAE4;
-      --sand: #E2DFD7;
-      --sand-border: #C8C3B8;
+      --canvas: #F3F2EE;
+      --well: #EAE8E1;
+      --well-border: #DCD9D0;
       --paper: #FFFFFF;
-      --border: #CFCBC2;
-      --cobalt: #14388C;
-      --cobalt-dark: #0F2C70;
-      --brass: #C88A14;
-      --ink: #12161F;
-      --slate: #4A5262;
+      --border: #DFDDD6;
+      --primary: #1B365D;
+      --primary-hover: #132847;
+      --teal: #0F766E;
+      --ink: #161A22;
+      --slate: #525866;
+      --muted: #767D8C;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: var(--stone);
+      background: var(--canvas);
       color: var(--ink);
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -38,100 +36,100 @@
       flex-direction: column;
     }
     a { color: inherit; text-decoration: none; }
-    .font-display { font-family: 'Newsreader', Georgia, serif; }
-    .font-code { font-family: 'JetBrains Mono', monospace; }
-    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .font-display { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; }
+    .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
-    .switcher { background: #061022; border-bottom: 1px solid var(--navy-border); color: #CBD5E1; font-size: 12px; }
-    .switcher-inner { height: 40px; display: flex; align-items: stretch; justify-content: space-between; overflow-x: auto; }
-    .switcher-tabs { display: flex; align-items: stretch; gap: 4px; white-space: nowrap; }
-    .switcher-tabs a { padding: 0 12px; display: flex; align-items: center; color: #94A3B8; }
-    .switcher-tabs a:hover { color: #FFFFFF; }
+    .switcher { background: var(--well); border-bottom: 1px solid var(--border); color: var(--slate); font-size: 12px; }
+    .switcher-inner { height: 36px; display: flex; align-items: center; justify-content: space-between; overflow-x: auto; }
+    .switcher-tabs { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .switcher-tabs a { padding: 4px 10px; border-radius: 6px; color: var(--slate); font-weight: 500; transition: all 0.15s; }
+    .switcher-tabs a:hover { color: var(--ink); background: rgba(255,255,255,0.6); }
     .switcher-tabs a.active {
-      color: #FFFFFF; font-weight: 600; background: var(--navy);
-      border-top: 2px solid var(--brass); border-left: 1px solid var(--navy-border); border-right: 1px solid var(--navy-border);
+      color: var(--ink); font-weight: 600; background: var(--paper);
+      border: 1px solid var(--border); box-shadow: 0 1px 1px rgba(22,26,34,0.03);
     }
 
-    .masthead { background: var(--navy); border-bottom: 1px solid var(--navy-border); color: #FFFFFF; position: sticky; top: 0; z-index: 30; }
-    .masthead-inner { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .masthead { background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 30; }
+    .masthead-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .brand { display: flex; align-items: center; gap: 12px; }
-    .btn-brass {
+    .btn-primary {
       display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px;
-      border-radius: 6px; background: var(--brass); color: var(--navy); font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+      border-radius: 8px; background: var(--primary); color: #FFFFFF; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s;
     }
-    .btn-brass:hover { background: #B2790E; }
+    .btn-primary:hover { background: var(--primary-hover); }
 
-    .layout { margin-top: 32px; margin-bottom: 64px; display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+    .layout { margin-top: 32px; margin-bottom: 64px; display: grid; grid-template-columns: 310px 1fr; gap: 24px; align-items: start; }
     @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
     .rail {
-      background: var(--navy); color: #FFFFFF; border: 1px solid var(--navy-border);
-      border-radius: 8px; padding: 26px; position: sticky; top: 90px;
-      box-shadow: 0 3px 12px rgba(10, 25, 49, 0.08);
+      background: var(--paper); color: var(--ink); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px; position: sticky; top: 88px;
+      box-shadow: 0 1px 2px rgba(22, 26, 34, 0.04);
     }
     @media (max-width: 900px) { .rail { position: static; } }
-    .rail-tag { padding-left: 10px; border-left: 2px solid var(--brass); font-size: 12.5px; color: #E2E8F0; }
-    .rail h1 { font-size: 32px; line-height: 1.08; margin: 12px 0 0; }
-    .rail p { font-size: 14px; line-height: 1.6; color: #CBD5E1; margin: 10px 0 0; }
+    .rail-tag { padding-left: 10px; border-left: 2px solid var(--teal); font-size: 12.5px; color: var(--slate); font-weight: 500; }
+    .rail h1 { font-size: 27px; line-height: 1.1; letter-spacing: -0.025em; margin: 10px 0 0; }
+    .rail p { font-size: 13.5px; line-height: 1.6; color: var(--slate); margin: 10px 0 0; }
 
-    .ctrl-label { display: block; font-size: 12px; font-weight: 600; color: #CBD5E1; margin-top: 16px; margin-bottom: 6px; }
+    .ctrl-label { display: block; font-size: 12px; font-weight: 500; color: var(--ink); margin-top: 16px; margin-bottom: 6px; }
     .ctrl-input {
-      width: 100%; height: 40px; padding: 0 12px; border-radius: 6px;
-      background: var(--navy-mid); border: 1px solid var(--navy-border); color: #FFFFFF; font-size: 13.5px; outline: none;
+      width: 100%; height: 38px; padding: 0 12px; border-radius: 8px;
+      background: rgba(234,232,225,0.6); border: 1px solid var(--border); color: var(--ink); font-size: 13.5px; outline: none; transition: all 0.15s;
     }
-    .ctrl-input::placeholder { color: #94A3B8; }
-    .ctrl-input:focus { border-color: var(--brass); }
+    .ctrl-input::placeholder { color: var(--muted); }
+    .ctrl-input:focus { background: var(--paper); border-color: var(--primary); }
 
-    .type-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .type-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--well); border: 1px solid var(--well-border); border-radius: 10px; }
     .tab-btn {
-      padding: 8px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600;
-      background: var(--navy-mid); color: #CBD5E1; border: 1px solid var(--navy-border); cursor: pointer;
+      padding: 7px 10px; border-radius: 7px; font-size: 12.5px; font-weight: 500;
+      background: transparent; color: var(--slate); border: 1px solid transparent; cursor: pointer; transition: all 0.15s;
     }
-    .tab-btn:hover { border-color: var(--brass); color: #FFFFFF; }
-    .tab-btn.active { background: var(--brass); color: var(--navy); border-color: var(--brass); font-weight: 700; }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { background: var(--paper); color: var(--ink); border-color: var(--border); box-shadow: 0 1px 1px rgba(22,26,34,0.04); font-weight: 600; }
 
     .atlas-sheet {
-      background: var(--paper); border: 1px solid var(--border); border-radius: 8px;
-      overflow: hidden; box-shadow: 0 2px 6px rgba(10, 25, 49, 0.05);
+      background: var(--paper); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; box-shadow: 0 1px 2px rgba(22, 26, 34, 0.04);
     }
     .sheet-head {
-      padding: 16px 24px; background: var(--sand); border-bottom: 1px solid var(--border);
+      padding: 15px 24px; background: var(--well); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
     .chapter-row {
-      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      padding: 20px 24px; border-bottom: 1px solid var(--well);
       display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; transition: background 0.15s ease;
     }
     .chapter-row:last-child { border-bottom: none; }
-    .chapter-row:hover { background: rgba(236, 234, 228, 0.45); }
+    .chapter-row:hover { background: #FAF9F6; }
     @media (max-width: 640px) { .chapter-row { flex-direction: column; align-items: flex-start; } }
 
-    .type-lbl { font-size: 12px; font-weight: 700; color: var(--cobalt); }
-    .gov-chip { background: var(--sand); border: 1px solid var(--sand-border); padding: 2px 8px; border-radius: 4px; color: var(--ink); font-size: 12px; font-weight: 600; }
-    .row-title { margin: 6px 0 0; font-size: 20px; font-weight: 700; color: var(--ink); }
-    .row-desc { margin: 5px 0 0; font-size: 14px; line-height: 1.55; color: var(--slate); max-width: 64ch; }
+    .type-lbl { font-size: 12px; font-weight: 600; color: var(--teal); }
+    .gov-chip { background: var(--well); border: 1px solid var(--well-border); padding: 2px 8px; border-radius: 6px; color: var(--slate); font-size: 11.5px; font-weight: 500; }
+    .row-title { margin: 6px 0 0; font-size: 19px; font-weight: 600; color: var(--ink); }
+    .row-desc { margin: 5px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--slate); max-width: 64ch; }
     .inspect-btn {
-      padding: 8px 14px; border-radius: 6px; background: var(--sand); border: 1px solid var(--sand-border);
-      color: var(--ink); font-size: 12.5px; font-weight: 600; shrink: 0; white-space: nowrap;
+      padding: 8px 14px; border-radius: 8px; background: var(--canvas); border: 1px solid var(--border);
+      color: var(--ink); font-size: 12.5px; font-weight: 500; shrink: 0; white-space: nowrap; transition: all 0.15s;
     }
-    .chapter-row:hover .inspect-btn { background: var(--cobalt); border-color: var(--cobalt); color: #FFFFFF; }
+    .chapter-row:hover .inspect-btn { background: var(--primary); border-color: var(--primary); color: #FFFFFF; }
 
     .modal-backdrop {
-      display: none; position: fixed; inset: 0; background: rgba(10, 25, 49, 0.55);
+      display: none; position: fixed; inset: 0; background: rgba(22, 26, 34, 0.42);
       z-index: 50; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       width: 100%; max-width: 540px; background: var(--paper); border: 1px solid var(--border);
-      border-radius: 8px; overflow: hidden; box-shadow: 0 20px 44px rgba(10, 25, 49, 0.25);
+      border-radius: 14px; overflow: hidden; box-shadow: 0 20px 44px rgba(22, 26, 34, 0.14);
     }
     .modal-top {
-      background: var(--navy); color: #FFFFFF; padding: 18px 22px; border-bottom: 2px solid var(--brass);
+      background: var(--canvas); color: var(--ink); padding: 18px 22px; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
     }
     .modal-body { padding: 22px; }
 
-    footer { background: var(--navy); color: #94A3B8; border-top: 2px solid var(--brass); padding: 20px 0; margin-top: auto; font-size: 12.5px; }
+    footer { background: var(--paper); color: var(--slate); border-top: 1px solid var(--border); padding: 20px 0; margin-top: auto; font-size: 12.5px; }
   </style>
 </head>
 <body>
@@ -139,14 +137,14 @@
     <div class="container switcher-inner">
       <div class="switcher-tabs">
         <a href="https://www.tfunions.com">Foundation</a>
-        <a href="https://news.tfunions.com">TF News</a>
-        <a href="https://guides.tfunions.com">TF Guides</a>
-        <a href="https://connect.tfunions.com" class="active">TF Connect</a>
-        <a href="https://verify.tfunions.com">Verify Registry</a>
+        <a href="https://news.tfunions.com">News</a>
+        <a href="https://guides.tfunions.com">Guides</a>
+        <a href="https://connect.tfunions.com" class="active">Connect</a>
+        <a href="https://verify.tfunions.com">Verify</a>
         <a href="https://docs.tfunions.com">Docs</a>
       </div>
       <div style="display:flex;align-items:center;">
-        <span id="live-sync-status" class="font-code" style="color:#CBD5E1;font-size:11px;">Synchronized Atlas</span>
+        <span id="live-sync-status" class="font-code" style="color:var(--teal);font-size:11px;">Synchronized atlas</span>
       </div>
     </div>
   </div>
@@ -154,25 +152,24 @@
   <header class="masthead">
     <div class="container masthead-inner">
       <a href="https://connect.tfunions.com" class="brand">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="border-radius:6px;">
-          <rect width="32" height="32" rx="6" fill="#14388C"/>
-          <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" stroke="#1E3A6D" stroke-width="1.5"/>
-          <rect x="22.5" y="5" width="4.5" height="4.5" rx="1" fill="#C88A14"/>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="border-radius:7px;">
+          <rect width="32" height="32" rx="7" fill="#1B365D"/>
+          <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/>
           <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF"/>
         </svg>
         <div>
-          <span class="font-display" style="font-size:20px;font-weight:700;display:block;line-height:1;">TF Connect</span>
-          <span style="font-size:11px;color:#94A3B8;">Governorate Chapters &amp; Guilds</span>
+          <span class="font-display" style="font-size:19px;font-weight:700;display:block;line-height:1;color:var(--ink);">TF Connect</span>
+          <span style="font-size:11px;color:var(--muted);">Governorate Chapters &amp; Guilds</span>
         </div>
       </a>
-      <a href="https://auth.tfunions.com/?redirect_to=https://connect.tfunions.com" class="btn-brass">Sign in</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://connect.tfunions.com" class="btn-primary">Sign in</a>
     </div>
   </header>
 
   <main class="container layout">
     <aside class="rail">
       <div class="rail-tag">27 Egyptian governorates</div>
-      <h1 class="font-display">Chapters, Unions &amp; Guilds</h1>
+      <h1 class="font-display">Chapters, unions &amp; guilds</h1>
       <p>Locate STEM high school chapters, regional study circles, and student-led research labs operating across Egypt.</p>
 
       <label class="ctrl-label">Classification</label>
@@ -198,13 +195,13 @@
       </select>
 
       <label for="connect-search" class="ctrl-label">Search</label>
-      <input id="connect-search" class="ctrl-input" type="search" placeholder="Chapter, city, or focus..." />
+      <input id="connect-search" class="ctrl-input" type="search" placeholder="Chapter, city, or focus (/)..." />
     </aside>
 
     <section class="atlas-sheet">
       <div class="sheet-head">
-        <strong class="font-display" style="font-size:19px;color:var(--ink);">Active Chapters &amp; Project Collectives</strong>
-        <span class="font-code" id="connect-count" style="font-size:12px;color:var(--slate);">8 entries</span>
+        <strong class="font-display" style="font-size:18px;color:var(--ink);">Active chapters &amp; project collectives</strong>
+        <span class="font-code" id="connect-count" style="font-size:12px;color:var(--muted);">8 entries</span>
       </div>
       <div id="connect-grid"></div>
     </section>
@@ -214,19 +211,19 @@
     <div class="modal-sheet">
       <div class="modal-top">
         <div>
-          <div id="m-type" class="font-code" style="font-size:12px;color:#C88A14;"></div>
-          <h2 id="m-title" class="font-display" style="margin:6px 0 0;font-size:23px;"></h2>
+          <div id="m-type" class="font-code" style="font-size:12px;color:var(--teal);font-weight:500;"></div>
+          <h2 id="m-title" class="font-display" style="margin:6px 0 0;font-size:21px;"></h2>
         </div>
-        <button id="m-close" type="button" style="width:32px;height:32px;border-radius:6px;border:1px solid var(--navy-border);background:var(--navy-mid);color:#FFFFFF;cursor:pointer;">✕</button>
+        <button id="m-close" type="button" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--paper);color:var(--slate);cursor:pointer;">✕</button>
       </div>
       <div class="modal-body">
-        <p id="m-desc" style="margin:0;font-size:14.5px;line-height:1.6;color:var(--slate);"></p>
-        <div style="margin-top:16px;padding:12px 14px;border-radius:6px;background:var(--stone);border:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;">
-          <span style="color:var(--slate);">Governorate / Scope</span>
-          <strong id="m-gov"></strong>
+        <p id="m-desc" style="margin:0;font-size:14px;line-height:1.65;color:var(--slate);"></p>
+        <div style="margin-top:16px;padding:12px 14px;border-radius:8px;background:var(--canvas);border:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;">
+          <span style="color:var(--muted);">Governorate / Scope</span>
+          <strong id="m-gov" style="color:var(--ink);"></strong>
         </div>
         <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-          <a href="https://www.tfunions.com/volunteer" style="padding:10px 18px;border-radius:6px;background:var(--cobalt);color:#FFFFFF;font-size:13.5px;font-weight:600;">Apply via Volunteer Hub ›</a>
+          <a href="https://www.tfunions.com/volunteer" style="padding:9px 16px;border-radius:8px;background:var(--primary);color:#FFFFFF;font-size:13px;font-weight:500;">Apply via Volunteer Hub →</a>
         </div>
       </div>
     </div>
@@ -235,7 +232,7 @@
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
       <span>TF Connect — Part of the TF Unions Foundation Ecosystem</span>
-      <a href="https://www.tfunions.com/team" style="color:var(--brass);font-weight:600;">Inspect 71-Member Constellation ›</a>
+      <a href="https://www.tfunions.com/team" style="color:var(--primary);font-weight:500;">Inspect 71-Member Constellation →</a>
     </div>
   </footer>
 
@@ -256,6 +253,13 @@
     let activeGov = 'All';
     let searchQuery = '';
 
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        document.getElementById('connect-search')?.focus();
+      }
+    });
+
     function esc(s) {
       return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
@@ -273,22 +277,23 @@
       document.getElementById('connect-count').textContent = `${filtered.length} entr${filtered.length === 1 ? 'y' : 'ies'}`;
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div style="padding:40px;text-align:center;color:var(--slate);">No chapters or guilds match this filter.</div>`;
+        grid.innerHTML = `<div style="padding:40px;text-align:center;color:var(--muted);">No chapters or guilds match this filter.</div>`;
         return;
       }
 
-      grid.innerHTML = filtered.map((it) => `
+      grid.innerHTML = filtered.map((it, idx) => `
         <article class="chapter-row" onclick="openItem('${esc(it.id)}')">
           <div>
-            <div style="display:flex;align-items:center;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="font-code" style="font-size:11.5px;color:var(--muted);">${String(idx + 1).padStart(2, '0')}</span>
               <span class="type-lbl">${esc(it.type)}</span>
               <span class="gov-chip">${esc(it.gov)}</span>
-              <span style="font-size:12px;color:var(--slate);">${esc(it.focus || 'Student Network')}</span>
+              <span style="font-size:12px;color:var(--muted);">${esc(it.focus || 'Student Network')}</span>
             </div>
             <h2 class="row-title font-display">${esc(it.name)}</h2>
             <p class="row-desc">${esc(it.desc)}</p>
           </div>
-          <span class="inspect-btn">Inspect ›</span>
+          <span class="inspect-btn">Inspect →</span>
         </article>
       `).join('');
     }
@@ -296,7 +301,7 @@
     window.openItem = function(id) {
       const it = allItems.find((x) => x.id === id);
       if (!it) return;
-      document.getElementById('m-type').textContent = `${it.type} (${it.focus || 'Verified'})`;
+      document.getElementById('m-type').textContent = `${it.type} · ${it.focus || 'Verified'}`;
       document.getElementById('m-title').textContent = it.name;
       document.getElementById('m-desc').textContent = it.desc;
       document.getElementById('m-gov').textContent = it.gov;
