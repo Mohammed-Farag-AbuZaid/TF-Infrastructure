@@ -16,17 +16,18 @@ const others = SECTIONS.slice(1);
 const title = (s: (typeof SECTIONS)[number]) => (lang === 'ar' ? SECTION_TITLES_AR[s.id].title : s.title);
 const sub = (s: (typeof SECTIONS)[number]) => (lang === 'ar' ? SECTION_TITLES_AR[s.id].subtitle : s.subtitle);
 const btn = 'h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13.5px] font-medium transition';
+const pk = `news_dir${lang === 'ar' ? '_ar' : ''}`;
 ---
 <NewsLayout title={`${t(lang, 'dir.title')} — TF News`} description={t(lang, 'dir.subtitle')} lang={lang} altPath="/directories" active="browse" backHref={href(lang, '/')} backLabel={t(lang, 'nav.home')}>
-  <PageHead title={t(lang, 'dir.title')} subtitle={t(lang, 'dir.subtitle')} kicker="DIRECTORIES" />
+  <PageHead title={t(lang, 'dir.title')} subtitle={t(lang, 'dir.subtitle')} kicker="DIRECTORIES" copyPrefix={pk} />
 
   <section class="bg-tf-surface border border-tf-border rounded-tf-card border-s-4 border-s-tf-accent p-6 sm:p-8">
     <div class="flex flex-wrap items-center gap-3">
       <span class="tf-serial-chip">№ 01 · {t(lang, 'dir.featured')}</span>
       <span class="text-[12px] font-semibold bg-tf-sunken px-2.5 py-1 rounded-tf-input">{universities.length.toLocaleString('en')} · {ways.length.toLocaleString('en')}</span>
     </div>
-    <h2 class="font-display text-[26px] font-bold mt-3 tracking-[-0.02em]">{title(study)}</h2>
-    <p class="mt-1.5 text-[15px] leading-[1.6] text-tf-muted max-w-[60ch]">{sub(study)}</p>
+    <h2 data-tf-copy={`${pk}.featured_title`} class="font-display text-[26px] font-bold mt-3 tracking-[-0.02em]">{title(study)}</h2>
+    <p data-tf-copy={`${pk}.featured_desc`} class="mt-1.5 text-[15px] leading-[1.6] text-tf-muted max-w-[60ch]">{sub(study)}</p>
     <div class="mt-5 flex flex-wrap gap-2">
       <a href={href(lang, '/study')} class="h-10 px-5 inline-flex items-center rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13.5px] font-semibold transition">{t(lang, 'dir.open')}</a>
       <a href={href(lang, '/study/universities')} class={btn}>{t(lang, 'uni.title')}</a>
@@ -41,8 +42,8 @@ const btn = 'h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-surface bo
           <span class="tf-serial-chip">№ 0{i + 2}</span>
           <span data-open-wrap class="text-[12.5px] text-tf-muted"><span data-open-count={s.id} class="font-mono font-semibold text-tf-accent-text">{openBy[s.id] ?? 0}</span> {t(lang, 'home.open')}</span>
         </div>
-        <h3 class="font-display text-[20px] font-semibold mt-4 group-hover:text-tf-brand transition">{title(s)}</h3>
-        <p class="mt-1.5 text-[14px] leading-[1.6] text-tf-muted">{sub(s)}</p>
+        <h3 data-tf-copy={`${pk}.card_${i}_title`} class="font-display text-[20px] font-semibold mt-4 group-hover:text-tf-brand transition">{title(s)}</h3>
+        <p data-tf-copy={`${pk}.card_${i}_desc`} class="mt-1.5 text-[14px] leading-[1.6] text-tf-muted">{sub(s)}</p>
       </a>
     ))}
   </section>

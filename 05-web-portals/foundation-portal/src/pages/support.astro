@@ -5,20 +5,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start max-w-[960px]">
     <!-- Left 5 Cols: Calm Zero-Overhead Pledge Card -->
     <aside class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      <div data-tf-copy="support.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
         Community infrastructure funding
       </div>
-      <h1 class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+      <h1 data-tf-copy="support.headline" class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
         Support the mission
       </h1>
-      <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
-        Every contribution directly pays for Linux server hosting, domain renewals, and student competition grants. Every transfer appears on our public Open Ledger.
+      <p data-tf-copy="support.subtitle" class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
+        Every contribution directly supports student infrastructure, domain renewals, and competition access. Every verified entry appears on our public Open Ledger.
       </p>
 
       <div class="mt-6 pt-5 border-t border-[#DFDDD6] space-y-3">
         <div class="p-4 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC]">
-          <div class="text-[12.5px] font-semibold text-[#0B5F58]">100% infrastructure allocation</div>
-          <div class="text-[13px] text-[#525866] mt-1">Zero executive salaries and zero recurring commercial SaaS fees.</div>
+          <div data-tf-copy="support.pledge_title" class="text-[12.5px] font-semibold text-[#0B5F58]">100% infrastructure allocation</div>
+          <div data-tf-copy="support.pledge_desc" class="text-[13px] text-[#525866] mt-1">Zero executive salaries and open financial accountability.</div>
         </div>
         <a href="/transparency" class="p-4 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] flex items-center justify-between gap-3 transition">
           <div>
@@ -32,51 +32,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- Right 7 Cols: Direct Channels + Link to Dedicated Receipt Form -->
     <section class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <h2 class="font-display text-[22px] font-bold text-[#161A22] pb-3.5 border-b border-[#DFDDD6]">
+      <h2 data-tf-copy="support.channels_heading" class="font-display text-[22px] font-bold text-[#161A22] pb-3.5 border-b border-[#DFDDD6]">
         Direct contribution channels
       </h2>
       <div class="divide-y divide-[#EAE8E1]">
         <div class="py-4 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div class="text-[15px] font-semibold text-[#161A22]">InstaPay (Egypt Instant Network)</div>
+            <div data-tf-copy="support.instapay_label" class="text-[15px] font-semibold text-[#161A22]">InstaPay (Egypt Instant Network)</div>
             <div class="text-[12.5px] text-[#767D8C]">Instant EGP settlement</div>
           </div>
           <div class="flex items-center gap-2">
-            <span class="font-code text-[12.5px] font-medium text-[#161A22] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
+            <span data-tf-copy="support.instapay_value" class="font-code text-[12.5px] font-medium text-[#161A22] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
               tfunions@instapay
             </span>
-            <button
-              type="button"
-              data-copy="tfunions@instapay"
-              class="copy-handle h-9 px-3 rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[12px] font-medium text-[#161A22] transition"
-            >
-              Copy
-            </button>
           </div>
         </div>
         <div class="py-4 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div class="text-[15px] font-semibold text-[#161A22]">Vodafone Cash Wallet</div>
-            <div class="text-[12.5px] text-[#767D8C]">Mobile wallet transfer</div>
+            <div data-tf-copy="support.wallet_label" class="text-[15px] font-semibold text-[#161A22]">Mobile Wallet Channel</div>
+            <div class="text-[12.5px] text-[#767D8C]">Local EGP transfer</div>
           </div>
           <div class="flex items-center gap-2">
-            <span class="font-code text-[12.5px] font-medium text-[#161A22] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
-              +20 10 0000 0000
+            <span data-tf-copy="support.wallet_value" class="font-code text-[12.5px] font-medium text-[#525866] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
+              Available via receipt form
             </span>
-            <button
-              type="button"
-              data-copy="+20 10 0000 0000"
-              class="copy-handle h-9 px-3 rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[12px] font-medium text-[#161A22] transition"
-            >
-              Copy
-            </button>
           </div>
         </div>
       </div>
 
       <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
-        <span class="text-[13px] text-[#525866]">Already sent a contribution?</span>
+        <span data-tf-copy="support.receipt_prompt" class="text-[13px] text-[#525866]">Already sent a contribution?</span>
         <a
+          data-tf-copy="support.receipt_cta"
           href="/support-receipt"
           class="h-10 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13.5px] font-medium transition"
         >

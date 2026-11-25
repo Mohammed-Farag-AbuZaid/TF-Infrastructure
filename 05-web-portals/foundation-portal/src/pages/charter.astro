@@ -36,13 +36,13 @@ const articles = [
   <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     <!-- Left 4 Cols: Calm White Index Panel -->
     <aside class="lg:col-span-4 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      <div data-tf-copy="charter.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
         Governance framework
       </div>
-      <h1 class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+      <h1 data-tf-copy="charter.headline" class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
         Non-Profit Charter
       </h1>
-      <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
+      <p data-tf-copy="charter.subtitle" class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
         Binding institutional rules covering free student access, data sovereignty, verifiable service records, and open finances.
       </p>
 
@@ -58,11 +58,11 @@ const articles = [
 
     <!-- Right 8 Cols: Crisp Paper Charter Document -->
     <div class="lg:col-span-8 bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#DFDDD6] shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      {articles.map((art) => (
+      {articles.map((art, idx) => (
         <article id={art.id} class="p-7 sm:p-8 scroll-mt-24">
           <div class="font-code text-[12px] font-medium text-[#0B5F58]">Article {art.num}</div>
-          <h2 class="font-display mt-1.5 text-[23px] font-bold text-[#161A22] leading-snug">{art.title}</h2>
-          <p class="mt-3 text-[15px] leading-[1.7] text-[#525866] max-w-[65ch]">{art.body}</p>
+          <h2 data-tf-copy={`charter.art_${idx}_title`} class="font-display mt-1.5 text-[23px] font-bold text-[#161A22] leading-snug">{art.title}</h2>
+          <p data-tf-copy={`charter.art_${idx}_body`} class="mt-3 text-[15px] leading-[1.7] text-[#525866] max-w-[65ch]">{art.body}</p>
           {art.linkHref && (
             <div class="mt-5">
               <a href={art.linkHref} class="inline-flex items-center h-9 px-4 rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] border border-[#DCD9D0] text-[13px] font-medium text-[#161A22] transition">

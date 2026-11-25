@@ -3,11 +3,12 @@ export interface Props {
   title: string;
   subtitle?: string;
   kicker?: string;
+  copyPrefix?: string;
 }
-const { title, subtitle, kicker } = Astro.props;
+const { title, subtitle, kicker, copyPrefix } = Astro.props;
 ---
 <div class="mb-8 max-w-[760px]">
   {kicker && <div class="tf-ledger-line !mt-0 !mb-3"><span class="tf-ledger-line__label">{kicker}</span></div>}
-  <h1 class="font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.025em]">{title}</h1>
-  {subtitle && <p class="mt-3 text-[16px] leading-[1.65] text-tf-muted">{subtitle}</p>}
+  <h1 data-tf-copy={copyPrefix ? `${copyPrefix}.headline` : undefined} class="font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.025em]">{title}</h1>
+  {subtitle && <p data-tf-copy={copyPrefix ? `${copyPrefix}.subtitle` : undefined} class="mt-3 text-[16px] leading-[1.65] text-tf-muted">{subtitle}</p>}
 </div>

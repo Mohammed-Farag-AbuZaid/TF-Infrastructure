@@ -1,15 +1,9 @@
 ---
 import '../styles/tf-tokens.css';
 import '../styles/tf-ui.css';
-import {
-  BASELINE_MEMBERS,
-  BASELINE_CHAPTERS,
-  BASELINE_GUIDES,
-  BASELINE_LEDGER,
-  SITE_COPY_PAGES,
-  STARTER_TASKS,
-} from '../data/seed';
+import { BASELINE_MEMBERS, COPY_CATALOG } from '../data/seed';
 
+const seedPayload = JSON.stringify({ BASELINE_MEMBERS, COPY_CATALOG }).replace(/</g, '\\u003c');
 const faviconSvg = encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
 );
@@ -37,11 +31,11 @@ const faviconSvg = encodeURIComponent(
       .font-display { font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif; }
       .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
       .copy-hot {
-        border: 1px dashed transparent;
-        border-radius: 8px;
-        padding: 4px 6px;
-        margin: -4px -6px;
+        border: 1px dashed #DFDDD6;
+        border-radius: 10px;
+        padding: 10px 12px;
         cursor: pointer;
+        background: #FAF9F6;
         transition: background-color 140ms ease, border-color 140ms ease;
       }
       .copy-hot:hover {
@@ -73,7 +67,7 @@ const faviconSvg = encodeURIComponent(
             </svg>
             <div>
               <h1 class="font-display font-bold text-[19px] text-[#161A22] leading-none">TF Dashboard</h1>
-              <span class="text-[11.5px] text-[#767D8C]">Owner &amp; Team Operations Hub</span>
+              <span class="text-[11.5px] text-[#767D8C]">Owner &amp; Team Operations</span>
             </div>
           </div>
           <a href="https://www.tfunions.com" class="text-[12.5px] font-medium text-[#1B365D] hover:underline">Home ↗</a>
@@ -81,7 +75,7 @@ const faviconSvg = encodeURIComponent(
 
         <h2 class="font-display font-bold text-[22px] text-[#161A22] mt-6">Sign in with your team account</h2>
         <p class="mt-1.5 text-[14px] text-[#525866]">
-          Log time, complete division tasks, track top achievers, or edit website copy and data based on your role.
+          Edit copy across every portal, manage real content, assign tasks, and log time from one workspace.
         </p>
 
         <div id="auth-err" class="hidden mt-4 p-3 rounded-lg bg-[#FEF3F2] border border-[#FECDCA] text-[13px] text-[#B42318]"></div>
@@ -134,7 +128,7 @@ const faviconSvg = encodeURIComponent(
       <div class="w-full max-w-[500px] bg-white border border-[#DFDDD6] rounded-2xl p-7 shadow-sm">
         <h2 class="font-display font-bold text-[22px] text-[#161A22]">Request dashboard access</h2>
         <p class="mt-2 text-[14.5px] text-[#525866] leading-relaxed">
-          Signed in as <strong id="denied-email" class="text-[#161A22]"></strong>, which has not been assigned a TF Unions role yet. Ask Mohammed Farag or an Admin to add your email inside <strong>Access &amp; Roles</strong>.
+          Signed in as <strong id="denied-email" class="text-[#161A22]"></strong>, which has not been assigned a TF Unions role yet. Ask the Owner or an Admin to add your email under <strong>Access &amp; Activity</strong>.
         </p>
         <div class="mt-5 flex gap-3">
           <button id="btn-denied-out" type="button" class="h-10 px-4 rounded-lg bg-[#1B365D] text-white text-[13.5px] font-medium">Sign out &amp; switch account</button>
@@ -143,30 +137,27 @@ const faviconSvg = encodeURIComponent(
       </div>
     </div>
 
-    <!-- Main Operations Workspace -->
-    <div id="dash-shell" class="hidden min-h-screen grid-cols-1 lg:grid-cols-[252px_1fr]">
-      <!-- Deep Fjord Navigation Rail -->
+    <!-- Main 5-Workspace Operations Shell -->
+    <div id="dash-shell" class="hidden min-h-screen grid-cols-1 lg:grid-cols-[240px_1fr]">
+      <!-- Deep Fjord Sidebar -->
       <aside id="dash-sidebar" class="hidden lg:flex flex-col justify-between bg-[#0F1D33] text-[#ECEAE4] p-5 lg:sticky lg:top-0 lg:h-screen">
         <div class="flex flex-col min-h-0">
-          <div class="flex items-center justify-between gap-2 pb-4 border-b border-white/10">
-            <a href="https://www.tfunions.com" class="flex items-center gap-2.5">
-              <svg width="28" height="28" viewBox="0 0 32 32" fill="none" class="rounded-[6px] shrink-0" aria-hidden="true">
-                <rect width="32" height="32" rx="7" fill="#1B365D" />
-                <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#5EC4B8" />
-                <path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF" />
-              </svg>
-              <div>
-                <div class="font-display font-bold text-[16px] text-[#F3F2EE] leading-none">TF Dashboard</div>
-                <div id="sb-role-pill" class="font-code text-[11px] text-[#7DD3C8] mt-1"></div>
-              </div>
-            </a>
-          </div>
+          <a href="https://www.tfunions.com" class="flex items-center gap-2.5 pb-4 border-b border-white/10">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" class="rounded-[6px] shrink-0" aria-hidden="true">
+              <rect width="32" height="32" rx="7" fill="#1B365D" />
+              <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#5EC4B8" />
+              <path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF" />
+            </svg>
+            <div>
+              <div class="font-display font-bold text-[16px] text-[#F3F2EE] leading-none">TF Dashboard</div>
+              <div id="sb-role-pill" class="font-code text-[11px] text-[#7DD3C8] mt-1"></div>
+            </div>
+          </a>
 
-          <!-- Nav Links -->
-          <nav id="dash-nav" class="mt-4 space-y-1 overflow-y-auto pr-1" aria-label="Dashboard sections"></nav>
+          <nav id="dash-nav" class="mt-5 space-y-1 overflow-y-auto pr-1" aria-label="Dashboard workspaces"></nav>
         </div>
 
-        <div class="pt-4 border-t border-white/10 space-y-2.5">
+        <div class="pt-4 border-t border-white/10 space-y-2">
           <div id="sb-user-name" class="text-[13px] font-semibold text-[#F3F2EE] truncate"></div>
           <div id="sb-user-email" class="font-code text-[11px] text-[#9AA7BC] truncate"></div>
           <div class="flex items-center justify-between pt-1">
@@ -178,542 +169,502 @@ const faviconSvg = encodeURIComponent(
 
       <!-- Workspace Canvas -->
       <main class="min-w-0 flex flex-col">
-        <!-- Mobile Top Bar Strip + Desktop Quick Action Bar -->
+        <!-- Top Action Strip -->
         <div class="bg-white border-b border-[#DFDDD6] px-4 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
             <button id="mobile-nav-btn" type="button" class="lg:hidden h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px] font-medium text-[#161A22]">
               Menu
             </button>
-            <div class="min-w-0">
-              <h1 id="active-page-title" class="font-display font-bold text-[19px] text-[#161A22] leading-tight truncate">Overview</h1>
-            </div>
+            <h1 id="active-page-title" class="font-display font-bold text-[20px] text-[#161A22] leading-tight truncate">Home</h1>
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5">
-            <span id="dash-toast" class="hidden font-code text-[12px] px-3 py-1 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]"></span>
-            <!-- Live Session Timer -->
-            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
-              <span id="timer-readout" class="font-code text-[12.5px] font-semibold text-[#161A22]">00:00:00</span>
-              <button id="timer-toggle-btn" type="button" class="h-7 px-2.5 rounded bg-[#1B365D] hover:bg-[#132847] text-white text-[12px] font-medium transition">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
+              <span class="w-2 h-2 rounded-full bg-[#0F766E]"></span>
+              <span id="timer-readout" class="font-code text-[13px] font-semibold text-[#161A22]">00:00:00</span>
+              <button id="timer-toggle-btn" type="button" class="ml-1 h-7 px-2.5 rounded bg-[#1B365D] hover:bg-[#132847] text-white text-[12px] font-medium transition">
                 Start session
               </button>
             </div>
+            <button id="mobile-signout-btn" type="button" class="lg:hidden h-9 px-3 rounded-lg border border-[#DFDDD6] text-[12.5px] font-medium text-[#525866]">
+              Sign out
+            </button>
           </div>
         </div>
 
         <!-- Mobile Drawer -->
-        <div id="mobile-nav-drawer" class="hidden lg:hidden bg-[#0F1D33] text-[#ECEAE4] p-4 space-y-1"></div>
+        <div id="mobile-nav-drawer" class="hidden lg:hidden bg-[#0F1D33] text-white p-3 space-y-1 border-b border-white/10"></div>
 
-        <!-- Dynamic Views -->
-        <div class="flex-1 p-4 sm:p-7 max-w-[1320px] w-full space-y-6">
-          <!-- 1. OVERVIEW & TIME LOGGER -->
-          <section id="view-overview" class="dash-view space-y-6">
+        <!-- Toast Banner -->
+        <div id="dash-toast" class="hidden mx-4 sm:mx-7 mt-4 px-4 py-2.5 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13px] font-medium" role="status"></div>
+
+        <!-- Views Container -->
+        <div class="p-4 sm:p-7 space-y-6 max-w-[1360px] w-full">
+          <!-- ================= WORKSPACE 1: HOME ================= -->
+          <section id="view-home" class="dash-view space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5">
-                <div class="text-[12px] text-[#767D8C]">Your logged hours</div>
-                <div id="kpi-my-hours" class="font-display text-[30px] font-bold text-[#161A22] mt-1 tabular-nums">0.0h</div>
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div class="text-[12px] text-[#767D8C]">Team Members</div>
+                <div id="stat-members" class="font-display font-bold text-[28px] text-[#161A22] mt-1 tabular-nums">0</div>
               </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5">
-                <div class="text-[12px] text-[#767D8C]">Team total hours</div>
-                <div id="kpi-team-hours" class="font-display text-[30px] font-bold text-[#0B5F58] mt-1 tabular-nums">0.0h</div>
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div class="text-[12px] text-[#767D8C]">Open Tasks</div>
+                <div id="stat-tasks" class="font-display font-bold text-[28px] text-[#1B365D] mt-1 tabular-nums">0</div>
               </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5">
-                <div class="text-[12px] text-[#767D8C]">Open team tasks</div>
-                <div id="kpi-open-tasks" class="font-display text-[30px] font-bold text-[#1B365D] mt-1 tabular-nums">0</div>
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div class="text-[12px] text-[#767D8C]">Team Logged Hours</div>
+                <div id="stat-hours" class="font-display font-bold text-[28px] text-[#0B5F58] mt-1 tabular-nums">0h</div>
               </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5">
-                <div class="text-[12px] text-[#767D8C]">Team contributors</div>
-                <div id="kpi-members" class="font-display text-[30px] font-bold text-[#161A22] mt-1 tabular-nums">{BASELINE_MEMBERS.length}</div>
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div class="text-[12px] text-[#767D8C]">Ledger Net Balance</div>
+                <div id="stat-ledger" class="font-display font-bold text-[26px] text-[#161A22] mt-1 tabular-nums">0 EGP</div>
               </div>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-[400px_1fr] gap-6 items-start">
-              <!-- Manual Time Entry -->
-              <form id="time-log-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3.5 shadow-[0_1px_2px_rgba(22,26,34,0.03)]">
-                <h2 class="font-display font-bold text-[18px] text-[#161A22]">Log work time</h2>
-                <p class="text-[13px] text-[#525866]">Every logged hour earns <strong class="text-[#0B5F58]">+10 pts</strong> toward Top Achievers.</p>
-                <div>
-                  <label class="block text-[12px] font-medium text-[#161A22] mb-1">What did you work on? *</label>
-                  <input id="tl-summary" type="text" required placeholder="e.g. Reviewed 14 HR volunteer interviews" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <label class="block text-[12px] font-medium text-[#161A22] mb-1">Division</label>
-                    <select id="tl-division" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <div class="lg:col-span-6 bg-white border border-[#DFDDD6] rounded-xl p-5 sm:p-6">
+                <h2 class="font-display font-semibold text-[18px] text-[#161A22]">Log manual work session</h2>
+                <p class="text-[13px] text-[#525866] mt-1">Record time spent on research, editing, outreach, or engineering.</p>
+                <form id="time-log-form" class="mt-4 space-y-3">
+                  <input id="tl-summary" type="text" required placeholder="What did you complete?" class="w-full h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px] focus:bg-white focus:border-[#1B365D] focus:outline-none" />
+                  <div class="grid grid-cols-2 gap-3">
+                    <select id="tl-division" class="h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px]">
                       <option value="Founders">Founders</option>
                       <option value="HR Team">HR Team</option>
                       <option value="PR Team">PR Team</option>
-                      <option value="Marketing Team">Marketing Team</option>
                       <option value="Social Media Team">Social Media Team</option>
+                      <option value="Marketing Team">Marketing Team</option>
+                      <option value="IT Team">IT Team</option>
                     </select>
+                    <input id="tl-minutes" type="number" min="5" max="720" value="30" required class="h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px] font-code" />
                   </div>
-                  <div>
-                    <label class="block text-[12px] font-medium text-[#161A22] mb-1">Minutes (1–720) *</label>
-                    <input id="tl-minutes" type="number" min="1" max="720" required value="60" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-                  </div>
-                </div>
-                <button type="submit" class="w-full h-9 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-                  Save time log
-                </button>
-              </form>
+                  <button type="submit" class="h-10 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13.5px] font-medium transition">
+                    Save work log
+                  </button>
+                </form>
+              </div>
 
-              <!-- Recent Team Activity Feed -->
-              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.03)]">
-                <div class="px-5 py-3.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
-                  <strong class="font-display text-[16px] text-[#161A22]">Recent time logs</strong>
-                  <span class="font-code text-[12px] text-[#525866]" id="timelog-count">0 logs</span>
+              <div class="lg:col-span-6 bg-white border border-[#DFDDD6] rounded-xl p-5 sm:p-6">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-display font-semibold text-[18px] text-[#161A22]">Active queue &amp; recent logs</h2>
+                  <button type="button" id="btn-go-tasks" class="text-[12.5px] font-medium text-[#1B365D] hover:underline">Open Team &amp; Tasks →</button>
                 </div>
-                <div id="timelog-list" class="divide-y divide-[#EAE8E1] max-h-[380px] overflow-y-auto"></div>
+                <div id="home-tasks-list" class="mt-3 divide-y divide-[#EAE8E1] text-[13.5px]"></div>
+                <div class="mt-5 pt-4 border-t border-[#EAE8E1]">
+                  <div class="text-[12px] font-semibold text-[#767D8C] mb-2">Recent work logs</div>
+                  <div id="home-logs-list" class="divide-y divide-[#EAE8E1] text-[13px]"></div>
+                </div>
               </div>
             </div>
           </section>
 
-          <!-- 2. TASKS & TO-DO LISTS -->
-          <section id="view-tasks" class="dash-view hidden space-y-5">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div class="flex flex-wrap items-center gap-2">
-                <select id="task-filter-div" class="h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
-                  <option value="All">All divisions</option>
-                  <option value="Founders">Founders</option>
-                  <option value="HR Team">HR Team</option>
-                  <option value="PR Team">PR Team</option>
-                  <option value="Marketing Team">Marketing Team</option>
-                  <option value="Social Media Team">Social Media Team</option>
-                </select>
-                <label class="inline-flex items-center gap-1.5 text-[13px] text-[#525866] px-2">
-                  <input id="task-only-mine" type="checkbox" class="rounded border-[#DCD9D0]" />
-                  <span>Assigned to me</span>
-                </label>
-              </div>
-              <div class="flex gap-2">
-                <button id="task-seed-btn" type="button" class="hidden h-9 px-3.5 rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] border border-[#DCD9D0] text-[12.5px] font-medium text-[#161A22]">
-                  Load starter roadmap (5 tasks)
-                </button>
-              </div>
-            </div>
-
-            <!-- Add Task Form (Owner / Leads / manage_tasks) -->
-            <form id="task-create-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
-              <div class="sm:col-span-2">
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Task title *</label>
-                <input id="tk-title" type="text" required placeholder="What needs to be shipped?" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Division</label>
-                <select id="tk-div" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                  <option value="Founders">Founders</option>
-                  <option value="HR Team">HR Team</option>
-                  <option value="PR Team">PR Team</option>
-                  <option value="Marketing Team">Marketing Team</option>
-                  <option value="Social Media Team">Social Media Team</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Assignee email</label>
-                <input id="tk-assignee" type="email" placeholder="optional@gmail.com" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Due date</label>
-                <input id="tk-due" type="date" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-                Create task
-              </button>
-            </form>
-
-            <!-- 3-Column Kanban -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#EAE8E1]">
-                  <strong class="font-display text-[15px] text-[#161A22]">To do</strong>
-                  <span id="cnt-todo" class="font-code text-[12px] text-[#767D8C]">0</span>
-                </div>
-                <div id="col-todo" class="mt-3 space-y-2.5"></div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#EAE8E1]">
-                  <strong class="font-display text-[15px] text-[#1B365D]">In progress</strong>
-                  <span id="cnt-doing" class="font-code text-[12px] text-[#1B365D]">0</span>
-                </div>
-                <div id="col-doing" class="mt-3 space-y-2.5"></div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#EAE8E1]">
-                  <strong class="font-display text-[15px] text-[#0B5F58]">Done (+25 pts)</strong>
-                  <span id="cnt-done" class="font-code text-[12px] text-[#0B5F58]">0</span>
-                </div>
-                <div id="col-done" class="mt-3 space-y-2.5"></div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 3. TOP ACHIEVERS & LEADERBOARD -->
-          <section id="view-leaderboard" class="dash-view hidden space-y-6">
-            <div id="podium-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-
-            <form id="recog-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
-              <div class="sm:col-span-2">
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Team member email *</label>
-                <input id="rc-email" type="email" required placeholder="achiever@gmail.com" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Display name</label>
-                <input id="rc-name" type="text" placeholder="Full Name" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Achievement &amp; Points *</label>
-                <input id="rc-reason" type="text" required placeholder="Top HR Recruiter (+50)" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <button type="submit" class="h-9 px-4 rounded-lg bg-[#0B5F58] hover:bg-[#084A44] text-white text-[13px] font-medium transition">
-                Award +50 pts
-              </button>
-            </form>
-
-            <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-              <div class="px-5 py-3.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex justify-between items-center">
-                <strong class="font-display text-[16px] text-[#161A22]">Achievers ranking</strong>
-                <span class="font-code text-[12px] text-[#525866]">10 pts/hr + 25 pts/task + awards</span>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-[13.5px]">
-                  <thead>
-                    <tr class="border-b border-[#DFDDD6] text-[12px] text-[#767D8C] bg-[#F3F2EE]">
-                      <th class="py-2.5 px-5">Rank</th>
-                      <th class="py-2.5 px-4">Contributor</th>
-                      <th class="py-2.5 px-4">Hours</th>
-                      <th class="py-2.5 px-4">Tasks Done</th>
-                      <th class="py-2.5 px-4">Bonus</th>
-                      <th class="py-2.5 px-5 text-right">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody id="leaderboard-rows" class="divide-y divide-[#EAE8E1]"></tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <!-- 4. VISUAL COPY EDITOR (CLICK ANY SENTENCE) -->
+          <!-- ================= WORKSPACE 2: WEBSITE EDITOR (ALL 6 PORTALS) ================= -->
           <section id="view-copy" class="dash-view hidden space-y-5">
-            <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 class="font-display font-bold text-[19px] text-[#161A22]">Visual Click-to-Edit Website Copy</h2>
-                <p class="text-[13px] text-[#525866]">Select any page, click directly on any sentence in the preview, change it letter by letter, and publish live.</p>
-              </div>
-              <div class="flex items-center gap-2.5">
-                <select id="copy-page-select" class="h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-medium text-[#161A22]"></select>
-                <a id="copy-live-link" href="https://www.tfunions.com/" target="_blank" rel="noopener" class="h-9 px-3.5 inline-flex items-center rounded-lg border border-[#DFDDD6] hover:border-[#1B365D] text-[12.5px] font-medium text-[#1B365D]">Open live ↗</a>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start">
-              <!-- Clickable Website Canvas Preview -->
-              <div id="copy-canvas" class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-inner space-y-5"></div>
-
-              <!-- Live Letter-by-Letter Sentence Inspector -->
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 sticky top-6 space-y-4">
-                <div class="flex items-center justify-between border-b border-[#EAE8E1] pb-3">
-                  <div>
-                    <div id="ce-field-label" class="font-display font-bold text-[16px] text-[#161A22]">Select a sentence</div>
-                    <div id="ce-field-key" class="font-code text-[11.5px] text-[#0B5F58]">Click any block on the left</div>
-                  </div>
-                  <span id="ce-live-badge" class="hidden font-code text-[11px] px-2 py-0.5 rounded bg-[#EDF7F5] text-[#0B5F58]">Custom live</span>
-                </div>
-
+            <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 space-y-3.5">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
-                  <div class="flex justify-between text-[12px] text-[#525866] mb-1">
-                    <span>Exact text</span>
-                    <span id="ce-char-count" class="font-code">0 chars</span>
-                  </div>
-                  <textarea id="ce-textarea" rows="5" class="w-full p-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none text-[14px] leading-relaxed"></textarea>
+                  <h2 class="font-display font-bold text-[18px] text-[#161A22]">Universal Website Text Editor</h2>
+                  <p class="text-[13px] text-[#525866]">Pick any website below, click any sentence to edit it live, or use Global Find &amp; Replace across the whole ecosystem.</p>
                 </div>
+                <input
+                  id="copy-global-search"
+                  type="search"
+                  placeholder="Search any sentence across all 6 portals..."
+                  class="w-full md:w-[320px] h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] focus:bg-white focus:border-[#1B365D] focus:outline-none"
+                />
+              </div>
 
+              <!-- Portal Filter Pills -->
+              <div id="copy-portal-tabs" class="flex flex-wrap gap-1.5 pt-1"></div>
+
+              <!-- Global Search Results Dropdown Card -->
+              <div id="copy-search-results" class="hidden rounded-xl border border-[#BCE3DC] bg-[#EDF7F5]/60 p-3 space-y-1.5 max-h-[260px] overflow-y-auto"></div>
+            </div>
+
+            <!-- Main 3-Pane Visual Editor -->
+            <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr_320px] gap-5 items-start">
+              <!-- Page Selector -->
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-3 space-y-1 max-h-[600px] overflow-y-auto">
+                <div class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#767D8C]">Pages</div>
+                <div id="copy-page-list" class="space-y-1"></div>
+              </div>
+
+              <!-- Click-to-Edit Visual Page Canvas -->
+              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-sm">
+                <div class="px-4 py-2.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span id="copy-preview-portal" class="px-2 py-0.5 rounded bg-[#1B365D] text-white font-medium text-[11px]"></span>
+                    <span id="copy-preview-url" class="font-code text-[#525866] truncate"></span>
+                  </div>
+                  <div class="flex items-center gap-3 shrink-0">
+                    <a id="copy-open-live" href="#" target="_blank" rel="noopener noreferrer" class="font-medium text-[#1B365D] hover:underline">Open page ↗</a>
+                  </div>
+                </div>
+                <div id="copy-canvas" class="p-5 sm:p-6 bg-[#F3F2EE] space-y-2.5 max-h-[560px] overflow-y-auto"></div>
+              </div>
+
+              <!-- Selected Sentence Inspector -->
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3.5 lg:sticky lg:top-6">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-display font-semibold text-[16px] text-[#161A22]">Edit sentence</h3>
+                  <span id="copy-field-kind" class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]"></span>
+                </div>
+                <div id="copy-field-path" class="font-code text-[11.5px] text-[#0B5F58] break-all">Click any sentence on the canvas</div>
+                <textarea id="copy-input" rows="5" placeholder="Click any sentence in the page preview to edit it..." class="w-full p-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none text-[14px] leading-relaxed"></textarea>
+                <div class="text-[11.5px] text-[#767D8C] bg-[#FAF9F6] border border-[#EAE8E1] rounded-lg p-2.5">
+                  <strong class="text-[#525866]">Default:</strong> <span id="copy-default-val">—</span>
+                </div>
                 <div class="flex flex-wrap gap-2">
-                  <button id="ce-save-btn" type="button" class="flex-1 h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-                    Publish text live
+                  <button id="copy-save-btn" type="button" class="flex-1 h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                    Save live
                   </button>
-                  <button id="ce-reset-btn" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] hover:border-[#B42318] text-[12.5px] text-[#525866] hover:text-[#B42318] transition">
-                    Reset default
+                  <button id="copy-reset-field-btn" type="button" class="h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">
+                    Revert
                   </button>
                 </div>
+                <button id="copy-reset-page-btn" type="button" class="w-full h-8 rounded-lg text-[12px] text-[#B42318] border border-[#FECDCA] hover:bg-[#FEF3F2] transition">
+                  Reset entire page to defaults
+                </button>
               </div>
             </div>
-          </section>
 
-          <!-- 5. TEAM & HR HUB -->
-          <section id="view-team" class="dash-view hidden">
-            <div class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6 items-start">
-              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-                <div class="p-4 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2">
-                  <input id="tm-search" type="search" placeholder="Search 71+ contributors by name, school, role..." class="flex-1 min-w-[200px] h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
-                  <button id="tm-new-btn" type="button" class="h-9 px-3.5 rounded-lg bg-[#1B365D] text-white text-[12.5px] font-medium">+ Add member</button>
-                </div>
-                <div id="tm-list" class="divide-y divide-[#EAE8E1] max-h-[580px] overflow-y-auto"></div>
+            <!-- Global Find & Replace Engine -->
+            <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-4">
+              <div>
+                <h3 class="font-display font-semibold text-[16px] text-[#161A22]">Global Find &amp; Replace (Every sentence across all sites)</h3>
+                <p class="text-[12.5px] text-[#525866] mt-0.5">Replace any recurring phrase across all public websites simultaneously in real time.</p>
               </div>
-
-              <form id="tm-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
-                <div class="flex items-center justify-between pb-2 border-b border-[#EAE8E1]">
-                  <h3 id="tm-form-title" class="font-display font-bold text-[17px] text-[#161A22]">Add / edit contributor</h3>
-                  <button id="tm-clear-btn" type="button" class="text-[12px] text-[#525866]">Clear</button>
-                </div>
-                <input id="tm-id" type="hidden" />
-                <div class="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Full name *</label>
-                    <input id="tm-name" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  </div>
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Arabic name</label>
-                    <input id="tm-arabic" type="text" dir="rtl" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Role *</label>
-                    <input id="tm-role" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  </div>
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Division *</label>
-                    <select id="tm-team" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                      <option value="Founders">Founders</option>
-                      <option value="HR Team">HR Team</option>
-                      <option value="PR Team">PR Team</option>
-                      <option value="Marketing Team">Marketing Team</option>
-                      <option value="Social Media Team">Social Media Team</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Tier</label>
-                    <select id="tm-tier" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                      <option value="0">0 · Founder</option>
-                      <option value="1">1 · Head</option>
-                      <option value="2">2 · Vice Head</option>
-                      <option value="3">3 · Coordinator</option>
-                      <option value="4" selected>4 · Contributor</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-[11.5px] font-medium mb-1">Cohort</label>
-                    <select id="tm-cohort" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                      <option value="2025-10|Oct 2025">Oct 2025</option>
-                      <option value="2026-01|Jan 2026">Jan 2026</option>
-                      <option value="2026-04|Apr 2026">Apr 2026</option>
-                      <option value="2026-07|Jul 2026">Jul 2026</option>
-                      <option value="2026-11|Nov 2026" selected>Nov 2026</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                  <input id="tm-school" type="text" placeholder="School / University" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <input id="tm-parent" type="text" placeholder="Reports to ID (e.g. founder-1)" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-                </div>
-                <textarea id="tm-bio" rows="3" placeholder="Public bio..." class="w-full p-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]"></textarea>
-                <label class="flex items-center gap-2 text-[12.5px] text-[#525866]">
-                  <input id="tm-archived" type="checkbox" class="rounded border-[#DCD9D0]" />
-                  <span>Hide from public /team &amp; /roster</span>
-                </label>
-                <button type="submit" class="w-full h-9 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium">
-                  Save live to website
+              <form id="global-replace-form" class="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3">
+                <input id="gr-from" type="text" required placeholder="Exact text to find..." class="h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                <input id="gr-to" type="text" required placeholder="Replace with..." class="h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                <button type="submit" class="h-9 px-4 rounded-lg bg-[#0F766E] hover:bg-[#0B5F58] text-white text-[13px] font-medium transition">
+                  Add live rule
                 </button>
               </form>
+              <div id="global-replace-list" class="divide-y divide-[#EAE8E1] text-[13px]"></div>
             </div>
           </section>
 
-          <!-- 6. OPEN LEDGER (BUG-FREE UNIFIED LIST + DELETE EXAMPLES) -->
-          <section id="view-ledger" class="dash-view hidden space-y-5">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="text-[12px] text-[#767D8C]">Verified inflows</div>
-                <div id="ld-kpi-in" class="font-code text-[22px] font-bold text-[#0B5F58] mt-1">0 EGP</div>
+          <!-- ================= WORKSPACE 3: CONTENT & DATA ================= -->
+          <section id="view-content" class="dash-view hidden space-y-5">
+            <!-- Sub-tab Pills (Permission Filtered) -->
+            <div id="content-subtabs" class="flex flex-wrap gap-1.5 bg-white border border-[#DFDDD6] rounded-xl p-2"></div>
+
+            <!-- 3A: OPEN LEDGER -->
+            <div id="sub-ledger" class="content-pane hidden space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4"><div class="text-[12px] text-[#767D8C]">Verified inflows</div><div id="ld-in" class="font-code font-bold text-[20px] text-[#0B5F58] mt-1">0 EGP</div></div>
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4"><div class="text-[12px] text-[#767D8C]">Outflows</div><div id="ld-out" class="font-code font-bold text-[20px] text-[#161A22] mt-1">0 EGP</div></div>
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4"><div class="text-[12px] text-[#767D8C]">Net reserve</div><div id="ld-net" class="font-code font-bold text-[20px] text-[#1B365D] mt-1">0 EGP</div></div>
               </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="text-[12px] text-[#767D8C]">Outflows</div>
-                <div id="ld-kpi-out" class="font-code text-[22px] font-bold text-[#161A22] mt-1">0 EGP</div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="text-[12px] text-[#767D8C]">Net reserve</div>
-                <div id="ld-kpi-net" class="font-code text-[22px] font-bold text-[#1B365D] mt-1">0 EGP</div>
+
+              <form id="ledger-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <input type="hidden" id="ld-id" />
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3 class="font-display font-semibold text-[16px]">Add or edit ledger entry</h3>
+                  <button id="ld-clear-all" type="button" class="text-[12px] text-[#B42318] hover:underline">Delete all entries</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="ld-date" type="date" required class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                  <input id="ld-vendor" type="text" required placeholder="Contributor or vendor" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="ld-channel" type="text" value="InstaPay" required placeholder="Channel" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="ld-type" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="inflow">Inflow (+ EGP)</option>
+                    <option value="outflow">Outflow (- EGP)</option>
+                  </select>
+                  <select id="ld-status" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="Verified">Verified</option>
+                    <option value="Audited">Audited</option>
+                  </select>
+                  <input id="ld-amount" type="number" min="1" required placeholder="Amount EGP" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                </div>
+                <div class="flex gap-2">
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save entry</button>
+                  <button id="ld-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
+                </div>
+              </form>
+
+              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                <div id="ld-list" class="divide-y divide-[#EAE8E1]"></div>
               </div>
             </div>
 
-            <form id="ld-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
-              <input id="ld-id" type="hidden" />
-              <div>
-                <label class="block text-[11.5px] font-medium mb-1">Date *</label>
-                <input id="ld-date" type="date" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div class="sm:col-span-2">
-                <label class="block text-[11.5px] font-medium mb-1">Contributor / Vendor *</label>
-                <input id="ld-vendor" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium mb-1">Channel *</label>
-                <input id="ld-channel" type="text" required value="Infrastructure" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium mb-1">Type</label>
-                <select id="ld-type" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                  <option value="inflow">Inflow (+)</option>
-                  <option value="outflow">Outflow (-)</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-[11.5px] font-medium mb-1">Amount EGP *</label>
-                <input id="ld-amount" type="number" min="1" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-              </div>
-              <div class="sm:col-span-6 flex flex-wrap justify-between gap-2 pt-2 border-t border-[#EAE8E1]">
-                <button id="ld-clear-examples-btn" type="button" class="h-9 px-3.5 rounded-lg border border-[#FECDCA] text-[#B42318] hover:bg-[#FEF3F2] text-[12.5px] font-medium transition">
-                  Clear all initial examples
-                </button>
+            <!-- 3B: CHAPTERS (TF Connect) -->
+            <div id="sub-chapters" class="content-pane hidden space-y-5">
+              <form id="ch-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <input type="hidden" id="ch-id" />
+                <h3 class="font-display font-semibold text-[16px]">Add or update TF Connect chapter</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <input id="ch-name" type="text" required placeholder="Chapter name" class="sm:col-span-2 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="ch-type" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="School Chapter">School Chapter</option>
+                    <option value="Project Guild">Project Guild</option>
+                    <option value="Research Lab">Research Lab</option>
+                  </select>
+                  <input id="ch-gov" type="text" required placeholder="Governorate (e.g. Cairo)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="ch-focus" type="text" placeholder="Focus area" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="ch-desc" type="text" required placeholder="Short description" class="sm:col-span-2 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
                 <div class="flex gap-2">
-                  <button id="ld-reset-btn" type="button" class="h-9 px-3 text-[12.5px] text-[#525866]">Reset</button>
-                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save live entry</button>
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save chapter</button>
+                  <button id="ch-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
+                </div>
+              </form>
+              <div id="ch-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
+            </div>
+
+            <!-- 3C: GUIDES (TF Guides) -->
+            <div id="sub-guides" class="content-pane hidden space-y-5">
+              <form id="gd-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <input type="hidden" id="gd-id" />
+                <h3 class="font-display font-semibold text-[16px]">Publish or edit study workbook</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <input id="gd-title" type="text" required placeholder="Guide title" class="sm:col-span-2 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="gd-cat" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="Research & ISEF">Research &amp; ISEF</option>
+                    <option value="Olympiads">Olympiads</option>
+                    <option value="Global Admissions">Global Admissions</option>
+                    <option value="Engineering">Engineering</option>
+                  </select>
+                  <input id="gd-level" type="text" placeholder="Duration (e.g. 6 Weeks)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <input id="gd-summary" type="text" required placeholder="Short summary" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                <textarea id="gd-steps" rows="3" placeholder="Checklist milestones (one step per line)..." class="w-full p-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]"></textarea>
+                <input id="gd-url" type="text" placeholder="Optional external URL (https://...)" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                <div class="flex gap-2">
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Publish guide</button>
+                  <button id="gd-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
+                </div>
+              </form>
+              <div id="gd-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
+            </div>
+
+            <!-- 3D: OPPORTUNITIES (TF News Live Announcements) -->
+            <div id="sub-opportunities" class="content-pane hidden space-y-5">
+              <form id="op-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <input type="hidden" id="op-id" />
+                <h3 class="font-display font-semibold text-[16px]">Publish opportunity to TF News</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <input id="op-title" type="text" required placeholder="Opportunity title" class="sm:col-span-2 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="op-cat" type="text" placeholder="Category (Scholarship / Summer)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="op-deadline" type="date" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                </div>
+                <input id="op-url" type="url" placeholder="https://..." class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                <div class="flex gap-2">
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Publish opportunity</button>
+                  <button id="op-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
+                </div>
+              </form>
+              <div id="op-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
+            </div>
+
+            <!-- 3E: CERTIFICATES (TF Verify) -->
+            <div id="sub-certificates" class="content-pane hidden space-y-5">
+              <form id="cr-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <h3 class="font-display font-semibold text-[16px]">Issue or update verifiable credential</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="cr-serial" type="text" required placeholder="TFU-2026-XXXXXX" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code uppercase" />
+                  <input id="cr-name" type="text" required placeholder="Recipient full name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="cr-role" type="text" required placeholder="Role / track" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="cr-type" type="text" value="Volunteer" required placeholder="Type" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="cr-hours" type="number" min="0" value="40" required class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                  <select id="cr-status" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="active">Active</option>
+                    <option value="revoked">Revoked</option>
+                  </select>
+                </div>
+                <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save credential</button>
+              </form>
+              <div id="cr-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
+            </div>
+          </section>
+
+          <!-- ================= WORKSPACE 4: TEAM & TASKS ================= -->
+          <section id="view-teamwork" class="dash-view hidden space-y-5">
+            <div class="flex flex-wrap gap-1.5 bg-white border border-[#DFDDD6] rounded-xl p-2" id="teamwork-subtabs">
+              <button type="button" data-tw="tasks" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white">Tasks Board</button>
+              <button type="button" data-tw="roster" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Team &amp; HR</button>
+              <button type="button" data-tw="timelogs" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Time Logs</button>
+              <button type="button" data-tw="achievers" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Top Achievers</button>
+            </div>
+
+            <!-- 4A: TASKS KANBAN -->
+            <div id="tw-tasks" class="tw-pane space-y-5">
+              <form id="task-create-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
+                <div class="md:col-span-2">
+                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Task title</label>
+                  <input id="tk-title" type="text" required placeholder="Action item for team member..." class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Division</label>
+                  <select id="tk-div" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option>Founders</option><option>HR Team</option><option>PR Team</option><option>Social Media Team</option><option>Marketing Team</option><option>IT Team</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Assignee email</label>
+                  <input id="tk-assignee" type="email" placeholder="Optional" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Due &amp; Points</label>
+                  <div class="flex gap-1.5">
+                    <input id="tk-due" type="date" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[12px] font-code" />
+                    <input id="tk-pts" type="number" min="5" max="200" value="25" class="w-16 h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[12px] font-code" />
+                  </div>
+                </div>
+                <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Add task</button>
+              </form>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                  <div class="pb-3 border-b border-[#EAE8E1] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px]">To-Do</span>
+                    <span id="cnt-todo" class="font-code text-[12px] text-[#767D8C]">0</span>
+                  </div>
+                  <div id="col-todo" class="mt-3 space-y-2.5"></div>
+                </div>
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                  <div class="pb-3 border-b border-[#EAE8E1] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px] text-[#1B365D]">In Progress</span>
+                    <span id="cnt-doing" class="font-code text-[12px] text-[#767D8C]">0</span>
+                  </div>
+                  <div id="col-doing" class="mt-3 space-y-2.5"></div>
+                </div>
+                <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                  <div class="pb-3 border-b border-[#EAE8E1] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px] text-[#0B5F58]">Completed</span>
+                    <span id="cnt-done" class="font-code text-[12px] text-[#767D8C]">0</span>
+                  </div>
+                  <div id="col-done" class="mt-3 space-y-2.5"></div>
                 </div>
               </div>
-            </form>
+            </div>
 
-            <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-              <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex justify-between items-center text-[13px]">
-                <strong class="font-display text-[#161A22]">All ledger rows shown on /transparency</strong>
-                <span id="ld-status" class="font-code text-[12px] text-[#0B5F58]"></span>
+            <!-- 4B: TEAM & HR ROSTER -->
+            <div id="tw-roster" class="tw-pane hidden space-y-5">
+              <form id="team-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                <input type="hidden" id="tm-id" />
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <h3 class="font-display font-semibold text-[16px]">Add or edit team member</h3>
+                  <button id="tm-sync-roster" type="button" class="text-[12.5px] font-medium text-[#0B5F58] hover:underline">Sync 71-member org roster to Firestore</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="tm-name" type="text" required placeholder="Full name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="tm-role" type="text" required placeholder="Role / Title" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="tm-team" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option>Founders</option><option>HR Team</option><option>PR Team</option><option>Social Media Team</option><option>Marketing Team</option><option>IT Team</option>
+                  </select>
+                  <input id="tm-school" type="text" placeholder="School / University" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="tm-cohort" type="text" value="2026-11" placeholder="YYYY-MM" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                  <input id="tm-bio" type="text" placeholder="Short bio" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div class="flex gap-2">
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save member</button>
+                  <button id="tm-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
+                </div>
+              </form>
+
+              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2">
+                  <input id="tm-search" type="search" placeholder="Search member or division..." class="h-8 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px] w-full sm:w-64" />
+                  <span id="tm-count" class="font-code text-[12px] text-[#525866]"></span>
+                </div>
+                <div id="tm-list" class="divide-y divide-[#EAE8E1] max-h-[520px] overflow-y-auto"></div>
               </div>
-              <div id="ld-list" class="divide-y divide-[#EAE8E1]"></div>
+            </div>
+
+            <!-- 4C: TIME LOGS -->
+            <div id="tw-timelogs" class="tw-pane hidden bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+              <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Team work session logs</div>
+              <div id="tl-all-list" class="divide-y divide-[#EAE8E1]"></div>
+            </div>
+
+            <!-- 4D: TOP ACHIEVERS -->
+            <div id="tw-achievers" class="tw-pane hidden space-y-5">
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[16px]">Top Achievers Leaderboard</span>
+                    <span class="font-code text-[11.5px] text-[#525866]">Tasks + Hours + Awards</span>
+                  </div>
+                  <div id="lb-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+                <div class="lg:col-span-5 space-y-4">
+                  <form id="rec-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
+                    <h3 class="font-display font-semibold text-[16px]">Award recognition</h3>
+                    <input id="rec-email" type="email" required placeholder="Teammate email" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                    <input id="rec-name" type="text" required placeholder="Teammate name" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                    <input id="rec-badge" type="text" required placeholder="Award title (e.g. Top Researcher)" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                    <div class="grid grid-cols-2 gap-2.5">
+                      <input id="rec-pts" type="number" min="10" max="500" value="50" class="h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                      <button type="submit" class="h-9 px-4 rounded-lg bg-[#0F766E] hover:bg-[#0B5F58] text-white text-[13px] font-medium">Grant award</button>
+                    </div>
+                  </form>
+                  <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                    <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Recent recognitions</div>
+                    <div id="rec-list" class="divide-y divide-[#EAE8E1]"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
-          <!-- 7. CHAPTERS & GUIDES -->
-          <section id="view-chapters" class="dash-view hidden space-y-5">
-            <form id="ch-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
-              <input id="ch-id" type="hidden" />
-              <input id="ch-serial" type="text" required placeholder="CH-28" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-              <input id="ch-name" type="text" required placeholder="Chapter name *" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <select id="ch-type" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                <option value="School Chapter">School Chapter</option>
-                <option value="Project Guild">Project Guild</option>
-                <option value="Research Lab">Research Lab</option>
-              </select>
-              <input id="ch-gov" type="text" required placeholder="Governorate *" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="ch-focus" type="text" placeholder="Focus" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="ch-desc" type="text" required placeholder="Description *" class="sm:col-span-2 w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save chapter</button>
-            </form>
-            <div id="ch-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
-          </section>
-
-          <section id="view-guides" class="dash-view hidden space-y-5">
-            <form id="gd-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
-              <input id="gd-id" type="hidden" />
-              <input id="gd-serial" type="text" required placeholder="GD-07" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-              <input id="gd-title" type="text" required placeholder="Guide title *" class="sm:col-span-2 w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <select id="gd-category" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                <option value="Research & ISEF">Research &amp; ISEF</option>
-                <option value="Olympiads">Olympiads</option>
-                <option value="Global Admissions">Global Admissions</option>
-                <option value="Engineering">Engineering</option>
-              </select>
-              <input id="gd-level" type="text" placeholder="Duration / Level" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="gd-summary" type="text" required placeholder="Summary *" class="sm:col-span-2 w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save guide</button>
-            </form>
-            <div id="gd-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
-          </section>
-
-          <!-- 8. CERTIFICATES & OPPORTUNITIES -->
-          <section id="view-certificates" class="dash-view hidden space-y-5">
-            <form id="cr-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-              <input id="cr-serial" type="text" required placeholder="TFU-2026-000142" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code uppercase" />
-              <input id="cr-recipient" type="text" required placeholder="Recipient Name *" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="cr-role" type="text" required placeholder="Role *" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="cr-cohort" type="text" value="2026" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="cr-hours" type="number" min="0" value="40" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-              <div class="flex gap-2">
-                <select id="cr-status" class="flex-1 h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                  <option value="valid">Valid</option>
-                  <option value="revoked">Revoked</option>
-                </select>
-                <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save</button>
-              </div>
-            </form>
-            <div id="cr-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
-          </section>
-
-          <section id="view-opportunities" class="dash-view hidden space-y-5">
-            <form id="op-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-              <input id="op-id" type="hidden" />
-              <input id="op-title" type="text" required placeholder="Opportunity title *" class="sm:col-span-2 w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <select id="op-section" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                <option value="Programs">Programs</option>
-                <option value="Scholarships">Scholarships</option>
-                <option value="Internships">Internships</option>
-                <option value="Activities">Activities</option>
-              </select>
-              <input id="op-deadline" type="date" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <input id="op-link" type="url" required placeholder="https://" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-              <div class="flex gap-2">
-                <input id="op-desc" type="text" required placeholder="Short description *" class="flex-1 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save</button>
-              </div>
-            </form>
-            <div id="op-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
-          </section>
-
-          <!-- 9. ACCESS & ROLES + AUDIT LOG (OWNER / ADMIN ONLY) -->
-          <section id="view-access" class="dash-view hidden space-y-6">
-            <form id="ac-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input id="ac-email" type="email" required placeholder="Teammate email *" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                <input id="ac-name" type="text" placeholder="Full Name" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                <select id="ac-role" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                  <option value="hr_lead">HR Lead (Team + Moderation + Tasks)</option>
-                  <option value="finance_lead">Finance Lead (Open Ledger)</option>
-                  <option value="copy_editor">Website Copy Editor (Click-to-Edit)</option>
-                  <option value="chapters_lead">Chapters Lead (Connect)</option>
-                  <option value="guides_lead">Guides Lead (Guides)</option>
-                  <option value="news_editor">News Editor (Opportunities)</option>
-                  <option value="registrar">Registrar (Certificates)</option>
-                  <option value="member">Team Member (Tasks + Time + Achievers)</option>
-                  <option value="admin">Admin (Full Control)</option>
-                  <option value="owner">Owner (Full Control)</option>
-                  <option value="custom">Custom Matrix</option>
-                </select>
-              </div>
-              <div id="ac-perms" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[12.5px]"></div>
-              <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#EAE8E1]">
-                <label class="inline-flex items-center gap-2 text-[13px] font-medium">
-                  <input id="ac-active" type="checkbox" checked class="rounded border-[#DCD9D0]" />
-                  <span>Account active</span>
-                </label>
-                <button type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save teammate permissions</button>
-              </div>
-            </form>
-
-            <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-              <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Assigned dashboard accounts</div>
-              <div id="ac-list" class="divide-y divide-[#EAE8E1]"></div>
+          <!-- ================= WORKSPACE 5: ACCESS & ACTIVITY ================= -->
+          <section id="view-access" class="dash-view hidden space-y-5">
+            <div class="flex flex-wrap gap-1.5 bg-white border border-[#DFDDD6] rounded-xl p-2" id="access-subtabs">
+              <button type="button" data-ac="perms" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white">Team Access</button>
+              <button type="button" data-ac="audit" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Activity Log</button>
             </div>
 
-            <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-              <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Audit trail</div>
-              <div id="audit-list" class="divide-y divide-[#EAE8E1] max-h-[360px] overflow-y-auto"></div>
+            <div id="ac-pane-perms" class="ac-pane space-y-5">
+              <form id="ac-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-4">
+                <h3 class="font-display font-semibold text-[16px]">Assign teammate role &amp; exact permissions</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="ac-email" type="email" required placeholder="teammate@gmail.com" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="ac-name" type="text" placeholder="Display name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="ac-role" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="owner">Owner (Full access)</option>
+                    <option value="hr_lead">HR Lead (Team &amp; Tasks)</option>
+                    <option value="copy_editor">Copy Editor (All website text)</option>
+                    <option value="finance_lead">Finance Lead (Open Ledger)</option>
+                    <option value="chapters_lead">Chapters Lead (TF Connect)</option>
+                    <option value="guides_lead">Guides Lead (TF Guides)</option>
+                    <option value="news_editor">News Editor (TF News)</option>
+                    <option value="registrar">Registrar (TF Verify)</option>
+                    <option value="member">Team Member (Tasks &amp; Time)</option>
+                    <option value="custom">Custom checkboxes</option>
+                  </select>
+                </div>
+                <div id="ac-perms" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[12.5px]"></div>
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#EAE8E1]">
+                  <label class="inline-flex items-center gap-2 text-[13px] font-medium">
+                    <input id="ac-active" type="checkbox" checked class="rounded border-[#DCD9D0]" />
+                    <span>Account active</span>
+                  </label>
+                  <button type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save teammate permissions</button>
+                </div>
+              </form>
+
+              <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Assigned dashboard accounts</div>
+                <div id="ac-list" class="divide-y divide-[#EAE8E1]"></div>
+              </div>
+            </div>
+
+            <div id="ac-pane-audit" class="ac-pane hidden bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+              <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Dashboard audit log</div>
+              <div id="audit-list" class="divide-y divide-[#EAE8E1] max-h-[480px] overflow-y-auto"></div>
             </div>
           </section>
         </div>
       </main>
     </div>
 
+    <script id="dash-seed" type="application/json" set:html={seedPayload}></script>
     <script src="/js/tf-chrome.js" defer></script>
-    <script
-      type="module"
-      define:vars={{
-        BASELINE_MEMBERS,
-        BASELINE_CHAPTERS,
-        BASELINE_GUIDES,
-        BASELINE_LEDGER,
-        SITE_COPY_PAGES,
-        STARTER_TASKS,
-      }}
-    >
+    <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
       import {
         getAuth,
@@ -740,6 +691,10 @@ const faviconSvg = encodeURIComponent(
         serverTimestamp,
       } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
+      const SEED = JSON.parse(document.getElementById('dash-seed').textContent || '{}');
+      const BASELINE_MEMBERS = SEED.BASELINE_MEMBERS || [];
+      const COPY_CATALOG = SEED.COPY_CATALOG || [];
+
       const app = initializeApp({
         apiKey: 'AIzaSyB0bILaWHg8QXuwl3Fhfht3BQnYLgTkWUk',
         authDomain: 'tf-unions.firebaseapp.com',
@@ -754,16 +709,16 @@ const faviconSvg = encodeURIComponent(
       googleProvider.setCustomParameters({ prompt: 'select_account' });
 
       const ALL_PERMS = [
-        { key: 'edit_site_copy', label: 'Visual Click-to-Edit Copy' },
-        { key: 'edit_team', label: 'Team & HR Roster' },
-        { key: 'manage_tasks', label: 'Create & Assign Tasks' },
-        { key: 'edit_ledger', label: 'Open Financial Ledger' },
-        { key: 'edit_chapters', label: 'Connect Chapters' },
-        { key: 'edit_guides', label: 'Research Guides' },
-        { key: 'edit_opportunities', label: 'News Opportunities' },
-        { key: 'manage_certificates', label: 'Verify Certificates' },
+        { key: 'edit_site_copy', label: 'Edit Website Sentences (All 6 portals)' },
+        { key: 'edit_ledger', label: 'Manage Open Ledger' },
+        { key: 'edit_chapters', label: 'Manage Connect Chapters' },
+        { key: 'edit_guides', label: 'Manage Research Guides' },
+        { key: 'edit_opportunities', label: 'Manage News Opportunities' },
+        { key: 'manage_certificates', label: 'Issue & Revoke Certificates' },
+        { key: 'edit_team', label: 'Manage Team & HR Roster' },
+        { key: 'manage_tasks', label: 'Create & Assign Tasks / Awards' },
         { key: 'moderate_submissions', label: 'Moderate Submissions' },
-        { key: 'manage_access', label: 'Access Matrix & Audit Log' },
+        { key: 'manage_access', label: 'Manage Access & Audit Log' },
       ];
 
       const ROLE_PRESETS = {
@@ -779,24 +734,20 @@ const faviconSvg = encodeURIComponent(
         member: [],
       };
 
-      const NAV_ITEMS = [
-        { id: 'overview', label: 'Overview & Time', perm: null },
-        { id: 'tasks', label: 'Tasks & To-Dos', perm: null },
-        { id: 'leaderboard', label: 'Top Achievers', perm: null },
-        { id: 'copy', label: 'Click-to-Edit Copy', perm: 'edit_site_copy' },
-        { id: 'team', label: 'Team & HR Hub', perm: 'edit_team' },
+      const CONTENT_TABS = [
         { id: 'ledger', label: 'Open Ledger', perm: 'edit_ledger' },
         { id: 'chapters', label: 'Chapters', perm: 'edit_chapters' },
         { id: 'guides', label: 'Guides', perm: 'edit_guides' },
-        { id: 'certificates', label: 'Certificates', perm: 'manage_certificates' },
         { id: 'opportunities', label: 'Opportunities', perm: 'edit_opportunities' },
-        { id: 'access', label: 'Access & Audit', perm: 'manage_access' },
+        { id: 'certificates', label: 'Certificates', perm: 'manage_certificates' },
       ];
 
       let currentUser = null;
       let activeRole = 'member';
       let activePerms = new Set();
-      let activeView = 'overview';
+      let activeWorkspace = 'home';
+      let activeContentTab = 'ledger';
+      let activeTeamTab = 'tasks';
       let timerStartedAt = null;
       let timerInterval = null;
 
@@ -850,24 +801,33 @@ const faviconSvg = encodeURIComponent(
         } catch {}
       }
 
+      function getVisibleWorkspaces() {
+        const items = [{ id: 'home', label: 'Home' }];
+        if (can('edit_site_copy')) items.push({ id: 'copy', label: 'Website Editor' });
+        if (CONTENT_TABS.some((t) => can(t.perm))) items.push({ id: 'content', label: 'Content & Data' });
+        items.push({ id: 'teamwork', label: 'Team & Tasks' });
+        if (can('manage_access')) items.push({ id: 'access', label: 'Access & Activity' });
+        return items;
+      }
+
       function renderNav() {
-        const allowed = NAV_ITEMS.filter((n) => can(n.perm));
-        if (!allowed.some((n) => n.id === activeView)) activeView = allowed[0]?.id || 'overview';
+        const allowed = getVisibleWorkspaces();
+        if (!allowed.some((n) => n.id === activeWorkspace)) activeWorkspace = allowed[0]?.id || 'home';
 
         const makeLinks = (container, onPick) => {
           container.replaceChildren();
           allowed.forEach((n) => {
             const btn = document.createElement('button');
             btn.type = 'button';
-            const sel = n.id === activeView;
+            const sel = n.id === activeWorkspace;
             btn.className =
-              'w-full text-left px-3 py-2 rounded-lg text-[13.5px] font-medium transition ' +
+              'w-full text-left px-3 py-2.5 rounded-lg text-[13.5px] font-medium transition ' +
               (sel ? 'bg-white text-[#0F1D33] font-semibold' : 'text-[#C7D0DE] hover:bg-white/10 hover:text-white');
             btn.textContent = n.label;
             btn.addEventListener('click', () => {
-              activeView = n.id;
+              activeWorkspace = n.id;
               renderNav();
-              switchView(n.id);
+              switchWorkspace(n.id);
               if (onPick) onPick();
             });
             container.appendChild(btn);
@@ -879,27 +839,28 @@ const faviconSvg = encodeURIComponent(
           document.getElementById('mobile-nav-drawer').classList.add('hidden');
         });
         document.getElementById('active-page-title').textContent =
-          allowed.find((n) => n.id === activeView)?.label || 'Dashboard';
+          allowed.find((n) => n.id === activeWorkspace)?.label || 'Home';
       }
 
-      function switchView(id) {
+      function switchWorkspace(id) {
         document.querySelectorAll('.dash-view').forEach((v) => v.classList.add('hidden'));
         document.getElementById('view-' + id)?.classList.remove('hidden');
-        if (id === 'overview') loadOverview();
-        else if (id === 'tasks') loadTasks();
-        else if (id === 'leaderboard') loadLeaderboard();
-        else if (id === 'copy') loadCopyEditor();
-        else if (id === 'team') loadTeam();
-        else if (id === 'ledger') loadLedger();
-        else if (id === 'chapters') loadChapters();
-        else if (id === 'guides') loadGuides();
-        else if (id === 'certificates') loadCertificates();
-        else if (id === 'opportunities') loadOpportunities();
+        if (id === 'home') loadHome();
+        else if (id === 'copy') loadWebsiteEditor();
+        else if (id === 'content') initContentWorkspace();
+        else if (id === 'teamwork') loadTeamworkPane(activeTeamTab);
         else if (id === 'access') loadAccessAndAudit();
       }
 
-      // ---- 1. LIVE SESSION TIMER & TIME LOGS ----
-      function formatSeconds(sec) {
+      document.getElementById('btn-go-tasks').addEventListener('click', () => {
+        activeWorkspace = 'teamwork';
+        activeTeamTab = 'tasks';
+        renderNav();
+        switchWorkspace('teamwork');
+      });
+
+      // ---- LIVE TIMER & WORK LOG ----
+      function fmtSecs(sec) {
         const h = String(Math.floor(sec / 3600)).padStart(2, '0');
         const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
         const s = String(sec % 60).padStart(2, '0');
@@ -911,9 +872,9 @@ const faviconSvg = encodeURIComponent(
         if (!timerStartedAt) {
           timerStartedAt = Date.now();
           btn.textContent = 'Stop & log';
-          btn.className = 'h-7 px-2.5 rounded bg-[#B42318] text-white text-[12px] font-medium transition';
+          btn.className = 'ml-1 h-7 px-2.5 rounded bg-[#B42318] text-white text-[12px] font-medium transition';
           timerInterval = setInterval(() => {
-            document.getElementById('timer-readout').textContent = formatSeconds(Math.floor((Date.now() - timerStartedAt) / 1000));
+            document.getElementById('timer-readout').textContent = fmtSecs(Math.floor((Date.now() - timerStartedAt) / 1000));
           }, 1000);
         } else {
           const mins = Math.max(1, Math.round((Date.now() - timerStartedAt) / 60000));
@@ -921,8 +882,8 @@ const faviconSvg = encodeURIComponent(
           timerStartedAt = null;
           document.getElementById('timer-readout').textContent = '00:00:00';
           btn.textContent = 'Start session';
-          btn.className = 'h-7 px-2.5 rounded bg-[#1B365D] hover:bg-[#132847] text-white text-[12px] font-medium transition';
-          await logWorkTime('Dashboard live work session', 'Founders', mins);
+          btn.className = 'ml-1 h-7 px-2.5 rounded bg-[#1B365D] hover:bg-[#132847] text-white text-[12px] font-medium transition';
+          await logWorkTime('Dashboard shift session', 'Founders', mins);
         }
       });
 
@@ -938,7 +899,8 @@ const faviconSvg = encodeURIComponent(
         });
         await writeAudit('time', 'log', minutes + 'm', `${summary} (${minutes}m)`);
         showToast(`Logged ${minutes} mins`);
-        loadOverview();
+        if (activeWorkspace === 'home') loadHome();
+        else if (activeWorkspace === 'teamwork' && activeTeamTab === 'timelogs') loadTimeLogs();
       }
 
       document.getElementById('time-log-form').addEventListener('submit', async (e) => {
@@ -948,582 +910,444 @@ const faviconSvg = encodeURIComponent(
           document.getElementById('tl-division').value,
           Number(document.getElementById('tl-minutes').value),
         );
-        document.getElementById('tl-summary').value = '';
+        e.target.reset();
+        document.getElementById('tl-minutes').value = 30;
       });
 
-      async function loadOverview() {
-        const [logsSnap, tasksSnap] = await Promise.all([
-          getDocs(collection(db, 'timeLogs')),
-          getDocs(collection(db, 'tasks')),
+      // ---- 1. HOME WORKSPACE ----
+      async function loadHome() {
+        const [memSnap, taskSnap, logSnap, ledSnap] = await Promise.all([
+          getDocs(collection(db, 'teamMembers')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'tasks')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'timeLogs')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'ledgerEntries')).catch(() => ({ docs: [] })),
         ]);
-        const myEmail = (currentUser?.email || '').toLowerCase();
-        let myMins = 0;
-        let teamMins = 0;
-        const logs = [];
-        logsSnap.forEach((d) => {
-          const x = d.data();
-          const m = Number(x.minutes) || 0;
-          teamMins += m;
-          if ((x.actorEmail || '').toLowerCase() === myEmail || x.actorUid === currentUser?.uid) myMins += m;
-          logs.push({ id: d.id, ...x });
+
+        const memCount = memSnap.docs.length > 0 ? memSnap.docs.filter((d) => !d.data().archived).length : BASELINE_MEMBERS.length;
+        const tasks = taskSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const openTasks = tasks.filter((t) => t.status !== 'done');
+
+        let totalMins = 0;
+        const logs = logSnap.docs.map((d) => {
+          const v = d.data();
+          totalMins += Number(v.minutes) || 0;
+          return { id: d.id, ...v };
         });
         logs.sort((a, b) => String(b.createdIso || '').localeCompare(String(a.createdIso || '')));
 
-        let openTasks = 0;
-        tasksSnap.forEach((d) => { if (d.data().status !== 'done') openTasks++; });
-
-        document.getElementById('kpi-my-hours').textContent = (myMins / 60).toFixed(1) + 'h';
-        document.getElementById('kpi-team-hours').textContent = (teamMins / 60).toFixed(1) + 'h';
-        document.getElementById('kpi-open-tasks').textContent = String(openTasks);
-        document.getElementById('timelog-count').textContent = `${logs.length} log${logs.length === 1 ? '' : 's'}`;
-
-        const list = document.getElementById('timelog-list');
-        list.replaceChildren();
-        if (logs.length === 0) {
-          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No time logged yet. Start the session timer or add a manual entry.</div>';
-          return;
-        }
-        logs.slice(0, 25).forEach((l) => {
-          const row = document.createElement('div');
-          row.className = 'px-5 py-3 flex items-center justify-between gap-3';
-          row.innerHTML = `
-            <div class="min-w-0">
-              <div class="text-[13.5px] font-medium text-[#161A22] truncate">${esc(l.summary)}</div>
-              <div class="text-[12px] text-[#525866]">${esc(l.actorName || l.actorEmail)} · ${esc(l.division || 'Team')}</div>
-            </div>
-            <span class="font-code text-[12px] font-semibold text-[#0B5F58] shrink-0">${Number(l.minutes)} min</span>
-          `;
-          list.appendChild(row);
+        let inf = 0;
+        let out = 0;
+        ledSnap.docs.forEach((d) => {
+          const v = d.data();
+          const a = Number(v.amountEgp) || 0;
+          if (v.entryType === 'outflow') out += a;
+          else inf += a;
         });
+
+        document.getElementById('stat-members').textContent = String(memCount);
+        document.getElementById('stat-tasks').textContent = String(openTasks.length);
+        document.getElementById('stat-hours').textContent = `${Math.round((totalMins / 60) * 10) / 10}h`;
+        document.getElementById('stat-ledger').textContent = `${(inf - out).toLocaleString('en-US')} EGP`;
+
+        const hTasks = document.getElementById('home-tasks-list');
+        hTasks.replaceChildren();
+        if (!openTasks.length) {
+          hTasks.innerHTML = '<div class="py-3 text-[#767D8C]">No open tasks right now.</div>';
+        } else {
+          openTasks.slice(0, 4).forEach((t) => {
+            const row = document.createElement('div');
+            row.className = 'py-2.5 flex items-center justify-between gap-2';
+            row.innerHTML = `<div class="min-w-0"><div class="font-medium truncate">${esc(t.title)}</div><div class="text-[11.5px] text-[#767D8C]">${esc(t.division || '')}${t.assigneeEmail ? ' · ' + esc(t.assigneeEmail) : ''}</div></div><span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] shrink-0">${esc(t.status || 'todo')}</span>`;
+            hTasks.appendChild(row);
+          });
+        }
+
+        const hLogs = document.getElementById('home-logs-list');
+        hLogs.replaceChildren();
+        if (!logs.length) {
+          hLogs.innerHTML = '<div class="py-3 text-[#767D8C]">No work sessions logged yet.</div>';
+        } else {
+          logs.slice(0, 4).forEach((l) => {
+            const row = document.createElement('div');
+            row.className = 'py-2 flex items-center justify-between gap-2';
+            row.innerHTML = `<div class="min-w-0 truncate"><strong>${esc(l.actorName || '')}</strong> · ${esc(l.summary || '')}</div><span class="font-code text-[11.5px] text-[#0B5F58] shrink-0">${Number(l.minutes || 0)}m</span>`;
+            hLogs.appendChild(row);
+          });
+        }
       }
 
-      // ---- 2. TASKS & TO-DOS ----
-      async function loadTasks() {
-        const manager = can('manage_tasks') || can('moderate_submissions');
-        document.getElementById('task-create-form').classList.toggle('hidden', !manager);
-        document.getElementById('task-seed-btn').classList.toggle('hidden', !manager);
+      // ---- 2. UNIVERSAL WEBSITE TEXT EDITOR (ALL 6 PORTALS) ----
+      let liveCopyMap = {};
+      let globalRules = [];
+      let selectedPortal = 'all';
+      let selectedPageKey = COPY_CATALOG[0]?.pageKey || 'home';
+      let selectedFieldKey = COPY_CATALOG[0]?.fields?.[0]?.key || '';
 
-        const snap = await getDocs(collection(db, 'tasks'));
-        const divFilter = document.getElementById('task-filter-div').value;
-        const onlyMine = document.getElementById('task-only-mine').checked;
-        const myEmail = (currentUser?.email || '').toLowerCase();
-
-        const cols = { todo: [], doing: [], done: [] };
+      async function loadWebsiteEditor() {
+        const snap = await getDocs(collection(db, 'siteCopy'));
+        liveCopyMap = {};
+        globalRules = [];
         snap.forEach((d) => {
-          const t = { id: d.id, ...d.data() };
-          if (divFilter !== 'All' && t.division !== divFilter) return;
-          if (onlyMine && (t.assigneeEmail || '').toLowerCase() !== myEmail) return;
-          const st = cols[t.status] ? t.status : 'todo';
-          cols[st].push(t);
-        });
-
-        ['todo', 'doing', 'done'].forEach((st) => {
-          document.getElementById('cnt-' + st).textContent = String(cols[st].length);
-          const container = document.getElementById('col-' + st);
-          container.replaceChildren();
-          if (cols[st].length === 0) {
-            container.innerHTML = '<div class="py-6 text-center text-[12.5px] text-[#767D8C]">Empty</div>';
+          if (d.id === '_global') {
+            try {
+              const parsed = JSON.parse(d.data().replacementsJson || '[]');
+              if (Array.isArray(parsed)) globalRules = parsed;
+            } catch {}
             return;
           }
-          cols[st].forEach((t) => {
-            const card = document.createElement('div');
-            card.className = 'p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] space-y-2';
-            const nextStatus = st === 'todo' ? 'doing' : st === 'doing' ? 'done' : 'todo';
-            const nextLabel = st === 'todo' ? 'Start →' : st === 'doing' ? 'Complete ✓' : 'Reopen';
-            card.innerHTML = `
-              <div class="flex items-center justify-between gap-2 text-[11px]">
-                <span class="font-medium px-2 py-0.5 rounded bg-white border border-[#DFDDD6] text-[#1B365D]">${esc(t.division || 'General')}</span>
-                <span class="font-code text-[#767D8C]">${esc(t.dueDate || '')}</span>
-              </div>
-              <div class="text-[13.5px] font-semibold text-[#161A22] leading-snug">${esc(t.title)}</div>
-              <div class="text-[11.5px] text-[#525866]">${t.assigneeEmail ? 'Assigned: ' + esc(t.assigneeEmail) : 'Open to division'}</div>
-              <div class="flex items-center justify-between pt-1">
-                <button type="button" class="move-btn text-[12px] font-semibold text-[#0B5F58] hover:underline">${nextLabel}</button>
-                ${manager ? '<button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button>' : ''}
-              </div>
-            `;
-            card.querySelector('.move-btn').addEventListener('click', async () => {
-              await updateDoc(doc(db, 'tasks', t.id), {
-                status: nextStatus,
-                completedByUid: nextStatus === 'done' ? currentUser.uid : null,
-                completedByEmail: nextStatus === 'done' ? (currentUser.email || '').toLowerCase() : null,
-                completedByName: nextStatus === 'done' ? (currentUser.displayName || currentUser.email.split('@')[0]) : null,
-              });
-              await writeAudit('tasks', nextStatus, t.id, t.title);
-              showToast(`Moved "${t.title.slice(0, 28)}"`);
-              loadTasks();
-            });
-            card.querySelector('.del-btn')?.addEventListener('click', async () => {
-              await deleteDoc(doc(db, 'tasks', t.id));
-              await writeAudit('tasks', 'delete', t.id, t.title);
-              loadTasks();
-            });
-            container.appendChild(card);
+          liveCopyMap[d.id] = d.data() || {};
+        });
+        renderPortalTabs();
+        renderPageList();
+        renderVisualCanvas();
+        renderGlobalRules();
+      }
+
+      function renderPortalTabs() {
+        const counts = { all: COPY_CATALOG.length };
+        const labels = { all: 'All Portals' };
+        COPY_CATALOG.forEach((p) => {
+          counts[p.portal] = (counts[p.portal] || 0) + 1;
+          labels[p.portal] = p.portalLabel;
+        });
+
+        const wrap = document.getElementById('copy-portal-tabs');
+        wrap.replaceChildren();
+        Object.keys(counts).forEach((key) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          const act = selectedPortal === key;
+          btn.className = act
+            ? 'px-3 py-1.5 rounded-lg bg-[#1B365D] text-white text-[12.5px] font-semibold transition'
+            : 'px-3 py-1.5 rounded-lg bg-[#F3F2EE] text-[#525866] hover:text-[#161A22] border border-[#DFDDD6] text-[12.5px] font-medium transition';
+          btn.textContent = `${labels[key]} (${counts[key]})`;
+          btn.addEventListener('click', () => {
+            selectedPortal = key;
+            const visible = COPY_CATALOG.filter((p) => selectedPortal === 'all' || p.portal === selectedPortal);
+            if (!visible.some((p) => p.pageKey === selectedPageKey) && visible[0]) {
+              selectedPageKey = visible[0].pageKey;
+              selectedFieldKey = visible[0].fields[0]?.key || '';
+            }
+            renderPortalTabs();
+            renderPageList();
+            renderVisualCanvas();
           });
+          wrap.appendChild(btn);
         });
       }
 
-      document.getElementById('task-filter-div').addEventListener('change', loadTasks);
-      document.getElementById('task-only-mine').addEventListener('change', loadTasks);
-      document.getElementById('task-seed-btn').addEventListener('click', async () => {
-        for (const t of STARTER_TASKS) {
-          await setDoc(doc(db, 'tasks', t.id), { ...t, updatedAt: new Date().toISOString() }, { merge: true });
+      function renderPageList() {
+        const wrap = document.getElementById('copy-page-list');
+        wrap.replaceChildren();
+        const filtered = COPY_CATALOG.filter((p) => selectedPortal === 'all' || p.portal === selectedPortal);
+        filtered.forEach((pg) => {
+          const ovCount = Object.keys(liveCopyMap[pg.pageKey] || {}).filter((k) => pg.fields.some((f) => f.key === k)).length;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          const sel = pg.pageKey === selectedPageKey;
+          btn.className = sel
+            ? 'w-full text-left px-3 py-2 rounded-lg bg-[#1B365D] text-white text-[12.5px] transition flex items-center justify-between gap-2'
+            : 'w-full text-left px-3 py-2 rounded-lg text-[#161A22] hover:bg-[#F3F2EE] text-[12.5px] transition flex items-center justify-between gap-2';
+          btn.innerHTML = `<span class="truncate font-medium">${esc(pg.label)}</span><span class="font-code text-[10.5px] shrink-0 ${sel ? 'text-[#7DD3C8]' : 'text-[#767D8C]'}">${ovCount > 0 ? ovCount + '/' : ''}${pg.fields.length}</span>`;
+          btn.addEventListener('click', () => {
+            selectedPageKey = pg.pageKey;
+            selectedFieldKey = pg.fields[0]?.key || '';
+            renderPageList();
+            renderVisualCanvas();
+          });
+          wrap.appendChild(btn);
+        });
+      }
+
+      function renderVisualCanvas() {
+        const pg = COPY_CATALOG.find((x) => x.pageKey === selectedPageKey);
+        if (!pg) return;
+        document.getElementById('copy-preview-portal').textContent = pg.portalLabel;
+        document.getElementById('copy-preview-url').textContent = pg.url;
+        document.getElementById('copy-open-live').href = pg.url;
+
+        const canvas = document.getElementById('copy-canvas');
+        canvas.setAttribute('dir', pg.rtl ? 'rtl' : 'ltr');
+        canvas.replaceChildren();
+
+        const overrides = liveCopyMap[pg.pageKey] || {};
+        pg.fields.forEach((f) => {
+          const val = overrides[f.key] || f.def;
+          const modified = Boolean(overrides[f.key] && overrides[f.key] !== f.def);
+          const box = document.createElement('div');
+          box.className = 'copy-hot' + (f.key === selectedFieldKey ? ' is-selected' : '');
+
+          const badge = f.kind.toUpperCase() + (modified ? ' · LIVE EDITED' : '');
+          const typCls =
+            f.kind === 'h1' ? 'font-display font-bold text-[22px] text-[#161A22] leading-snug'
+              : f.kind === 'h2' ? 'font-display font-semibold text-[17px] text-[#161A22]'
+              : f.kind === 'btn' ? 'inline-block px-3.5 py-1.5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium'
+              : f.kind === 'link' ? 'text-[13.5px] font-medium text-[#1B365D] underline'
+              : f.kind === 'input' ? 'px-3 py-1.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#767D8C] font-code'
+              : 'text-[13.5px] text-[#525866] leading-relaxed';
+
+          box.innerHTML = `<div class="flex items-center justify-between gap-2 mb-1"><span class="text-[11px] font-medium text-[#767D8C]">${esc(f.label)}</span><span class="font-code text-[10px] ${modified ? 'text-[#0B5F58] font-semibold' : 'text-[#767D8C]'}">${esc(badge)}</span></div><div class="${typCls}">${esc(val)}</div>`;
+          box.addEventListener('click', () => {
+            selectedFieldKey = f.key;
+            renderVisualCanvas();
+          });
+          canvas.appendChild(box);
+        });
+
+        const cur = pg.fields.find((x) => x.key === selectedFieldKey) || pg.fields[0];
+        if (cur) {
+          selectedFieldKey = cur.key;
+          document.getElementById('copy-field-kind').textContent = cur.kind.toUpperCase();
+          document.getElementById('copy-field-path').textContent = `${pg.pageKey}.${cur.key}`;
+          const ta = document.getElementById('copy-input');
+          ta.setAttribute('dir', pg.rtl ? 'rtl' : 'ltr');
+          ta.value = overrides[cur.key] || cur.def;
+          document.getElementById('copy-default-val').textContent = cur.def;
         }
-        await writeAudit('tasks', 'seed', 'starter', 'Loaded 5 starter TF tasks');
-        showToast('Loaded starter tasks');
-        loadTasks();
-      });
-      document.getElementById('task-create-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = 'task-' + Date.now();
-        const payload = {
-          title: document.getElementById('tk-title').value.trim(),
-          division: document.getElementById('tk-div').value,
-          assigneeEmail: document.getElementById('tk-assignee').value.trim().toLowerCase(),
-          dueDate: document.getElementById('tk-due').value,
-          status: 'todo',
-          points: 25,
-          createdAt: new Date().toISOString(),
-        };
-        await setDoc(doc(db, 'tasks', id), payload);
-        await writeAudit('tasks', 'create', id, payload.title);
-        document.getElementById('task-create-form').reset();
-        showToast('Task created');
-        loadTasks();
-      });
+      }
 
-      // ---- 3. TOP ACHIEVERS LEADERBOARD ----
-      async function loadLeaderboard() {
-        document.getElementById('recog-form').classList.toggle('hidden', !(can('edit_team') || can('manage_tasks')));
-
-        const [logsSnap, tasksSnap, recSnap] = await Promise.all([
-          getDocs(collection(db, 'timeLogs')),
-          getDocs(collection(db, 'tasks')),
-          getDocs(collection(db, 'recognitions')),
-        ]);
-
-        const scores = new Map();
-        const touch = (email, name) => {
-          const key = (email || name || 'unknown').toLowerCase();
-          if (!scores.has(key)) scores.set(key, { key, name: name || email, mins: 0, tasks: 0, bonus: 0, badge: '' });
-          const cur = scores.get(key);
-          if (name && cur.name.includes('@')) cur.name = name;
-          return cur;
-        };
-
-        logsSnap.forEach((d) => {
-          const l = d.data();
-          touch(l.actorEmail, l.actorName).mins += Number(l.minutes) || 0;
-        });
-        tasksSnap.forEach((d) => {
-          const t = d.data();
-          if (t.status === 'done' && (t.completedByEmail || t.assigneeEmail)) {
-            touch(t.completedByEmail || t.assigneeEmail, t.completedByName).tasks += 1;
-          }
-        });
-        recSnap.forEach((d) => {
-          const r = d.data();
-          const row = touch(r.email, r.name);
-          row.bonus += Number(r.points) || 50;
-          row.badge = r.reason || row.badge;
-        });
-
-        const ranked = Array.from(scores.values())
-          .map((r) => ({ ...r, total: Math.round((r.mins / 60) * 10 + r.tasks * 25 + r.bonus) }))
-          .sort((a, b) => b.total - a.total);
-
-        const podium = document.getElementById('podium-grid');
-        podium.replaceChildren();
-        [0, 1, 2].forEach((idx) => {
-          const p = ranked[idx];
-          const card = document.createElement('div');
-          card.className = idx === 0
-            ? 'rounded-xl p-5 bg-[#0F1D33] text-[#F3F2EE] border border-[#1B365D]'
-            : 'rounded-xl p-5 bg-white text-[#161A22] border border-[#DFDDD6]';
-          if (!p) {
-            card.innerHTML = `<div class="font-code text-[12px] opacity-60">#${idx + 1} Spot Open</div><div class="mt-2 text-[14px] opacity-75">Log time or complete tasks to claim rank #${idx + 1}.</div>`;
-          } else {
-            card.innerHTML = `
-              <div class="flex justify-between items-center text-[12px]">
-                <span class="font-code font-bold ${idx === 0 ? 'text-[#5EC4B8]' : 'text-[#0B5F58]'}">#${idx + 1} Top Achiever</span>
-                <span class="font-code font-bold">${p.total} pts</span>
-              </div>
-              <div class="font-display font-bold text-[20px] mt-2 truncate">${esc(p.name)}</div>
-              <div class="text-[12.5px] mt-1 ${idx === 0 ? 'text-[#C7D0DE]' : 'text-[#525866]'}">${(p.mins / 60).toFixed(1)}h logged · ${p.tasks} tasks${p.badge ? ' · ' + esc(p.badge) : ''}</div>
-            `;
-          }
-          podium.appendChild(card);
-        });
-
-        const tbody = document.getElementById('leaderboard-rows');
-        tbody.replaceChildren();
-        if (ranked.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-[#767D8C]">No activity scored yet. Log work time or complete tasks!</td></tr>';
+      document.getElementById('copy-global-search').addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        const box = document.getElementById('copy-search-results');
+        box.replaceChildren();
+        if (q.length < 2) {
+          box.classList.add('hidden');
           return;
         }
-        ranked.forEach((r, idx) => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="py-3 px-5 font-code font-semibold">#${idx + 1}</td>
-            <td class="py-3 px-4 font-medium">${esc(r.name)}</td>
-            <td class="py-3 px-4 font-code">${(r.mins / 60).toFixed(1)}h</td>
-            <td class="py-3 px-4 font-code">${r.tasks}</td>
-            <td class="py-3 px-4 font-code text-[#0B5F58]">+${r.bonus}</td>
-            <td class="py-3 px-5 text-right font-code font-bold">${r.total} pts</td>
-          `;
-          tbody.appendChild(tr);
+        const hits = [];
+        COPY_CATALOG.forEach((pg) => {
+          const ov = liveCopyMap[pg.pageKey] || {};
+          pg.fields.forEach((f) => {
+            const val = ov[f.key] || f.def;
+            if (val.toLowerCase().includes(q) || f.label.toLowerCase().includes(q) || pg.label.toLowerCase().includes(q)) {
+              hits.push({ pg, f, val });
+            }
+          });
         });
-      }
-
-      document.getElementById('recog-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = 'rec-' + Date.now();
-        const payload = {
-          email: document.getElementById('rc-email').value.trim().toLowerCase(),
-          name: document.getElementById('rc-name').value.trim(),
-          reason: document.getElementById('rc-reason').value.trim(),
-          points: 50,
-          createdAt: new Date().toISOString(),
-        };
-        await setDoc(doc(db, 'recognitions', id), payload);
-        await writeAudit('recognitions', 'award', payload.email, payload.reason);
-        document.getElementById('recog-form').reset();
-        showToast('Awarded +50 pts');
-        loadLeaderboard();
-      });
-
-      // ---- 4. VISUAL CLICK-TO-EDIT SITE COPY CMS ----
-      let liveCopyByPage = {};
-      let selectedCopyPage = SITE_COPY_PAGES[0].pageKey;
-      let selectedFieldKey = SITE_COPY_PAGES[0].fields[0].key;
-
-      async function loadCopyEditor() {
-        const snap = await getDocs(collection(db, 'siteCopy'));
-        liveCopyByPage = {};
-        snap.forEach((d) => { liveCopyByPage[d.id] = d.data(); });
-
-        const select = document.getElementById('copy-page-select');
-        select.replaceChildren();
-        SITE_COPY_PAGES.forEach((p) => {
-          const opt = document.createElement('option');
-          opt.value = p.pageKey;
-          opt.textContent = p.label;
-          if (p.pageKey === selectedCopyPage) opt.selected = true;
-          select.appendChild(opt);
+        box.classList.remove('hidden');
+        if (!hits.length) {
+          box.innerHTML = '<div class="text-[12.5px] text-[#525866]">No matching tagged field found — use Global Find &amp; Replace below to change any word globally.</div>';
+          return;
+        }
+        hits.slice(0, 20).forEach((h) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'w-full text-left px-3 py-2 rounded-lg bg-white hover:bg-[#F3F2EE] border border-[#DFDDD6] flex items-center justify-between gap-3 text-[12.5px]';
+          btn.innerHTML = `<span class="truncate"><strong>${esc(h.pg.portalLabel)} · ${esc(h.pg.label)}:</strong> ${esc(h.val)}</span><span class="font-code text-[11px] text-[#0B5F58] shrink-0">Edit →</span>`;
+          btn.addEventListener('click', () => {
+            selectedPortal = h.pg.portal;
+            selectedPageKey = h.pg.pageKey;
+            selectedFieldKey = h.f.key;
+            box.classList.add('hidden');
+            renderPortalTabs();
+            renderPageList();
+            renderVisualCanvas();
+          });
+          box.appendChild(btn);
         });
-        renderCopyCanvas();
-      }
-
-      function currentPageSchema() {
-        return SITE_COPY_PAGES.find((p) => p.pageKey === selectedCopyPage) || SITE_COPY_PAGES[0];
-      }
-
-      function valForField(pageKey, f) {
-        return liveCopyByPage[pageKey]?.[f.key] || f.def;
-      }
-
-      function selectCopyField(fieldKey) {
-        selectedFieldKey = fieldKey;
-        const page = currentPageSchema();
-        const field = page.fields.find((f) => f.key === fieldKey) || page.fields[0];
-        if (!field) return;
-
-        const isCustom = Boolean(liveCopyByPage[page.pageKey]?.[field.key]);
-        document.getElementById('ce-field-label').textContent = field.label;
-        document.getElementById('ce-field-key').textContent = `${page.pageKey}.${field.key}`;
-        document.getElementById('ce-live-badge').classList.toggle('hidden', !isCustom);
-        const ta = document.getElementById('ce-textarea');
-        ta.dir = page.rtl ? 'rtl' : 'ltr';
-        ta.value = valForField(page.pageKey, field);
-        document.getElementById('ce-char-count').textContent = `${ta.value.length} chars`;
-        renderCopyCanvas();
-      }
-
-      function renderCopyCanvas() {
-        const page = currentPageSchema();
-        document.getElementById('copy-live-link').href = page.url;
-        const canvas = document.getElementById('copy-canvas');
-        canvas.replaceChildren();
-        canvas.dir = page.rtl ? 'rtl' : 'ltr';
-
-        page.fields.forEach((f) => {
-          const val = valForField(page.pageKey, f);
-          const wrap = document.createElement('div');
-          wrap.className = 'copy-hot ' + (f.key === selectedFieldKey ? 'is-selected' : '');
-          wrap.dataset.copyField = f.key;
-
-          const tag = document.createElement('div');
-          tag.className = 'text-[10.5px] font-code text-[#767D8C] mb-1 flex items-center justify-between';
-          tag.innerHTML = `<span>${esc(f.label)}</span>${liveCopyByPage[page.pageKey]?.[f.key] ? '<span class="text-[#0B5F58]">live custom</span>' : ''}`;
-
-          const content = document.createElement('div');
-          content.dataset.previewText = f.key;
-          if (f.kind === 'h1') content.className = 'font-display font-bold text-[26px] leading-[1.15] text-[#161A22]';
-          else if (f.kind === 'h2') content.className = 'font-display font-semibold text-[18px] text-[#161A22]';
-          else if (f.kind === 'btn') content.className = 'inline-block px-4 py-2 rounded-lg bg-[#1B365D] text-white text-[13.5px] font-medium';
-          else if (f.kind === 'link') content.className = 'text-[14px] font-medium text-[#1B365D] underline';
-          else content.className = 'text-[14.5px] leading-[1.6] text-[#525866]';
-          content.textContent = val;
-
-          wrap.append(tag, content);
-          wrap.addEventListener('click', () => selectCopyField(f.key));
-          canvas.appendChild(wrap);
-        });
-      }
-
-      document.getElementById('copy-page-select').addEventListener('change', (e) => {
-        selectedCopyPage = e.target.value;
-        const page = currentPageSchema();
-        selectCopyField(page.fields[0].key);
       });
 
-      document.getElementById('ce-textarea').addEventListener('input', (e) => {
-        document.getElementById('ce-char-count').textContent = `${e.target.value.length} chars`;
-        const preview = document.querySelector(`[data-preview-text="${CSS.escape(selectedFieldKey)}"]`);
-        if (preview) preview.textContent = e.target.value;
+      document.getElementById('copy-save-btn').addEventListener('click', async () => {
+        if (!selectedPageKey || !selectedFieldKey) return;
+        const val = document.getElementById('copy-input').value.trim();
+        if (!val) return;
+        const existing = { ...(liveCopyMap[selectedPageKey] || {}), [selectedFieldKey]: val, updatedAt: new Date().toISOString() };
+        await setDoc(doc(db, 'siteCopy', selectedPageKey), existing);
+        liveCopyMap[selectedPageKey] = existing;
+        await writeAudit('siteCopy', 'edit', `${selectedPageKey}.${selectedFieldKey}`, val.slice(0, 80));
+        showToast(`Published ${selectedPageKey}.${selectedFieldKey}`);
+        renderPageList();
+        renderVisualCanvas();
       });
 
-      document.getElementById('ce-save-btn').addEventListener('click', async () => {
-        const page = currentPageSchema();
-        const text = document.getElementById('ce-textarea').value.trim();
-        await setDoc(doc(db, 'siteCopy', page.pageKey), { [selectedFieldKey]: text, updatedAt: new Date().toISOString() }, { merge: true });
-        await writeAudit('siteCopy', 'update', `${page.pageKey}.${selectedFieldKey}`, text);
-        showToast(`Published ${page.pageKey}.${selectedFieldKey} live`);
-        await loadCopyEditor();
-        selectCopyField(selectedFieldKey);
+      document.getElementById('copy-reset-field-btn').addEventListener('click', async () => {
+        const existing = { ...(liveCopyMap[selectedPageKey] || {}) };
+        delete existing[selectedFieldKey];
+        existing.updatedAt = new Date().toISOString();
+        await setDoc(doc(db, 'siteCopy', selectedPageKey), existing);
+        liveCopyMap[selectedPageKey] = existing;
+        await writeAudit('siteCopy', 'revert', `${selectedPageKey}.${selectedFieldKey}`, 'Reverted field');
+        showToast('Reverted sentence to default');
+        renderPageList();
+        renderVisualCanvas();
       });
 
-      document.getElementById('ce-reset-btn').addEventListener('click', async () => {
-        const page = currentPageSchema();
-        await setDoc(doc(db, 'siteCopy', page.pageKey), { [selectedFieldKey]: '' }, { merge: true });
-        await writeAudit('siteCopy', 'reset', `${page.pageKey}.${selectedFieldKey}`, 'Reset to default');
-        showToast('Reset to default text');
-        await loadCopyEditor();
-        selectCopyField(selectedFieldKey);
+      document.getElementById('copy-reset-page-btn').addEventListener('click', async () => {
+        await deleteDoc(doc(db, 'siteCopy', selectedPageKey));
+        delete liveCopyMap[selectedPageKey];
+        await writeAudit('siteCopy', 'reset_page', selectedPageKey, 'Reset page copy');
+        showToast('Reset page copy to defaults');
+        renderPageList();
+        renderVisualCanvas();
       });
 
-      // ---- 5. TEAM & HR HUB ----
-      let mergedMembers = [];
-      async function loadTeam() {
-        const byId = new Map(BASELINE_MEMBERS.map((m) => [m.id, { ...m }]));
-        const snap = await getDocs(collection(db, 'teamMembers'));
-        snap.forEach((d) => { byId.set(d.id, { ...(byId.get(d.id) || {}), ...d.data(), id: d.id, _live: true }); });
-        mergedMembers = Array.from(byId.values()).sort((a, b) => (a.tier ?? 4) - (b.tier ?? 4) || a.name.localeCompare(b.name));
-        renderTeamList();
-      }
-
-      function renderTeamList() {
-        const q = (document.getElementById('tm-search').value || '').toLowerCase().trim();
-        const filtered = mergedMembers.filter((m) => !q || [m.name, m.arabicName, m.role, m.team, m.school].filter(Boolean).join(' ').toLowerCase().includes(q));
-        const list = document.getElementById('tm-list');
+      function renderGlobalRules() {
+        const list = document.getElementById('global-replace-list');
         list.replaceChildren();
-        filtered.forEach((m) => {
+        if (!globalRules.length) {
+          list.innerHTML = '<div class="py-3 text-[#767D8C]">No global find-and-replace rules active.</div>';
+          return;
+        }
+        globalRules.forEach((r, idx) => {
           const row = document.createElement('div');
-          row.className = 'p-3.5 flex items-center justify-between gap-3 hover:bg-[#FAF9F6]';
-          row.innerHTML = `
-            <div class="min-w-0">
-              <div class="text-[13.5px] font-semibold text-[#161A22] truncate">${esc(m.name)} ${m.archived ? '<span class="text-[#B42318]">(hidden)</span>' : ''} ${m._live ? '<span class="font-code text-[10.5px] text-[#0B5F58]">live</span>' : ''}</div>
-              <div class="text-[12px] text-[#525866] truncate">${esc(m.role)} · ${esc(m.team)}</div>
-            </div>
-            <button type="button" class="h-8 px-3 rounded border border-[#DFDDD6] hover:border-[#1B365D] text-[12px] font-medium">Edit</button>
-          `;
-          row.querySelector('button').addEventListener('click', () => {
-            document.getElementById('tm-form-title').textContent = `Edit: ${m.name}`;
-            document.getElementById('tm-id').value = m.id;
-            document.getElementById('tm-name').value = m.name;
-            document.getElementById('tm-arabic').value = m.arabicName || '';
-            document.getElementById('tm-role').value = m.role || '';
-            document.getElementById('tm-team').value = m.team || 'HR Team';
-            document.getElementById('tm-tier').value = String(m.tier ?? 4);
-            document.getElementById('tm-cohort').value = `${m.cohortDate || '2026-11'}|${m.cohortLabel || 'Nov 2026'}`;
-            document.getElementById('tm-school').value = m.school || '';
-            document.getElementById('tm-parent').value = m.parent || 'founder-1';
-            document.getElementById('tm-bio').value = m.bio || '';
-            document.getElementById('tm-archived').checked = Boolean(m.archived);
+          row.className = 'py-2.5 flex flex-wrap items-center justify-between gap-2';
+          row.innerHTML = `<div><span class="font-code bg-[#F3F2EE] px-2 py-0.5 rounded border border-[#DFDDD6]">${esc(r.from)}</span> <span class="mx-1.5 text-[#767D8C]">→</span> <span class="font-code bg-[#EDF7F5] px-2 py-0.5 rounded border border-[#BCE3DC] text-[#0B5F58]">${esc(r.to)}</span></div><button type="button" class="text-[12px] text-[#B42318] hover:underline">Remove</button>`;
+          row.querySelector('button').addEventListener('click', async () => {
+            globalRules.splice(idx, 1);
+            await setDoc(doc(db, 'siteCopy', '_global'), { replacementsJson: JSON.stringify(globalRules), updatedAt: new Date().toISOString() });
+            showToast('Removed global replacement rule');
+            renderGlobalRules();
           });
           list.appendChild(row);
         });
       }
 
-      document.getElementById('tm-search').addEventListener('input', renderTeamList);
-      const resetTeamForm = () => { document.getElementById('tm-form').reset(); document.getElementById('tm-id').value = ''; document.getElementById('tm-form-title').textContent = 'Add new contributor'; };
-      document.getElementById('tm-new-btn').addEventListener('click', resetTeamForm);
-      document.getElementById('tm-clear-btn').addEventListener('click', resetTeamForm);
-      document.getElementById('tm-form').addEventListener('submit', async (e) => {
+      document.getElementById('global-replace-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const rawId = document.getElementById('tm-id').value.trim();
-        const id = rawId || 'm-' + Date.now();
-        const [cohortDate, cohortLabel] = document.getElementById('tm-cohort').value.split('|');
-        const payload = {
-          id,
-          name: document.getElementById('tm-name').value.trim(),
-          arabicName: document.getElementById('tm-arabic').value.trim(),
-          role: document.getElementById('tm-role').value.trim(),
-          team: document.getElementById('tm-team').value,
-          tier: Number(document.getElementById('tm-tier').value),
-          school: document.getElementById('tm-school').value.trim() || 'TF Unions',
-          cohortDate,
-          cohortLabel,
-          parent: document.getElementById('tm-parent').value.trim() || null,
-          bio: document.getElementById('tm-bio').value.trim(),
-          archived: document.getElementById('tm-archived').checked,
-          x: 500,
-          y: 380,
-          r: 12,
-        };
-        await setDoc(doc(db, 'teamMembers', id), payload, { merge: true });
-        await writeAudit('team', rawId ? 'update' : 'create', id, payload.name);
-        showToast(`Saved ${payload.name}`);
-        loadTeam();
+        const from = document.getElementById('gr-from').value.trim();
+        const to = document.getElementById('gr-to').value.trim();
+        if (!from) return;
+        globalRules = globalRules.filter((r) => r.from !== from);
+        globalRules.push({ from, to });
+        await setDoc(doc(db, 'siteCopy', '_global'), { replacementsJson: JSON.stringify(globalRules), updatedAt: new Date().toISOString() });
+        await writeAudit('siteCopy', 'global_rule', from, `${from} -> ${to}`);
+        e.target.reset();
+        showToast('Saved global find-and-replace rule');
+        renderGlobalRules();
       });
 
-      // ---- 6. OPEN LEDGER (FULLY SOLVES HARDCODED EXAMPLES) ----
-      let ledgerManaged = false;
-      let currentLedgerItems = [];
+      // ---- 3. CONTENT & DATA WORKSPACE ----
+      function initContentWorkspace() {
+        const allowedTabs = CONTENT_TABS.filter((t) => can(t.perm));
+        if (!allowedTabs.some((t) => t.id === activeContentTab)) activeContentTab = allowedTabs[0]?.id || 'ledger';
 
-      async function ensureLedgerManagedExcluding(skipId) {
-        if (!ledgerManaged) {
-          for (const item of BASELINE_LEDGER) {
-            if (item.id === skipId) continue;
-            const { id, ...fields } = item;
-            await setDoc(doc(db, 'ledgerEntries', id), fields);
-          }
-          await setDoc(doc(db, 'siteConfig', 'ledger'), { managed: true, updatedAt: new Date().toISOString() }, { merge: true });
-          ledgerManaged = true;
-        }
+        const wrap = document.getElementById('content-subtabs');
+        wrap.replaceChildren();
+        allowedTabs.forEach((t) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = t.id === activeContentTab
+            ? 'px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white'
+            : 'px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]';
+          btn.textContent = t.label;
+          btn.addEventListener('click', () => {
+            activeContentTab = t.id;
+            initContentWorkspace();
+          });
+          wrap.appendChild(btn);
+        });
+
+        document.querySelectorAll('.content-pane').forEach((p) => p.classList.add('hidden'));
+        document.getElementById('sub-' + activeContentTab)?.classList.remove('hidden');
+        if (activeContentTab === 'ledger') loadLedger();
+        else if (activeContentTab === 'chapters') loadChapters();
+        else if (activeContentTab === 'guides') loadGuides();
+        else if (activeContentTab === 'opportunities') loadOpportunities();
+        else if (activeContentTab === 'certificates') loadCertificates();
       }
 
+      // 3A. LEDGER (ZERO FAKE SEEDS)
       async function loadLedger() {
-        const [cfgSnap, entriesSnap] = await Promise.all([
-          getDoc(doc(db, 'siteConfig', 'ledger')),
-          getDocs(collection(db, 'ledgerEntries')),
-        ]);
-        ledgerManaged = Boolean(cfgSnap.exists() && cfgSnap.data().managed === true);
-        const live = [];
-        entriesSnap.forEach((d) => live.push({ id: d.id, ...d.data() }));
+        const snap = await getDocs(collection(db, 'ledgerEntries'));
+        const rows = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        rows.sort((a, b) => String(b.txDate || '').localeCompare(String(a.txDate || '')));
 
-        currentLedgerItems = ledgerManaged || live.length > 0 ? live : [...BASELINE_LEDGER];
-        currentLedgerItems.sort((a, b) => String(b.txDate || '').localeCompare(String(a.txDate || '')));
-
-        let inflows = 0, outflows = 0;
-        currentLedgerItems.forEach((e) => {
-          const amt = Number(e.amountEgp) || 0;
-          if (e.entryType === 'outflow') outflows += amt;
-          else inflows += amt;
-        });
-        document.getElementById('ld-kpi-in').textContent = inflows.toLocaleString('en-US') + ' EGP';
-        document.getElementById('ld-kpi-out').textContent = outflows.toLocaleString('en-US') + ' EGP';
-        document.getElementById('ld-kpi-net').textContent = (inflows - outflows).toLocaleString('en-US') + ' EGP';
-        document.getElementById('ld-status').textContent = ledgerManaged ? 'Managed live in Dashboard' : 'Showing initial baseline examples (click Delete to remove)';
+        let inf = 0; let out = 0;
+        rows.forEach((r) => { const a = Number(r.amountEgp) || 0; if (r.entryType === 'outflow') out += a; else inf += a; });
+        const fmt = (n) => Number(n || 0).toLocaleString('en-US') + ' EGP';
+        document.getElementById('ld-in').textContent = fmt(inf);
+        document.getElementById('ld-out').textContent = fmt(out);
+        document.getElementById('ld-net').textContent = fmt(inf - out);
 
         const list = document.getElementById('ld-list');
         list.replaceChildren();
-        if (currentLedgerItems.length === 0) {
-          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">Ledger is clean (0 entries). /transparency now displays 0 EGP.</div>';
+        if (!rows.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No ledger entries recorded. Public /transparency currently displays 0 EGP.</div>';
           return;
         }
-        currentLedgerItems.forEach((item) => {
+        rows.forEach((e) => {
           const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3';
-          const sign = item.entryType === 'outflow' ? '-' : '+';
-          row.innerHTML = `
-            <div>
-              <div class="text-[14px] font-semibold text-[#161A22]">${esc(item.donorOrVendor)}</div>
-              <div class="font-code text-[12px] text-[#525866]">${esc(item.txDate)} · ${esc(item.paymentChannel)} · ${sign}${Number(item.amountEgp).toLocaleString('en-US')} EGP</div>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
-              <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Delete</button>
-            </div>
-          `;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13.5px]';
+          row.innerHTML = `<div><span class="font-code text-[12px] text-[#767D8C]">${esc(e.txDate)}</span> <strong class="ml-2">${esc(e.donorOrVendor)}</strong> <span class="text-[#525866] ml-1">(${esc(e.paymentChannel)})</span></div><div class="flex items-center gap-3"><span class="font-code font-semibold ${e.entryType === 'outflow' ? 'text-[#161A22]' : 'text-[#0B5F58]'}">${e.entryType === 'outflow' ? '-' : '+'}${fmt(e.amountEgp)}</span><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
           row.querySelector('.edit-btn').addEventListener('click', () => {
-            document.getElementById('ld-id').value = item.id;
-            document.getElementById('ld-date').value = item.txDate;
-            document.getElementById('ld-vendor').value = item.donorOrVendor;
-            document.getElementById('ld-channel').value = item.paymentChannel;
-            document.getElementById('ld-type').value = item.entryType;
-            document.getElementById('ld-amount').value = item.amountEgp;
+            document.getElementById('ld-id').value = e.id;
+            document.getElementById('ld-date').value = e.txDate || '';
+            document.getElementById('ld-vendor').value = e.donorOrVendor || '';
+            document.getElementById('ld-channel').value = e.paymentChannel || '';
+            document.getElementById('ld-type').value = e.entryType || 'inflow';
+            document.getElementById('ld-status').value = e.verificationStatus || 'Verified';
+            document.getElementById('ld-amount').value = e.amountEgp || 0;
           });
           row.querySelector('.del-btn').addEventListener('click', async () => {
-            if (!ledgerManaged) {
-              await ensureLedgerManagedExcluding(item.id);
-            } else {
-              await deleteDoc(doc(db, 'ledgerEntries', item.id));
-            }
-            await writeAudit('ledger', 'delete', item.id, item.donorOrVendor);
-            showToast(`Removed "${item.donorOrVendor}" from live site`);
+            await deleteDoc(doc(db, 'ledgerEntries', e.id));
+            await writeAudit('ledger', 'delete', e.id, `Deleted ${e.donorOrVendor}`);
+            showToast('Deleted ledger entry');
             loadLedger();
           });
           list.appendChild(row);
         });
       }
 
-      document.getElementById('ld-reset-btn').addEventListener('click', () => { document.getElementById('ld-form').reset(); document.getElementById('ld-id').value = ''; });
-      document.getElementById('ld-clear-examples-btn').addEventListener('click', async () => {
-        for (const item of BASELINE_LEDGER) {
-          await deleteDoc(doc(db, 'ledgerEntries', item.id)).catch(() => {});
-        }
-        await setDoc(doc(db, 'siteConfig', 'ledger'), { managed: true, updatedAt: new Date().toISOString() }, { merge: true });
-        await writeAudit('ledger', 'clear_examples', 'baseline', 'Cleared initial example ledger items');
-        showToast('Cleared initial examples from /transparency');
+      document.getElementById('ld-clear-all').addEventListener('click', async () => {
+        const snap = await getDocs(collection(db, 'ledgerEntries'));
+        await Promise.all(snap.docs.map((d) => deleteDoc(doc(db, 'ledgerEntries', d.id))));
+        await writeAudit('ledger', 'clear_all', 'all', 'Cleared all ledger entries');
+        showToast('Cleared all ledger entries (now 0 EGP)');
         loadLedger();
       });
-      document.getElementById('ld-form').addEventListener('submit', async (e) => {
+
+      document.getElementById('ledger-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        await ensureLedgerManagedExcluding(null);
-        const rawId = document.getElementById('ld-id').value.trim();
-        const id = rawId || 'tx-' + Date.now();
+        const id = document.getElementById('ld-id').value.trim();
         const payload = {
           txDate: document.getElementById('ld-date').value,
           donorOrVendor: document.getElementById('ld-vendor').value.trim(),
           paymentChannel: document.getElementById('ld-channel').value.trim(),
-          verificationStatus: 'Verified',
           entryType: document.getElementById('ld-type').value,
+          verificationStatus: document.getElementById('ld-status').value,
           amountEgp: Number(document.getElementById('ld-amount').value),
+          updatedAt: new Date().toISOString(),
         };
-        await setDoc(doc(db, 'ledgerEntries', id), payload, { merge: true });
-        await setDoc(doc(db, 'siteConfig', 'ledger'), { managed: true, updatedAt: new Date().toISOString() }, { merge: true });
-        await writeAudit('ledger', rawId ? 'update' : 'create', id, `${payload.donorOrVendor} (${payload.amountEgp} EGP)`);
-        document.getElementById('ld-form').reset();
+        if (id) await setDoc(doc(db, 'ledgerEntries', id), payload, { merge: true });
+        else await addDoc(collection(db, 'ledgerEntries'), payload);
+        await writeAudit('ledger', id ? 'update' : 'create', id || 'new', `${payload.entryType}: ${payload.amountEgp} EGP`);
+        e.target.reset();
         document.getElementById('ld-id').value = '';
-        showToast('Published live ledger entry');
+        showToast('Saved ledger entry');
         loadLedger();
       });
 
-      // ---- 7. CHAPTERS & GUIDES ----
+      document.getElementById('ld-cancel').addEventListener('click', () => {
+        document.getElementById('ledger-form').reset();
+        document.getElementById('ld-id').value = '';
+      });
+
+      // 3B. CHAPTERS (PURE FIRESTORE)
       async function loadChapters() {
         const snap = await getDocs(collection(db, 'chapters'));
-        const byId = new Map(BASELINE_CHAPTERS.map((c) => [c.id, { ...c }]));
-        snap.forEach((d) => { byId.set(d.id, { ...(byId.get(d.id) || {}), ...d.data(), id: d.id }); });
         const list = document.getElementById('ch-list');
         list.replaceChildren();
-        Array.from(byId.values()).forEach((ch) => {
-          if (ch.archived) return;
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((x) => !x.archived);
+        if (!docs.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No chapters published yet. Add one above to display it live on TF Connect.</div>';
+          return;
+        }
+        docs.forEach((c) => {
           const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3';
-          row.innerHTML = `
-            <div>
-              <div class="font-semibold text-[14px]"><span class="font-code text-[#0B5F58]">${esc(ch.serial)}</span> ${esc(ch.name)}</div>
-              <div class="text-[12px] text-[#525866]">${esc(ch.type)} · ${esc(ch.gov)}</div>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px]">Edit</button>
-              <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px]">Remove</button>
-            </div>
-          `;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3 text-[13.5px]';
+          row.innerHTML = `<div><div class="font-semibold">${esc(c.name)}</div><div class="text-[12px] text-[#525866]">${esc(c.type)} · ${esc(c.gov)}${c.focus ? ' · ' + esc(c.focus) : ''}</div></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
           row.querySelector('.edit-btn').addEventListener('click', () => {
-            document.getElementById('ch-id').value = ch.id;
-            document.getElementById('ch-serial').value = ch.serial || '';
-            document.getElementById('ch-name').value = ch.name || '';
-            document.getElementById('ch-type').value = ch.type || 'School Chapter';
-            document.getElementById('ch-gov').value = ch.gov || '';
-            document.getElementById('ch-focus').value = ch.focus || '';
-            document.getElementById('ch-desc').value = ch.desc || '';
+            document.getElementById('ch-id').value = c.id;
+            document.getElementById('ch-name').value = c.name || '';
+            document.getElementById('ch-type').value = c.type || 'School Chapter';
+            document.getElementById('ch-gov').value = c.gov || '';
+            document.getElementById('ch-focus').value = c.focus || '';
+            document.getElementById('ch-desc').value = c.desc || '';
           });
           row.querySelector('.del-btn').addEventListener('click', async () => {
-            await setDoc(doc(db, 'chapters', ch.id), { name: ch.name, gov: ch.gov, archived: true }, { merge: true });
-            await writeAudit('chapters', 'remove', ch.id, ch.name);
-            showToast(`Removed ${ch.name}`);
+            await deleteDoc(doc(db, 'chapters', c.id));
+            await writeAudit('chapters', 'delete', c.id, c.name || c.id);
+            showToast('Deleted chapter');
             loadChapters();
           });
           list.appendChild(row);
@@ -1532,57 +1356,61 @@ const faviconSvg = encodeURIComponent(
 
       document.getElementById('ch-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const rawId = document.getElementById('ch-id').value.trim();
-        const id = rawId || 'ch-' + Date.now();
+        const id = document.getElementById('ch-id').value.trim();
         const payload = {
-          serial: document.getElementById('ch-serial').value.trim(),
           name: document.getElementById('ch-name').value.trim(),
           type: document.getElementById('ch-type').value,
           gov: document.getElementById('ch-gov').value.trim(),
           focus: document.getElementById('ch-focus').value.trim(),
           desc: document.getElementById('ch-desc').value.trim(),
           archived: false,
+          updatedAt: new Date().toISOString(),
         };
-        await setDoc(doc(db, 'chapters', id), payload, { merge: true });
-        await writeAudit('chapters', rawId ? 'update' : 'create', id, payload.name);
-        document.getElementById('ch-form').reset();
+        if (id) await setDoc(doc(db, 'chapters', id), payload, { merge: true });
+        else await addDoc(collection(db, 'chapters'), payload);
+        await writeAudit('chapters', id ? 'update' : 'create', id || 'new', payload.name);
+        e.target.reset();
         document.getElementById('ch-id').value = '';
-        showToast('Saved chapter live');
+        showToast('Saved chapter live to TF Connect');
         loadChapters();
       });
 
+      document.getElementById('ch-cancel').addEventListener('click', () => {
+        document.getElementById('ch-form').reset();
+        document.getElementById('ch-id').value = '';
+      });
+
+      // 3C. GUIDES (PURE FIRESTORE WITH CHECKLIST STEPS)
       async function loadGuides() {
         const snap = await getDocs(collection(db, 'guides'));
-        const byId = new Map(BASELINE_GUIDES.map((g) => [g.id, { ...g }]));
-        snap.forEach((d) => { byId.set(d.id, { ...(byId.get(d.id) || {}), ...d.data(), id: d.id }); });
         const list = document.getElementById('gd-list');
         list.replaceChildren();
-        Array.from(byId.values()).forEach((g) => {
-          if (g.archived) return;
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((x) => !x.archived);
+        if (!docs.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No study guides published yet. Add one above to display it live on TF Guides.</div>';
+          return;
+        }
+        docs.forEach((g) => {
           const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3';
-          row.innerHTML = `
-            <div>
-              <div class="font-semibold text-[14px]"><span class="font-code text-[#0B5F58]">${esc(g.serial)}</span> ${esc(g.title)}</div>
-              <div class="text-[12px] text-[#525866]">${esc(g.category)} · ${esc(g.level)}</div>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px]">Edit</button>
-              <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px]">Hide</button>
-            </div>
-          `;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3 text-[13.5px]';
+          row.innerHTML = `<div><div class="font-semibold">${esc(g.title)}</div><div class="text-[12px] text-[#525866]">${esc(g.category || '')}${g.level ? ' · ' + esc(g.level) : ''}</div></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
           row.querySelector('.edit-btn').addEventListener('click', () => {
             document.getElementById('gd-id').value = g.id;
-            document.getElementById('gd-serial').value = g.serial || '';
             document.getElementById('gd-title').value = g.title || '';
-            document.getElementById('gd-category').value = g.category || 'Research & ISEF';
+            document.getElementById('gd-cat').value = g.category || 'Research & ISEF';
             document.getElementById('gd-level').value = g.level || '';
             document.getElementById('gd-summary').value = g.summary || '';
+            let stText = g.stepsText || '';
+            if (!stText && g.stepsJson) {
+              try { const a = JSON.parse(g.stepsJson); if (Array.isArray(a)) stText = a.join('\n'); } catch {}
+            }
+            document.getElementById('gd-steps').value = stText;
+            document.getElementById('gd-url').value = g.url || '';
           });
           row.querySelector('.del-btn').addEventListener('click', async () => {
-            await setDoc(doc(db, 'guides', g.id), { title: g.title, category: g.category, archived: true }, { merge: true });
-            await writeAudit('guides', 'hide', g.id, g.title);
-            showToast(`Hidden ${g.title}`);
+            await deleteDoc(doc(db, 'guides', g.id));
+            await writeAudit('guides', 'delete', g.id, g.title || g.id);
+            showToast('Deleted guide');
             loadGuides();
           });
           list.appendChild(row);
@@ -1591,76 +1419,58 @@ const faviconSvg = encodeURIComponent(
 
       document.getElementById('gd-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const rawId = document.getElementById('gd-id').value.trim();
-        const id = rawId || 'gd-' + Date.now();
+        const id = document.getElementById('gd-id').value.trim();
+        const lines = document.getElementById('gd-steps').value.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
         const payload = {
-          serial: document.getElementById('gd-serial').value.trim(),
           title: document.getElementById('gd-title').value.trim(),
-          category: document.getElementById('gd-category').value,
-          level: document.getElementById('gd-level').value.trim(),
+          category: document.getElementById('gd-cat').value,
+          level: document.getElementById('gd-level').value.trim() || 'Workbook',
           summary: document.getElementById('gd-summary').value.trim(),
-          url: 'https://docs.tfunions.com',
+          stepsText: lines.join('\n'),
+          stepsJson: JSON.stringify(lines),
+          url: document.getElementById('gd-url').value.trim(),
           archived: false,
+          updatedAt: new Date().toISOString(),
         };
-        await setDoc(doc(db, 'guides', id), payload, { merge: true });
-        await writeAudit('guides', rawId ? 'update' : 'create', id, payload.title);
-        document.getElementById('gd-form').reset();
+        if (id) await setDoc(doc(db, 'guides', id), payload, { merge: true });
+        else await addDoc(collection(db, 'guides'), payload);
+        await writeAudit('guides', id ? 'update' : 'create', id || 'new', payload.title);
+        e.target.reset();
         document.getElementById('gd-id').value = '';
-        showToast('Saved guide live');
+        showToast('Published guide live to TF Guides');
         loadGuides();
       });
 
-      // ---- 8. CERTIFICATES & OPPORTUNITIES ----
-      async function loadCertificates() {
-        const snap = await getDocs(collection(db, 'certificates'));
-        const list = document.getElementById('cr-list');
-        list.replaceChildren();
-        if (snap.empty) {
-          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No Firestore credentials issued yet.</div>';
-          return;
-        }
-        snap.forEach((d) => {
-          const c = { serial: d.id, ...d.data() };
-          const row = document.createElement('div');
-          row.className = 'p-4 flex justify-between items-center';
-          row.innerHTML = `<div><strong class="font-code text-[#0B5F58]">${esc(c.serial)}</strong> ${esc(c.recipientName)} · <span class="text-[12.5px] text-[#525866]">${esc(c.role)} (${esc(c.status)})</span></div>`;
-          list.appendChild(row);
-        });
-      }
-
-      document.getElementById('cr-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const serial = document.getElementById('cr-serial').value.trim().toUpperCase();
-        const payload = {
-          serial,
-          recipientName: document.getElementById('cr-recipient').value.trim(),
-          role: document.getElementById('cr-role').value.trim(),
-          cohort: document.getElementById('cr-cohort').value.trim(),
-          hours: Number(document.getElementById('cr-hours').value),
-          status: document.getElementById('cr-status').value,
-        };
-        await setDoc(doc(db, 'certificates', serial), payload, { merge: true });
-        await writeAudit('certificates', 'upsert', serial, payload.recipientName);
-        showToast(`Saved ${serial}`);
-        loadCertificates();
+      document.getElementById('gd-cancel').addEventListener('click', () => {
+        document.getElementById('gd-form').reset();
+        document.getElementById('gd-id').value = '';
       });
 
+      // 3D. OPPORTUNITIES (TF NEWS)
       async function loadOpportunities() {
         const snap = await getDocs(collection(db, 'opportunities'));
         const list = document.getElementById('op-list');
         list.replaceChildren();
-        if (snap.empty) {
-          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No Firestore opportunities loaded.</div>';
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((x) => !x.archived);
+        if (!docs.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No custom live announcements yet. Add one above to publish to TF News Bulletins.</div>';
           return;
         }
-        snap.forEach((d) => {
-          const o = { id: d.id, ...d.data() };
+        docs.forEach((o) => {
           const row = document.createElement('div');
-          row.className = 'p-4 flex justify-between items-center gap-3';
-          row.innerHTML = `<div><strong>${esc(o.title)}</strong> <span class="text-[12px] text-[#525866]">· ${esc(o.section)} · ${esc(o.deadline)}</span></div><button type="button" class="del-btn text-[12px] text-[#B42318]">Delete</button>`;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3 text-[13.5px]';
+          row.innerHTML = `<div><div class="font-semibold">${esc(o.title)}</div><div class="text-[12px] text-[#525866]">${esc(o.category || 'Opportunity')}${o.deadline ? ' · Deadline: ' + esc(o.deadline) : ''}</div></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
+          row.querySelector('.edit-btn').addEventListener('click', () => {
+            document.getElementById('op-id').value = o.id;
+            document.getElementById('op-title').value = o.title || '';
+            document.getElementById('op-cat').value = o.category || '';
+            document.getElementById('op-deadline').value = o.deadline || '';
+            document.getElementById('op-url').value = o.url || '';
+          });
           row.querySelector('.del-btn').addEventListener('click', async () => {
             await deleteDoc(doc(db, 'opportunities', o.id));
-            await writeAudit('opportunities', 'delete', o.id, o.title);
+            await writeAudit('opportunities', 'delete', o.id, o.title || o.id);
+            showToast('Deleted opportunity');
             loadOpportunities();
           });
           list.appendChild(row);
@@ -1669,63 +1479,400 @@ const faviconSvg = encodeURIComponent(
 
       document.getElementById('op-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const id = 'opp-' + Date.now();
+        const id = document.getElementById('op-id').value.trim();
         const payload = {
-          id,
           title: document.getElementById('op-title').value.trim(),
-          section: document.getElementById('op-section').value,
+          category: document.getElementById('op-cat').value.trim() || 'Scholarship',
           deadline: document.getElementById('op-deadline').value,
-          link: document.getElementById('op-link').value.trim(),
-          shortDescription: document.getElementById('op-desc').value.trim(),
-          startDate: new Date().toISOString().slice(0, 10),
+          url: document.getElementById('op-url').value.trim(),
+          archived: false,
+          updatedAt: new Date().toISOString(),
         };
-        await setDoc(doc(db, 'opportunities', id), payload, { merge: true });
-        await writeAudit('opportunities', 'create', id, payload.title);
-        document.getElementById('op-form').reset();
-        showToast('Saved opportunity');
+        if (id) await setDoc(doc(db, 'opportunities', id), payload, { merge: true });
+        else await addDoc(collection(db, 'opportunities'), payload);
+        await writeAudit('opportunities', id ? 'update' : 'create', id || 'new', payload.title);
+        e.target.reset();
+        document.getElementById('op-id').value = '';
+        showToast('Saved live opportunity');
         loadOpportunities();
       });
 
-      // ---- 9. ACCESS MATRIX & AUDIT ----
-      const acPermsEl = document.getElementById('ac-perms');
-      ALL_PERMS.forEach((p) => {
-        const lbl = document.createElement('label');
-        lbl.className = 'flex items-center gap-2 p-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] cursor-pointer';
-        lbl.innerHTML = `<input type="checkbox" value="${esc(p.key)}" class="ac-cb rounded border-[#DCD9D0]" /><span>${esc(p.label)}</span>`;
-        acPermsEl.appendChild(lbl);
+      document.getElementById('op-cancel').addEventListener('click', () => {
+        document.getElementById('op-form').reset();
+        document.getElementById('op-id').value = '';
       });
-      const applyRolePreset = (role) => {
-        const s = new Set(ROLE_PRESETS[role] || []);
-        document.querySelectorAll('.ac-cb').forEach((c) => { c.checked = s.has(c.value); });
-      };
-      applyRolePreset('hr_lead');
+
+      // 3E. CERTIFICATES (TF VERIFY)
+      async function loadCertificates() {
+        const snap = await getDocs(collection(db, 'certificates'));
+        const list = document.getElementById('cr-list');
+        list.replaceChildren();
+        if (!snap.docs.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No certificates issued yet. Issue a credential above to make it verifiable at verify.tfunions.com.</div>';
+          return;
+        }
+        snap.docs.forEach((d) => {
+          const c = d.data();
+          const row = document.createElement('div');
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13.5px]';
+          row.innerHTML = `<div><span class="font-code text-[12px] px-2 py-0.5 rounded bg-[#EAE8E1]">${esc(d.id)}</span> <strong class="ml-2">${esc(c.recipientName)}</strong> <span class="text-[#525866]">(${esc(c.roleTitle || '')} · ${esc(c.status || 'active')})</span></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
+          row.querySelector('.edit-btn').addEventListener('click', () => {
+            document.getElementById('cr-serial').value = d.id;
+            document.getElementById('cr-name').value = c.recipientName || '';
+            document.getElementById('cr-role').value = c.roleTitle || '';
+            document.getElementById('cr-type').value = c.credentialType || 'Volunteer';
+            document.getElementById('cr-hours').value = c.hoursCredited || 0;
+            document.getElementById('cr-status').value = c.status || 'active';
+          });
+          row.querySelector('.del-btn').addEventListener('click', async () => {
+            await deleteDoc(doc(db, 'certificates', d.id));
+            await writeAudit('certificates', 'delete', d.id, `Deleted ${d.id}`);
+            showToast('Deleted certificate');
+            loadCertificates();
+          });
+          list.appendChild(row);
+        });
+      }
+
+      document.getElementById('cr-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const serial = document.getElementById('cr-serial').value.trim().toUpperCase();
+        await setDoc(doc(db, 'certificates', serial), {
+          serialCode: serial,
+          recipientName: document.getElementById('cr-name').value.trim(),
+          roleTitle: document.getElementById('cr-role').value.trim(),
+          credentialType: document.getElementById('cr-type').value.trim(),
+          hoursCredited: Number(document.getElementById('cr-hours').value || 0),
+          status: document.getElementById('cr-status').value,
+          issueDate: new Date().toISOString().slice(0, 10),
+        });
+        await writeAudit('certificates', 'upsert', serial, serial);
+        e.target.reset();
+        showToast(`Saved credential ${serial}`);
+        loadCertificates();
+      });
+
+      // ---- 4. TEAM & TASKS WORKSPACE ----
+      document.querySelectorAll('#teamwork-subtabs .tw-tab').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeTeamTab = btn.getAttribute('data-tw') || 'tasks';
+          loadTeamworkPane(activeTeamTab);
+        });
+      });
+
+      function loadTeamworkPane(tabId) {
+        document.querySelectorAll('#teamwork-subtabs .tw-tab').forEach((b) => {
+          b.className = b.getAttribute('data-tw') === tabId
+            ? 'tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white'
+            : 'tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]';
+        });
+        document.querySelectorAll('.tw-pane').forEach((p) => p.classList.add('hidden'));
+        document.getElementById('tw-' + tabId)?.classList.remove('hidden');
+        if (tabId === 'tasks') loadTasks();
+        else if (tabId === 'roster') loadRoster();
+        else if (tabId === 'timelogs') loadTimeLogs();
+        else if (tabId === 'achievers') loadAchievers();
+      }
+
+      // 4A. TASKS BOARD (STARTS EMPTY UNTIL REAL TASKS ARE CREATED)
+      async function loadTasks() {
+        document.getElementById('task-create-form').classList.toggle('hidden', !can('manage_tasks'));
+        const snap = await getDocs(collection(db, 'tasks'));
+        const tasks = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+        const cols = {
+          todo: document.getElementById('col-todo'),
+          doing: document.getElementById('col-doing'),
+          done: document.getElementById('col-done'),
+        };
+        Object.values(cols).forEach((c) => c.replaceChildren());
+        const counts = { todo: 0, doing: 0, done: 0 };
+
+        tasks.forEach((t) => {
+          const st = ['todo', 'doing', 'done'].includes(t.status) ? t.status : 'todo';
+          counts[st]++;
+          const card = document.createElement('div');
+          card.className = 'p-3.5 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-2';
+          card.innerHTML = `<div class="flex items-center justify-between gap-2 text-[11px]"><span class="font-medium text-[#0B5F58]">${esc(t.division || 'Founders')}</span><span class="font-code px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">${Number(t.points || 25)} pts</span></div><div class="text-[13.5px] font-semibold text-[#161A22]">${esc(t.title)}</div><div class="text-[11.5px] text-[#525866]">${t.assigneeEmail ? esc(t.assigneeEmail) : 'Open to division'}${t.dueDate ? ' · Due ' + esc(t.dueDate) : ''}</div><div class="flex flex-wrap gap-1.5 pt-1">${st !== 'doing' ? '<button type="button" data-move="doing" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Start</button>' : ''}${st !== 'done' ? '<button type="button" data-move="done" class="px-2 py-1 rounded bg-[#0F766E] text-white text-[11px] font-medium">Mark done</button>' : '<button type="button" data-move="todo" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Reopen</button>'}${can('manage_tasks') ? '<button type="button" class="del-btn px-2 py-1 text-[11px] text-[#B42318]">Delete</button>' : ''}</div>`;
+          card.querySelectorAll('[data-move]').forEach((b) => {
+            b.addEventListener('click', async () => {
+              const nextStatus = b.getAttribute('data-move');
+              await updateDoc(doc(db, 'tasks', t.id), {
+                status: nextStatus,
+                completedByEmail: nextStatus === 'done' ? (currentUser.email || '').toLowerCase() : '',
+                completedByName: nextStatus === 'done' ? (currentUser.displayName || currentUser.email.split('@')[0]) : '',
+                updatedAt: new Date().toISOString(),
+              });
+              await writeAudit('tasks', nextStatus, t.id, `${t.title} -> ${nextStatus}`);
+              loadTasks();
+            });
+          });
+          card.querySelector('.del-btn')?.addEventListener('click', async () => {
+            await deleteDoc(doc(db, 'tasks', t.id));
+            await writeAudit('tasks', 'delete', t.id, t.title || t.id);
+            loadTasks();
+          });
+          cols[st].appendChild(card);
+        });
+
+        ['todo', 'doing', 'done'].forEach((k) => {
+          document.getElementById('cnt-' + k).textContent = String(counts[k]);
+          if (counts[k] === 0) {
+            cols[k].innerHTML = '<div class="py-4 text-center text-[12px] text-[#767D8C]">Empty</div>';
+          }
+        });
+      }
+
+      document.getElementById('task-create-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('tk-title').value.trim();
+        await addDoc(collection(db, 'tasks'), {
+          title,
+          division: document.getElementById('tk-div').value,
+          assigneeEmail: document.getElementById('tk-assignee').value.trim().toLowerCase(),
+          dueDate: document.getElementById('tk-due').value,
+          points: Number(document.getElementById('tk-pts').value || 25),
+          status: 'todo',
+          createdAt: new Date().toISOString(),
+        });
+        await writeAudit('tasks', 'create', 'new', title);
+        e.target.reset();
+        document.getElementById('tk-pts').value = 25;
+        showToast('Task assigned');
+        loadTasks();
+      });
+
+      // 4B. TEAM & HR ROSTER
+      let rosterCache = [];
+      async function loadRoster() {
+        document.getElementById('team-form').classList.toggle('hidden', !can('edit_team'));
+        const snap = await getDocs(collection(db, 'teamMembers'));
+        const byId = new Map(BASELINE_MEMBERS.map((m) => [m.id, { ...m }]));
+        snap.docs.forEach((d) => {
+          const v = d.data();
+          if (v.archived) byId.delete(d.id);
+          else byId.set(d.id, { id: d.id, ...v });
+        });
+        rosterCache = Array.from(byId.values());
+        renderRoster();
+      }
+
+      function renderRoster() {
+        const q = (document.getElementById('tm-search').value || '').trim().toLowerCase();
+        const filtered = rosterCache.filter((m) => !q || `${m.name} ${m.role} ${m.team} ${m.school || ''}`.toLowerCase().includes(q));
+        document.getElementById('tm-count').textContent = `${filtered.length} members`;
+        const list = document.getElementById('tm-list');
+        list.replaceChildren();
+        filtered.forEach((m) => {
+          const row = document.createElement('div');
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13.5px]';
+          row.innerHTML = `<div><strong class="text-[#161A22]">${esc(m.name)}</strong> <span class="text-[#525866]">— ${esc(m.role)}</span><div class="text-[12px] text-[#767D8C]">${esc(m.team)}${m.school ? ' · ' + esc(m.school) : ''} · ${esc(m.cohortDate || '')}</div></div>${can('edit_team') ? '<div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Remove</button></div>' : ''}`;
+          row.querySelector('.edit-btn')?.addEventListener('click', () => {
+            document.getElementById('tm-id').value = m.id;
+            document.getElementById('tm-name').value = m.name || '';
+            document.getElementById('tm-role').value = m.role || '';
+            document.getElementById('tm-team').value = m.team || 'Founders';
+            document.getElementById('tm-school').value = m.school || '';
+            document.getElementById('tm-cohort').value = m.cohortDate || '2026-11';
+            document.getElementById('tm-bio').value = m.bio || '';
+          });
+          row.querySelector('.del-btn')?.addEventListener('click', async () => {
+            await setDoc(doc(db, 'teamMembers', m.id), { archived: true, name: m.name || '' }, { merge: true });
+            await writeAudit('team', 'archive', m.id, `Removed ${m.name}`);
+            showToast(`Removed ${m.name}`);
+            loadRoster();
+          });
+          list.appendChild(row);
+        });
+      }
+
+      document.getElementById('tm-search').addEventListener('input', renderRoster);
+      document.getElementById('tm-sync-roster').addEventListener('click', async () => {
+        for (const m of BASELINE_MEMBERS) {
+          await setDoc(doc(db, 'teamMembers', m.id), m, { merge: true });
+        }
+        await writeAudit('team', 'sync', 'roster', `Synced ${BASELINE_MEMBERS.length} org members`);
+        showToast('Synced 71-member org roster to Firestore');
+        loadRoster();
+      });
+
+      document.getElementById('team-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const existingId = document.getElementById('tm-id').value.trim();
+        const id = existingId || 'm_' + Date.now();
+        await setDoc(doc(db, 'teamMembers', id), {
+          id,
+          name: document.getElementById('tm-name').value.trim(),
+          role: document.getElementById('tm-role').value.trim(),
+          team: document.getElementById('tm-team').value,
+          school: document.getElementById('tm-school').value.trim(),
+          cohortDate: document.getElementById('tm-cohort').value.trim(),
+          bio: document.getElementById('tm-bio').value.trim(),
+          archived: false,
+        }, { merge: true });
+        await writeAudit('team', existingId ? 'update' : 'create', id, document.getElementById('tm-name').value.trim());
+        e.target.reset();
+        document.getElementById('tm-id').value = '';
+        showToast('Saved team member');
+        loadRoster();
+      });
+
+      document.getElementById('tm-cancel').addEventListener('click', () => {
+        document.getElementById('team-form').reset();
+        document.getElementById('tm-id').value = '';
+      });
+
+      // 4C. TIME LOGS
+      async function loadTimeLogs() {
+        const snap = await getDocs(collection(db, 'timeLogs'));
+        const list = document.getElementById('tl-all-list');
+        list.replaceChildren();
+        const logs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        logs.sort((a, b) => String(b.createdIso || '').localeCompare(String(a.createdIso || '')));
+        if (!logs.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No work logs yet.</div>';
+          return;
+        }
+        logs.forEach((l) => {
+          const row = document.createElement('div');
+          row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-2 text-[13px]';
+          row.innerHTML = `<div><strong>${esc(l.actorName || l.actorEmail)}</strong> <span class="text-[#767D8C]">(${esc(l.division || '')})</span> — ${esc(l.summary)}</div><div class="flex items-center gap-3"><span class="font-code text-[#0B5F58] font-semibold">${Number(l.minutes || 0)} mins</span>${(can('manage_access') || l.actorUid === currentUser.uid) ? '<button type="button" class="text-[12px] text-[#B42318] hover:underline">Delete</button>' : ''}</div>`;
+          row.querySelector('button')?.addEventListener('click', async () => {
+            await deleteDoc(doc(db, 'timeLogs', l.id));
+            loadTimeLogs();
+          });
+          list.appendChild(row);
+        });
+      }
+
+      // 4D. TOP ACHIEVERS
+      async function loadAchievers() {
+        document.getElementById('rec-form').classList.toggle('hidden', !can('manage_tasks') && !can('edit_team'));
+        const [taskSnap, logSnap, recSnap] = await Promise.all([
+          getDocs(collection(db, 'tasks')),
+          getDocs(collection(db, 'timeLogs')),
+          getDocs(collection(db, 'recognitions')),
+        ]);
+
+        const scores = new Map();
+        const addScore = (key, name, pts, mins) => {
+          if (!key) return;
+          const prev = scores.get(key) || { name: name || key.split('@')[0], email: key, pts: 0, mins: 0 };
+          if (name) prev.name = name;
+          prev.pts += pts;
+          prev.mins += mins;
+          scores.set(key, prev);
+        };
+
+        taskSnap.docs.forEach((d) => {
+          const t = d.data();
+          if (t.status === 'done') {
+            const who = t.completedByEmail || t.assigneeEmail;
+            if (who) addScore(who, t.completedByName, Number(t.points || 25), 0);
+          }
+        });
+        logSnap.docs.forEach((d) => {
+          const l = d.data();
+          addScore(l.actorEmail, l.actorName, Math.round((Number(l.minutes || 0) / 30) * 10), Number(l.minutes || 0));
+        });
+        const recs = [];
+        recSnap.docs.forEach((d) => {
+          const r = d.data();
+          recs.push({ id: d.id, ...r });
+          addScore((r.email || '').toLowerCase(), r.name, Number(r.points || 50), 0);
+        });
+
+        const ranked = Array.from(scores.values()).sort((a, b) => b.pts - a.pts);
+        const lb = document.getElementById('lb-list');
+        lb.replaceChildren();
+        if (!ranked.length) {
+          lb.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">Complete tasks, log hours, or award recognitions to build the live leaderboard.</div>';
+        } else {
+          ranked.forEach((u, i) => {
+            const row = document.createElement('div');
+            row.className = 'p-4 flex items-center justify-between gap-3';
+            row.innerHTML = `<div class="flex items-center gap-3"><span class="font-code w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold ${i === 0 ? 'bg-[#1B365D] text-white' : 'bg-[#EAE8E1] text-[#525866]'}">#${i + 1}</span><div><div class="font-semibold text-[14px]">${esc(u.name)}</div><div class="font-code text-[11px] text-[#767D8C]">${Math.round((u.mins / 60) * 10) / 10} hrs logged</div></div></div><div class="font-code font-bold text-[15px] text-[#0B5F58]">${u.pts} pts</div>`;
+            lb.appendChild(row);
+          });
+        }
+
+        const rList = document.getElementById('rec-list');
+        rList.replaceChildren();
+        if (!recs.length) {
+          rList.innerHTML = '<div class="p-5 text-center text-[12.5px] text-[#767D8C]">No awards granted yet.</div>';
+        } else {
+          recs.forEach((r) => {
+            const row = document.createElement('div');
+            row.className = 'p-3.5 text-[13px] flex items-center justify-between gap-2';
+            row.innerHTML = `<div><strong>${esc(r.name)}</strong> · <span class="text-[#0B5F58] font-medium">${esc(r.badge)}</span> (+${Number(r.points || 50)} pts)</div>`;
+            rList.appendChild(row);
+          });
+        }
+      }
+
+      document.getElementById('rec-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('rec-name').value.trim();
+        await addDoc(collection(db, 'recognitions'), {
+          email: document.getElementById('rec-email').value.trim().toLowerCase(),
+          name,
+          badge: document.getElementById('rec-badge').value.trim(),
+          points: Number(document.getElementById('rec-pts').value || 50),
+          createdIso: new Date().toISOString(),
+        });
+        await writeAudit('recognitions', 'award', name, `Awarded ${name}`);
+        e.target.reset();
+        document.getElementById('rec-pts').value = 50;
+        showToast(`Recognized ${name}`);
+        loadAchievers();
+      });
+
+      // ---- 5. ACCESS & ACTIVITY WORKSPACE ----
+      document.querySelectorAll('#access-subtabs .ac-tab').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-ac');
+          document.querySelectorAll('#access-subtabs .ac-tab').forEach((b) => {
+            b.className = b.getAttribute('data-ac') === target
+              ? 'ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white'
+              : 'ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]';
+          });
+          document.querySelectorAll('.ac-pane').forEach((p) => p.classList.add('hidden'));
+          document.getElementById('ac-pane-' + target)?.classList.remove('hidden');
+        });
+      });
+
+      function renderPermCheckboxes() {
+        const box = document.getElementById('ac-perms');
+        box.replaceChildren();
+        ALL_PERMS.forEach((p) => {
+          const lbl = document.createElement('label');
+          lbl.className = 'inline-flex items-center gap-2 p-2 rounded-lg border border-[#EAE8E1] cursor-pointer';
+          lbl.innerHTML = `<input type="checkbox" class="ac-cb" value="${esc(p.key)}" /><span>${esc(p.label)}</span>`;
+          box.appendChild(lbl);
+        });
+      }
+      renderPermCheckboxes();
+
       document.getElementById('ac-role').addEventListener('change', (e) => {
-        if (e.target.value !== 'custom') applyRolePreset(e.target.value);
+        const preset = ROLE_PRESETS[e.target.value];
+        if (!preset) return;
+        const set = new Set(preset);
+        document.querySelectorAll('.ac-cb').forEach((c) => { c.checked = set.has(c.value); });
       });
 
       async function loadAccessAndAudit() {
         const [acSnap, auSnap] = await Promise.all([
           getDocs(collection(db, 'staffAccess')),
-          getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(40))).catch(() => getDocs(collection(db, 'auditLogs'))),
+          getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60))).catch(() => getDocs(collection(db, 'auditLogs'))),
         ]);
 
         const acList = document.getElementById('ac-list');
         acList.replaceChildren();
-        acSnap.forEach((d) => {
+        acSnap.docs.forEach((d) => {
           const s = { email: d.id, ...d.data() };
           const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3';
-          row.innerHTML = `
-            <div>
-              <div class="font-semibold text-[14px]">${esc(s.displayName || s.email)} <span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1]">${esc(s.role)}</span> ${s.active ? '' : '<span class="text-[#B42318]">(paused)</span>'}</div>
-              <div class="font-code text-[12px] text-[#525866]">${esc(s.email)}</div>
-              <div class="text-[11.5px] text-[#767D8C] mt-0.5">${esc((s.permissions || []).join(' · '))}</div>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px]">Edit</button>
-              <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px]">Revoke</button>
-            </div>
-          `;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13px]';
+          row.innerHTML = `<div><strong>${esc(s.email)}</strong> <span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] ml-1">${esc(s.role)}</span> <span class="text-[#767D8C] ml-1">${s.active ? 'Active' : 'Disabled'}</span><div class="text-[11.5px] text-[#525866] mt-0.5">${esc((s.permissions || []).join(', ') || 'Tasks & Time only')}</div></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Revoke</button></div>`;
           row.querySelector('.edit-btn').addEventListener('click', () => {
             document.getElementById('ac-email').value = s.email;
             document.getElementById('ac-name').value = s.displayName || '';
@@ -1737,6 +1884,7 @@ const faviconSvg = encodeURIComponent(
           row.querySelector('.del-btn').addEventListener('click', async () => {
             await deleteDoc(doc(db, 'staffAccess', s.email));
             await writeAudit('access', 'revoke', s.email, `Revoked ${s.email}`);
+            showToast(`Revoked ${s.email}`);
             loadAccessAndAudit();
           });
           acList.appendChild(row);
@@ -1744,7 +1892,7 @@ const faviconSvg = encodeURIComponent(
 
         const auList = document.getElementById('audit-list');
         auList.replaceChildren();
-        auSnap.forEach((d) => {
+        auSnap.docs.forEach((d) => {
           const a = d.data();
           const row = document.createElement('div');
           row.className = 'p-3.5 flex flex-wrap justify-between gap-2 text-[13px]';
@@ -1804,7 +1952,7 @@ const faviconSvg = encodeURIComponent(
       document.getElementById('btn-check-verify').addEventListener('click', async () => {
         if (auth.currentUser) { await auth.currentUser.reload(); resolveSession(auth.currentUser); }
       });
-      ['btn-signout', 'btn-unverified-out', 'btn-denied-out'].forEach((id) => {
+      ['btn-signout', 'mobile-signout-btn', 'btn-unverified-out', 'btn-denied-out'].forEach((id) => {
         document.getElementById(id).addEventListener('click', () => signOut(auth));
       });
 
@@ -1861,7 +2009,7 @@ const faviconSvg = encodeURIComponent(
         document.getElementById('sb-user-email').textContent = email;
         showGate('dash-shell');
         renderNav();
-        switchView(activeView);
+        switchWorkspace(activeWorkspace);
       }
 
       onAuthStateChanged(auth, resolveSession);

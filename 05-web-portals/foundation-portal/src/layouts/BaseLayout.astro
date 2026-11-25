@@ -9,6 +9,7 @@ export interface Props {
   backHref?: string;
   lang?: 'en' | 'ar';
   altPath?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -18,6 +19,7 @@ const {
   backHref = '/',
   lang = 'en',
   altPath,
+  noindex = false,
 } = Astro.props;
 
 const orgJsonLd = JSON.stringify({
@@ -59,6 +61,8 @@ const faviconSvg = encodeURIComponent(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <slot name="head" />
     <title>{title} — TF Unions</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url.href} />
@@ -79,7 +83,6 @@ const faviconSvg = encodeURIComponent(
       rel="stylesheet"
     />
     <script type="application/ld+json" set:html={orgJsonLd}></script>
-    <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
     <style is:global>
       :root {
         --tf-primary: var(--tf-brand);
@@ -224,13 +227,13 @@ const faviconSvg = encodeURIComponent(
           <p data-tf-copy="footer.tagline" class="mt-3 text-[#525866] leading-[1.6]">
             Independent non-profit student academic union supporting STEM and university scholars across all 27 Egyptian governorates.
           </p>
-          <p class="mt-3 text-[12px] text-[#767D8C]">
+          <p data-tf-copy="footer.founded_by" class="mt-3 text-[12px] text-[#767D8C]">
             Founded by Mohammed Farag &amp; Mohammed Abdelghany.
           </p>
         </div>
 
         <div>
-          <div class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Student platforms</div>
+          <div data-tf-copy="footer.col_platforms" class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Student platforms</div>
           <ul class="mt-3 space-y-2 text-[#525866]">
             <li><a href="https://news.tfunions.com" class="hover:text-[#1B365D] transition">TF News &amp; admissions</a></li>
             <li><a href="https://guides.tfunions.com" class="hover:text-[#1B365D] transition">TF Guides &amp; roadmaps</a></li>
@@ -240,26 +243,24 @@ const faviconSvg = encodeURIComponent(
         </div>
 
         <div>
-          <div class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Foundation</div>
+          <div data-tf-copy="footer.col_foundation" class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Foundation</div>
           <ul class="mt-3 space-y-2 text-[#525866]">
             <li><a href="/about" class="hover:text-[#1B365D] transition">About &amp; mission</a></li>
-            <li><a href="/team" class="hover:text-[#1B365D] transition">71-member team constellation</a></li>
+            <li><a href="/team" class="hover:text-[#1B365D] transition">Team directory &amp; timeline</a></li>
             <li><a href="/volunteer" class="hover:text-[#1B365D] transition">Volunteer tracks</a></li>
             <li><a href="/ideas" class="hover:text-[#1B365D] transition">Student idea incubator</a></li>
           </ul>
         </div>
 
         <div>
-          <div class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Accountability &amp; API</div>
+          <div data-tf-copy="footer.col_accountability" class="text-[12.5px] font-semibold text-[#161A22] border-b border-[#DFDDD6] pb-2">Accountability &amp; API</div>
           <ul class="mt-3 space-y-2 text-[#525866]">
             <li><a href="https://verify.tfunions.com" class="hover:text-[#1B365D] transition">Verify certificate serial</a></li>
             <li><a href="/transparency" class="hover:text-[#1B365D] transition">Open financial ledger</a></li>
             <li><a href="/charter" class="hover:text-[#1B365D] transition">Non-profit charter</a></li>
             <li><a href="/privacy" class="hover:text-[#1B365D] transition">Privacy &amp; data policy</a></li>
-            <li><a href="/photos-submit" class="hover:text-[#1B365D] transition">Submit chapter photos</a></li>
             <li><a href="https://dashboard.tfunions.com" class="hover:text-[#1B365D] transition">Team Dashboard</a></li>
             <li><a href="https://docs.tfunions.com" class="hover:text-[#1B365D] transition">Documentation &amp; API</a></li>
-            <li><a href="https://status.tfunions.com" class="hover:text-[#1B365D] transition">System status</a></li>
           </ul>
         </div>
       </div>

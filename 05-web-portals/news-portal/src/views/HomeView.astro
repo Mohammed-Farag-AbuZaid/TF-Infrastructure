@@ -18,6 +18,7 @@ const cards = [
   { n: '04', path: '/study/universities', title: t(lang, 'home.card.uni'), d: t(lang, 'home.card.uni.d'), section: '' },
 ];
 const totalOpen = Object.values(openBy).reduce((a, b) => a + b, 0);
+const pk = `news_home${lang === 'ar' ? '_ar' : ''}`;
 const ld = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -36,19 +37,20 @@ const ld = {
     <div class="tf-ledger-line !mt-0 !mb-4">
       <span class="tf-ledger-line__label">TF News</span>
     </div>
-    <h1 class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.03em]">{t(lang, 'home.title')}</h1>
-    <p class="mt-4 text-[17px] leading-[1.65] text-tf-muted max-w-[60ch]">{t(lang, 'home.subtitle')}</p>
+    <h1 data-tf-copy={`${pk}.headline`} class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.03em]">{t(lang, 'home.title')}</h1>
+    <p data-tf-copy={`${pk}.subtitle`} class="mt-4 text-[17px] leading-[1.65] text-tf-muted max-w-[60ch]">{t(lang, 'home.subtitle')}</p>
 
     <form action={href(lang, '/search')} method="get" role="search" class="mt-7 flex gap-2">
       <label for="home-q" class="sr-only">{t(lang, 'home.search')}</label>
       <input
         id="home-q"
+        data-tf-copy={`${pk}.search_placeholder`}
         name="q"
         type="search"
         placeholder={t(lang, 'home.search')}
         class="flex-1 min-w-0 h-12 px-4 rounded-tf-card bg-tf-surface border border-tf-border text-[16px] placeholder-tf-subtle focus:border-tf-brand focus:outline-none"
       />
-      <button type="submit" class="h-12 px-5 rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[14px] font-semibold transition">{t(lang, 'search.title')}</button>
+      <button data-tf-copy={`${pk}.search_btn`} type="submit" class="h-12 px-5 rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[14px] font-semibold transition">{t(lang, 'search.title')}</button>
     </form>
 
     <p data-open-wrap class="mt-4 text-[13px] text-tf-muted">
@@ -57,7 +59,7 @@ const ld = {
   </section>
 
   <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Browse">
-    {cards.map((c) => (
+    {cards.map((c, idx) => (
       <a href={href(lang, c.path)} class="group block bg-tf-surface border border-tf-border hover:border-tf-brand rounded-tf-card p-6 transition">
         <div class="flex items-center justify-between">
           <span class="tf-serial-chip">№ {c.n}</span>
@@ -65,8 +67,8 @@ const ld = {
             <span data-open-wrap class="text-[12.5px] text-tf-muted"><span data-open-count={c.section} class="font-mono font-semibold text-tf-accent-text">{openBy[c.section] ?? 0}</span> {t(lang, 'home.open')}</span>
           )}
         </div>
-        <h2 class="font-display text-[22px] font-semibold mt-4 leading-snug group-hover:text-tf-brand transition">{c.title}</h2>
-        <p class="mt-1.5 text-[14px] leading-[1.6] text-tf-muted">{c.d}</p>
+        <h2 data-tf-copy={`${pk}.card_${idx}_title`} class="font-display text-[22px] font-semibold mt-4 leading-snug group-hover:text-tf-brand transition">{c.title}</h2>
+        <p data-tf-copy={`${pk}.card_${idx}_desc`} class="mt-1.5 text-[14px] leading-[1.6] text-tf-muted">{c.d}</p>
         <span class="mt-4 inline-block text-[13px] font-medium text-tf-brand">{lang === 'ar' ? '←' : '→'}</span>
       </a>
     ))}

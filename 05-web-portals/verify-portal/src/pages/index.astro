@@ -91,11 +91,11 @@ const structuredData = {
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <!-- Left 5 Cols: Calm White Serial Lookup Console -->
         <section class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-          <h1 class="font-display text-[28px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+          <h1 data-tf-copy="verify.headline" class="font-display text-[28px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
             Verify a certificate
           </h1>
-          <p class="mt-2.5 text-[14px] leading-[1.6] text-[#525866]">
-            Enter the permanent serial code printed on any TF Unions volunteer or leadership credential (<span class="font-code text-[#0B5F58]">TFU-YYYY-XXXXXX</span>).
+          <p data-tf-copy="verify.subtitle" class="mt-2.5 text-[14px] leading-[1.6] text-[#525866]">
+            Enter the permanent serial code printed on any TF Unions volunteer or leadership credential (TFU-YYYY-XXXXXX).
           </p>
 
           <form id="verify-form" class="mt-6 space-y-3">
@@ -104,41 +104,30 @@ const structuredData = {
                 id="serial-input"
                 type="text"
                 required
-                placeholder="TFU-2026-8F92A1"
+                placeholder="TFU-YYYY-XXXXXX"
                 class="w-full h-10 pl-3.5 pr-9 rounded-lg bg-[#EAE8E1]/60 font-code text-[14px] uppercase text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none transition"
               />
               <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[11px] font-code text-[#767D8C]">/</kbd>
             </div>
             <button
+              data-tf-copy="verify.submit_btn"
               type="submit"
               class="w-full h-10 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
             >
               Inspect credential record
             </button>
           </form>
-
-          <div class="mt-5 pt-5 border-t border-[#DFDDD6]">
-            <div class="text-[12px] text-[#767D8C] mb-2">Sample verifiable records:</div>
-            <div class="flex flex-wrap gap-2">
-              <button type="button" data-code="TFU-2026-8F92A1" class="sample-btn font-code text-[12px] px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition">
-                TFU-2026-8F92A1
-              </button>
-              <button type="button" data-code="TFU-2026-000001" class="sample-btn font-code text-[12px] px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition">
-                TFU-2026-000001
-              </button>
-            </div>
-          </div>
         </section>
 
         <!-- Right 7 Cols: Crisp Official Credential Sheet -->
         <section id="result-box" class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
           <div class="px-6 py-3.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
-            <span class="font-display text-[16px] font-semibold text-[#161A22]">Official Credential Dossier</span>
-            <span class="font-code text-[11.5px] text-[#767D8C]">Awaiting serial query</span>
+            <span data-tf-copy="verify.dossier_title" class="font-display text-[16px] font-semibold text-[#161A22]">Official Credential Dossier</span>
+            <span data-tf-copy="verify.awaiting_label" class="font-code text-[11.5px] text-[#767D8C]">Awaiting serial query</span>
           </div>
           <div class="p-8 sm:p-10 text-center">
-            <p class="text-[14.5px] text-[#525866] max-w-[440px] mx-auto leading-relaxed">
-              Select a sample serial on the left or enter a certificate code to verify authenticity directly against the TF Unions PostgreSQL registry.
+            <p data-tf-copy="verify.empty_prompt" class="text-[14.5px] text-[#525866] max-w-[440px] mx-auto leading-relaxed">
+              Enter a certificate serial code to verify authenticity directly against the TF Unions Credential Registry.
             </p>
           </div>
         </section>
@@ -147,14 +136,14 @@ const structuredData = {
 
     <footer class="tf-eco-footer bg-white">
       <div class="max-w-[1160px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 text-[12px]">
-        <span>TF Unions Credential Verification Registry — Backed by VPS PostgreSQL</span>
+        <span data-tf-copy="verify.footer_note">TF Unions Official Credential Verification Registry</span>
         <div class="flex flex-wrap items-center gap-4">
           <a href="https://www.tfunions.com">Foundation</a>
           <a href="https://news.tfunions.com">News</a>
           <a href="https://guides.tfunions.com">Guides</a>
           <a href="https://connect.tfunions.com">Connect</a>
+          <a href="https://dashboard.tfunions.com">Dashboard</a>
           <a href="/schema" class="!text-[#161A22] font-medium hover:underline">Verification schema</a>
-          <a href="https://docs.tfunions.com/api" class="!text-[#1B365D] font-medium hover:underline">Verification API Docs →</a>
         </div>
       </div>
     </footer>
@@ -189,36 +178,53 @@ const structuredData = {
         }
       });
 
+      function decodeFsVal(v) {
+        if (!v || typeof v !== 'object') return undefined;
+        if ('stringValue' in v) return v.stringValue;
+        if ('booleanValue' in v) return v.booleanValue;
+        if ('integerValue' in v) return Number(v.integerValue);
+        if ('doubleValue' in v) return Number(v.doubleValue);
+        return undefined;
+      }
+
       async function verifySerial(code) {
         const clean = String(code || '').trim().toUpperCase();
 
-        if (!/^TFU-\d{4}-[A-Z0-9]{6}$/.test(clean)) {
-          resultBox.innerHTML = `<div class="p-7"><p class="text-[14.5px] text-[#B91C1C] font-medium">Enter a valid serial code in the format TFU-YYYY-XXXXXX.</p></div>`;
+        if (!/^TFU-\d{4}-[A-Z0-9]{4,12}$/.test(clean)) {
+          resultBox.innerHTML = `<div class="p-7"><p class="text-[14.5px] text-[#B91C1C] font-medium">Enter a valid serial code (e.g. TFU-2026-000142).</p></div>`;
           return;
         }
 
-        resultBox.innerHTML = `<div class="p-7"><p class="text-[14.5px] text-[#525866]">Querying PostgreSQL credential registry...</p></div>`;
+        resultBox.innerHTML = `<div class="p-7"><p class="text-[14.5px] text-[#525866]">Querying TF Unions Credential Registry...</p></div>`;
 
         try {
-          const res = await fetch(`https://n8n.tfunions.com/tf-api/api/verify-certificate?code=${encodeURIComponent(clean)}`);
-          const data = await res.json();
-          if (res.ok && data.valid) {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/certificates/${encodeURIComponent(clean)}`, { cache: 'no-store' });
+          if (!res.ok) throw new Error('No active credential matches this serial code.');
+          const doc = await res.json();
+          const f = doc.fields || {};
+          const data = {};
+          Object.keys(f).forEach((k) => { data[k] = decodeFsVal(f[k]); });
+          if (data.status === 'revoked') {
+            throw new Error(`Credential ${clean} has been revoked.`);
+          }
+          if (res.ok && data.recipientName) {
             window.tfTrack?.('certificate_verify', { valid: true });
-            const shareUrl = `https://verify.tfunions.com/?code=${encodeURIComponent(data.serialCode)}`;
+            const serial = data.serialCode || clean;
+            const shareUrl = `https://verify.tfunions.com/?code=${encodeURIComponent(serial)}`;
             resultBox.innerHTML = `
               <div class="px-6 py-3.5 bg-[#EDF7F5] border-b border-[#BCE3DC] flex flex-wrap items-center justify-between gap-3">
                 <span class="tf-stamp">Verified Authentic Credential</span>
-                <span class="tf-serial-chip">№ ${esc(data.serialCode)}</span>
+                <span class="tf-serial-chip">№ ${esc(serial)}</span>
               </div>
               <div class="p-6 sm:p-8">
                 <div class="text-[12px] font-medium text-[#767D8C]">Issued to recipient</div>
                 <h2 class="font-display mt-1 text-[28px] font-bold tracking-[-0.02em] text-[#161A22]">${esc(data.recipientName)}</h2>
-                <p class="mt-1 text-[15px] font-medium text-[#1B365D]">${esc(data.roleTitle)}</p>
+                <p class="mt-1 text-[15px] font-medium text-[#1B365D]">${esc(data.roleTitle || 'Contributor')}</p>
 
                 <div class="mt-6 pt-6 border-t border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-3 gap-3 text-[13px]">
                   <div class="p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
                     <div class="text-[#767D8C] text-[11.5px] font-medium">Credential type</div>
-                    <div class="font-semibold text-[#161A22] mt-1">${esc(data.credentialType)}</div>
+                    <div class="font-semibold text-[#161A22] mt-1">${esc(data.credentialType || 'Volunteer')}</div>
                   </div>
                   <div class="p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
                     <div class="text-[#767D8C] text-[11.5px] font-medium">Service hours</div>
@@ -226,7 +232,7 @@ const structuredData = {
                   </div>
                   <div class="p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6]">
                     <div class="text-[#767D8C] text-[11.5px] font-medium">Issue date</div>
-                    <div class="font-code font-semibold text-[#161A22] mt-1">${esc(data.issueDate)}</div>
+                    <div class="font-code font-semibold text-[#161A22] mt-1">${esc(data.issueDate || '2026')}</div>
                   </div>
                 </div>
 
@@ -248,7 +254,7 @@ const structuredData = {
               });
             }
           } else {
-            throw new Error(data.message || 'No active credential matches this serial code.');
+            throw new Error('No active credential matches this serial code.');
           }
         } catch (err) {
           resultBox.innerHTML = `<div class="p-7"><p class="text-[14.5px] text-[#B91C1C] font-medium">${esc(err.message || 'Certificate not found.')}</p></div>`;
@@ -258,13 +264,6 @@ const structuredData = {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         verifySerial(input.value);
-      });
-
-      document.querySelectorAll('.sample-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          input.value = btn.getAttribute('data-code');
-          verifySerial(input.value);
-        });
       });
 
       const urlCode = new URLSearchParams(window.location.search).get('code');

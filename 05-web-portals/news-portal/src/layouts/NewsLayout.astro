@@ -113,7 +113,7 @@ const updated = new Date(dataMeta.fetchedAt).toISOString().slice(0, 10);
 
     <footer class="tf-eco-footer bg-tf-surface">
       <div class="max-w-[1100px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
-        <span>{t(lang, 'footer.note')} · {t(lang, 'footer.updated')} {updated}</span>
+        <span data-tf-copy={`news_footer${lang === 'ar' ? '_ar' : ''}.note`}>{t(lang, 'footer.note')}</span>
         <div class="flex flex-wrap items-center gap-5">
           <a href="https://www.tfunions.com">Foundation</a>
           <a href="https://guides.tfunions.com">Guides</a>

@@ -5,21 +5,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="mt-8 bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.04)] max-w-[920px]">
     <div class="p-6 sm:p-7 border-b border-[#DFDDD6] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+        <div data-tf-copy="ideas.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
           Community engineering backlog
         </div>
-        <h1 class="font-display mt-2 text-[28px] sm:text-[32px] font-bold text-[#161A22] tracking-[-0.02em]">
+        <h1 data-tf-copy="ideas.headline" class="font-display mt-2 text-[28px] sm:text-[32px] font-bold text-[#161A22] tracking-[-0.02em]">
           Student Idea Incubator
         </h1>
-        <p class="text-[14px] text-[#525866] mt-1">
-          Vote on open-source student utilities, scholarship filters, and research guides in the PostgreSQL queue.
+        <p data-tf-copy="ideas.subtitle" class="text-[14px] text-[#525866] mt-1">
+          Browse and vote on open-source student tools, scholarship filters, and study resources.
         </p>
       </div>
       <div class="flex items-center gap-2.5 shrink-0">
         <span id="ideas-count" class="font-code text-[12px] font-medium text-[#0B5F58] bg-[#EDF7F5] border border-[#BCE3DC] px-3 py-1.5 rounded-lg">
-          1 proposal
+          0 proposals
         </span>
         <a
+          data-tf-copy="ideas.cta_propose"
           href="/ideas-submit"
           class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
         >
@@ -36,6 +37,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
       <input
         id="idea-search"
+        data-tf-copy="ideas.search_placeholder"
         type="search"
         placeholder="Filter proposals..."
         class="w-full sm:w-56 h-8 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12.5px] text-[#161A22] placeholder-[#767D8C] focus:border-[#1B365D] focus:outline-none"
@@ -43,27 +45,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <div class="divide-y divide-[#EAE8E1]" id="ideas-list">
-      <div class="p-6 flex items-center justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-2 text-[12px]">
-            <span class="font-medium text-[#0B5F58]">TF News</span>
-            <span class="px-2 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] font-medium">Planned</span>
-          </div>
-          <div class="font-display text-[18px] font-semibold text-[#161A22] mt-1">
-            Arabic-to-English Research Abstract Reviewer &amp; LaTeX Template Pack
-          </div>
-          <p class="text-[13.5px] text-[#525866] mt-1">
-            Checklist and peer review queue for ISEF and science fair students.
-          </p>
-        </div>
-        <button
-          type="button"
-          data-id="1"
-          class="upvote-btn px-3.5 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-semibold text-[#161A22] shrink-0 transition"
-        >
-          â–² <span class="count font-code">142</span>
-        </button>
-      </div>
+      <div class="p-10 text-center text-[14px] text-[#767D8C]">Loading proposals...</div>
     </div>
   </section>
 
@@ -77,36 +59,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         .replace(/'/g, '&#39;');
     }
 
-    function getVoterId() {
-      let id = localStorage.getItem('tf_voter_id');
-      if (!id) {
-        id = 'web_' + Math.random().toString(36).slice(2) + Date.now();
-        localStorage.setItem('tf_voter_id', id);
-      }
-      return id;
+    function decodeFsVal(v) {
+      if (!v || typeof v !== 'object') return undefined;
+      if ('stringValue' in v) return v.stringValue;
+      if ('booleanValue' in v) return v.booleanValue;
+      if ('integerValue' in v) return Number(v.integerValue);
+      if ('doubleValue' in v) return Number(v.doubleValue);
+      return undefined;
     }
 
     const listEl = document.getElementById('ideas-list');
     const countBadge = document.getElementById('ideas-count');
     const searchInput = document.getElementById('idea-search');
 
-    let cachedIdeas = [
-      {
-        item_id: 1,
-        source_service: 'TF News',
-        status: 'Planned',
-        title: 'Arabic-to-English Research Abstract Reviewer & LaTeX Template Pack',
-        description: 'Checklist and peer review queue for ISEF and science fair students.',
-        upvote_count: 142,
-      },
-    ];
+    let cachedIdeas = [];
     let statusFilter = 'all';
     let searchTerm = '';
 
     function renderList() {
       const q = searchTerm.toLowerCase();
       const filtered = cachedIdeas.filter((it) => {
-        const st = String(it.status || 'Open').toLowerCase();
+        const st = String(it.status || 'open').toLowerCase();
         const matchStatus = statusFilter === 'all' || st.includes(statusFilter);
         const matchQ = !q || String(it.title || '').toLowerCase().includes(q) || String(it.description || '').toLowerCase().includes(q);
         return matchStatus && matchQ;
@@ -117,67 +90,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
 
       if (filtered.length === 0) {
-        listEl.innerHTML = `<div class="p-8 text-center text-[14px] text-[#767D8C]">No proposals match this filter yet.</div>`;
+        listEl.innerHTML = '<div data-tf-copy="ideas.empty_state" class="p-10 text-center text-[14px] text-[#767D8C]">No proposals submitted yet.</div>';
         return;
       }
 
       listEl.innerHTML = filtered
-        .map(
-          (item) => `
+        .map((item) => `
           <div class="p-6 flex items-center justify-between gap-4 hover:bg-[#FAF9F6] transition">
             <div>
               <div class="flex items-center gap-2 text-[12px]">
-                <span class="font-medium text-[#0B5F58]">${esc(item.source_service || 'Ecosystem')}</span>
-                <span class="px-2 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] font-medium">${esc(String(item.status || 'Open').replace(/_/g, ' '))}</span>
+                <span class="font-medium text-[#0B5F58]">${esc(item.service || 'TF Unions')}</span>
+                <span class="px-2 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] font-medium">${esc(String(item.status || 'Open'))}</span>
               </div>
               <div class="font-display text-[18px] font-semibold text-[#161A22] mt-1">${esc(item.title)}</div>
               <p class="text-[13.5px] text-[#525866] mt-1">${esc(item.description || '')}</p>
             </div>
-            <button
-              type="button"
-              data-id="${Number(item.item_id)}"
-              class="upvote-btn px-3.5 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-semibold text-[#161A22] shrink-0 transition"
-            >
-              â–² <span class="count font-code">${Number(item.upvote_count || 1)}</span>
-            </button>
           </div>
-        `
-        )
-        .join('');
-      bindUpvotes();
+        `).join('');
     }
 
     async function loadIdeas() {
       try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/ideas');
-        const data = await res.json();
-        const items = data.ideas || [];
-        if (items.length > 0) {
-          cachedIdeas = items;
-          renderList();
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ideas?pageSize=100', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          cachedIdeas = (data.documents || []).map((doc) => {
+            const o = { id: doc.name.split('/').pop() };
+            const f = doc.fields || {};
+            Object.keys(f).forEach((k) => { o[k] = decodeFsVal(f[k]); });
+            return o;
+          });
         }
       } catch {}
-    }
-
-    function bindUpvotes() {
-      document.querySelectorAll('.upvote-btn').forEach((btn) => {
-        btn.onclick = async () => {
-          const itemId = Number(btn.getAttribute('data-id'));
-          const countEl = btn.querySelector('.count');
-          try {
-            const res = await fetch('https://n8n.tfunions.com/tf-api/api/idea-upvote', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ itemId, uid: getVoterId() }),
-            });
-            const data = await res.json();
-            if (data.upvoteCount) {
-              countEl.textContent = data.upvoteCount;
-              btn.classList.add('border-[#0F766E]', 'text-[#0B5F58]', 'bg-[#EDF7F5]');
-            }
-          } catch {}
-        };
-      });
+      renderList();
     }
 
     document.querySelectorAll('.idea-filter').forEach((btn) => {
@@ -198,7 +143,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    bindUpvotes();
     loadIdeas();
   </script>
 </BaseLayout>

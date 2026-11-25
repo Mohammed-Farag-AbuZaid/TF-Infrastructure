@@ -18,7 +18,7 @@ const tracks = [
     id: 'Engineering_Flutter',
     name: 'Engineering & Flutter',
     division: 'Systems Architecture',
-    summary: 'Build fast student web portals in Astro, Node/PostgreSQL APIs, and responsive Dart/Flutter clients.',
+    summary: 'Build fast student web portals in Astro, cloud APIs, and responsive Dart/Flutter clients.',
   },
   {
     id: 'Community_Ambassador',
@@ -32,13 +32,13 @@ const tracks = [
   <section class="mt-8 max-w-[900px]">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
       <div>
-        <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
-          Winter 2026 contributor cohort
+        <div data-tf-copy="volunteer.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+          Contributor tracks
         </div>
-        <h1 class="font-display mt-2 text-[30px] sm:text-[36px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+        <h1 data-tf-copy="volunteer.headline" class="font-display mt-2 text-[30px] sm:text-[36px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
           Choose a volunteer track
         </h1>
-        <p class="mt-2 text-[14.5px] leading-[1.6] text-[#525866] max-w-[60ch]">
+        <p data-tf-copy="volunteer.subtitle" class="mt-2 text-[14.5px] leading-[1.6] text-[#525866] max-w-[60ch]">
           Select any contributor division below to proceed directly to the application form. Approved contributors receive a verifiable TF Unions credential.
         </p>
       </div>
@@ -51,7 +51,7 @@ const tracks = [
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {tracks.map((t) => (
+      {tracks.map((t, idx) => (
         <a
           href={`/volunteer-apply?track=${encodeURIComponent(t.id)}`}
           class="group bg-white border border-[#DFDDD6] hover:border-[#0F766E] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between transition"
@@ -61,8 +61,8 @@ const tracks = [
               <span class="font-code text-[12px] font-medium text-[#0B5F58]">{t.division}</span>
               <span class="text-[#767D8C] group-hover:text-[#0B5F58] transition">Apply →</span>
             </div>
-            <h2 class="font-display text-[20px] font-bold text-[#161A22] mt-2">{t.name}</h2>
-            <p class="text-[13.5px] text-[#525866] mt-2 leading-[1.6]">{t.summary}</p>
+            <h2 data-tf-copy={`volunteer.track_${idx}_name`} class="font-display text-[20px] font-bold text-[#161A22] mt-2">{t.name}</h2>
+            <p data-tf-copy={`volunteer.track_${idx}_summary`} class="text-[13.5px] text-[#525866] mt-2 leading-[1.6]">{t.summary}</p>
           </div>
         </a>
       ))}

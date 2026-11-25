@@ -8,9 +8,10 @@ import { t, href, type Lang } from '../lib/i18n';
 export interface Props { lang: Lang }
 const { lang } = Astro.props;
 const items = opportunities.filter((o) => o.mustKnow).sort((a, b) => b.ratingCount - a.ratingCount);
+const pk = `news_must${lang === 'ar' ? '_ar' : ''}`;
 ---
 <NewsLayout title={`${t(lang, 'must.title')} — TF News`} description={t(lang, 'must.subtitle')} lang={lang} altPath="/must-know" active="browse" backHref={href(lang, '/directories')} backLabel={t(lang, 'nav.learn')}>
-  <PageHead title={t(lang, 'must.title')} subtitle={t(lang, 'must.subtitle')} kicker="MUST-KNOW" />
+  <PageHead title={t(lang, 'must.title')} subtitle={t(lang, 'must.subtitle')} kicker="MUST-KNOW" copyPrefix={pk} />
   <div class="bg-tf-surface border border-tf-border rounded-tf-card">
     <div class="px-5 py-3 bg-tf-sunken border-b border-tf-border rounded-t-tf-card text-[12.5px] text-tf-muted font-mono">{items.length} {t(lang, 'section.count')}</div>
     <ul class="px-5">

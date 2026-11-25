@@ -14,14 +14,15 @@ const regions = [...new Set(rows.map((r) => r.region))].sort((a, b) => {
 });
 const countries = [...new Set(universities.map((u) => u.country))].filter(Boolean).sort((a, b) => a.localeCompare(b));
 const field = 'h-10 px-3 rounded-tf-input bg-tf-surface border border-tf-border text-[14px] focus:border-tf-brand focus:outline-none';
+const pk = `news_uni${lang === 'ar' ? '_ar' : ''}`;
 ---
 <NewsLayout title={`${t(lang, 'uni.title')} — TF News`} description={t(lang, 'uni.subtitle')} lang={lang} altPath="/study/universities" active="browse" backHref={href(lang, '/study')} backLabel={t(lang, 'home.card.study')}>
-  <PageHead title={t(lang, 'uni.title')} subtitle={t(lang, 'uni.subtitle')} kicker="UNIVERSITIES" />
+  <PageHead title={t(lang, 'uni.title')} subtitle={t(lang, 'uni.subtitle')} kicker="UNIVERSITIES" copyPrefix={pk} />
 
   <div data-dir data-page-size="80">
     <div class="flex flex-wrap items-center gap-3">
       <label class="sr-only" for="u-q">{t(lang, 'uni.search')}</label>
-      <input id="u-q" data-f="q" type="search" placeholder={t(lang, 'uni.search')} class={`${field} flex-1 min-w-[220px]`} />
+      <input id="u-q" data-tf-copy={`${pk}.search_placeholder`} data-f="q" type="search" placeholder={t(lang, 'uni.search')} class={`${field} flex-1 min-w-[220px]`} />
       <label class="sr-only" for="u-region">{t(lang, 'uni.region')}</label>
       <select id="u-region" data-f="region" class={field}>
         <option value="">{t(lang, 'uni.region')}</option>

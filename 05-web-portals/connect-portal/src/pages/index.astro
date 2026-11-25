@@ -1,31 +1,25 @@
 ---
 import ConnectLayout from '../layouts/ConnectLayout.astro';
-import { BASELINE_CHAPTERS, GOVERNORATES } from '../data/chapters';
+import { GOVERNORATES } from '../data/chapters';
 
 const orgJsonLd = JSON.stringify({
   '@context': 'https://schema.org',
-  '@type': 'ItemList',
+  '@type': 'CollectionPage',
   name: 'TF Connect Governorate Chapters and Project Guilds',
-  itemListElement: BASELINE_CHAPTERS.map((ch, i) => ({
-    '@type': 'Organization',
-    position: i + 1,
-    name: ch.name,
-    areaServed: ch.gov,
-    description: ch.desc,
-  })),
+  url: 'https://connect.tfunions.com',
 });
 ---
 <ConnectLayout title="TF Connect — Governorate Chapters & Project Guilds">
   <Fragment slot="head-actions">
-    <span id="live-sync-status" class="font-mono text-tf-accent-text text-[11.5px] font-medium mr-1">Synchronized atlas</span>
-    <a href="/propose" class="h-9 px-3.5 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition">
+    <span id="live-sync-status" class="font-mono text-tf-accent-text text-[11.5px] font-medium mr-1">Live Firestore Atlas</span>
+    <a data-tf-copy="connect.propose_cta" href="/propose" class="h-9 px-3.5 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition">
       Propose a study group →
     </a>
   </Fragment>
 
   <main class="max-w-[1160px] mx-auto px-4 sm:px-6 mt-7 mb-16 grid grid-cols-1 lg:grid-cols-[310px_1fr] gap-6 items-start">
     <aside class="bg-tf-surface border border-tf-border rounded-tf-card p-6 lg:sticky lg:top-8 shadow-[0_1px_2px_rgb(22_26_34/0.04)]">
-      <div class="pl-2.5 border-l-2 border-tf-accent text-[12.5px] text-tf-muted font-medium">
+      <div data-tf-copy="connect.eyebrow" class="pl-2.5 border-l-2 border-tf-accent text-[12.5px] text-tf-muted font-medium">
         27 Egyptian governorates
       </div>
       <h1 data-tf-copy="connect.headline" class="font-display text-[27px] leading-[1.1] mt-2.5 text-tf-ink">Chapters, unions &amp; guilds</h1>
@@ -52,6 +46,7 @@ const orgJsonLd = JSON.stringify({
       <label for="connect-search" class="block text-[12px] font-medium text-tf-ink mt-4 mb-1.5">Search</label>
       <input
         id="connect-search"
+        data-tf-copy="connect.search_placeholder"
         type="search"
         placeholder="Chapter, city, or focus..."
         class="w-full h-10 px-3 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-tf-ink placeholder-tf-subtle text-[14px] focus:bg-tf-surface focus:border-tf-brand focus:outline-none"
@@ -60,33 +55,12 @@ const orgJsonLd = JSON.stringify({
 
     <section class="bg-tf-surface border border-tf-border rounded-tf-card overflow-hidden shadow-[0_1px_2px_rgb(22_26_34/0.04)]">
       <div class="px-6 py-4 bg-tf-sunken border-b border-tf-border flex items-center justify-between gap-3">
-        <strong class="font-display text-[18px] text-tf-ink">Active chapters &amp; project collectives</strong>
-        <span class="font-mono text-[12px] text-tf-muted" id="connect-count">{BASELINE_CHAPTERS.length} entries</span>
+        <strong data-tf-copy="connect.list_heading" class="font-display text-[18px] text-tf-ink">Active chapters &amp; project collectives</strong>
+        <span class="font-mono text-[12px] text-tf-muted" id="connect-count">0 entries</span>
       </div>
 
       <div id="connect-grid" class="divide-y divide-tf-sunken">
-        {BASELINE_CHAPTERS.map((it) => (
-          <article
-            class="chapter-row p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 cursor-pointer hover:bg-tf-canvas/60 transition"
-            data-id={it.id}
-            tabindex="0"
-            role="button"
-          >
-            <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="tf-serial-chip">№ {it.serial}</span>
-                <span class="text-[12px] font-semibold text-tf-accent-text">{it.type}</span>
-                <span class="bg-tf-sunken border border-tf-border-strong px-2 py-0.5 rounded-tf-input text-tf-muted text-[11.5px] font-medium">{it.gov}</span>
-                <span class="text-[12px] text-tf-subtle">{it.focus}</span>
-              </div>
-              <h2 class="font-display text-[19px] font-semibold text-tf-ink mt-2">{it.name}</h2>
-              <p class="text-[13.5px] leading-[1.6] text-tf-muted mt-1.5 max-w-[64ch]">{it.desc}</p>
-            </div>
-            <span class="px-3.5 py-2 rounded-tf-input bg-tf-canvas border border-tf-border text-tf-ink text-[12.5px] font-medium whitespace-nowrap shrink-0 self-start sm:self-center">
-              Inspect →
-            </span>
-          </article>
-        ))}
+        <div class="p-10 text-center text-tf-muted">Loading chapters directory...</div>
       </div>
     </section>
   </main>
@@ -117,8 +91,8 @@ const orgJsonLd = JSON.stringify({
 
   <script type="application/ld+json" set:html={orgJsonLd}></script>
 
-  <script is:inline define:vars={{ BASELINE_CHAPTERS }}>
-    let allItems = [...BASELINE_CHAPTERS];
+  <script is:inline>
+    let allItems = [];
     let activeType = 'All';
     let activeGov = 'All';
     let searchQuery = '';
@@ -127,20 +101,34 @@ const orgJsonLd = JSON.stringify({
       return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    function decodeFsVal(v) {
+      if (!v || typeof v !== 'object') return undefined;
+      if ('stringValue' in v) return v.stringValue;
+      if ('booleanValue' in v) return v.booleanValue;
+      if ('integerValue' in v) return Number(v.integerValue);
+      if ('doubleValue' in v) return Number(v.doubleValue);
+      return undefined;
+    }
+
     function render() {
       const grid = document.getElementById('connect-grid');
       const filtered = allItems.filter((it) => {
         const matchType = activeType === 'All' || it.type === activeType;
         const matchGov = activeGov === 'All' || it.gov === activeGov;
         const q = searchQuery.toLowerCase();
-        const matchQ = !q || it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q) || it.gov.toLowerCase().includes(q);
+        const matchQ = !q || String(it.name || '').toLowerCase().includes(q) || String(it.desc || '').toLowerCase().includes(q) || String(it.gov || '').toLowerCase().includes(q);
         return matchType && matchGov && matchQ;
       });
 
       document.getElementById('connect-count').textContent = `${filtered.length} entr${filtered.length === 1 ? 'y' : 'ies'}`;
 
+      if (allItems.length === 0) {
+        grid.innerHTML = '<div data-tf-copy="connect.empty_state" class="p-10 text-center text-tf-muted">No chapters published yet. Add chapters from TF Dashboard.</div>';
+        return;
+      }
+
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="p-10 text-center text-tf-muted">No chapters or guilds match this filter.</div>`;
+        grid.innerHTML = '<div class="p-10 text-center text-tf-muted">No chapters or guilds match this filter.</div>';
         return;
       }
 
@@ -148,7 +136,7 @@ const orgJsonLd = JSON.stringify({
         <article class="chapter-row p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 cursor-pointer hover:bg-tf-canvas/60 transition" data-id="${esc(it.id)}" tabindex="0" role="button">
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="tf-serial-chip">№ ${esc(it.serial || ('CN-' + String(idx + 1).padStart(2, '0')))}</span>
+              <span class="tf-serial-chip">№ ${esc(it.serial || ('CH-' + String(idx + 1).padStart(2, '0')))}</span>
               <span class="text-[12px] font-semibold text-tf-accent-text">${esc(it.type)}</span>
               <span class="bg-tf-sunken border border-tf-border-strong px-2 py-0.5 rounded-tf-input text-tf-muted text-[11.5px] font-medium">${esc(it.gov)}</span>
               <span class="text-[12px] text-tf-subtle">${esc(it.focus || 'Student Network')}</span>
@@ -219,83 +207,35 @@ const orgJsonLd = JSON.stringify({
       render();
     });
 
-    render();
-
-    function decodeFsVal(v) {
-      if (!v || typeof v !== 'object') return undefined;
-      if ('stringValue' in v) return v.stringValue;
-      if ('booleanValue' in v) return v.booleanValue;
-      if ('integerValue' in v) return Number(v.integerValue);
-      if ('doubleValue' in v) return Number(v.doubleValue);
-      return undefined;
-    }
-
     (async () => {
       try {
-        const [fsChRes, orgsRes, projRes] = await Promise.all([
-          fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/chapters?pageSize=200', { cache: 'no-store' }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
-          fetch('https://n8n.tfunions.com/tf-api/api/collections/orgs').then((r) => r.json()).catch(() => ({})),
-          fetch('https://n8n.tfunions.com/tf-api/api/collections/allProjects').then((r) => r.json()).catch(() => ({}))
-        ]);
-        const extra = [];
-        const byId = new Map(BASELINE_CHAPTERS.map((x) => [x.id, x]));
-        (fsChRes.documents || []).forEach((doc, idx) => {
-          const id = doc.name.split('/').pop();
-          const f = doc.fields || {};
-          const ch = {};
-          Object.keys(f).forEach((k) => { ch[k] = decodeFsVal(f[k]); });
-          if (ch.archived) {
-            byId.delete(id);
-          } else if (ch.name) {
-            byId.set(id, {
-              id,
-              serial: ch.serial || `CH-${String(idx + 1).padStart(2, '0')}`,
-              type: ch.type || 'School Chapter',
-              gov: ch.gov || 'Nationwide',
-              name: ch.name,
-              desc: ch.desc || '',
-              focus: ch.focus || 'Verified Chapter',
-            });
-          }
-        });
-        const seen = new Set(Array.from(byId.values()).map((x) => x.name.toLowerCase()));
-        (orgsRes.documents || []).forEach((doc, idx) => {
-          const name = doc.name || doc.title;
-          if (name && !seen.has(name.toLowerCase())) {
-            seen.add(name.toLowerCase());
-            extra.push({
-              id: 'org-' + (doc.id || idx),
-              serial: `ORG-${String(idx + 1).padStart(2, '0')}`,
-              type: 'School Chapter',
-              gov: doc.governorate || doc.city || 'Nationwide',
-              name,
-              desc: doc.description || doc.bio || 'Connected student union chapter in the TF Unions ecosystem.',
-              focus: doc.category || 'Verified Organization'
-            });
-          }
-        });
-        (projRes.documents || []).forEach((doc, idx) => {
-          const name = doc.title || doc.name;
-          if (name && !seen.has(name.toLowerCase())) {
-            seen.add(name.toLowerCase());
-            extra.push({
-              id: 'proj-' + (doc.id || idx),
-              serial: `PRJ-${String(idx + 1).padStart(2, '0')}`,
-              type: 'Project Guild',
-              gov: doc.governorate || 'Nationwide',
-              name,
-              desc: doc.description || doc.subtitle || 'Student-led scientific or software project initiative.',
-              focus: doc.category || 'Open Project'
-            });
-          }
-        });
-        const combined = [...Array.from(byId.values()), ...extra];
-        if (combined.length !== BASELINE_CHAPTERS.length || (fsChRes.documents || []).length > 0) {
-          allItems = combined;
-          document.getElementById('live-sync-status').textContent = `Live Studio Synced (${allItems.length} entries)`;
-          render();
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/chapters?pageSize=200', { cache: 'no-store' });
+        if (res.ok) {
+          const fsJson = await res.json();
+          const list = [];
+          (fsJson.documents || []).forEach((doc, idx) => {
+            const id = doc.name.split('/').pop();
+            const f = doc.fields || {};
+            const ch = {};
+            Object.keys(f).forEach((k) => { ch[k] = decodeFsVal(f[k]); });
+            if (!ch.archived && ch.name) {
+              list.push({
+                id,
+                serial: ch.serial || `CH-${String(idx + 1).padStart(2, '0')}`,
+                type: ch.type || 'School Chapter',
+                gov: ch.gov || 'Nationwide',
+                name: ch.name,
+                desc: ch.desc || '',
+                focus: ch.focus || 'Verified Chapter',
+              });
+            }
+          });
+          allItems = list;
         }
+        const badge = document.getElementById('live-sync-status');
+        if (badge) badge.textContent = allItems.length ? `${allItems.length} live ${allItems.length === 1 ? 'chapter' : 'chapters'}` : 'Ready for chapters';
       } catch {}
+      render();
     })();
   </script>
 </ConnectLayout>

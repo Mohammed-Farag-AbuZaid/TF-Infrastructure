@@ -40,7 +40,7 @@ const chip = 'h-9 px-3.5 inline-flex items-center rounded-tf-pill border border-
   backLabel={t(lang, 'nav.learn')}
   jsonLd={ld}
 >
-  <PageHead title={title} subtitle={subtitle} kicker={section.id.toUpperCase()} />
+  <PageHead title={title} subtitle={subtitle} kicker={section.id.toUpperCase()} copyPrefix={`news_sec_${section.id}${lang === 'ar' ? '_ar' : ''}`} />
 
   {section.id === 'study' && (
     <div class="-mt-3 mb-8 flex flex-wrap gap-2">

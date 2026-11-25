@@ -6,42 +6,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     <!-- Left 4 Cols: Crisp White Institutional Summary Card -->
     <aside class="lg:col-span-4 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+      <div data-tf-copy="about.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
         Institutional dossier
       </div>
-      <h1 class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+      <h1 data-tf-copy="about.headline" class="font-display mt-2.5 text-[30px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
         About TF Unions
       </h1>
-      <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
+      <p data-tf-copy="about.subtitle" class="mt-3 text-[14px] leading-[1.6] text-[#525866]">
         Formerly Altafawwoq Union. An independent, student-governed educational foundation operating across all 27 Egyptian governorates.
       </p>
 
       <dl class="mt-6 pt-5 border-t border-[#DFDDD6] space-y-4 text-[13px]">
         <div>
           <dt class="text-[#767D8C]">Founding cohort</dt>
-          <dd class="font-semibold text-[#161A22] mt-0.5">October 2025</dd>
+          <dd data-tf-copy="about.cohort" class="font-semibold text-[#161A22] mt-0.5">October 2025</dd>
         </div>
         <div>
           <dt class="text-[#767D8C]">Founders</dt>
-          <dd class="font-semibold text-[#161A22] mt-0.5">Mohammed Farag &amp; Mohammed Abdelghany</dd>
+          <dd data-tf-copy="about.founders" class="font-semibold text-[#161A22] mt-0.5">Mohammed Farag &amp; Mohammed Abdelghany</dd>
         </div>
         <div>
           <dt class="text-[#767D8C]">Infrastructure model</dt>
-          <dd class="font-semibold text-[#0B5F58] mt-0.5">Self-hosted PostgreSQL &amp; Open APIs ($0 SaaS)</dd>
+          <dd data-tf-copy="about.model" class="font-semibold text-[#0B5F58] mt-0.5">Self-hosted Open Student Infrastructure</dd>
         </div>
       </dl>
 
       <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-col gap-2">
         <a href="/commitments" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-          <span>Operating commitments</span>
+          <span data-tf-copy="about.cta_commitments">Operating commitments</span>
           <span>→</span>
         </a>
         <a href="/team" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition">
-          <span>Inspect 71-member constellation</span>
+          <span data-tf-copy="about.cta_team">Team directory &amp; timeline</span>
           <span>→</span>
         </a>
         <a href="/charter" class="h-10 px-4 inline-flex items-center justify-between rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition">
-          <span>Read non-profit charter</span>
+          <span data-tf-copy="about.cta_charter">Read non-profit charter</span>
           <span>→</span>
         </a>
       </div>
@@ -50,14 +50,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- Right 8 Cols: Clean Mandate Sheet -->
     <div class="lg:col-span-8">
       <article class="bg-white border border-[#DFDDD6] rounded-xl p-7 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-        <h2 class="font-display text-[26px] font-bold text-[#161A22] tracking-[-0.02em]">Answer before they ask</h2>
-        <p class="mt-3 text-[15px] leading-[1.68] text-[#525866] max-w-[66ch]">
+        <h2 data-tf-copy="about.manifesto_title" class="font-display text-[26px] font-bold text-[#161A22] tracking-[-0.02em]">Answer before they ask</h2>
+        <p data-tf-copy="about.manifesto_body" class="mt-3 text-[15px] leading-[1.68] text-[#525866] max-w-[66ch]">
           Most ambitious high school and university students in Egypt lose critical scholarship deadlines, Olympiad training plans, or research mentors simply because information sits scattered across private chats. TF Unions centralizes admissions intelligence, scientific writing guides, and chapter networks into open, fast, permanent public infrastructure.
         </p>
 
         <div class="mt-6 pt-5 border-t border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
-          <span class="text-[13px] text-[#767D8C]">Open across Thanaweya Amma, STEM, IGCSE, American, and Azhar tracks.</span>
-          <a href="/commitments" class="text-[13.5px] font-semibold text-[#1B365D] hover:underline">
+          <span data-tf-copy="about.track_note" class="text-[13px] text-[#767D8C]">Open across Thanaweya Amma, STEM, IGCSE, American, and Azhar tracks.</span>
+          <a data-tf-copy="about.commitments_link" href="/commitments" class="text-[13.5px] font-semibold text-[#1B365D] hover:underline">
             Explore operating commitments →
           </a>
         </div>

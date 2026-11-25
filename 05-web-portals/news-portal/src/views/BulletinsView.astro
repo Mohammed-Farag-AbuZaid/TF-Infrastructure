@@ -8,9 +8,17 @@ import { t, href, type Lang } from '../lib/i18n';
 export interface Props { lang: Lang }
 const { lang } = Astro.props;
 const chip = 'h-9 px-3.5 inline-flex items-center rounded-tf-pill border border-transparent text-[13px] font-medium text-tf-muted hover:text-tf-ink transition aria-pressed:bg-tf-surface aria-pressed:border-tf-border aria-pressed:text-tf-ink aria-pressed:font-semibold';
+const pk = `news_bull${lang === 'ar' ? '_ar' : ''}`;
 ---
 <NewsLayout title={`${t(lang, 'bull.title')} — TF News`} description={t(lang, 'bull.subtitle')} lang={lang} altPath="/bulletins" active="deadlines" backHref={href(lang, '/')} backLabel={t(lang, 'nav.home')}>
-  <PageHead title={t(lang, 'bull.title')} subtitle={t(lang, 'bull.subtitle')} kicker="BULLETINS" />
+  <PageHead title={t(lang, 'bull.title')} subtitle={t(lang, 'bull.subtitle')} kicker="BULLETINS" copyPrefix={pk} />
+  <div id="live-opps-wrap" class="hidden mb-6 bg-tf-surface border border-tf-accent-border rounded-tf-card overflow-hidden">
+    <div class="px-5 py-3 bg-tf-accent-soft border-b border-tf-accent-border flex items-center justify-between">
+      <strong class="font-display text-[15px] text-tf-accent-text">Live Union Announcements</strong>
+      <span id="live-opps-count" class="font-mono text-[11.5px] text-tf-accent-text"></span>
+    </div>
+    <ul id="live-opps-list" class="divide-y divide-tf-sunken px-5"></ul>
+  </div>
   <div data-bulletins>
     <div class="flex flex-wrap gap-2 mb-5" data-ctl="tab" role="group" aria-label="Filter">
       <button type="button" data-value="all" aria-pressed="true" class={chip}>{t(lang, 'bull.all')}</button>
@@ -24,4 +32,36 @@ const chip = 'h-9 px-3.5 inline-flex items-center rounded-tf-pill border border-
       <p data-empty hidden class="p-10 text-center text-tf-muted">{t(lang, 'section.empty')}</p>
     </div>
   </div>
+  <script is:inline>
+    (function () {
+      function dec(v) { return v && (v.stringValue ?? (v.booleanValue !== undefined ? v.booleanValue : undefined)); }
+      function safe(u) { return typeof u === 'string' && /^https?:\/\//i.test(u) ? u : '#'; }
+      function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+      fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/opportunities?pageSize=100', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (json) {
+          if (!json || !Array.isArray(json.documents)) return;
+          var live = json.documents.map(function (d) {
+            var o = {}; var f = d.fields || {};
+            Object.keys(f).forEach(function (k) { o[k] = dec(f[k]); });
+            return o;
+          }).filter(function (o) { return !o.archived && o.title; });
+          if (!live.length) return;
+          var wrap = document.getElementById('live-opps-wrap');
+          var list = document.getElementById('live-opps-list');
+          var cnt = document.getElementById('live-opps-count');
+          if (!wrap || !list) return;
+          if (cnt) cnt.textContent = live.length + ' live';
+          list.innerHTML = live.map(function (o) {
+            var u = safe(o.url);
+            return '<li class="py-3.5 flex flex-wrap items-center justify-between gap-3">' +
+              '<div><div class="text-[12px] font-semibold text-tf-accent-text">' + esc(o.category || 'Announcement') + (o.deadline ? ' · Deadline: ' + esc(o.deadline) : '') + '</div>' +
+              '<div class="font-display text-[17px] font-semibold text-tf-ink mt-0.5">' + esc(o.title) + '</div></div>' +
+              (u !== '#' ? '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer" class="h-8 px-3 inline-flex items-center rounded-tf-input bg-tf-brand text-white text-[12.5px] font-medium">Open →</a>' : '') +
+              '</li>';
+          }).join('');
+          wrap.classList.remove('hidden');
+        }).catch(function () {});
+    })();
+  </script>
 </NewsLayout>

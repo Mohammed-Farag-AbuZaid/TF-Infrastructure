@@ -1,0 +1,1814 @@
+[
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "about",
+    "label": "About",
+    "url": "https://www.tfunions.com/about",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Institutional dossier"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "About TF Unions"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Formerly Altafawwoq Union. An independent, student-governed educational foundation operating across all 27 Egyptian governorates."
+      },
+      {
+        "key": "cohort",
+        "label": "Cohort",
+        "kind": "p",
+        "def": "October 2025"
+      },
+      {
+        "key": "founders",
+        "label": "Founders",
+        "kind": "p",
+        "def": "Mohammed Farag & Mohammed Abdelghany"
+      },
+      {
+        "key": "model",
+        "label": "Model",
+        "kind": "p",
+        "def": "Self-hosted Open Student Infrastructure"
+      },
+      {
+        "key": "cta_commitments",
+        "label": "Cta Commitments",
+        "kind": "p",
+        "def": "Operating commitments"
+      },
+      {
+        "key": "cta_team",
+        "label": "Cta Team",
+        "kind": "p",
+        "def": "Team directory & timeline"
+      },
+      {
+        "key": "cta_charter",
+        "label": "Cta Charter",
+        "kind": "p",
+        "def": "Read non-profit charter"
+      },
+      {
+        "key": "manifesto_title",
+        "label": "Manifesto Title",
+        "kind": "h2",
+        "def": "Answer before they ask"
+      },
+      {
+        "key": "manifesto_body",
+        "label": "Manifesto Body",
+        "kind": "p",
+        "def": "Most ambitious high school and university students in Egypt lose critical scholarship deadlines, Olympiad training plans, or research mentors simply because information sits scattered across private chats. TF Unions centralizes admissions intelligence, scientific writing guides, and chapter networks into open, fast, permanent public infrastructure."
+      },
+      {
+        "key": "track_note",
+        "label": "Track Note",
+        "kind": "p",
+        "def": "Open across Thanaweya Amma, STEM, IGCSE, American, and Azhar tracks."
+      },
+      {
+        "key": "commitments_link",
+        "label": "Commitments Link",
+        "kind": "link",
+        "def": "Explore operating commitments →"
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "footer",
+    "label": "Global Ecosystem Footer",
+    "url": "https://www.tfunions.com/about",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "tagline",
+        "label": "Tagline",
+        "kind": "p",
+        "def": "Independent non-profit student academic union supporting STEM and university scholars across all 27 Egyptian governorates."
+      },
+      {
+        "key": "founded_by",
+        "label": "Founded By",
+        "kind": "p",
+        "def": "Founded by Mohammed Farag & Mohammed Abdelghany."
+      },
+      {
+        "key": "col_platforms",
+        "label": "Col Platforms",
+        "kind": "p",
+        "def": "Student platforms"
+      },
+      {
+        "key": "col_foundation",
+        "label": "Col Foundation",
+        "kind": "p",
+        "def": "Foundation"
+      },
+      {
+        "key": "col_accountability",
+        "label": "Col Accountability",
+        "kind": "p",
+        "def": "Accountability & API"
+      },
+      {
+        "key": "copyright",
+        "label": "Copyright",
+        "kind": "p",
+        "def": "© 2025–2026 TF Unions Foundation. Open access and ad-free for all students."
+      },
+      {
+        "key": "support_cta",
+        "label": "Support Cta",
+        "kind": "btn",
+        "def": "Support the mission →"
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "home_ar",
+    "label": "Foundation Home (AR)",
+    "url": "https://www.tfunions.com/ar",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "اتحاد طلاب مصر للبحث العلمي والقبول الجامعي العالمي."
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "مستقل وبإدارة طلابية في جميع محافظات مصر الـ 27 — بيانات قبول موثّقة، وأدلّة للأولمبياد والبحث العلمي، وفصول محلية، وسجل مالي مفتوح."
+      },
+      {
+        "key": "cta_primary",
+        "label": "Cta Primary",
+        "kind": "btn",
+        "def": "تصفّح المنح والفرص"
+      },
+      {
+        "key": "cta_secondary",
+        "label": "Cta Secondary",
+        "kind": "btn",
+        "def": "تحقّق من شهادة ←"
+      },
+      {
+        "key": "dest_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "أقسام الاتحاد والمنصات"
+      },
+      {
+        "key": "dest_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "أخبار المنح والقبول الجامعي، أدلّة البحث العلمي والأولمبياد، فصول المحافظات، ومتجر ستيم."
+      },
+      {
+        "key": "dest_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "المتابعة المباشرة للاتحاد"
+      },
+      {
+        "key": "dest_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "استعرض المواعيد النهائية المفتوحة، فصول المحافظات النشطة، وملخّص الخزانة المالي."
+      },
+      {
+        "key": "dest_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "الهيكل القيادي والأعضاء"
+      },
+      {
+        "key": "dest_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "تتبّع تاريخ التأسيس منذ أكتوبر 2025 أو ابحث عن كل مساهم في مختلف المحافظات."
+      },
+      {
+        "key": "dest_3_title",
+        "label": "Card 4 Title",
+        "kind": "h2",
+        "def": "السجل المالي والميثاق"
+      },
+      {
+        "key": "dest_3_desc",
+        "label": "Card 4 Desc",
+        "kind": "p",
+        "def": "تأكّد من الإيرادات والمصروفات بالجنيه المصري، واطّلع على الميثاق غير الهادف للربح."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "charter",
+    "label": "Charter",
+    "url": "https://www.tfunions.com/charter",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Governance framework"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Non-Profit Charter"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Binding institutional rules covering free student access, data sovereignty, verifiable service records, and open finances."
+      },
+      {
+        "key": "art_0_title",
+        "label": "Article 1 Title",
+        "kind": "h2",
+        "def": "Independent non-profit mandate"
+      },
+      {
+        "key": "art_0_body",
+        "label": "Article 1 Body",
+        "kind": "p",
+        "def": "TF Unions operates strictly as a non-profit student educational foundation. Core student access to university admission data, scholarships, roadmaps, and study circles will never be paywalled or monetized with third-party advertising."
+      },
+      {
+        "key": "art_1_title",
+        "label": "Article 2 Title",
+        "kind": "h2",
+        "def": "Student data sovereignty & single TF Passport"
+      },
+      {
+        "key": "art_1_body",
+        "label": "Article 2 Body",
+        "kind": "p",
+        "def": "Student identity records reside in our self-hosted PostgreSQL database rather than commercial tracking networks. One session cookie scoped to *.tfunions.com grants access across portals and is never sold or shared."
+      },
+      {
+        "key": "art_2_title",
+        "label": "Article 3 Title",
+        "kind": "h2",
+        "def": "Cryptographically verifiable contributor credentials"
+      },
+      {
+        "key": "art_2_body",
+        "label": "Article 3 Body",
+        "kind": "p",
+        "def": "Every volunteer, research author, and officer certificate issued by TF Unions carries a permanent serial code verifiable publicly at verify.tfunions.com."
+      },
+      {
+        "key": "art_3_title",
+        "label": "Article 4 Title",
+        "kind": "h2",
+        "def": "Open-book treasury & infrastructure accountability"
+      },
+      {
+        "key": "art_3_body",
+        "label": "Article 4 Body",
+        "kind": "p",
+        "def": "Every incoming community contribution, hardware grant, and server expenditure is published with verification status and channel provenance on the public Open Financial Ledger."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "desk",
+    "label": "Live Union Desk",
+    "url": "https://www.tfunions.com/desk",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Real-time ecosystem feed"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Live union desk"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Inspect synchronized opportunity deadlines, active governorate chapters, and live treasury balance snapshots."
+      },
+      {
+        "key": "season_badge",
+        "label": "Season Badge",
+        "kind": "p",
+        "def": "Season 2"
+      },
+      {
+        "key": "ledger_note",
+        "label": "Ledger Note",
+        "kind": "p",
+        "def": "100% of verified contributions support infrastructure and student academic access. Inspect transaction records publicly on the Open Ledger."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "divisions",
+    "label": "Divisions & Platforms",
+    "url": "https://www.tfunions.com/divisions",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Public ecosystem registries"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Union divisions and platforms"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Purpose-built student systems running under one unified TF Passport session."
+      },
+      {
+        "key": "arch_link",
+        "label": "Arch Link",
+        "kind": "link",
+        "def": "System architecture reference →"
+      },
+      {
+        "key": "item_0_title",
+        "label": "Item 1 Title",
+        "kind": "h2",
+        "def": "TF News & Admissions"
+      },
+      {
+        "key": "item_0_desc",
+        "label": "Item 1 Desc",
+        "kind": "p",
+        "def": "Searchable database of verified full-need university scholarships, summer research institutes, internships, and Olympiad competitions with deadline tracking."
+      },
+      {
+        "key": "item_0_metric",
+        "label": "Item 1 Metric",
+        "kind": "p",
+        "def": "Updated daily"
+      },
+      {
+        "key": "item_0_cta",
+        "label": "Item 1 Cta",
+        "kind": "btn",
+        "def": "Open TF News →"
+      },
+      {
+        "key": "item_1_title",
+        "label": "Item 2 Title",
+        "kind": "h2",
+        "def": "TF Guides & Roadmaps"
+      },
+      {
+        "key": "item_1_desc",
+        "label": "Item 2 Desc",
+        "kind": "p",
+        "def": "Interactive milestone workbooks authored by alumni finalists covering Regeneron ISEF methodology, Olympiad training plans, and Overleaf paper drafting."
+      },
+      {
+        "key": "item_1_metric",
+        "label": "Item 2 Metric",
+        "kind": "p",
+        "def": "Live study roadmaps"
+      },
+      {
+        "key": "item_1_cta",
+        "label": "Item 2 Cta",
+        "kind": "btn",
+        "def": "Browse Guides →"
+      },
+      {
+        "key": "item_2_title",
+        "label": "Item 3 Title",
+        "kind": "h2",
+        "def": "TF Connect Chapters"
+      },
+      {
+        "key": "item_2_desc",
+        "label": "Item 3 Desc",
+        "kind": "p",
+        "def": "Directory of STEM school chapters, governorate study circles, and student-built technical guilds coordinating peer mentorship across Egypt."
+      },
+      {
+        "key": "item_2_metric",
+        "label": "Item 3 Metric",
+        "kind": "p",
+        "def": "Synchronized network"
+      },
+      {
+        "key": "item_2_cta",
+        "label": "Item 3 Cta",
+        "kind": "btn",
+        "def": "Explore Chapters →"
+      },
+      {
+        "key": "item_3_title",
+        "label": "Item 4 Title",
+        "kind": "h2",
+        "def": "Volunteer & Onboarding"
+      },
+      {
+        "key": "item_3_desc",
+        "label": "Item 4 Desc",
+        "kind": "p",
+        "def": "Join our contributor onboarding pipeline for builders, researchers, and organizers across high school and university teams."
+      },
+      {
+        "key": "item_3_metric",
+        "label": "Item 4 Metric",
+        "kind": "p",
+        "def": "Open applications"
+      },
+      {
+        "key": "item_3_cta",
+        "label": "Item 4 Cta",
+        "kind": "btn",
+        "def": "Join Cohort →"
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "ideas",
+    "label": "Ideas Backlog",
+    "url": "https://www.tfunions.com/ideas",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Community engineering backlog"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Student Idea Incubator"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Browse and vote on open-source student tools, scholarship filters, and study resources."
+      },
+      {
+        "key": "cta_propose",
+        "label": "Cta Propose",
+        "kind": "btn",
+        "def": "Propose an idea →"
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Filter proposals..."
+      },
+      {
+        "key": "empty_state",
+        "label": "Empty State Message",
+        "kind": "p",
+        "def": "No proposals submitted yet."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "home",
+    "label": "Foundation Home (EN)",
+    "url": "https://www.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Egypt’s student union for STEM research and global admissions."
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Independent and student-run across all 27 governorates — verified admission data, research roadmaps, local chapters, and an open ledger."
+      },
+      {
+        "key": "cta_primary",
+        "label": "Cta Primary",
+        "kind": "btn",
+        "def": "Browse opportunities"
+      },
+      {
+        "key": "cta_secondary",
+        "label": "Cta Secondary",
+        "kind": "btn",
+        "def": "Verify a certificate →"
+      },
+      {
+        "key": "dest_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "Divisions & platforms"
+      },
+      {
+        "key": "dest_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "Access TF News admissions, TF Guides research roadmaps, TF Connect chapters, and STEM Shop."
+      },
+      {
+        "key": "dest_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "Live union desk"
+      },
+      {
+        "key": "dest_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "Inspect active opportunity deadlines, regional governorate chapters, and treasury snapshots."
+      },
+      {
+        "key": "dest_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "Team & chapters"
+      },
+      {
+        "key": "dest_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "Trace leadership history from October 2025 or browse active student contributors across Egypt."
+      },
+      {
+        "key": "dest_3_title",
+        "label": "Card 4 Title",
+        "kind": "h2",
+        "def": "Open ledger & charter"
+      },
+      {
+        "key": "dest_3_desc",
+        "label": "Card 4 Desc",
+        "kind": "p",
+        "def": "Verify public EGP inflows and outflows, read the non-profit charter, or submit chapter ideas."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "support",
+    "label": "Support",
+    "url": "https://www.tfunions.com/support",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Community infrastructure funding"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Support the mission"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Every contribution directly supports student infrastructure, domain renewals, and competition access. Every verified entry appears on our public Open Ledger."
+      },
+      {
+        "key": "pledge_title",
+        "label": "Pledge Title",
+        "kind": "p",
+        "def": "100% infrastructure allocation"
+      },
+      {
+        "key": "pledge_desc",
+        "label": "Pledge Desc",
+        "kind": "p",
+        "def": "Zero executive salaries and open financial accountability."
+      },
+      {
+        "key": "channels_heading",
+        "label": "Channels Heading",
+        "kind": "h2",
+        "def": "Direct contribution channels"
+      },
+      {
+        "key": "instapay_label",
+        "label": "Instapay Label",
+        "kind": "p",
+        "def": "InstaPay (Egypt Instant Network)"
+      },
+      {
+        "key": "instapay_value",
+        "label": "Instapay Value",
+        "kind": "p",
+        "def": "tfunions@instapay"
+      },
+      {
+        "key": "wallet_label",
+        "label": "Wallet Label",
+        "kind": "p",
+        "def": "Mobile Wallet Channel"
+      },
+      {
+        "key": "wallet_value",
+        "label": "Wallet Value",
+        "kind": "p",
+        "def": "Available via receipt form"
+      },
+      {
+        "key": "receipt_prompt",
+        "label": "Receipt Prompt",
+        "kind": "p",
+        "def": "Already sent a contribution?"
+      },
+      {
+        "key": "receipt_cta",
+        "label": "Receipt Cta",
+        "kind": "btn",
+        "def": "Log transfer receipt →"
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "team",
+    "label": "Team",
+    "url": "https://www.tfunions.com/team",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Seventy-one students building Egypt’s STEM union."
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "From two founding systems architects in October 2025 to 71 active leaders across 5 operational divisions — scrub the timeline below or explore the live directory."
+      },
+      {
+        "key": "founders_heading",
+        "label": "Founders Heading",
+        "kind": "h2",
+        "def": "Founding leadership"
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "ledger",
+    "label": "Open Ledger",
+    "url": "https://www.tfunions.com/transparency",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Financial accountability registry"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Open financial ledger"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Every verified contribution inflow and self-hosted server infrastructure expense is audited publicly in Egyptian Pounds."
+      },
+      {
+        "key": "support_cta",
+        "label": "Support Cta",
+        "kind": "btn",
+        "def": "Support TF Unions →"
+      },
+      {
+        "key": "metric_inflows_label",
+        "label": "Metric Inflows Label",
+        "kind": "p",
+        "def": "Verified inflows"
+      },
+      {
+        "key": "metric_outflows_label",
+        "label": "Metric Outflows Label",
+        "kind": "p",
+        "def": "Infrastructure outflows"
+      },
+      {
+        "key": "metric_reserve_label",
+        "label": "Metric Reserve Label",
+        "kind": "p",
+        "def": "Net reserve"
+      },
+      {
+        "key": "metric_saas_label",
+        "label": "Metric Saas Label",
+        "kind": "p",
+        "def": "Commercial SaaS spend"
+      },
+      {
+        "key": "metric_saas_val",
+        "label": "Metric Saas Val",
+        "kind": "p",
+        "def": "$0 / mo"
+      },
+      {
+        "key": "chart_caption",
+        "label": "Chart Caption",
+        "kind": "p",
+        "def": "Direct-labeled comparison of verified inflows, server infrastructure expenses, and net reserve."
+      },
+      {
+        "key": "empty_state",
+        "label": "Empty State Message",
+        "kind": "p",
+        "def": "No verified financial entries recorded yet."
+      }
+    ]
+  },
+  {
+    "portal": "foundation",
+    "portalLabel": "TF Unions",
+    "pageKey": "volunteer",
+    "label": "Volunteer Tracks",
+    "url": "https://www.tfunions.com/volunteer",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Contributor tracks"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Choose a volunteer track"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Select any contributor division below to proceed directly to the application form. Approved contributors receive a verifiable TF Unions credential."
+      },
+      {
+        "key": "track_0_name",
+        "label": "Track 1 Name",
+        "kind": "h2",
+        "def": "TF News Researcher"
+      },
+      {
+        "key": "track_0_summary",
+        "label": "Track 1 Summary",
+        "kind": "p",
+        "def": "Audit global university scholarship rules, full-need aid requirements, and summer fellowship deadlines across verified sources."
+      },
+      {
+        "key": "track_1_name",
+        "label": "Track 2 Name",
+        "kind": "h2",
+        "def": "TF Guides Author"
+      },
+      {
+        "key": "track_1_summary",
+        "label": "Track 2 Summary",
+        "kind": "p",
+        "def": "Author structured ISEF research blueprints, Olympiad problem checklists, and LaTeX manuscript templates."
+      },
+      {
+        "key": "track_2_name",
+        "label": "Track 3 Name",
+        "kind": "h2",
+        "def": "Engineering & Flutter"
+      },
+      {
+        "key": "track_2_summary",
+        "label": "Track 3 Summary",
+        "kind": "p",
+        "def": "Build fast student web portals in Astro, cloud APIs, and responsive Dart/Flutter clients."
+      },
+      {
+        "key": "track_3_name",
+        "label": "Track 4 Name",
+        "kind": "h2",
+        "def": "Community & Chapters"
+      },
+      {
+        "key": "track_3_summary",
+        "label": "Track 4 Summary",
+        "kind": "p",
+        "def": "Coordinate STEM school circles, governorate onboarding workshops, and peer review sessions on TF Connect."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_footer",
+    "label": "TF News Footer (EN)",
+    "url": "https://news.tfunions.com/404.html",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "note",
+        "label": "Note",
+        "kind": "p",
+        "def": "Always confirm dates on the official site."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_activities",
+    "label": "Extracurricular Activities",
+    "url": "https://news.tfunions.com/activities",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Extracurricular Activities"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Volunteering, competitions, clubs, teams, and everything beyond academics"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_activities_ar",
+    "label": "الأنشطة اللامنهجية (AR)",
+    "url": "https://news.tfunions.com/ar/activities",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "الأنشطة اللامنهجية"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "تطوع ومسابقات ونوادٍ وفرق وكل ما هو خارج الدراسة"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_footer_ar",
+    "label": "TF News Footer (AR)",
+    "url": "https://news.tfunions.com/ar/activities",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "note",
+        "label": "Note",
+        "kind": "p",
+        "def": "تأكّد دائمًا من المواعيد من الموقع الرسمي."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_bull_ar",
+    "label": "النشرة والمواعيد النهائية (AR)",
+    "url": "https://news.tfunions.com/ar/bulletins",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "النشرة والمواعيد النهائية"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "افتح أي فرصة لمعرفة الشروط والمزايا وروابط التقديم الموثّقة."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_dir_ar",
+    "label": "أدلّة الفرص (AR)",
+    "url": "https://news.tfunions.com/ar/directories",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "أدلّة الفرص"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "تصفّح أدلة القبول والأنشطة والتدريبات وبرامج البحث."
+      },
+      {
+        "key": "featured_title",
+        "label": "Featured Title",
+        "kind": "h2",
+        "def": "المنح والقبول"
+      },
+      {
+        "key": "featured_desc",
+        "label": "Featured Desc",
+        "kind": "p",
+        "def": "اعثر على جامعة أحلامك داخل مصر وخارجها"
+      },
+      {
+        "key": "card_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "الأنشطة اللامنهجية"
+      },
+      {
+        "key": "card_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "تطوع ومسابقات ونوادٍ وفرق وكل ما هو خارج الدراسة"
+      },
+      {
+        "key": "card_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "التدريب"
+      },
+      {
+        "key": "card_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "خبرة عمل حقيقية"
+      },
+      {
+        "key": "card_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "البرامج"
+      },
+      {
+        "key": "card_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "بحث وتبادل وقيادة وغير ذلك"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_home_ar",
+    "label": "TF News — اعثر على فرصتك التالية (AR)",
+    "url": "https://news.tfunions.com/ar",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "اعثر على فرصتك التالية"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "منح دراسية ومسارات قبول وأنشطة وتدريبات وبرامج موثّقة للطلاب المصريين."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "ابحث عن فرص وجامعات وبرامج"
+      },
+      {
+        "key": "search_btn",
+        "label": "Search Btn",
+        "kind": "btn",
+        "def": "بحث"
+      },
+      {
+        "key": "card_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "المنح والقبول"
+      },
+      {
+        "key": "card_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "أكثر من ١٥٠٠ جامعة ومسارات تمويل موثّقة."
+      },
+      {
+        "key": "card_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "أدلّة الفرص"
+      },
+      {
+        "key": "card_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "الأنشطة والتدريبات وبرامج البحث."
+      },
+      {
+        "key": "card_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "النشرة والمواعيد النهائية"
+      },
+      {
+        "key": "card_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "ما هو مفتوح الآن وما يُغلق قريبًا."
+      },
+      {
+        "key": "card_3_title",
+        "label": "Card 4 Title",
+        "kind": "h2",
+        "def": "الجامعات"
+      },
+      {
+        "key": "card_3_desc",
+        "label": "Card 4 Desc",
+        "kind": "p",
+        "def": "تصفّح حسب الدولة والمنطقة وتصنيف QS."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_internships_ar",
+    "label": "التدريب (AR)",
+    "url": "https://news.tfunions.com/ar/internships",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "التدريب"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "خبرة عمل حقيقية"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_must_ar",
+    "label": "فرص لا يجب أن تفوّتها (AR)",
+    "url": "https://news.tfunions.com/ar/must-know",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "فرص لا يجب أن تفوّتها"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "الفرص الأكثر تقييمًا بالنجوم من الطلاب."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_programs_ar",
+    "label": "البرامج (AR)",
+    "url": "https://news.tfunions.com/ar/programs",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "البرامج"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "بحث وتبادل وقيادة وغير ذلك"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_study_ar",
+    "label": "المنح والقبول (AR)",
+    "url": "https://news.tfunions.com/ar/study",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "المنح والقبول"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "اعثر على جامعة أحلامك داخل مصر وخارجها"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_prog_ar",
+    "label": "برامج التمويل (AR)",
+    "url": "https://news.tfunions.com/ar/study/programs",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "برامج التمويل"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "برامج المنح الخارجية مجمّعة حسب الجهة المانحة عبر كل الجامعات التي تنطبق عليها."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "ابحث في البرامج"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_uni_ar",
+    "label": "الجامعات (AR)",
+    "url": "https://news.tfunions.com/ar/study/universities",
+    "rtl": true,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "الجامعات"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "كل جامعة مع طرق التمويل الموثّقة الخاصة بها."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "ابحث عن جامعة أو دولة"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_bull",
+    "label": "Live bulletins & deadlines",
+    "url": "https://news.tfunions.com/bulletins",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Live bulletins & deadlines"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Open an entry for requirements, benefits and verified application links."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_dir",
+    "label": "Opportunity directories",
+    "url": "https://news.tfunions.com/directories",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Opportunity directories"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Browse admissions guides, extracurricular activities, internships, and research programs."
+      },
+      {
+        "key": "featured_title",
+        "label": "Featured Title",
+        "kind": "h2",
+        "def": "Scholarships & Admissions"
+      },
+      {
+        "key": "featured_desc",
+        "label": "Featured Desc",
+        "kind": "p",
+        "def": "Find your dream university, within Egypt and abroad"
+      },
+      {
+        "key": "card_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "Extracurricular Activities"
+      },
+      {
+        "key": "card_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "Volunteering, competitions, clubs, teams, and everything beyond academics"
+      },
+      {
+        "key": "card_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "Internships"
+      },
+      {
+        "key": "card_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "Real work experience"
+      },
+      {
+        "key": "card_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "Programs"
+      },
+      {
+        "key": "card_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "Research, exchange, leadership, and more"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_home",
+    "label": "TF News — Find your next opportunity",
+    "url": "https://news.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Find your next opportunity"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Verified scholarships, admissions routes, activities, internships and programs for Egyptian students."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Search opportunities, universities, programs"
+      },
+      {
+        "key": "search_btn",
+        "label": "Search Btn",
+        "kind": "btn",
+        "def": "Search"
+      },
+      {
+        "key": "card_0_title",
+        "label": "Card 1 Title",
+        "kind": "h2",
+        "def": "Scholarships & Admissions"
+      },
+      {
+        "key": "card_0_desc",
+        "label": "Card 1 Desc",
+        "kind": "p",
+        "def": "1,500+ universities and verified funding routes."
+      },
+      {
+        "key": "card_1_title",
+        "label": "Card 2 Title",
+        "kind": "h2",
+        "def": "Opportunity directories"
+      },
+      {
+        "key": "card_1_desc",
+        "label": "Card 2 Desc",
+        "kind": "p",
+        "def": "Activities, internships and research programs."
+      },
+      {
+        "key": "card_2_title",
+        "label": "Card 3 Title",
+        "kind": "h2",
+        "def": "Live bulletins & deadlines"
+      },
+      {
+        "key": "card_2_desc",
+        "label": "Card 3 Desc",
+        "kind": "p",
+        "def": "What is open now and closing soon."
+      },
+      {
+        "key": "card_3_title",
+        "label": "Card 4 Title",
+        "kind": "h2",
+        "def": "Universities"
+      },
+      {
+        "key": "card_3_desc",
+        "label": "Card 4 Desc",
+        "kind": "p",
+        "def": "Browse by country, region and QS ranking."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_internships",
+    "label": "Internships",
+    "url": "https://news.tfunions.com/internships",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Internships"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Real work experience"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_must",
+    "label": "Must-know opportunities",
+    "url": "https://news.tfunions.com/must-know",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Must-know opportunities"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "The ones students starred most. Do not miss these."
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_programs",
+    "label": "Programs",
+    "url": "https://news.tfunions.com/programs",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Programs"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Research, exchange, leadership, and more"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_sec_study",
+    "label": "Scholarships & Admissions",
+    "url": "https://news.tfunions.com/study",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Scholarships & Admissions"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Find your dream university, within Egypt and abroad"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_prog",
+    "label": "Funding programs",
+    "url": "https://news.tfunions.com/study/programs",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Funding programs"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "External scholarship programs, grouped by provider across every university they apply to."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Search programs"
+      }
+    ]
+  },
+  {
+    "portal": "news",
+    "portalLabel": "TF News",
+    "pageKey": "news_uni",
+    "label": "Universities",
+    "url": "https://news.tfunions.com/study/universities",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Universities"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Every university with its verified ways to get funded."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Search university or country"
+      }
+    ]
+  },
+  {
+    "portal": "guides",
+    "portalLabel": "TF Guides",
+    "pageKey": "guides",
+    "label": "TF Guides — Academic & Research Workbooks",
+    "url": "https://guides.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Curatorial STEM syllabus"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Research and Olympiad roadmaps"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Structured playbooks authored by mentors and alumni. Check off milestones locally as you advance."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Search topic or skill..."
+      },
+      {
+        "key": "list_heading",
+        "label": "List Heading",
+        "kind": "p",
+        "def": "Active roadmaps & checklists"
+      },
+      {
+        "key": "empty_state",
+        "label": "Empty State Message",
+        "kind": "p",
+        "def": "No study guides published yet. Add guides from TF Dashboard."
+      }
+    ]
+  },
+  {
+    "portal": "connect",
+    "portalLabel": "TF Connect",
+    "pageKey": "connect",
+    "label": "TF Connect — Governorate Chapters & Project Guilds",
+    "url": "https://connect.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "propose_cta",
+        "label": "Propose Cta",
+        "kind": "btn",
+        "def": "Propose a study group →"
+      },
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "27 Egyptian governorates"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Chapters, unions & guilds"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Locate STEM high school chapters, regional study circles, and student-led research labs operating across Egypt."
+      },
+      {
+        "key": "search_placeholder",
+        "label": "Search Placeholder",
+        "kind": "input",
+        "def": "Chapter, city, or focus..."
+      },
+      {
+        "key": "list_heading",
+        "label": "List Heading",
+        "kind": "p",
+        "def": "Active chapters & project collectives"
+      },
+      {
+        "key": "empty_state",
+        "label": "Empty State Message",
+        "kind": "p",
+        "def": "No chapters published yet. Add chapters from TF Dashboard."
+      }
+    ]
+  },
+  {
+    "portal": "connect",
+    "portalLabel": "TF Connect",
+    "pageKey": "connect_propose",
+    "label": "Propose a Study Group",
+    "url": "https://connect.tfunions.com/propose",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "eyebrow",
+        "label": "Eyebrow",
+        "kind": "p",
+        "def": "Chapter registration"
+      },
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Propose a regional study group"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Submit your school chapter, Olympiad peer circle, or engineering guild to be reviewed and listed in the TF Connect atlas."
+      }
+    ]
+  },
+  {
+    "portal": "verify",
+    "portalLabel": "TF Verify",
+    "pageKey": "verify",
+    "label": "Verify Credential",
+    "url": "https://verify.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "Verify a certificate"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Enter the permanent serial code printed on any TF Unions volunteer or leadership credential (TFU-YYYY-XXXXXX)."
+      },
+      {
+        "key": "submit_btn",
+        "label": "Submit Btn",
+        "kind": "btn",
+        "def": "Inspect credential record"
+      },
+      {
+        "key": "dossier_title",
+        "label": "Dossier Title",
+        "kind": "p",
+        "def": "Official Credential Dossier"
+      },
+      {
+        "key": "awaiting_label",
+        "label": "Awaiting Label",
+        "kind": "p",
+        "def": "Awaiting serial query"
+      },
+      {
+        "key": "empty_prompt",
+        "label": "Empty Prompt",
+        "kind": "p",
+        "def": "Enter a certificate serial code to verify authenticity directly against the TF Unions Credential Registry."
+      },
+      {
+        "key": "footer_note",
+        "label": "Footer Note",
+        "kind": "p",
+        "def": "TF Unions Official Credential Verification Registry"
+      }
+    ]
+  },
+  {
+    "portal": "docs",
+    "portalLabel": "TF Docs",
+    "pageKey": "docs",
+    "label": "Platform Directory",
+    "url": "https://docs.tfunions.com/",
+    "rtl": false,
+    "fields": [
+      {
+        "key": "headline",
+        "label": "Headline",
+        "kind": "h1",
+        "def": "TF Unions platform directory"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "p",
+        "def": "Active student subdomains and unified authentication services."
+      },
+      {
+        "key": "item_foundation",
+        "label": "Item Foundation",
+        "kind": "p",
+        "def": "Foundation Hub, Interactive Team Graph & Open Ledger"
+      },
+      {
+        "key": "item_dashboard",
+        "label": "Item Dashboard",
+        "kind": "p",
+        "def": "TF Dashboard — Team Operations & Owner Content Hub"
+      },
+      {
+        "key": "item_news",
+        "label": "Item News",
+        "kind": "p",
+        "def": "TF News — Scholarships, University Admissions & Programs"
+      },
+      {
+        "key": "item_guides",
+        "label": "Item Guides",
+        "kind": "p",
+        "def": "TF Guides — STEM, Olympiad & Research Workbooks"
+      },
+      {
+        "key": "item_connect",
+        "label": "Item Connect",
+        "kind": "p",
+        "def": "TF Connect — Egyptian Governorate Chapters & Project Guilds"
+      },
+      {
+        "key": "item_verify",
+        "label": "Item Verify",
+        "kind": "p",
+        "def": "Official Credential & Certificate Registrar"
+      },
+      {
+        "key": "item_auth",
+        "label": "Item Auth",
+        "kind": "p",
+        "def": "TF Passport — Unified Firebase Authentication Hub"
+      }
+    ]
+  }
+]

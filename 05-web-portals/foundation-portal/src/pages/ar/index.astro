@@ -57,15 +57,15 @@ const destinations = [
   </section>
 
   <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
-    {destinations.map((item) => (
+    {destinations.map((item, idx) => (
       <a href={item.href} class="group block border-t border-[#DFDDD6] pt-5">
         <div class="flex items-center justify-between gap-3">
-          <h2 class="font-display text-[19px] font-semibold text-[#161A22] group-hover:text-[#1B365D] transition">
+          <h2 data-tf-copy={`home_ar.dest_${idx}_title`} class="font-display text-[19px] font-semibold text-[#161A22] group-hover:text-[#1B365D] transition">
             {item.title}
           </h2>
           <span class="text-[#767D8C] group-hover:text-[#1B365D] transition">←</span>
         </div>
-        <p class="mt-1.5 text-[14px] leading-[1.7] text-[#525866]">
+        <p data-tf-copy={`home_ar.dest_${idx}_desc`} class="mt-1.5 text-[14px] leading-[1.7] text-[#525866]">
           {item.desc}
         </p>
       </a>

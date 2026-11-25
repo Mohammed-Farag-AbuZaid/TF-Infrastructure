@@ -39,38 +39,20 @@
 
   var ITEMS = [
     { label: 'Foundation Home', url: 'https://www.tfunions.com/', cat: 'Home' },
-    { label: 'Arabic Foundation Home (العربية)', url: 'https://www.tfunions.com/ar/', cat: 'Home' },
+    { label: 'Arabic Home (العربية)', url: 'https://www.tfunions.com/ar/', cat: 'Home' },
     { label: 'Divisions & Programs', url: 'https://www.tfunions.com/divisions', cat: 'Home' },
-    { label: 'Quick Actions Desk', url: 'https://www.tfunions.com/desk', cat: 'Act' },
     { label: 'Team & Governance', url: 'https://www.tfunions.com/team', cat: 'Trust' },
     { label: 'Open Financial Ledger', url: 'https://www.tfunions.com/transparency', cat: 'Trust' },
     { label: 'Charter & Bylaws', url: 'https://www.tfunions.com/charter', cat: 'Trust' },
-    { label: 'Privacy & Data Policy', url: 'https://www.tfunions.com/privacy', cat: 'Trust' },
-    { label: 'TF Dashboard — Team & Owner Hub', url: 'https://dashboard.tfunions.com/', cat: 'Act' },
-    { label: 'Team Studio — Quick Editor', url: 'https://www.tfunions.com/studio', cat: 'Act' },
-    { label: 'Submit Chapter Photos', url: 'https://www.tfunions.com/photos-submit', cat: 'Act' },
-    { label: 'Volunteer Tracks', url: 'https://www.tfunions.com/volunteer', cat: 'Act' },
-    { label: 'Volunteer Application Form', url: 'https://www.tfunions.com/volunteer-apply', cat: 'Act' },
+    { label: 'Volunteer', url: 'https://www.tfunions.com/volunteer', cat: 'Act' },
     { label: 'Ideas Backlog', url: 'https://www.tfunions.com/ideas', cat: 'Act' },
-    { label: 'Submit a Union Idea', url: 'https://www.tfunions.com/ideas-submit', cat: 'Act' },
-    { label: 'Support & Donations', url: 'https://www.tfunions.com/support', cat: 'Act' },
-    { label: 'News & Bulletins', url: 'https://news.tfunions.com/bulletins', cat: 'Learn' },
-    { label: 'Scholarships & Admissions', url: 'https://news.tfunions.com/study', cat: 'Learn' },
-    { label: 'Universities', url: 'https://news.tfunions.com/study/universities', cat: 'Learn' },
-    { label: 'Funding Programs', url: 'https://news.tfunions.com/study/programs', cat: 'Learn' },
-    { label: 'Extracurricular Activities', url: 'https://news.tfunions.com/activities', cat: 'Learn' },
-    { label: 'Internships', url: 'https://news.tfunions.com/internships', cat: 'Learn' },
-    { label: 'Research & Exchange Programs', url: 'https://news.tfunions.com/programs', cat: 'Learn' },
-    { label: 'Must-know Opportunities', url: 'https://news.tfunions.com/must-know', cat: 'Learn' },
-    { label: 'Study Workbooks (Guides)', url: 'https://guides.tfunions.com/', cat: 'Learn' },
-    { label: 'Study Groups (Connect)', url: 'https://connect.tfunions.com/', cat: 'Join' },
-    { label: 'Propose a Study Chapter', url: 'https://connect.tfunions.com/propose', cat: 'Join' },
-    { label: 'Certificate Verifier', url: 'https://verify.tfunions.com/', cat: 'Trust' },
-    { label: 'Verification Schema & API', url: 'https://verify.tfunions.com/schema', cat: 'Trust' },
-    { label: 'Docs & Platforms Directory', url: 'https://docs.tfunions.com/', cat: 'Learn' },
-    { label: 'SSO Passport Docs', url: 'https://docs.tfunions.com/sso', cat: 'Learn' },
-    { label: 'REST API Reference', url: 'https://docs.tfunions.com/api', cat: 'Learn' },
-    { label: 'TF Passport Sign In', url: 'https://auth.tfunions.com/', cat: 'Me' },
+    { label: 'Support', url: 'https://www.tfunions.com/support', cat: 'Act' },
+    { label: 'TF Dashboard', url: 'https://dashboard.tfunions.com/', cat: 'Act' },
+    { label: 'TF News', url: 'https://news.tfunions.com/', cat: 'Learn' },
+    { label: 'TF Guides', url: 'https://guides.tfunions.com/', cat: 'Learn' },
+    { label: 'TF Connect', url: 'https://connect.tfunions.com/', cat: 'Join' },
+    { label: 'TF Verify', url: 'https://verify.tfunions.com/', cat: 'Trust' },
+    { label: 'TF Docs', url: 'https://docs.tfunions.com/', cat: 'Learn' },
   ];
 
   var backdrop = null;
@@ -207,16 +189,33 @@
     }
   });
 
-  // Live visual copy hydration from Firestore siteCopy/{pageKey}
-  if (typeof document !== 'undefined' && document.querySelectorAll('[data-tf-copy]').length > 0) {
-    fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteCopy?pageSize=50', { cache: 'no-store' })
+  // Live visual copy + global text replacement hydration from Firestore siteCopy/{pageKey}
+  if (typeof document !== 'undefined' && !document.getElementById('dash-shell')) {
+    fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteCopy?pageSize=200', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (data) {
         if (!data || !Array.isArray(data.documents)) return;
         var flat = {};
+        var globalRules = [];
         data.documents.forEach(function (doc) {
           var pageKey = doc.name.split('/').pop();
           var fields = doc.fields || {};
+          if (pageKey === '_global') {
+            var rawJson = fields.replacementsJson && fields.replacementsJson.stringValue;
+            if (rawJson) {
+              try {
+                var parsed = JSON.parse(rawJson);
+                if (Array.isArray(parsed)) {
+                  parsed.forEach(function (rule) {
+                    if (rule && typeof rule.from === 'string' && rule.from && typeof rule.to === 'string') {
+                      globalRules.push({ from: rule.from, to: rule.to });
+                    }
+                  });
+                }
+              } catch (_) {}
+            }
+            return;
+          }
           Object.keys(fields).forEach(function (k) {
             var v = fields[k];
             if (v && typeof v.stringValue === 'string' && v.stringValue.trim()) {
@@ -224,10 +223,40 @@
             }
           });
         });
+
         document.querySelectorAll('[data-tf-copy]').forEach(function (el) {
           var key = el.getAttribute('data-tf-copy');
-          if (key && flat[key]) el.textContent = flat[key];
+          if (!key || !Object.prototype.hasOwnProperty.call(flat, key)) return;
+          var val = flat[key];
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.setAttribute('placeholder', val);
+          } else {
+            el.textContent = val;
+          }
         });
+
+        if (globalRules.length > 0 && document.body && document.createTreeWalker) {
+          var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+          var textNodes = [];
+          var current;
+          while ((current = walker.nextNode())) {
+            var parent = current.parentElement;
+            if (!parent || parent.closest('script, style, noscript, input, textarea, code, pre')) continue;
+            textNodes.push(current);
+          }
+          textNodes.forEach(function (node) {
+            var txt = node.nodeValue;
+            if (!txt || !txt.trim()) return;
+            var changed = false;
+            globalRules.forEach(function (rule) {
+              if (txt.indexOf(rule.from) !== -1) {
+                txt = txt.split(rule.from).join(rule.to);
+                changed = true;
+              }
+            });
+            if (changed) node.nodeValue = txt;
+          });
+        }
       })
       .catch(function () {});
   }

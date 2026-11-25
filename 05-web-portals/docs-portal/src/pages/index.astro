@@ -7,53 +7,60 @@ import DocsLayout from '../layouts/DocsLayout.astro';
 ---
 <DocsLayout title="Platform Directory" activeTab="platforms" showSearch={true} searchPlaceholder="Filter platforms (/)...">
   <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-    <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">
+    <h1 data-tf-copy="docs.headline" class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">
       TF Unions platform directory
     </h1>
-    <p class="mt-1.5 text-[14.5px] text-[#525866]">
-      Active student subdomains and self-hosted infrastructure services.
+    <p data-tf-copy="docs.subtitle" class="mt-1.5 text-[14.5px] text-[#525866]">
+      Active student subdomains and unified authentication services.
     </p>
 
     <div class="mt-6 border-t border-[#DFDDD6] divide-y divide-[#EAE8E1]">
       <a href="https://www.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">www.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">Foundation Hub, Interactive Team Graph &amp; Open Ledger</div>
+          <div data-tf-copy="docs.item_foundation" class="text-[15px] font-semibold text-[#161A22] mt-0.5">Foundation Hub, Interactive Team Graph &amp; Open Ledger</div>
+        </div>
+        <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
+      </a>
+      <a href="https://dashboard.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
+        <div>
+          <span class="font-code text-[12px] text-[#0B5F58] font-medium">dashboard.tfunions.com</span>
+          <div data-tf-copy="docs.item_dashboard" class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Dashboard — Team Operations &amp; Owner Content Hub</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
       <a href="https://news.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">news.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF News — Scholarships, University Admissions &amp; Programs</div>
+          <div data-tf-copy="docs.item_news" class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF News — Scholarships, University Admissions &amp; Programs</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
       <a href="https://guides.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">guides.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Workbooks</div>
+          <div data-tf-copy="docs.item_guides" class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Guides — STEM, Olympiad &amp; Research Workbooks</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
       <a href="https://connect.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">connect.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Connect — Egyptian Governorate Chapters &amp; Project Guilds</div>
+          <div data-tf-copy="docs.item_connect" class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Connect — Egyptian Governorate Chapters &amp; Project Guilds</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
       <a href="https://verify.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">verify.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">Official Credential &amp; Certificate Registrar</div>
+          <div data-tf-copy="docs.item_verify" class="text-[15px] font-semibold text-[#161A22] mt-0.5">Official Credential &amp; Certificate Registrar</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
       <a href="https://auth.tfunions.com" class="doc-item py-4 flex items-center justify-between gap-4 hover:bg-[#F3F2EE]/60 px-2.5 -mx-2.5 rounded-lg transition">
         <div>
           <span class="font-code text-[12px] text-[#0B5F58] font-medium">auth.tfunions.com</span>
-          <div class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Passport — Unified Firebase Authentication Hub</div>
+          <div data-tf-copy="docs.item_auth" class="text-[15px] font-semibold text-[#161A22] mt-0.5">TF Passport — Unified Firebase Authentication Hub</div>
         </div>
         <span class="text-[13px] font-medium text-[#1B365D] shrink-0">Open →</span>
       </a>
