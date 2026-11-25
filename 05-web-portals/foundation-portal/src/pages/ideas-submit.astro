@@ -22,6 +22,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           id="idea-title"
           type="text"
           required
+          minlength="4"
+          maxlength="160"
           placeholder="Concise tool or feature title"
           class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
         />
@@ -32,6 +34,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           id="idea-desc"
           rows="5"
           required
+          minlength="10"
+          maxlength="4000"
           placeholder="What concrete problem does this solve for STEM or university applicants?"
           class="w-full p-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
         ></textarea>
@@ -67,25 +71,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
       alertBox.classList.remove('hidden');
       try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ideas', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            submissionType: 'Project_Idea',
-            service: 'Foundation_Portal',
-            title: document.getElementById('idea-title').value.trim(),
-            description: document.getElementById('idea-desc').value.trim(),
-            pageUrl: window.location.href,
-            uid: getVoterId(),
+            fields: {
+              submissionType: { stringValue: 'Project_Idea' },
+              service: { stringValue: 'TF Unions' },
+              title: { stringValue: document.getElementById('idea-title').value.trim() },
+              description: { stringValue: document.getElementById('idea-desc').value.trim() },
+              status: { stringValue: 'open' },
+              submitterId: { stringValue: getVoterId() },
+              createdAt: { stringValue: new Date().toISOString() },
+            },
           }),
         });
         if (!res.ok) throw new Error('Publish failed');
         window.tfTrack?.('idea_submit', { service: 'Foundation_Portal' });
-        alertBox.textContent = 'Idea published to the community backlog.';
+        alertBox.textContent = 'Idea published live to the Student Idea Incubator.';
         alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();
       } catch {
-        alertBox.textContent = 'Could not submit idea. Please try again.';
+        alertBox.textContent = 'Could not submit idea. Ensure title (4+ chars) and description (10+ chars) are filled cleanly.';
         alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
       }
     });

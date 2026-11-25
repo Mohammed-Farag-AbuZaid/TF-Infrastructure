@@ -18,7 +18,7 @@ import ConnectLayout from '../layouts/ConnectLayout.astro';
 
       <form id="propose-form" class="mt-4">
         <label for="group-name" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Chapter or guild name</label>
-        <input id="group-name" type="text" required placeholder="e.g. Mansoura Olympiad Physics Circle" class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none" />
+        <input id="group-name" type="text" required minlength="4" maxlength="120" placeholder="e.g. Mansoura Olympiad Physics Circle" class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none" />
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -36,7 +36,7 @@ import ConnectLayout from '../layouts/ConnectLayout.astro';
         </div>
 
         <label for="group-desc" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Focus areas &amp; meeting format</label>
-        <textarea id="group-desc" rows="4" required placeholder="Describe topics covered, target student track, and how students can join..." class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none"></textarea>
+        <textarea id="group-desc" rows="4" required minlength="10" maxlength="4000" placeholder="Describe topics covered, target student track, and how students can join..." class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none"></textarea>
 
         <button type="submit" class="mt-5 w-full h-11 rounded-tf-input bg-tf-brand hover:bg-tf-brand-hover text-white text-[14px] font-semibold transition">
           Submit chapter proposal
@@ -59,25 +59,30 @@ import ConnectLayout from '../layouts/ConnectLayout.astro';
       const desc = document.getElementById('group-desc').value.trim();
 
       try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ideas', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            submissionType: 'Project_Idea',
-            service: 'Connect_Portal',
-            title: `[${type} · ${gov}] ${name}`,
-            description: desc,
-            pageUrl: window.location.href,
-            uid: localStorage.getItem('tf_voter_id') || 'connect_visitor'
-          })
+            fields: {
+              submissionType: { stringValue: 'Chapter_Proposal' },
+              service: { stringValue: 'TF Connect' },
+              title: { stringValue: `[${type} · ${gov}] ${name}`.slice(0, 160) },
+              chapterName: { stringValue: name },
+              chapterType: { stringValue: type },
+              governorate: { stringValue: gov },
+              description: { stringValue: desc },
+              status: { stringValue: 'open' },
+              createdAt: { stringValue: new Date().toISOString() },
+            },
+          }),
         });
         if (!res.ok) throw new Error('Request failed');
         alertBox.className = 'mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-accent-border bg-tf-accent-soft text-tf-accent-text';
-        alertBox.textContent = 'Proposal received. Our regional coordinators will review and publish it.';
+        alertBox.textContent = 'Proposal received. Coordinators can approve and publish it straight to TF Connect in TF Dashboard.';
         form.reset();
       } catch {
         alertBox.className = 'mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-danger/30 bg-tf-danger-soft text-tf-danger';
-        alertBox.textContent = 'Could not submit chapter proposal. Please try again.';
+        alertBox.textContent = 'Could not submit chapter proposal. Ensure name (4+ chars) and format details (10+ chars) are filled cleanly.';
       }
     });
   </script>

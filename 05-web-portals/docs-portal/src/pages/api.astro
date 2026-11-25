@@ -5,24 +5,27 @@
 import DocsLayout from '../layouts/DocsLayout.astro';
 
 const endpoints = [
-  { method: 'GET', path: '/api/health', desc: 'Inspect live status of the self-hosted TF Unions API and database.', testable: true },
-  { method: 'GET', path: '/api/team-directory', desc: 'Fetch public executive roster nodes for foundation pages.', testable: true },
-  { method: 'GET', path: '/api/ideas', desc: 'List community incubator proposals ordered by upvote count.', testable: true },
-  { method: 'GET', path: '/api/verify-certificate?code=TFU-2026-8F92A1', desc: 'Verify volunteer or contributor credential serials.', testable: true },
-  { method: 'GET', path: '/api/ledger', desc: 'Fetch verified public financial inflows, outflows, and net reserve summary.', testable: true },
-  { method: 'POST', path: '/api/ideas', desc: 'Submit a new community initiative proposal.', testable: false },
-  { method: 'POST', path: '/api/volunteers', desc: 'Submit a contributor track application.', testable: false },
+  { method: 'GET', path: '/teamMembers?pageSize=25', desc: 'Fetch public TF Unions team constellation nodes and tenure records.', testable: true },
+  { method: 'GET', path: '/ledgerEntries?pageSize=25', desc: 'Fetch verified public financial inflows, outflows, categories, and receipt URLs.', testable: true },
+  { method: 'GET', path: '/chapters?pageSize=25', desc: 'List regional TF Connect chapters, guilds, and research labs across Egypt.', testable: true },
+  { method: 'GET', path: '/guides?pageSize=25', desc: 'List published TF Guides research roadmaps and Olympiad study workbooks.', testable: true },
+  { method: 'GET', path: '/opportunities?pageSize=25', desc: 'List live TF News scholarships, fellowships, and competition deadlines.', testable: true },
+  { method: 'GET', path: '/ideas?pageSize=25', desc: 'List community incubator proposals and TF Connect chapter proposals.', testable: true },
+  { method: 'GET', path: '/certificates?pageSize=10', desc: 'List public verifiable volunteer and leadership credentials.', testable: true },
+  { method: 'POST', path: '/ideas', desc: 'Submit a new validated project idea or chapter proposal (open status).', testable: false },
+  { method: 'POST', path: '/volunteers', desc: 'Submit a volunteer track application into the HR moderation queue.', testable: false },
+  { method: 'POST', path: '/donations', desc: 'Submit a transfer receipt into the treasury verification queue.', testable: false },
 ];
 ---
 <DocsLayout title="REST API Explorer" activeTab="api" showSearch={true} searchPlaceholder="Filter endpoints (/)...">
   <section class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
     <div class="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-[#DFDDD6]">
       <div>
-        <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">Self-hosted VPS endpoints</h1>
-        <p class="text-[14px] text-[#525866] mt-1">Click any GET endpoint's Test button to inspect live JSON output from the server.</p>
+        <h1 class="font-display text-[28px] font-bold text-[#161A22] tracking-[-0.02em]">Live Firestore REST endpoints</h1>
+        <p class="text-[14px] text-[#525866] mt-1">Click any GET endpoint's Test button to inspect real live JSON from the TF Unions registry.</p>
       </div>
-      <span class="font-code text-[12px] text-[#525866] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg">
-        https://n8n.tfunions.com/tf-api
+      <span class="font-code text-[11.5px] text-[#525866] bg-[#EAE8E1] border border-[#DCD9D0] px-3 py-1.5 rounded-lg break-all">
+        https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents
       </span>
     </div>
 
@@ -69,7 +72,7 @@ const endpoints = [
     document.querySelectorAll('.test-api-btn').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const ep = btn.getAttribute('data-endpoint');
-        const url = 'https://n8n.tfunions.com/tf-api' + ep;
+        const url = 'https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents' + ep;
         outWrap.classList.remove('hidden');
         outUrl.textContent = url;
         outStatus.textContent = 'Fetching...';

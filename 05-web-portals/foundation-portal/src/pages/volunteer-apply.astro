@@ -26,6 +26,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             id="vol-name"
             type="text"
             required
+            minlength="2"
+            maxlength="120"
             placeholder="Your full name"
             class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
           />
@@ -37,6 +39,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             type="email"
             required
             placeholder="you@example.com"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label for="vol-phone" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Phone number</label>
+          <input
+            id="vol-phone"
+            type="tel"
+            required
+            placeholder="01xxxxxxxxx"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition font-code"
+          />
+        </div>
+        <div>
+          <label for="vol-school" class="block text-[13px] font-medium text-[#161A22] mb-1.5">School / University</label>
+          <input
+            id="vol-school"
+            type="text"
+            placeholder="e.g. STEM October / Cairo Uni"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+        <div>
+          <label for="vol-gov" class="block text-[13px] font-medium text-[#161A22] mb-1.5">Governorate</label>
+          <input
+            id="vol-gov"
+            type="text"
+            placeholder="e.g. Giza"
             class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
           />
         </div>
@@ -72,6 +105,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           id="vol-motivation"
           rows="5"
           required
+          minlength="10"
+          maxlength="3000"
           placeholder="Describe relevant research, articles, codebases, or school leadership work you have shipped."
           class="w-full p-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
         ></textarea>
@@ -121,21 +156,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
       alertBox.classList.remove('hidden');
       try {
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/volunteer-apply', {
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/volunteers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            full_name: document.getElementById('vol-name').value.trim(),
-            applicant_email: document.getElementById('vol-email').value.trim(),
-            season_cohort: 'Winter_2026',
-            target_track: document.getElementById('vol-track').value,
-            portfolio_or_cv_url: document.getElementById('vol-cv').value.trim(),
-            motivation_answer: document.getElementById('vol-motivation').value.trim(),
+            fields: {
+              fullName: { stringValue: document.getElementById('vol-name').value.trim() },
+              email: { stringValue: document.getElementById('vol-email').value.trim().toLowerCase() },
+              phone: { stringValue: document.getElementById('vol-phone').value.trim() },
+              school: { stringValue: document.getElementById('vol-school').value.trim() },
+              governorate: { stringValue: document.getElementById('vol-gov').value.trim() },
+              track: { stringValue: document.getElementById('vol-track').value },
+              cvUrl: { stringValue: document.getElementById('vol-cv').value.trim() },
+              motivation: { stringValue: document.getElementById('vol-motivation').value.trim() },
+              seasonCohort: { stringValue: 'Winter_2026' },
+              status: { stringValue: 'pending' },
+              createdAt: { stringValue: new Date().toISOString() },
+            },
           }),
         });
         if (!res.ok) throw new Error('Submission failed');
         window.tfTrack?.('volunteer_apply', { track: document.getElementById('vol-track').value });
-        alertBox.textContent = 'Application received. Our HR committee will review and follow up by email.';
+        alertBox.textContent = 'Application received cleanly. Our HR team can inspect and onboard you directly in TF Dashboard.';
         alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();
         syncTrackLabel(trackSelect.value);

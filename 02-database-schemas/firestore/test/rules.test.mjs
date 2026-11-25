@@ -94,20 +94,35 @@ test('public catalog collections restrict writes to leads or admins', () => {
   }
 });
 
-test('ideas require signed-in bounded creates and lead moderation', () => {
+test('ideas enforce bounded creates with open status and lead/moderator management', () => {
   const block = extractMatchBlock(rulesText, 'match /ideas/{ideaId}');
-  assert.match(block, /allow\s+create:\s*if\s+isSignedIn\(\)/);
+  assert.match(block, /request\.resource\.data\.title\.size\(\)\s*>=\s*4/);
+  assert.match(block, /request\.resource\.data\.description\.size\(\)\s*>=\s*10/);
+  assert.match(block, /request\.resource\.data\.status\s*==\s*'open'/);
   assert.match(block, /allow\s+update,\s*delete:\s*if\s+isLead\(\)/);
 });
 
-test('private intake collections forbid blanket public reads', () => {
+test('private intake collections forbid blanket public reads and validate intake schemas', () => {
   for (const header of [
     'match /volunteers/{applicationId}',
     'match /donations/{donationId}',
+    'match /photoSubmissions/{photoId}',
   ]) {
     const block = extractMatchBlock(rulesText, header);
     assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/, `${header} must not allow blanket public read`);
+    assert.match(block, /status\s*==\s*'pending'/);
   }
+  const photoBlock = extractMatchBlock(rulesText, 'match /photoSubmissions/{photoId}');
+  assert.match(photoBlock, /consentConfirmed\s*==\s*true/);
+  assert.match(photoBlock, /moderate_submissions/);
+
+  const volBlock = extractMatchBlock(rulesText, 'match /volunteers/{applicationId}');
+  assert.match(volBlock, /fullName\s+is\s+string/);
+  assert.match(volBlock, /motivation\s+is\s+string/);
+
+  const donBlock = extractMatchBlock(rulesText, 'match /donations/{donationId}');
+  assert.match(donBlock, /amountEgp\s+is\s+number/);
+  assert.match(donBlock, /amountEgp\s*>\s*0/);
 });
 
 test('/staffAccess/{email} restricts reads to self/admin/access-manager and writes to admin/access-manager', () => {

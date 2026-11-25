@@ -7,6 +7,10 @@ type RawMember = (typeof rawTeam)[number] & {
   grade?: string;
   cohortDate?: string;
   cohortLabel?: string;
+  startDate?: string;
+  endDate?: string;
+  replacedBy?: string;
+  replaces?: string;
   bio?: string;
   parent?: string;
 };
@@ -20,7 +24,12 @@ export const BASELINE_MEMBERS = (rawTeam as RawMember[]).map((m) => ({
   tier: m.tier,
   school: m.school ?? 'TF Unions',
   grade: m.grade ?? '',
-  cohortDate: m.cohortDate ?? '2026-11',
+  cohortDate: m.startDate ?? m.cohortDate ?? '2026-11',
+  startDate: m.startDate ?? m.cohortDate ?? '2026-11',
+  endDate: m.endDate ?? '',
+  status: m.endDate ? 'alumni' : 'active',
+  replacedBy: m.replacedBy ?? '',
+  replaces: m.replaces ?? '',
   cohortLabel: m.cohortLabel ?? '',
   bio: m.bio ?? '',
   parent: m.parent ?? null,

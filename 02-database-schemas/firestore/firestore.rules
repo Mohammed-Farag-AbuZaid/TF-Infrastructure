@@ -233,32 +233,72 @@ service cloud.firestore {
       allow write: if isLead() || hasPermission('edit_chapters');
     }
 
-    // 7. Community Ideas Incubator
+    // 7. Community Ideas & Chapter Proposals
     match /ideas/{ideaId} {
       allow read: if true;
-      allow create: if isSignedIn()
-                    && request.resource.data.title is string
+      allow create: if request.resource.data.title is string
                     && request.resource.data.title.size() >= 4
                     && request.resource.data.title.size() <= 160
                     && request.resource.data.description is string
                     && request.resource.data.description.size() >= 10
-                    && request.resource.data.description.size() <= 4000;
-      allow update, delete: if isLead();
+                    && request.resource.data.description.size() <= 4000
+                    && (!('status' in request.resource.data) || request.resource.data.status == 'open');
+      allow update, delete: if isLead() || isAdmin() || hasPermission('moderate_submissions') || hasPermission('edit_chapters');
     }
 
-    // 8. Private Volunteer Applications & Donation Receipts
+    // 8. Private Volunteer Applications, Donation Receipts & Photo Moderation Queue
     match /volunteers/{applicationId} {
-      allow read: if isLead() || isAdmin() || hasPermission('edit_team') || hasPermission('manage_access') || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow create: if isSignedIn()
-                    && (!('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid);
-      allow update, delete: if isAdmin();
+      allow read: if isLead() || isAdmin() || hasPermission('edit_team') || hasPermission('manage_access') || hasPermission('moderate_submissions') || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if request.resource.data.fullName is string
+                    && request.resource.data.fullName.size() >= 2
+                    && request.resource.data.fullName.size() <= 120
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() >= 3
+                    && request.resource.data.email.size() <= 160
+                    && request.resource.data.track is string
+                    && request.resource.data.track.size() >= 2
+                    && request.resource.data.track.size() <= 80
+                    && request.resource.data.motivation is string
+                    && request.resource.data.motivation.size() >= 10
+                    && request.resource.data.motivation.size() <= 3000
+                    && (!('status' in request.resource.data) || request.resource.data.status == 'pending')
+                    && (!('uid' in request.resource.data) || (isSignedIn() && request.resource.data.uid == request.auth.uid));
+      allow update, delete: if isAdmin() || hasPermission('manage_access') || hasPermission('moderate_submissions');
     }
 
     match /donations/{donationId} {
-      allow read: if isLead() || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow create: if isSignedIn()
-                    && (!('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid);
-      allow update, delete: if isAdmin();
+      allow read: if isLead() || isAdmin() || hasPermission('edit_ledger') || hasPermission('moderate_submissions') || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if request.resource.data.donorName is string
+                    && request.resource.data.donorName.size() >= 1
+                    && request.resource.data.donorName.size() <= 120
+                    && request.resource.data.paymentChannel is string
+                    && request.resource.data.paymentChannel.size() >= 2
+                    && request.resource.data.paymentChannel.size() <= 60
+                    && request.resource.data.amountEgp is number
+                    && request.resource.data.amountEgp > 0
+                    && request.resource.data.amountEgp <= 10000000
+                    && (!('status' in request.resource.data) || request.resource.data.status == 'pending')
+                    && (!('uid' in request.resource.data) || (isSignedIn() && request.resource.data.uid == request.auth.uid));
+      allow update, delete: if isAdmin() || hasPermission('edit_ledger') || hasPermission('moderate_submissions');
+    }
+
+    match /photoSubmissions/{photoId} {
+      allow read: if isLead() || isAdmin() || hasPermission('moderate_submissions');
+      allow create: if request.resource.data.title is string
+                    && request.resource.data.title.size() >= 3
+                    && request.resource.data.title.size() <= 140
+                    && request.resource.data.chapterOrEvent is string
+                    && request.resource.data.chapterOrEvent.size() >= 2
+                    && request.resource.data.chapterOrEvent.size() <= 120
+                    && request.resource.data.photographerName is string
+                    && request.resource.data.photographerName.size() >= 2
+                    && request.resource.data.photographerName.size() <= 120
+                    && request.resource.data.imageUrl is string
+                    && request.resource.data.imageUrl.size() >= 8
+                    && request.resource.data.imageUrl.size() <= 500
+                    && request.resource.data.consentConfirmed == true
+                    && (!('status' in request.resource.data) || request.resource.data.status == 'pending');
+      allow update, delete: if isAdmin() || hasPermission('moderate_submissions');
     }
 
     // 9. Public Credential Registry (admin or registrar-managed)

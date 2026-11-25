@@ -192,7 +192,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               <div class="min-w-0">
                 <h2 id="insp-name" class="font-display font-bold text-[18px] text-[#F3F2EE] leading-tight"></h2>
                 <div id="insp-arabic" class="text-[12.5px] text-[#C7D0DE] mt-0.5 hidden"></div>
-                <span id="insp-team-badge" class="inline-block mt-1.5 px-2 py-0.5 rounded text-[11px] font-medium"></span>
+                <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  <span id="insp-team-badge" class="inline-block px-2 py-0.5 rounded text-[11px] font-medium"></span>
+                  <span id="insp-status-badge" class="inline-block px-2 py-0.5 rounded text-[11px] font-code font-medium"></span>
+                </div>
               </div>
             </div>
 
@@ -233,8 +236,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               <span id="insp-grade" class="text-[#ECEAE4] text-right"></span>
             </div>
             <div class="flex items-baseline justify-between gap-3">
-              <span class="text-[#9AA7BC]">Joined</span>
-              <span id="insp-cohort" class="font-code text-[#7DD3C8] font-medium"></span>
+              <span class="text-[#9AA7BC]">Tenure</span>
+              <span id="insp-cohort" class="font-code text-[#7DD3C8] font-medium text-right"></span>
             </div>
           </div>
 
@@ -248,6 +251,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             <div id="insp-reports-wrap" class="hidden">
               <div id="insp-reports-label" class="text-[11px] font-medium text-[#9AA7BC] mb-1.5">Direct reports</div>
               <div id="insp-reports-slot" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto"></div>
+            </div>
+            <div id="insp-replaces-wrap" class="hidden">
+              <div class="text-[11px] font-medium text-[#9AA7BC] mb-1.5">Preceded by</div>
+              <div id="insp-replaces-slot" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div id="insp-replaced-wrap" class="hidden">
+              <div class="text-[11px] font-medium text-[#9AA7BC] mb-1.5">Succeeded by</div>
+              <div id="insp-replaced-slot" class="flex flex-wrap gap-1.5"></div>
             </div>
           </div>
         </div>
@@ -283,13 +294,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             id="timeline-slider"
             type="range"
             min="0"
-            max="4"
+            max="5"
             step="1"
-            value="4"
+            value="5"
             aria-label="Cohort timeline milestone slider"
             class="w-full h-1.5 bg-white/15 rounded-lg appearance-none cursor-pointer accent-[#5EC4B8] focus:outline-none"
           />
-          <div id="milestone-buttons" class="grid grid-cols-5 gap-1.5 text-[11px] mt-2"></div>
+          <div id="milestone-buttons" class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-[11px] mt-2"></div>
         </div>
       </div>
     </div>
@@ -377,8 +388,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       </div>
     </div>
 
-    <!-- Dynamic Team Filter Pills -->
-    <div id="team-filter-buttons" class="mt-4 flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter directory and orbital map by team"></div>
+    <!-- Dynamic Team & Status Filter Pills -->
+    <div class="mt-4 flex flex-wrap items-center justify-between gap-2.5">
+      <div id="team-filter-buttons" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter directory and orbital map by team"></div>
+      <div id="dir-status-buttons" class="inline-flex rounded-lg bg-[#EAE8E1] p-0.5 border border-[#DFDDD6]" role="group" aria-label="Filter directory by member tenure status">
+        <button type="button" data-dstatus="milestone" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs">Active</button>
+        <button type="button" data-dstatus="alumni" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">Alumni</button>
+        <button type="button" data-dstatus="all" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">All history</button>
+      </div>
+    </div>
 
     <!-- Editorial 3-Column Hairline Grid -->
     <div id="directory-grid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6"></div>
@@ -386,13 +404,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
   <script is:inline define:vars={{ initialMembers: publicMembers }}>
     (function () {
-      var STEPS = [
+      var BASE_STEPS = [
         { key: '2025-10', short: 'Oct 2025', title: 'Founders', desc: 'October 2025 — Co-Founding Systems & Operations Architects' },
         { key: '2026-01', short: 'Jan 2026', title: 'Heads', desc: 'January 2026 — Division Heads Across HR, PR, Marketing & Social Media' },
         { key: '2026-04', short: 'Apr 2026', title: 'Vice Heads', desc: 'April 2026 — Vice Heads & Regional Chapter Coordinators' },
         { key: '2026-07', short: 'Jul 2026', title: 'Committees', desc: 'July 2026 — Interview Panels, Outreach Leads & Guild Managers' },
-        { key: '2026-11', short: 'Nov 2026', title: 'Full Network', desc: 'November 2026 — Nationwide Scale Across All 27 Governorates' },
+        { key: '2026-11', short: 'Nov 2026', title: 'Scale Cohort', desc: 'November 2026 — Nationwide Scale Across All 27 Governorates' },
+        { key: 'present', short: 'Live Now', title: 'Current Roster', desc: 'Live Now — Active TF Unions Team & Recorded Leadership Transitions' },
       ];
+      var STEPS = BASE_STEPS.slice();
 
       var DIV_META = {
         Founders: { label: 'Founders', nodeFill: '#F3F2EE', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' },
@@ -400,7 +420,27 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         'PR Team': { label: 'PR & Outreach', nodeFill: '#5EC4B8', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
         'Marketing Team': { label: 'Marketing', nodeFill: '#CBD5E1', nodeInk: '#0F1D33', ring: '#CBD5E1', barColor: '#64748B', badgeBg: '#F1F5F9', badgeText: '#334155' },
         'Social Media Team': { label: 'Social Media', nodeFill: '#E7A35C', nodeInk: '#0F1D33', ring: '#E7A35C', barColor: '#A2570F', badgeBg: '#FEF6EB', badgeText: '#A2570F' },
+        'IT Team': { label: 'IT & Systems', nodeFill: '#93C5FD', nodeInk: '#0F1D33', ring: '#93C5FD', barColor: '#1D4ED8', badgeBg: '#EFF6FF', badgeText: '#1E40AF' },
+        'Research & Guides': { label: 'Research & Guides', nodeFill: '#6EE7B7', nodeInk: '#0F1D33', ring: '#6EE7B7', barColor: '#047857', badgeBg: '#ECFDF5', badgeText: '#065F46' },
+        'Chapters & Connect': { label: 'Chapters', nodeFill: '#FDBA74', nodeInk: '#0F1D33', ring: '#FDBA74', barColor: '#C2410C', badgeBg: '#FFF7ED', badgeText: '#9A3412' },
+        'Finance & Operations': { label: 'Finance & Ops', nodeFill: '#D8B4FE', nodeInk: '#0F1D33', ring: '#D8B4FE', barColor: '#6D28D9', badgeBg: '#F5F3FF', badgeText: '#5B21B6' },
       };
+
+      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function fmtMonth(ym) {
+        var s = String(ym || '').trim();
+        var parts = s.split('-');
+        if (parts.length === 2) {
+          var mo = Number(parts[1]);
+          if (mo >= 1 && mo <= 12) return MONTHS[mo - 1] + ' ' + parts[0];
+        }
+        return s || 'Present';
+      }
+      function fmtTenure(m) {
+        var start = m.startDate || m.cohortDate || '2026-11';
+        var end = m.endDate || '';
+        return fmtMonth(start) + ' – ' + (end ? fmtMonth(end) : 'Present');
+      }
 
       var FALLBACK_META = DIV_META.Founders;
       var prefersReducedMotion =
@@ -415,7 +455,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       var EDGE_ELS = new Map();
 
       var state = {
-        stepIdx: 4,
+        stepIdx: 5,
+        dirStatus: 'milestone',
         team: 'All',
         search: '',
         sort: 'tier',
@@ -496,7 +537,25 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function isActiveAtStep(m, idx) {
-        return (m.cohortDate || '2026-11') <= STEPS[idx].key;
+        var step = STEPS[idx] || STEPS[STEPS.length - 1];
+        var start = m.startDate || m.cohortDate || '2026-11';
+        var end = m.endDate || '';
+        if (step.key === 'present') {
+          return !end && m.status !== 'alumni';
+        }
+        return start <= step.key && (!end || end >= step.key);
+      }
+
+      function bestStepForMember(m) {
+        var idxPresent = STEPS.length - 1;
+        if (isActiveAtStep(m, idxPresent)) return idxPresent;
+        var targetDate = m.endDate || m.startDate || m.cohortDate || '2026-11';
+        var matched = -1;
+        for (var i = 0; i < STEPS.length - 1; i++) {
+          if (STEPS[i].key <= targetDate && isActiveAtStep(m, i)) matched = i;
+        }
+        if (matched !== -1) return matched;
+        return STEPS.findIndex(function (s) { return s.key !== 'present' && isActiveAtStep(m, STEPS.indexOf(s)); });
       }
 
       function matchesFilter(m) {
@@ -549,10 +608,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         // Quadrant angular ranges in radians (padded away from vertical/horizontal axes)
         var QUADRANTS = {
-          'HR Team': [(-168 * Math.PI) / 180, (-102 * Math.PI) / 180],
-          'PR Team': [(-78 * Math.PI) / 180, (-12 * Math.PI) / 180],
-          'Marketing Team': [(102 * Math.PI) / 180, (168 * Math.PI) / 180],
-          'Social Media Team': [(12 * Math.PI) / 180, (78 * Math.PI) / 180],
+          'HR Team': [(-168 * Math.PI) / 180, (-105 * Math.PI) / 180],
+          'IT Team': [(-100 * Math.PI) / 180, (-80 * Math.PI) / 180],
+          'PR Team': [(-75 * Math.PI) / 180, (-14 * Math.PI) / 180],
+          'Research & Guides': [(-10 * Math.PI) / 180, (10 * Math.PI) / 180],
+          'Social Media Team': [(14 * Math.PI) / 180, (75 * Math.PI) / 180],
+          'Chapters & Connect': [(80 * Math.PI) / 180, (100 * Math.PI) / 180],
+          'Marketing Team': [(105 * Math.PI) / 180, (166 * Math.PI) / 180],
+          'Finance & Operations': [(170 * Math.PI) / 180, (190 * Math.PI) / 180],
         };
 
         var TIER_RINGS = {
@@ -962,11 +1025,9 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var m = BY_ID.get(id);
         if (!m) return;
 
-        var neededIdx = STEPS.findIndex(function (s) {
-          return (m.cohortDate || '2026-11') <= s.key;
-        });
-        if (neededIdx !== -1 && neededIdx > state.stepIdx) {
-          setStep(neededIdx, true);
+        if (!isActiveAtStep(m, state.stepIdx)) {
+          var targetIdx = bestStepForMember(m);
+          if (targetIdx !== -1) setStep(targetIdx, true);
         }
 
         state.selectedId = id;
@@ -1026,23 +1087,39 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         teamBadge.style.backgroundColor = meta.badgeBg;
         teamBadge.style.color = meta.badgeText;
 
+        var isAlum = Boolean(m.endDate) || m.status === 'alumni';
+        var stBadge = document.getElementById('insp-status-badge');
+        stBadge.textContent = isAlum ? 'Alumni' : 'Active';
+        stBadge.className = isAlum
+          ? 'inline-block px-2 py-0.5 rounded text-[11px] font-code font-medium bg-white/10 text-[#CBD5E1]'
+          : 'inline-block px-2 py-0.5 rounded text-[11px] font-code font-medium bg-[#0F766E]/35 text-[#7DD3C8]';
+
         document.getElementById('insp-role').textContent = m.role;
         document.getElementById('insp-school').textContent = m.school || 'TF Unions';
-        document.getElementById('insp-grade').textContent = m.grade || 'Active cohort';
-        document.getElementById('insp-cohort').textContent = m.cohortLabel || m.cohortDate;
+        document.getElementById('insp-grade').textContent = m.grade || (isAlum ? 'Former cohort' : 'Active cohort');
+        document.getElementById('insp-cohort').textContent = fmtTenure(m);
         document.getElementById('insp-bio').textContent = m.bio || 'Contributor in ' + m.team + '.';
 
         var parent = m.parent ? BY_ID.get(m.parent) : null;
         var reports = REPORTS_BY_ID.get(m.id) || [];
+        var prevMember = m.replaces ? BY_ID.get(m.replaces) : null;
+        var nextMember = m.replacedBy ? BY_ID.get(m.replacedBy) : null;
+
         var lineageBox = document.getElementById('insp-lineage');
         var parentWrap = document.getElementById('insp-parent-wrap');
         var parentSlot = document.getElementById('insp-parent-slot');
         var reportsWrap = document.getElementById('insp-reports-wrap');
         var reportsLabel = document.getElementById('insp-reports-label');
         var reportsSlot = document.getElementById('insp-reports-slot');
+        var replacesWrap = document.getElementById('insp-replaces-wrap');
+        var replacesSlot = document.getElementById('insp-replaces-slot');
+        var replacedWrap = document.getElementById('insp-replaced-wrap');
+        var replacedSlot = document.getElementById('insp-replaced-slot');
 
         parentSlot.replaceChildren();
         reportsSlot.replaceChildren();
+        replacesSlot.replaceChildren();
+        replacedSlot.replaceChildren();
 
         if (parent) {
           parentSlot.appendChild(makeDarkChip(parent));
@@ -1059,7 +1136,21 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           reportsWrap.classList.add('hidden');
         }
 
-        lineageBox.classList.toggle('hidden', !parent && reports.length === 0);
+        if (prevMember) {
+          replacesSlot.appendChild(makeDarkChip(prevMember));
+          replacesWrap.classList.remove('hidden');
+        } else {
+          replacesWrap.classList.add('hidden');
+        }
+
+        if (nextMember) {
+          replacedSlot.appendChild(makeDarkChip(nextMember));
+          replacedWrap.classList.remove('hidden');
+        } else {
+          replacedWrap.classList.add('hidden');
+        }
+
+        lineageBox.classList.toggle('hidden', !parent && reports.length === 0 && !prevMember && !nextMember);
         spotlightView.classList.add('hidden');
         inspectorView.classList.remove('hidden');
         inspectorView.classList.add('flex');
@@ -1225,15 +1316,42 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         renderSpotlight(active);
       }
 
-      function renderDirectory() {
-        var active = ALL_MEMBERS.filter(function (m) {
-          return isActiveAtStep(m, state.stepIdx) && matchesFilter(m);
+      function isMemberAlumni(m) {
+        return Boolean(m.endDate) || m.status === 'alumni';
+      }
+
+      document.querySelectorAll('#dir-status-buttons .dst-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          state.dirStatus = btn.getAttribute('data-dstatus') || 'milestone';
+          document.querySelectorAll('#dir-status-buttons .dst-btn').forEach(function (b) {
+            var act = b.getAttribute('data-dstatus') === state.dirStatus;
+            b.className = act
+              ? 'dst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs'
+              : 'dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]';
+          });
+          renderDirectory();
         });
+      });
+
+      function renderDirectory() {
+        var pool = ALL_MEMBERS.filter(function (m) {
+          if (state.dirStatus === 'alumni') return isMemberAlumni(m);
+          if (state.dirStatus === 'all') return true;
+          return isActiveAtStep(m, state.stepIdx);
+        });
+        var active = pool.filter(matchesFilter);
+
+        var alumniTotal = ALL_MEMBERS.filter(isMemberAlumni).length;
+        if (state.dirStatus === 'alumni') {
+          dirSubtitleEl.textContent = 'Showing ' + active.length + ' past / alumni contributors (' + alumniTotal + ' total alumni recorded).';
+        } else if (state.dirStatus === 'all') {
+          dirSubtitleEl.textContent = 'Showing ' + active.length + ' of ' + ALL_MEMBERS.length + ' contributors across full TF Unions history.';
+        }
 
         var sorted = active.slice().sort(function (a, b) {
           if (state.sort === 'name') return a.name.localeCompare(b.name);
           if (state.sort === 'cohort') {
-            return (a.cohortDate || '').localeCompare(b.cohortDate || '') || a.tier - b.tier || a.name.localeCompare(b.name);
+            return (a.startDate || a.cohortDate || '').localeCompare(b.startDate || b.cohortDate || '') || a.tier - b.tier || a.name.localeCompare(b.name);
           }
           return a.tier - b.tier || a.team.localeCompare(b.team) || a.name.localeCompare(b.name);
         });
@@ -1242,15 +1360,24 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (sorted.length === 0) {
           var empty = document.createElement('div');
           empty.className = 'sm:col-span-2 lg:col-span-3 py-12 text-center border-t border-[#DFDDD6] text-[14px] text-[#767D8C]';
-          empty.textContent = 'No contributors match your filter at this milestone.';
+          empty.textContent = state.dirStatus === 'alumni' ? 'No alumni contributors recorded yet.' : 'No contributors match your filter at this milestone.';
           directoryGrid.appendChild(empty);
           return;
         }
 
         sorted.forEach(function (m) {
           var meta = metaFor(m.team);
+          var isAlum = isMemberAlumni(m);
           var card = document.createElement('article');
           card.className = 'border-t border-[#DFDDD6] pt-4 flex flex-col justify-between';
+
+          var successor = m.replacedBy ? BY_ID.get(m.replacedBy) : null;
+          var predecessor = m.replaces ? BY_ID.get(m.replaces) : null;
+          var handoverLine = successor
+            ? 'Succeeded by ' + successor.name
+            : predecessor
+              ? 'Preceded by ' + predecessor.name
+              : '';
 
           card.innerHTML =
             '<div>' +
@@ -1270,24 +1397,28 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             '</div>' +
             '</div>' +
             '</div>' +
-            '<span class="px-2 py-0.5 rounded text-[11px] font-medium shrink-0" style="background-color:' +
+            '<div class="flex flex-col items-end gap-1 shrink-0">' +
+            '<span class="px-2 py-0.5 rounded text-[11px] font-medium" style="background-color:' +
             meta.badgeBg +
             ';color:' +
             meta.badgeText +
             ';">' +
             esc(meta.label) +
             '</span>' +
+            (isAlum ? '<span class="px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866] text-[10px] font-code">Alumni</span>' : '') +
+            '</div>' +
             '</div>' +
             '<p class="mt-2.5 text-[13px] text-[#525866] leading-relaxed line-clamp-2">' +
             esc(m.bio || m.school || 'TF Unions contributor') +
             '</p>' +
+            (handoverLine ? '<div class="mt-1.5 font-code text-[11px] text-[#0B5F58]">' + esc(handoverLine) + '</div>' : '') +
             '</div>';
 
           var footer = document.createElement('div');
           footer.className = 'mt-3 flex items-center justify-between gap-2 text-[12px] text-[#767D8C]';
           var metaSpan = document.createElement('span');
-          metaSpan.className = 'truncate';
-          metaSpan.textContent = (m.school || 'TF Unions') + ' · ' + (m.cohortLabel || m.cohortDate);
+          metaSpan.className = 'truncate font-code text-[11px]';
+          metaSpan.textContent = fmtTenure(m) + (m.school ? ' · ' + m.school : '');
 
           var mapBtn = document.createElement('button');
           mapBtn.type = 'button';
@@ -1539,7 +1670,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             tier: typeof o.tier === 'number' ? o.tier : 4,
             school: o.school || 'TF Unions',
             grade: o.grade || '',
-            cohortDate: o.cohortDate || '2026-11',
+            cohortDate: o.startDate || o.cohortDate || '2026-11',
+            startDate: o.startDate || o.cohortDate || '2026-11',
+            endDate: o.endDate || '',
+            status: o.endDate ? 'alumni' : (o.status || 'active'),
+            replacedBy: o.replacedBy || '',
+            replaces: o.replaces || '',
             cohortLabel: o.cohortLabel || '',
             bio: o.bio || '',
             x: typeof o.x === 'number' ? o.x : 500,

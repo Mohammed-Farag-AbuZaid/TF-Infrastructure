@@ -202,23 +202,32 @@ const faviconSvg = encodeURIComponent(
         <div class="p-4 sm:p-7 space-y-6 max-w-[1360px] w-full">
           <!-- ================= WORKSPACE 1: HOME ================= -->
           <section id="view-home" class="dash-view space-y-6">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
-                <div class="text-[12px] text-[#767D8C]">Team Members</div>
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+              <button type="button" id="kpi-members-btn" class="text-left bg-white border border-[#DFDDD6] hover:border-[#1B365D] rounded-xl p-4 transition">
+                <div class="text-[12px] text-[#767D8C]">Active Org Members</div>
                 <div id="stat-members" class="font-display font-bold text-[28px] text-[#161A22] mt-1 tabular-nums">0</div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div id="stat-members-sub" class="text-[11px] text-[#525866] mt-0.5">Public org tree</div>
+              </button>
+              <button type="button" id="kpi-tasks-btn" class="text-left bg-white border border-[#DFDDD6] hover:border-[#1B365D] rounded-xl p-4 transition">
                 <div class="text-[12px] text-[#767D8C]">Open Tasks</div>
                 <div id="stat-tasks" class="font-display font-bold text-[28px] text-[#1B365D] mt-1 tabular-nums">0</div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div class="text-[11px] text-[#525866] mt-0.5">View Kanban →</div>
+              </button>
+              <button type="button" id="kpi-submissions-btn" class="text-left bg-white border border-[#DFDDD6] hover:border-[#0F766E] rounded-xl p-4 transition">
+                <div class="text-[12px] text-[#767D8C]">Pending Submissions</div>
+                <div id="stat-submissions" class="font-display font-bold text-[28px] text-[#0B5F58] mt-1 tabular-nums">0</div>
+                <div class="text-[11px] text-[#525866] mt-0.5">Receipts · Apps · Ideas</div>
+              </button>
+              <button type="button" id="kpi-logs-btn" class="text-left bg-white border border-[#DFDDD6] hover:border-[#1B365D] rounded-xl p-4 transition">
                 <div class="text-[12px] text-[#767D8C]">Team Logged Hours</div>
-                <div id="stat-hours" class="font-display font-bold text-[28px] text-[#0B5F58] mt-1 tabular-nums">0h</div>
-              </div>
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-4">
+                <div id="stat-hours" class="font-display font-bold text-[28px] text-[#161A22] mt-1 tabular-nums">0h</div>
+                <div class="text-[11px] text-[#525866] mt-0.5">Shift sessions</div>
+              </button>
+              <button type="button" id="kpi-ledger-btn" class="col-span-2 lg:col-span-1 text-left bg-white border border-[#DFDDD6] hover:border-[#1B365D] rounded-xl p-4 transition">
                 <div class="text-[12px] text-[#767D8C]">Ledger Net Balance</div>
-                <div id="stat-ledger" class="font-display font-bold text-[26px] text-[#161A22] mt-1 tabular-nums">0 EGP</div>
-              </div>
+                <div id="stat-ledger" class="font-display font-bold text-[24px] text-[#161A22] mt-1 tabular-nums">0 EGP</div>
+                <div class="text-[11px] text-[#525866] mt-0.5">Open Ledger →</div>
+              </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -228,14 +237,7 @@ const faviconSvg = encodeURIComponent(
                 <form id="time-log-form" class="mt-4 space-y-3">
                   <input id="tl-summary" type="text" required placeholder="What did you complete?" class="w-full h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px] focus:bg-white focus:border-[#1B365D] focus:outline-none" />
                   <div class="grid grid-cols-2 gap-3">
-                    <select id="tl-division" class="h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px]">
-                      <option value="Founders">Founders</option>
-                      <option value="HR Team">HR Team</option>
-                      <option value="PR Team">PR Team</option>
-                      <option value="Social Media Team">Social Media Team</option>
-                      <option value="Marketing Team">Marketing Team</option>
-                      <option value="IT Team">IT Team</option>
-                    </select>
+                    <select id="tl-division" class="canonical-team-select h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px]"></select>
                     <input id="tl-minutes" type="number" min="5" max="720" value="30" required class="h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13.5px] font-code" />
                   </div>
                   <button type="submit" class="h-10 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13.5px] font-medium transition">
@@ -473,13 +475,50 @@ const faviconSvg = encodeURIComponent(
               </form>
               <div id="cr-list" class="bg-white border border-[#DFDDD6] rounded-xl divide-y divide-[#EAE8E1]"></div>
             </div>
+
+            <!-- 3F: UNIFIED SUBMISSIONS INBOX -->
+            <div id="sub-submissions" class="content-pane hidden space-y-5">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px]">Donation Receipts Queue</span>
+                    <span id="sub-don-count" class="font-code text-[11.5px] text-[#525866]">0</span>
+                  </div>
+                  <div id="sub-don-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+
+                <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px]">Volunteer Applications</span>
+                    <span id="sub-vol-count" class="font-code text-[11.5px] text-[#525866]">0</span>
+                  </div>
+                  <div id="sub-vol-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+
+                <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px]">Ideas &amp; Chapter Proposals</span>
+                    <span id="sub-idea-count" class="font-code text-[11.5px] text-[#525866]">0</span>
+                  </div>
+                  <div id="sub-idea-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+
+                <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px]">Photo Archive Submissions</span>
+                    <span id="sub-photo-count" class="font-code text-[11.5px] text-[#525866]">0</span>
+                  </div>
+                  <div id="sub-photo-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <!-- ================= WORKSPACE 4: TEAM & TASKS ================= -->
           <section id="view-teamwork" class="dash-view hidden space-y-5">
             <div class="flex flex-wrap gap-1.5 bg-white border border-[#DFDDD6] rounded-xl p-2" id="teamwork-subtabs">
               <button type="button" data-tw="tasks" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white">Tasks Board</button>
-              <button type="button" data-tw="roster" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Team &amp; HR</button>
+              <button type="button" data-tw="roster" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Org Tree &amp; Tenure</button>
               <button type="button" data-tw="timelogs" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Time Logs</button>
               <button type="button" data-tw="achievers" class="tw-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Top Achievers</button>
             </div>
@@ -493,13 +532,13 @@ const faviconSvg = encodeURIComponent(
                 </div>
                 <div>
                   <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Division</label>
-                  <select id="tk-div" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                    <option>Founders</option><option>HR Team</option><option>PR Team</option><option>Social Media Team</option><option>Marketing Team</option><option>IT Team</option>
-                  </select>
+                  <select id="tk-div" class="canonical-team-select w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]"></select>
                 </div>
                 <div>
-                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Assignee email</label>
-                  <input id="tk-assignee" type="email" placeholder="Optional" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Assign to member</label>
+                  <select id="tk-assignee" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="">Open to whole division</option>
+                  </select>
                 </div>
                 <div>
                   <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Due &amp; Points</label>
@@ -536,36 +575,72 @@ const faviconSvg = encodeURIComponent(
               </div>
             </div>
 
-            <!-- 4B: TEAM & HR ROSTER -->
+            <!-- 4B: ORG TREE & TENURE LIFECYCLE -->
             <div id="tw-roster" class="tw-pane hidden space-y-5">
               <form id="team-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
                 <input type="hidden" id="tm-id" />
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                  <h3 class="font-display font-semibold text-[16px]">Add or edit team member</h3>
-                  <button id="tm-sync-roster" type="button" class="text-[12.5px] font-medium text-[#0B5F58] hover:underline">Sync 71-member org roster to Firestore</button>
+                  <div>
+                    <h3 class="font-display font-semibold text-[16px]">Public Org Tree &amp; Tenure Record (<span class="font-code text-[13px] text-[#1B365D]">tfunions.com/team</span>)</h3>
+                    <p class="text-[12px] text-[#525866]">Add, edit, end tenure (Active → Alumni), or replace leaders on the public constellation without breaking lineage history.</p>
+                  </div>
+                  <button id="tm-sync-roster" type="button" class="text-[12.5px] font-medium text-[#0B5F58] hover:underline shrink-0">Sync 71-member baseline to Firestore</button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <input id="tm-name" type="text" required placeholder="Full name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <input id="tm-role" type="text" required placeholder="Role / Title" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <select id="tm-team" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                    <option>Founders</option><option>HR Team</option><option>PR Team</option><option>Social Media Team</option><option>Marketing Team</option><option>IT Team</option>
-                  </select>
+                  <input id="tm-role" type="text" required placeholder="Public role / title (e.g. Marketing Head)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <select id="tm-team" class="canonical-team-select h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]"></select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#767D8C] mb-1">Tier</label>
+                    <select id="tm-tier" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                      <option value="0">0 · Founder</option>
+                      <option value="1">1 · Head / Lead</option>
+                      <option value="2">2 · Vice Head</option>
+                      <option value="3">3 · Committee Lead</option>
+                      <option value="4" selected>4 · Member</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#767D8C] mb-1">Start Month</label>
+                    <input id="tm-start" type="month" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#767D8C] mb-1">End Month (blank = Active)</label>
+                    <input id="tm-end" type="month" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#767D8C] mb-1">Reports To</label>
+                    <select id="tm-parent" class="w-full h-9 px-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                      <option value="">None (Top level)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input id="tm-school" type="text" placeholder="School / University" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <input id="tm-cohort" type="text" value="2026-11" placeholder="YYYY-MM" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
-                  <input id="tm-bio" type="text" placeholder="Short bio" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="tm-bio" type="text" placeholder="Short public bio" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
                 </div>
                 <div class="flex gap-2">
-                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save member</button>
+                  <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save org member</button>
                   <button id="tm-cancel" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Clear</button>
                 </div>
               </form>
 
               <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2">
-                  <input id="tm-search" type="search" placeholder="Search member or division..." class="h-8 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px] w-full sm:w-64" />
+                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2.5">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <input id="tm-search" type="search" placeholder="Search member, role, division..." class="h-8 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px] w-full sm:w-56" />
+                    <div class="inline-flex rounded-lg bg-white p-0.5 border border-[#DFDDD6]" id="tm-status-filters">
+                      <button type="button" data-tsf="all" class="tsf-btn px-2.5 py-1 rounded text-[11.5px] font-semibold bg-[#1B365D] text-white">All</button>
+                      <button type="button" data-tsf="active" class="tsf-btn px-2.5 py-1 rounded text-[11.5px] font-medium text-[#525866]">Active</button>
+                      <button type="button" data-tsf="alumni" class="tsf-btn px-2.5 py-1 rounded text-[11.5px] font-medium text-[#525866]">Alumni</button>
+                      <button type="button" data-tsf="linked" class="tsf-btn px-2.5 py-1 rounded text-[11.5px] font-medium text-[#525866]">Dashboard Accounts</button>
+                    </div>
+                  </div>
                   <span id="tm-count" class="font-code text-[12px] text-[#525866]"></span>
                 </div>
-                <div id="tm-list" class="divide-y divide-[#EAE8E1] max-h-[520px] overflow-y-auto"></div>
+                <div id="tm-list" class="divide-y divide-[#EAE8E1] max-h-[540px] overflow-y-auto"></div>
               </div>
             </div>
 
@@ -588,6 +663,9 @@ const faviconSvg = encodeURIComponent(
                 <div class="lg:col-span-5 space-y-4">
                   <form id="rec-form" class="hidden bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3">
                     <h3 class="font-display font-semibold text-[16px]">Award recognition</h3>
+                    <select id="rec-picker" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                      <option value="">Select teammate from directory (or type below)...</option>
+                    </select>
                     <input id="rec-email" type="email" required placeholder="Teammate email" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
                     <input id="rec-name" type="text" required placeholder="Teammate name" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
                     <input id="rec-badge" type="text" required placeholder="Award title (e.g. Top Researcher)" class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
@@ -826,6 +904,40 @@ const faviconSvg = encodeURIComponent(
               <div id="pa-rule-preview" class="mt-2 flex flex-wrap gap-1.5"></div>
             </div>
 
+            <!-- Public Org Tree & Tenure Synchronization -->
+            <div class="p-3.5 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-2.5">
+              <label class="inline-flex items-center gap-2 text-[12.5px] font-semibold text-[#161A22] cursor-pointer">
+                <input id="pa-sync-tree" type="checkbox" class="rounded border-[#DCD9D0]" />
+                <span>Show &amp; sync on public <span class="font-code text-[#1B365D]">tfunions.com/team</span> org tree</span>
+              </label>
+              <div id="pa-tree-fields" class="space-y-2.5 pt-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#525866] mb-1">Org Tree Record</label>
+                    <select id="pa-tree-link" class="w-full h-8 px-2 rounded-lg bg-white border border-[#DFDDD6] text-[12px]">
+                      <option value="">Create new org tree card</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#525866] mb-1">Reports To</label>
+                    <select id="pa-parent" class="w-full h-8 px-2 rounded-lg bg-white border border-[#DFDDD6] text-[12px]">
+                      <option value="">None / Founder-led</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#525866] mb-1">Tenure Start Month</label>
+                    <input id="pa-start-date" type="month" class="w-full h-8 px-2 rounded-lg bg-white border border-[#DFDDD6] text-[12px] font-code" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#525866] mb-1">End Month (blank = Active)</label>
+                    <input id="pa-end-date" type="month" class="w-full h-8 px-2 rounded-lg bg-white border border-[#DFDDD6] text-[12px] font-code" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="pt-1">
               <label class="inline-flex items-center gap-2 text-[12.5px] font-medium text-[#525866] cursor-pointer">
                 <input id="pa-custom-toggle" type="checkbox" class="rounded border-[#DCD9D0]" />
@@ -851,6 +963,63 @@ const faviconSvg = encodeURIComponent(
           </form>
         </div>
       </div>
+    </div>
+
+    <!-- End Tenure / Appoint Replacement Modal -->
+    <div
+      id="tenure-modal"
+      class="hidden fixed inset-0 z-50 bg-[#0F1D33]/45 backdrop-blur-[1px] flex items-center justify-center p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tn-title"
+    >
+      <form id="tenure-form" class="w-full max-w-[540px] bg-white border border-[#DFDDD6] rounded-2xl shadow-xl overflow-hidden">
+        <input type="hidden" id="tn-old-id" />
+        <div class="px-6 py-4 bg-[#FAF9F6] border-b border-[#DFDDD6] flex items-center justify-between gap-3">
+          <div>
+            <h2 id="tn-title" class="font-display font-bold text-[18px] text-[#161A22]">End tenure or replace leader</h2>
+            <p id="tn-subtitle" class="text-[12.5px] text-[#525866] mt-0.5"></p>
+          </div>
+          <button id="tn-close" type="button" class="h-8 px-3 rounded-lg border border-[#DFDDD6] bg-white text-[12.5px] font-medium text-[#525866]">Close</button>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-[12px] font-medium text-[#525866] mb-1">End Month on Public Org Tree (moves member to Alumni)</label>
+            <input id="tn-end-date" type="month" required class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+          </div>
+
+          <div class="p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-3">
+            <label class="inline-flex items-center gap-2 text-[13px] font-semibold text-[#161A22] cursor-pointer">
+              <input id="tn-appoint-toggle" type="checkbox" checked class="rounded border-[#DCD9D0]" />
+              <span>Appoint replacement onto this role immediately</span>
+            </label>
+            <div id="tn-replacement-fields" class="space-y-3">
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Pick from Directory (optional)</label>
+                <select id="tn-successor-pick" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                  <option value="">Type successor manually...</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input id="tn-new-name" type="text" placeholder="Successor full name" class="h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                <input id="tn-new-role" type="text" placeholder="Role / Title" class="h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                <input id="tn-new-school" type="text" placeholder="School / University" class="h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                <input id="tn-new-start" type="month" class="h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+              </div>
+              <label class="inline-flex items-center gap-2 text-[12.5px] text-[#525866] cursor-pointer">
+                <input id="tn-reassign-reports" type="checkbox" checked class="rounded border-[#DCD9D0]" />
+                <span>Reassign direct reports to the replacement on the org tree</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2 border-t border-[#EAE8E1]">
+            <button type="button" id="tn-cancel" class="h-9 px-3.5 rounded-lg border border-[#DFDDD6] text-[13px]">Cancel</button>
+            <button type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Confirm transition</button>
+          </div>
+        </div>
+      </form>
     </div>
 
     <script id="dash-seed" type="application/json" set:html={seedPayload}></script>
@@ -957,13 +1126,61 @@ const faviconSvg = encodeURIComponent(
         },
       ];
 
+      const CANONICAL_TEAMS = [
+        'Founders',
+        'HR Team',
+        'PR Team',
+        'Marketing Team',
+        'Social Media Team',
+        'IT Team',
+        'Research & Guides',
+        'Chapters & Connect',
+        'Finance & Operations',
+      ];
+
+      function populateCanonicalTeamSelects() {
+        document.querySelectorAll('.canonical-team-select').forEach((sel) => {
+          const prev = sel.value;
+          sel.replaceChildren();
+          CANONICAL_TEAMS.forEach((t) => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            sel.appendChild(opt);
+          });
+          if (prev && CANONICAL_TEAMS.includes(prev)) sel.value = prev;
+        });
+      }
+      populateCanonicalTeamSelects();
+
+      function currentYm() {
+        return new Date().toISOString().slice(0, 7);
+      }
+
+      function safeHttpUrl(raw) {
+        const s = String(raw || '').trim();
+        if (!s) return '';
+        try {
+          const u = new URL(s);
+          return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '';
+        } catch {
+          return '';
+        }
+      }
+
       const CONTENT_TABS = [
         { id: 'ledger', label: 'Open Ledger', perm: 'edit_ledger' },
+        { id: 'submissions', label: 'Submissions Inbox', perms: ['moderate_submissions', 'edit_ledger', 'edit_chapters', 'manage_access', 'edit_team'] },
         { id: 'chapters', label: 'Chapters', perm: 'edit_chapters' },
         { id: 'guides', label: 'Guides', perm: 'edit_guides' },
         { id: 'opportunities', label: 'Opportunities', perm: 'edit_opportunities' },
         { id: 'certificates', label: 'Certificates', perm: 'manage_certificates' },
       ];
+
+      function canTab(t) {
+        if (Array.isArray(t.perms)) return t.perms.some((p) => can(p));
+        return can(t.perm);
+      }
 
       let currentUser = null;
       let activeRole = 'member';
@@ -1027,7 +1244,7 @@ const faviconSvg = encodeURIComponent(
       function getVisibleWorkspaces() {
         const items = [{ id: 'home', label: 'Home' }];
         if (can('edit_site_copy')) items.push({ id: 'copy', label: 'Website Editor' });
-        if (CONTENT_TABS.some((t) => can(t.perm))) items.push({ id: 'content', label: 'Content & Data' });
+        if (CONTENT_TABS.some((t) => canTab(t))) items.push({ id: 'content', label: 'Content & Data' });
         items.push({ id: 'teamwork', label: 'Team & Tasks' });
         if (can('manage_access')) items.push({ id: 'access', label: 'Access & Activity' });
         return items;
@@ -1080,6 +1297,39 @@ const faviconSvg = encodeURIComponent(
         activeTeamTab = 'tasks';
         renderNav();
         switchWorkspace('teamwork');
+      });
+
+      document.getElementById('kpi-members-btn').addEventListener('click', () => {
+        activeWorkspace = 'teamwork';
+        activeTeamTab = 'roster';
+        renderNav();
+        switchWorkspace('teamwork');
+      });
+      document.getElementById('kpi-tasks-btn').addEventListener('click', () => {
+        activeWorkspace = 'teamwork';
+        activeTeamTab = 'tasks';
+        renderNav();
+        switchWorkspace('teamwork');
+      });
+      document.getElementById('kpi-logs-btn').addEventListener('click', () => {
+        activeWorkspace = 'teamwork';
+        activeTeamTab = 'timelogs';
+        renderNav();
+        switchWorkspace('teamwork');
+      });
+      document.getElementById('kpi-submissions-btn').addEventListener('click', () => {
+        if (!CONTENT_TABS.some((t) => canTab(t))) return;
+        activeWorkspace = 'content';
+        activeContentTab = 'submissions';
+        renderNav();
+        switchWorkspace('content');
+      });
+      document.getElementById('kpi-ledger-btn').addEventListener('click', () => {
+        if (!can('edit_ledger')) return;
+        activeWorkspace = 'content';
+        activeContentTab = 'ledger';
+        renderNav();
+        switchWorkspace('content');
       });
 
       // ---- LIVE TIMER & WORK LOG ----
@@ -1139,16 +1389,35 @@ const faviconSvg = encodeURIComponent(
 
       // ---- 1. HOME WORKSPACE ----
       async function loadHome() {
-        const [memSnap, taskSnap, logSnap, ledSnap] = await Promise.all([
+        const [memSnap, taskSnap, logSnap, ledSnap, donSnap, volSnap, ideaSnap, photoSnap] = await Promise.all([
           getDocs(collection(db, 'teamMembers')).catch(() => ({ docs: [] })),
           getDocs(collection(db, 'tasks')).catch(() => ({ docs: [] })),
           getDocs(collection(db, 'timeLogs')).catch(() => ({ docs: [] })),
           getDocs(collection(db, 'ledgerEntries')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'donations')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'volunteers')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'ideas')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'photoSubmissions')).catch(() => ({ docs: [] })),
         ]);
 
-        const memCount = memSnap.docs.length > 0 ? memSnap.docs.filter((d) => !d.data().archived).length : BASELINE_MEMBERS.length;
+        const byId = new Map(BASELINE_MEMBERS.map((m) => [m.id, { ...m }]));
+        memSnap.docs.forEach((d) => {
+          const v = d.data();
+          if (v.archived) byId.delete(d.id);
+          else byId.set(d.id, { id: d.id, ...v });
+        });
+        const orgAll = Array.from(byId.values());
+        const activeOrg = orgAll.filter((m) => !m.endDate && m.status !== 'alumni');
+        const alumniOrg = orgAll.length - activeOrg.length;
+
         const tasks = taskSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
         const openTasks = tasks.filter((t) => t.status !== 'done');
+
+        const pendingDon = donSnap.docs.filter((d) => (d.data().status || 'pending') === 'pending').length;
+        const pendingVol = volSnap.docs.filter((d) => (d.data().status || 'pending') === 'pending').length;
+        const openIdeas = ideaSnap.docs.filter((d) => (d.data().status || 'open') === 'open').length;
+        const pendingPhotos = photoSnap.docs.filter((d) => (d.data().status || 'pending') === 'pending').length;
+        const totalPending = pendingDon + pendingVol + openIdeas + pendingPhotos;
 
         let totalMins = 0;
         const logs = logSnap.docs.map((d) => {
@@ -1167,8 +1436,10 @@ const faviconSvg = encodeURIComponent(
           else inf += a;
         });
 
-        document.getElementById('stat-members').textContent = String(memCount);
+        document.getElementById('stat-members').textContent = String(activeOrg.length);
+        document.getElementById('stat-members-sub').textContent = alumniOrg > 0 ? `${alumniOrg} alumni recorded` : 'Live on tfunions.com/team';
         document.getElementById('stat-tasks').textContent = String(openTasks.length);
+        document.getElementById('stat-submissions').textContent = String(totalPending);
         document.getElementById('stat-hours').textContent = `${Math.round((totalMins / 60) * 10) / 10}h`;
         document.getElementById('stat-ledger').textContent = `${(inf - out).toLocaleString('en-US')} EGP`;
 
@@ -1180,7 +1451,8 @@ const faviconSvg = encodeURIComponent(
           openTasks.slice(0, 4).forEach((t) => {
             const row = document.createElement('div');
             row.className = 'py-2.5 flex items-center justify-between gap-2';
-            row.innerHTML = `<div class="min-w-0"><div class="font-medium truncate">${esc(t.title)}</div><div class="text-[11.5px] text-[#767D8C]">${esc(t.division || '')}${t.assigneeEmail ? ' · ' + esc(t.assigneeEmail) : ''}</div></div><span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] shrink-0">${esc(t.status || 'todo')}</span>`;
+            const who = t.assigneeEmail ? lookupPersonName(t.assigneeEmail) : '';
+            row.innerHTML = `<div class="min-w-0"><div class="font-medium truncate">${esc(t.title)}</div><div class="text-[11.5px] text-[#767D8C]">${esc(t.division || '')}${who ? ' · ' + esc(who) : ''}</div></div><span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] shrink-0">${esc(t.status || 'todo')}</span>`;
             hTasks.appendChild(row);
           });
         }
@@ -1475,7 +1747,7 @@ const faviconSvg = encodeURIComponent(
 
       // ---- 3. CONTENT & DATA WORKSPACE ----
       function initContentWorkspace() {
-        const allowedTabs = CONTENT_TABS.filter((t) => can(t.perm));
+        const allowedTabs = CONTENT_TABS.filter((t) => canTab(t));
         if (!allowedTabs.some((t) => t.id === activeContentTab)) activeContentTab = allowedTabs[0]?.id || 'ledger';
 
         const wrap = document.getElementById('content-subtabs');
@@ -1497,10 +1769,245 @@ const faviconSvg = encodeURIComponent(
         document.querySelectorAll('.content-pane').forEach((p) => p.classList.add('hidden'));
         document.getElementById('sub-' + activeContentTab)?.classList.remove('hidden');
         if (activeContentTab === 'ledger') loadLedger();
+        else if (activeContentTab === 'submissions') loadSubmissions();
         else if (activeContentTab === 'chapters') loadChapters();
         else if (activeContentTab === 'guides') loadGuides();
         else if (activeContentTab === 'opportunities') loadOpportunities();
         else if (activeContentTab === 'certificates') loadCertificates();
+      }
+
+      // 3F. UNIFIED SUBMISSIONS INBOX (Donations -> Ledger, Volunteers -> People Modal, Ideas -> Chapters, Photos)
+      async function loadSubmissions() {
+        const [donSnap, volSnap, ideaSnap, photoSnap] = await Promise.all([
+          getDocs(collection(db, 'donations')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'volunteers')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'ideas')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'photoSubmissions')).catch(() => ({ docs: [] })),
+        ]);
+
+        // 1) Donation Receipts
+        const donations = donSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        donations.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+        document.getElementById('sub-don-count').textContent = `${donations.filter((d) => (d.status || 'pending') === 'pending').length} pending / ${donations.length}`;
+        const donList = document.getElementById('sub-don-list');
+        donList.replaceChildren();
+        if (!donations.length) {
+          donList.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No supporter receipts submitted yet.</div>';
+        } else {
+          donations.forEach((d) => {
+            const st = d.status || 'pending';
+            const proof = safeHttpUrl(d.proofUrl);
+            const row = document.createElement('div');
+            row.className = 'p-4 space-y-2 text-[13px]';
+            row.innerHTML = `
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div><strong>${esc(d.donorName || 'Anonymous Supporter')}</strong> · <span class="text-[#525866]">${esc(d.paymentChannel || '')}</span></div>
+                <span class="font-code font-semibold text-[#0B5F58]">+${Number(d.amountEgp || 0).toLocaleString('en-US')} EGP</span>
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-[#767D8C]">
+                <span>${esc(String(d.createdAt || '').slice(0, 10))} · <span class="font-code px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#161A22]">${esc(st)}</span>${proof ? ` · <a href="${esc(proof)}" target="_blank" rel="noopener noreferrer" class="text-[#1B365D] underline">Receipt ↗</a>` : ''}</span>
+                <div class="flex gap-2">
+                  ${(st === 'pending' && (can('edit_ledger') || can('moderate_submissions'))) ? '<button type="button" class="don-approve px-2.5 py-1 rounded bg-[#0F766E] text-white text-[11.5px] font-medium">Approve &amp; Post to Ledger</button>' : ''}
+                  ${(st === 'pending' && (can('edit_ledger') || can('moderate_submissions'))) ? '<button type="button" class="don-reject text-[#B42318] hover:underline">Reject</button>' : ''}
+                </div>
+              </div>
+            `;
+            row.querySelector('.don-approve')?.addEventListener('click', async () => {
+              const today = new Date().toISOString().slice(0, 10);
+              if (can('edit_ledger')) {
+                await addDoc(collection(db, 'ledgerEntries'), {
+                  txDate: String(d.createdAt || today).slice(0, 10) || today,
+                  donorOrVendor: d.donorName || 'Verified Supporter',
+                  paymentChannel: d.paymentChannel || 'InstaPay',
+                  entryType: 'inflow',
+                  category: 'Donations',
+                  memo: 'Verified supporter transfer receipt',
+                  receiptUrl: proof,
+                  notes: 'Approved via Dashboard Submissions Inbox',
+                  verificationStatus: 'Verified',
+                  amountEgp: Number(d.amountEgp || 0),
+                  updatedAt: new Date().toISOString(),
+                });
+              }
+              await updateDoc(doc(db, 'donations', d.id), { status: 'verified', reviewedAt: new Date().toISOString() });
+              await writeAudit('submissions', 'approve_donation', d.id, `Verified +${d.amountEgp} EGP -> Open Ledger`);
+              showToast(`Verified +${d.amountEgp} EGP & posted live to /transparency`);
+              loadSubmissions();
+            });
+            row.querySelector('.don-reject')?.addEventListener('click', async () => {
+              await updateDoc(doc(db, 'donations', d.id), { status: 'rejected', reviewedAt: new Date().toISOString() });
+              await writeAudit('submissions', 'reject_donation', d.id, `Rejected receipt ${d.donorName}`);
+              showToast('Marked receipt rejected');
+              loadSubmissions();
+            });
+            donList.appendChild(row);
+          });
+        }
+
+        // 2) Volunteer Applications
+        const vols = volSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        vols.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+        document.getElementById('sub-vol-count').textContent = `${vols.filter((v) => (v.status || 'pending') === 'pending').length} pending / ${vols.length}`;
+        const volList = document.getElementById('sub-vol-list');
+        volList.replaceChildren();
+        if (!vols.length) {
+          volList.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No volunteer applications received yet.</div>';
+        } else {
+          vols.forEach((v) => {
+            const st = v.status || 'pending';
+            const email = String(v.email || v.applicant_email || '').trim().toLowerCase();
+            const name = v.fullName || v.name || v.full_name || email.split('@')[0] || 'Applicant';
+            const cv = safeHttpUrl(v.cvUrl || v.portfolio_or_cv_url);
+            const row = document.createElement('div');
+            row.className = 'p-4 space-y-1.5 text-[13px]';
+            row.innerHTML = `
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div><strong>${esc(name)}</strong> <span class="font-code text-[11px] px-1.5 py-0.5 rounded bg-[#E4EAF2] text-[#1B365D] ml-1">${esc(v.track || v.target_track || 'Volunteer')}</span></div>
+                <span class="font-code text-[11px] px-1.5 py-0.5 rounded bg-[#EAE8E1]">${esc(st)}</span>
+              </div>
+              <div class="text-[12px] text-[#525866]">${esc(email)}${v.phone ? ' · ' + esc(v.phone) : ''}${v.school ? ' · ' + esc(v.school) : ''}${v.governorate ? ' · ' + esc(v.governorate) : ''}</div>
+              <p class="text-[12px] text-[#525866] line-clamp-2">${esc(v.motivation || v.motivation_answer || '')}</p>
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11.5px]">
+                <span>${cv ? `<a href="${esc(cv)}" target="_blank" rel="noopener noreferrer" class="text-[#1B365D] underline">Portfolio/CV ↗</a>` : ''}</span>
+                <div class="flex gap-2">
+                  ${can('manage_access') ? '<button type="button" class="vol-onboard px-2.5 py-1 rounded bg-[#1B365D] text-white font-medium">Inspect &amp; Onboard →</button>' : ''}
+                  ${(st === 'pending' && (can('moderate_submissions') || can('manage_access'))) ? '<button type="button" class="vol-review px-2.5 py-1 rounded border border-[#DFDDD6] bg-[#F3F2EE]">Mark Reviewed</button>' : ''}
+                </div>
+              </div>
+            `;
+            row.querySelector('.vol-onboard')?.addEventListener('click', async () => {
+              await loadUnifiedDirectoryData();
+              const matched = peopleDirectoryCache.find((p) => p.email === email) || {
+                email,
+                name,
+                phone: v.phone || '',
+                uid: v.uid || '',
+                school: v.school || '',
+                grade: v.grade || '',
+                gov: v.governorate || '',
+                track: v.track || v.target_track || '',
+                bio: v.motivation || v.motivation_answer || '',
+                createdAt: fmtDate(v.createdAt),
+                lastLoginAt: '—',
+                team: '',
+                rank: 'Member',
+                roleId: 'team_member',
+                roleName: 'Team Member',
+                permissions: [],
+                customPermissions: false,
+                active: true,
+                hasStaff: false,
+                hasUser: false,
+                hasApplicant: true,
+              };
+              await updateDoc(doc(db, 'volunteers', v.id), { status: 'reviewed', reviewedAt: new Date().toISOString() }).catch(() => {});
+              openPersonModal(matched);
+            });
+            row.querySelector('.vol-review')?.addEventListener('click', async () => {
+              await updateDoc(doc(db, 'volunteers', v.id), { status: 'reviewed', reviewedAt: new Date().toISOString() });
+              showToast(`Marked ${name} reviewed`);
+              loadSubmissions();
+            });
+            volList.appendChild(row);
+          });
+        }
+
+        // 3) Ideas & Chapter Proposals
+        const ideas = ideaSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        ideas.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+        document.getElementById('sub-idea-count').textContent = `${ideas.filter((i) => (i.status || 'open') === 'open').length} open / ${ideas.length}`;
+        const ideaList = document.getElementById('sub-idea-list');
+        ideaList.replaceChildren();
+        if (!ideas.length) {
+          ideaList.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No ideas or chapter proposals submitted yet.</div>';
+        } else {
+          ideas.forEach((it) => {
+            const isChapterProp = it.submissionType === 'Chapter_Proposal' || String(it.service || '').includes('Connect');
+            const st = it.status || 'open';
+            const row = document.createElement('div');
+            row.className = 'p-4 space-y-2 text-[13px]';
+            row.innerHTML = `
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div><strong>${esc(it.title || 'Proposal')}</strong> <span class="font-code text-[10.5px] px-1.5 py-0.5 rounded bg-[#EAE8E1] ml-1">${esc(it.service || 'TF Unions')}</span></div>
+                <select class="idea-st h-7 px-2 rounded border border-[#DFDDD6] bg-[#F3F2EE] font-code text-[11px]">
+                  <option value="open" ${st === 'open' ? 'selected' : ''}>open</option>
+                  <option value="planned" ${st === 'planned' ? 'selected' : ''}>planned</option>
+                  <option value="shipped" ${st === 'shipped' ? 'selected' : ''}>shipped</option>
+                </select>
+              </div>
+              <p class="text-[12px] text-[#525866]">${esc(it.description || '')}</p>
+              <div class="flex flex-wrap justify-end gap-2 text-[11.5px]">
+                ${(isChapterProp && can('edit_chapters') && st !== 'shipped') ? '<button type="button" class="pub-ch px-2.5 py-1 rounded bg-[#0F766E] text-white font-medium">Approve &amp; Publish to TF Connect</button>' : ''}
+                ${(can('moderate_submissions') || can('edit_chapters')) ? '<button type="button" class="del-idea text-[#B42318] hover:underline">Delete</button>' : ''}
+              </div>
+            `;
+            row.querySelector('.idea-st').addEventListener('change', async (ev) => {
+              await updateDoc(doc(db, 'ideas', it.id), { status: ev.target.value });
+              await writeAudit('ideas', 'status', it.id, `${it.title} -> ${ev.target.value}`);
+              showToast('Updated proposal status');
+            });
+            row.querySelector('.pub-ch')?.addEventListener('click', async () => {
+              const chName = it.chapterName || String(it.title || '').replace(/^\[[^\]]+\]\s*/, '').trim() || 'Regional Chapter';
+              await addDoc(collection(db, 'chapters'), {
+                name: chName,
+                type: it.chapterType || 'School Chapter',
+                gov: it.governorate || 'Nationwide',
+                focus: 'Student Study Circle',
+                desc: it.description || '',
+                archived: false,
+                updatedAt: new Date().toISOString(),
+              });
+              await updateDoc(doc(db, 'ideas', it.id), { status: 'shipped' });
+              await writeAudit('chapters', 'publish_proposal', it.id, `Published ${chName} to TF Connect`);
+              showToast(`Published "${chName}" live to connect.tfunions.com`);
+              loadSubmissions();
+            });
+            row.querySelector('.del-idea')?.addEventListener('click', async () => {
+              await deleteDoc(doc(db, 'ideas', it.id));
+              showToast('Deleted proposal');
+              loadSubmissions();
+            });
+            ideaList.appendChild(row);
+          });
+        }
+
+        // 4) Photo Archive Submissions
+        const photos = photoSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        photos.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+        document.getElementById('sub-photo-count').textContent = `${photos.filter((p) => (p.status || 'pending') === 'pending').length} pending / ${photos.length}`;
+        const photoList = document.getElementById('sub-photo-list');
+        photoList.replaceChildren();
+        if (!photos.length) {
+          photoList.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No chapter photos submitted yet.</div>';
+        } else {
+          photos.forEach((ph) => {
+            const st = ph.status || 'pending';
+            const imgLink = safeHttpUrl(ph.imageUrl);
+            const row = document.createElement('div');
+            row.className = 'p-4 space-y-1.5 text-[13px]';
+            row.innerHTML = `
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div><strong>${esc(ph.title || 'Photo')}</strong> · <span class="text-[#525866]">${esc(ph.chapterOrEvent || '')}</span></div>
+                <span class="font-code text-[11px] px-1.5 py-0.5 rounded bg-[#EAE8E1]">${esc(st)}</span>
+              </div>
+              <div class="text-[12px] text-[#525866]">By ${esc(ph.photographerName || 'Unknown')}${imgLink ? ` · <a href="${esc(imgLink)}" target="_blank" rel="noopener noreferrer" class="text-[#1B365D] underline">Inspect Image ↗</a>` : ''}</div>
+              <div class="flex flex-wrap justify-end gap-2 text-[11.5px]">
+                ${(st === 'pending' && can('moderate_submissions')) ? '<button type="button" class="ph-approve px-2.5 py-1 rounded bg-[#0F766E] text-white font-medium">Approve</button><button type="button" class="ph-reject text-[#B42318] hover:underline">Reject</button>' : ''}
+              </div>
+            `;
+            row.querySelector('.ph-approve')?.addEventListener('click', async () => {
+              await updateDoc(doc(db, 'photoSubmissions', ph.id), { status: 'approved', reviewedAt: new Date().toISOString() });
+              showToast(`Approved photo "${ph.title}"`);
+              loadSubmissions();
+            });
+            row.querySelector('.ph-reject')?.addEventListener('click', async () => {
+              await updateDoc(doc(db, 'photoSubmissions', ph.id), { status: 'rejected', reviewedAt: new Date().toISOString() });
+              showToast(`Rejected photo "${ph.title}"`);
+              loadSubmissions();
+            });
+            photoList.appendChild(row);
+          });
+        }
       }
 
       // 3A. LEDGER (ZERO FAKE SEEDS)
@@ -1853,9 +2360,261 @@ const faviconSvg = encodeURIComponent(
         else if (tabId === 'achievers') loadAchievers();
       }
 
-      // 4A. TASKS BOARD (STARTS EMPTY UNTIL REAL TASKS ARE CREATED)
+      // ---- UNIFIED STATE & LOADERS (ROSTER + USERS + STAFF + ROLE RULES) ----
+      let rosterCache = [];
+      let roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
+      let staffAccessCache = [];
+      let peopleDirectoryCache = [];
+      let peopleFilter = 'all';
+      let rosterStatusFilter = 'all';
+
+      const TEAM_OPTIONS = new Set(['', ...CANONICAL_TEAMS]);
+      const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      function fmtMonth(ym) {
+        const s = String(ym || '').trim();
+        const parts = s.split('-');
+        if (parts.length === 2) {
+          const m = Number(parts[1]);
+          if (m >= 1 && m <= 12) return `${MONTHS[m - 1]} ${parts[0]}`;
+        }
+        return s || 'Present';
+      }
+
+      function fmtTenureLabel(m) {
+        const start = m.startDate || m.cohortDate || '2026-11';
+        const end = m.endDate || '';
+        return `${fmtMonth(start)} – ${end ? fmtMonth(end) : 'Present'}`;
+      }
+
+      function fmtDate(val) {
+        if (!val) return '—';
+        try {
+          if (typeof val === 'object' && typeof val.toDate === 'function') {
+            return val.toDate().toISOString().slice(0, 16).replace('T', ' ');
+          }
+          if (typeof val === 'object' && typeof val.seconds === 'number') {
+            return new Date(val.seconds * 1000).toISOString().slice(0, 16).replace('T', ' ');
+          }
+          const s = String(val).trim();
+          if (!s) return '—';
+          return s.length >= 16 ? s.slice(0, 16).replace('T', ' ') : s;
+        } catch {
+          return '—';
+        }
+      }
+
+      function pickStr(...vals) {
+        for (const v of vals) {
+          if (v !== undefined && v !== null && String(v).trim()) return String(v).trim();
+        }
+        return '';
+      }
+
+      function slugifyRole(str) {
+        return String(str || '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '')
+          .slice(0, 40);
+      }
+
+      function getRoleRule(roleId) {
+        return roleDefinitionsCache.find((r) => r.id === roleId) || null;
+      }
+
+      function permLabel(key) {
+        return ALL_PERMS.find((p) => p.key === key)?.label || key;
+      }
+
+      function lookupPersonName(email) {
+        const clean = String(email || '').trim().toLowerCase();
+        if (!clean) return '';
+        const p = peopleDirectoryCache.find((x) => x.email === clean);
+        return p ? `${p.name}${p.team ? ' (' + p.team + ')' : ''}` : email;
+      }
+
+      function buildPeopleDirectory(userDocs, staffDocs, volDocs) {
+        const byEmail = new Map();
+        const ensureBucket = (key, email) => {
+          if (!byEmail.has(key)) {
+            byEmail.set(key, { key, email: email || '', user: null, staff: null, vol: null });
+          }
+          const b = byEmail.get(key);
+          if (email && !b.email) b.email = email;
+          return b;
+        };
+
+        userDocs.forEach((d) => {
+          const data = { id: d.id, uid: d.data().uid || d.id, ...d.data() };
+          const email = String(data.email || '').trim().toLowerCase();
+          const b = ensureBucket(email || `uid:${d.id}`, email);
+          b.user = data;
+        });
+
+        staffDocs.forEach((d) => {
+          const email = String(d.id || d.data().email || '').trim().toLowerCase();
+          const b = ensureBucket(email, email);
+          b.staff = { email, ...d.data() };
+        });
+
+        volDocs.forEach((d) => {
+          const data = { id: d.id, ...d.data() };
+          const email = String(data.email || data.applicant_email || '').trim().toLowerCase();
+          const b = ensureBucket(email || `vol:${d.id}`, email);
+          if (!b.vol) b.vol = data;
+        });
+
+        const entries = Array.from(byEmail.values()).map((b) => {
+          const u = b.user || {};
+          const s = b.staff || {};
+          const v = b.vol || {};
+          const fullNameFromParts = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
+          const emailPrefix = b.email ? b.email.split('@')[0] : '';
+          const name = pickStr(s.displayName, u.fullName, fullNameFromParts, v.fullName, v.name, v.full_name, emailPrefix, 'Member');
+          const roleId = b.staff ? (s.role || 'team_member') : 'normal_user';
+          const matchedRule = getRoleRule(roleId);
+          return {
+            key: b.key,
+            email: b.email,
+            name,
+            phone: pickStr(s.phone, u.phone, u.phoneNumber, v.phone, v.phoneNumber),
+            uid: pickStr(u.uid, u.id, v.uid),
+            school: pickStr(u.stemSchool, u.school, v.stemSchool, v.school),
+            grade: pickStr(u.grade, u.academicLevel, v.grade, v.academicLevel),
+            gov: pickStr(u.governorate, u.gov, v.governorate, v.gov),
+            track: pickStr(v.track, v.target_track, v.team, v.division, u.track),
+            bio: pickStr(v.motivation, v.motivation_answer, v.notes, v.bio, u.bio),
+            createdAt: fmtDate(u.createdAt || u.registrationDate || v.createdAt),
+            lastLoginAt: fmtDate(u.lastLoginAt || u.updatedAt),
+            team: pickStr(s.team, u.team),
+            rank: pickStr(s.rank, u.rank, b.staff ? 'Member' : 'Normal User'),
+            roleId,
+            roleName: b.staff ? pickStr(s.roleName, matchedRule?.name, roleId) : 'Normal User',
+            permissions: b.staff && Array.isArray(s.permissions) ? s.permissions : [],
+            customPermissions: Boolean(s.customPermissions),
+            active: b.staff ? Boolean(s.active) : false,
+            publicMemberId: pickStr(s.publicMemberId, u.publicMemberId),
+            startDate: pickStr(s.startDate, u.startDate),
+            endDate: pickStr(s.endDate, u.endDate),
+            hasStaff: Boolean(b.staff),
+            hasUser: Boolean(b.user),
+            hasApplicant: Boolean(b.vol),
+          };
+        });
+
+        entries.sort((a, b) => {
+          if (a.hasStaff !== b.hasStaff) return a.hasStaff ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        });
+        return entries;
+      }
+
+      function populateUnifiedPickers() {
+        const tkSel = document.getElementById('tk-assignee');
+        if (tkSel) {
+          const prev = tkSel.value;
+          tkSel.replaceChildren();
+          const defOpt = document.createElement('option');
+          defOpt.value = '';
+          defOpt.textContent = 'Open to whole division';
+          tkSel.appendChild(defOpt);
+          peopleDirectoryCache.forEach((p) => {
+            if (!p.email) return;
+            const opt = document.createElement('option');
+            opt.value = p.email;
+            opt.textContent = `${p.name}${p.team ? ' — ' + p.team : ''} (${p.email})`;
+            tkSel.appendChild(opt);
+          });
+          if (prev) tkSel.value = prev;
+        }
+
+        const recPick = document.getElementById('rec-picker');
+        if (recPick) {
+          recPick.replaceChildren();
+          const def = document.createElement('option');
+          def.value = '';
+          def.textContent = 'Select teammate from directory (or type below)...';
+          recPick.appendChild(def);
+          peopleDirectoryCache.forEach((p) => {
+            if (!p.email) return;
+            const opt = document.createElement('option');
+            opt.value = p.email;
+            opt.textContent = `${p.name}${p.team ? ' · ' + p.team : ''} (${p.email})`;
+            recPick.appendChild(opt);
+          });
+        }
+
+        const tmParent = document.getElementById('tm-parent');
+        if (tmParent) {
+          const prev = tmParent.value;
+          tmParent.replaceChildren();
+          const def = document.createElement('option');
+          def.value = '';
+          def.textContent = 'None (Top level)';
+          tmParent.appendChild(def);
+          rosterCache.filter((m) => !m.endDate && m.status !== 'alumni').forEach((m) => {
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = `${m.name} — ${m.role} (${m.team})`;
+            tmParent.appendChild(opt);
+          });
+          if (prev) tmParent.value = prev;
+        }
+      }
+
+      async function loadUnifiedDirectoryData() {
+        const [roleSnap, acSnap, usrSnap, volSnap, memSnap] = await Promise.all([
+          getDocs(collection(db, 'roleDefinitions')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'staffAccess')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'users')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'volunteers')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'teamMembers')).catch(() => ({ docs: [] })),
+        ]);
+
+        if (roleSnap.docs.length === 0 && can('manage_access')) {
+          await Promise.all(
+            DEFAULT_ROLE_RULES.map((r) =>
+              setDoc(doc(db, 'roleDefinitions', r.id), {
+                ...r,
+                updatedBy: (currentUser?.email || '').toLowerCase(),
+                updatedAt: new Date().toISOString(),
+              }, { merge: true }).catch(() => {})
+            )
+          );
+          roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
+        } else if (roleSnap.docs.length > 0) {
+          roleDefinitionsCache = roleSnap.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .sort((a, b) => String(a.name || a.id).localeCompare(String(b.name || b.id)));
+        }
+
+        staffAccessCache = acSnap.docs.map((d) => ({ email: d.id, ...d.data() }));
+        peopleDirectoryCache = buildPeopleDirectory(usrSnap.docs, acSnap.docs, volSnap.docs);
+
+        const byId = new Map(BASELINE_MEMBERS.map((m) => [m.id, { ...m }]));
+        memSnap.docs.forEach((d) => {
+          const v = d.data();
+          if (v.archived) byId.delete(d.id);
+          else byId.set(d.id, { id: d.id, ...v });
+        });
+        rosterCache = Array.from(byId.values());
+        populateUnifiedPickers();
+      }
+
+      function findLinkedAccountForMember(m) {
+        const byPublicId = peopleDirectoryCache.find((p) => p.publicMemberId && p.publicMemberId === m.id);
+        if (byPublicId) return byPublicId;
+        const cleanName = String(m.name || '').trim().toLowerCase();
+        if (!cleanName) return null;
+        return peopleDirectoryCache.find((p) => String(p.name || '').trim().toLowerCase() === cleanName) || null;
+      }
+
+      // 4A. TASKS BOARD
       async function loadTasks() {
         document.getElementById('task-create-form').classList.toggle('hidden', !can('manage_tasks'));
+        await loadUnifiedDirectoryData();
         const snap = await getDocs(collection(db, 'tasks'));
         const tasks = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
@@ -1872,7 +2631,8 @@ const faviconSvg = encodeURIComponent(
           counts[st]++;
           const card = document.createElement('div');
           card.className = 'p-3.5 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-2';
-          card.innerHTML = `<div class="flex items-center justify-between gap-2 text-[11px]"><span class="font-medium text-[#0B5F58]">${esc(t.division || 'Founders')}</span><span class="font-code px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">${Number(t.points || 25)} pts</span></div><div class="text-[13.5px] font-semibold text-[#161A22]">${esc(t.title)}</div><div class="text-[11.5px] text-[#525866]">${t.assigneeEmail ? esc(t.assigneeEmail) : 'Open to division'}${t.dueDate ? ' · Due ' + esc(t.dueDate) : ''}</div><div class="flex flex-wrap gap-1.5 pt-1">${st !== 'doing' ? '<button type="button" data-move="doing" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Start</button>' : ''}${st !== 'done' ? '<button type="button" data-move="done" class="px-2 py-1 rounded bg-[#0F766E] text-white text-[11px] font-medium">Mark done</button>' : '<button type="button" data-move="todo" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Reopen</button>'}${can('manage_tasks') ? '<button type="button" class="del-btn px-2 py-1 text-[11px] text-[#B42318]">Delete</button>' : ''}</div>`;
+          const assigneeLabel = t.assigneeEmail ? lookupPersonName(t.assigneeEmail) : 'Open to whole division';
+          card.innerHTML = `<div class="flex items-center justify-between gap-2 text-[11px]"><span class="font-medium text-[#0B5F58]">${esc(t.division || 'Founders')}</span><span class="font-code px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">${Number(t.points || 25)} pts</span></div><div class="text-[13.5px] font-semibold text-[#161A22]">${esc(t.title)}</div><div class="text-[11.5px] text-[#525866]">${esc(assigneeLabel)}${t.dueDate ? ' · Due ' + esc(t.dueDate) : ''}</div><div class="flex flex-wrap gap-1.5 pt-1">${st !== 'doing' ? '<button type="button" data-move="doing" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Start</button>' : ''}${st !== 'done' ? '<button type="button" data-move="done" class="px-2 py-1 rounded bg-[#0F766E] text-white text-[11px] font-medium">Mark done</button>' : '<button type="button" data-move="todo" class="px-2 py-1 rounded bg-white border border-[#DFDDD6] text-[11px] font-medium">Reopen</button>'}${can('manage_tasks') ? '<button type="button" class="del-btn px-2 py-1 text-[11px] text-[#B42318]">Delete</button>' : ''}</div>`;
           card.querySelectorAll('[data-move]').forEach((b) => {
             b.addEventListener('click', async () => {
               const nextStatus = b.getAttribute('data-move');
@@ -1921,49 +2681,237 @@ const faviconSvg = encodeURIComponent(
         loadTasks();
       });
 
-      // 4B. TEAM & HR ROSTER
-      let rosterCache = [];
+      // 4B. ORG TREE & TENURE LIFECYCLE
+      document.querySelectorAll('#tm-status-filters .tsf-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          rosterStatusFilter = btn.getAttribute('data-tsf') || 'all';
+          document.querySelectorAll('#tm-status-filters .tsf-btn').forEach((b) => {
+            const act = b.getAttribute('data-tsf') === rosterStatusFilter;
+            b.className = act
+              ? 'tsf-btn px-2.5 py-1 rounded text-[11.5px] font-semibold bg-[#1B365D] text-white'
+              : 'tsf-btn px-2.5 py-1 rounded text-[11.5px] font-medium text-[#525866]';
+          });
+          renderRoster();
+        });
+      });
+
       async function loadRoster() {
         document.getElementById('team-form').classList.toggle('hidden', !can('edit_team'));
-        const snap = await getDocs(collection(db, 'teamMembers'));
-        const byId = new Map(BASELINE_MEMBERS.map((m) => [m.id, { ...m }]));
-        snap.docs.forEach((d) => {
-          const v = d.data();
-          if (v.archived) byId.delete(d.id);
-          else byId.set(d.id, { id: d.id, ...v });
-        });
-        rosterCache = Array.from(byId.values());
+        if (!document.getElementById('tm-start').value) document.getElementById('tm-start').value = currentYm();
+        await loadUnifiedDirectoryData();
         renderRoster();
       }
 
       function renderRoster() {
         const q = (document.getElementById('tm-search').value || '').trim().toLowerCase();
-        const filtered = rosterCache.filter((m) => !q || `${m.name} ${m.role} ${m.team} ${m.school || ''}`.toLowerCase().includes(q));
-        document.getElementById('tm-count').textContent = `${filtered.length} members`;
+        const filtered = rosterCache.filter((m) => {
+          const isAlum = Boolean(m.endDate) || m.status === 'alumni';
+          const linked = findLinkedAccountForMember(m);
+          if (rosterStatusFilter === 'active' && isAlum) return false;
+          if (rosterStatusFilter === 'alumni' && !isAlum) return false;
+          if (rosterStatusFilter === 'linked' && !linked) return false;
+          if (q && !`${m.name} ${m.role} ${m.team} ${m.school || ''}`.toLowerCase().includes(q)) return false;
+          return true;
+        });
+
+        document.getElementById('tm-count').textContent = `${filtered.length} of ${rosterCache.length} org members`;
         const list = document.getElementById('tm-list');
         list.replaceChildren();
+        if (!filtered.length) {
+          list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No org tree members match this filter.</div>';
+          return;
+        }
+
+        const byId = new Map(rosterCache.map((x) => [x.id, x]));
         filtered.forEach((m) => {
+          const isAlum = Boolean(m.endDate) || m.status === 'alumni';
+          const linked = findLinkedAccountForMember(m);
+          const succ = m.replacedBy ? byId.get(m.replacedBy) : null;
+          const pred = m.replaces ? byId.get(m.replaces) : null;
+          const handoverNote = succ ? ` · Succeeded by ${succ.name}` : pred ? ` · Replaced ${pred.name}` : '';
+
           const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13.5px]';
-          row.innerHTML = `<div><strong class="text-[#161A22]">${esc(m.name)}</strong> <span class="text-[#525866]">— ${esc(m.role)}</span><div class="text-[12px] text-[#767D8C]">${esc(m.team)}${m.school ? ' · ' + esc(m.school) : ''} · ${esc(m.cohortDate || '')}</div></div>${can('edit_team') ? '<div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Remove</button></div>' : ''}`;
+          row.className = 'p-4 flex flex-wrap items-center justify-between gap-3 text-[13.5px]';
+          row.innerHTML = `
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <strong class="text-[#161A22]">${esc(m.name)}</strong>
+                <span class="text-[#525866]">— ${esc(m.role)}</span>
+                <span class="font-code text-[10.5px] px-2 py-0.5 rounded ${isAlum ? 'bg-[#EAE8E1] text-[#525866]' : 'bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]'}">${isAlum ? 'Alumni' : 'Active'}</span>
+                ${linked ? `<span class="font-code text-[10.5px] px-2 py-0.5 rounded bg-[#E4EAF2] text-[#1B365D]">Dashboard Account</span>` : ''}
+              </div>
+              <div class="text-[12px] text-[#767D8C] mt-0.5">
+                ${esc(m.team)}${m.school ? ' · ' + esc(m.school) : ''} · <span class="font-code">${esc(fmtTenureLabel(m))}</span>${esc(handoverNote)}
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 shrink-0">
+              ${(linked && can('manage_access')) ? '<button type="button" class="acc-btn text-[12px] font-medium text-[#0B5F58] hover:underline">Manage Access →</button>' : ''}
+              ${can('edit_team') ? '<button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button>' : ''}
+              ${(can('edit_team') && !isAlum) ? '<button type="button" class="end-btn text-[12px] font-medium text-[#1B365D] hover:underline">End Tenure / Replace</button>' : ''}
+              ${can('edit_team') ? '<button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Remove</button>' : ''}
+            </div>
+          `;
+
+          row.querySelector('.acc-btn')?.addEventListener('click', () => {
+            if (linked) openPersonModal(linked);
+          });
           row.querySelector('.edit-btn')?.addEventListener('click', () => {
             document.getElementById('tm-id').value = m.id;
             document.getElementById('tm-name').value = m.name || '';
             document.getElementById('tm-role').value = m.role || '';
-            document.getElementById('tm-team').value = m.team || 'Founders';
+            document.getElementById('tm-team').value = CANONICAL_TEAMS.includes(m.team) ? m.team : 'Founders';
+            document.getElementById('tm-tier').value = String(typeof m.tier === 'number' ? m.tier : 4);
+            document.getElementById('tm-start').value = m.startDate || m.cohortDate || '2026-11';
+            document.getElementById('tm-end').value = m.endDate || '';
+            document.getElementById('tm-parent').value = m.parent || '';
             document.getElementById('tm-school').value = m.school || '';
-            document.getElementById('tm-cohort').value = m.cohortDate || '2026-11';
             document.getElementById('tm-bio').value = m.bio || '';
+            document.getElementById('team-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           });
+          row.querySelector('.end-btn')?.addEventListener('click', () => openTenureModal(m));
           row.querySelector('.del-btn')?.addEventListener('click', async () => {
-            await setDoc(doc(db, 'teamMembers', m.id), { archived: true, name: m.name || '' }, { merge: true });
+            await setDoc(doc(db, 'teamMembers', m.id), { archived: true, name: m.name || '', role: m.role || 'Member', team: m.team || 'Founders' }, { merge: true });
             await writeAudit('team', 'archive', m.id, `Removed ${m.name}`);
-            showToast(`Removed ${m.name}`);
+            showToast(`Removed ${m.name} from public roster`);
             loadRoster();
           });
           list.appendChild(row);
         });
       }
+
+      function openTenureModal(member) {
+        const modal = document.getElementById('tenure-modal');
+        document.getElementById('tn-old-id').value = member.id;
+        document.getElementById('tn-subtitle').textContent = `${member.name} · ${member.role} (${member.team}) — started ${fmtMonth(member.startDate || member.cohortDate)}`;
+        const ym = currentYm();
+        document.getElementById('tn-end-date').value = ym;
+        document.getElementById('tn-appoint-toggle').checked = true;
+        document.getElementById('tn-replacement-fields').classList.remove('hidden');
+
+        const pick = document.getElementById('tn-successor-pick');
+        pick.replaceChildren();
+        const man = document.createElement('option');
+        man.value = '';
+        man.textContent = 'Type successor manually...';
+        pick.appendChild(man);
+        peopleDirectoryCache.forEach((p) => {
+          const opt = document.createElement('option');
+          opt.value = p.email || p.key;
+          opt.textContent = `${p.name}${p.email ? ' (' + p.email + ')' : ''}`;
+          pick.appendChild(opt);
+        });
+
+        document.getElementById('tn-new-name').value = '';
+        document.getElementById('tn-new-role').value = member.role || '';
+        document.getElementById('tn-new-school').value = '';
+        document.getElementById('tn-new-start').value = ym;
+        document.getElementById('tn-reassign-reports').checked = true;
+        modal.classList.remove('hidden');
+        document.getElementById('tn-end-date').focus();
+      }
+
+      document.getElementById('tn-appoint-toggle').addEventListener('change', (e) => {
+        document.getElementById('tn-replacement-fields').classList.toggle('hidden', !e.target.checked);
+      });
+
+      document.getElementById('tn-successor-pick').addEventListener('change', (e) => {
+        const val = e.target.value;
+        const p = peopleDirectoryCache.find((x) => (x.email || x.key) === val);
+        if (p) {
+          document.getElementById('tn-new-name').value = p.name || '';
+          document.getElementById('tn-new-school').value = p.school || '';
+        }
+      });
+
+      function closeTenureModal() {
+        document.getElementById('tenure-modal').classList.add('hidden');
+      }
+      document.getElementById('tn-close').addEventListener('click', closeTenureModal);
+      document.getElementById('tn-cancel').addEventListener('click', closeTenureModal);
+      document.getElementById('tenure-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'tenure-modal') closeTenureModal();
+      });
+
+      document.getElementById('tenure-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const oldId = document.getElementById('tn-old-id').value.trim();
+        const oldMember = rosterCache.find((x) => x.id === oldId);
+        if (!oldMember) return;
+        const endDate = document.getElementById('tn-end-date').value || currentYm();
+        const appoint = document.getElementById('tn-appoint-toggle').checked;
+        const newName = document.getElementById('tn-new-name').value.trim();
+
+        let newId = '';
+        if (appoint && newName.length >= 2) {
+          newId = 'm_' + Date.now();
+          const pickKey = document.getElementById('tn-successor-pick').value;
+          const succAccount = peopleDirectoryCache.find((x) => (x.email || x.key) === pickKey);
+          const newStart = document.getElementById('tn-new-start').value || endDate;
+          const newRole = document.getElementById('tn-new-role').value.trim() || oldMember.role || 'Member';
+          const newSchool = document.getElementById('tn-new-school').value.trim() || 'TF Unions';
+
+          await setDoc(doc(db, 'teamMembers', newId), {
+            id: newId,
+            name: newName,
+            role: newRole,
+            team: oldMember.team || 'Founders',
+            tier: typeof oldMember.tier === 'number' ? oldMember.tier : 4,
+            parent: oldMember.parent || null,
+            school: newSchool,
+            cohortDate: newStart,
+            startDate: newStart,
+            endDate: '',
+            status: 'active',
+            replaces: oldId,
+            bio: succAccount?.bio || `${newRole} in ${oldMember.team || 'TF Unions'}.`,
+            archived: false,
+          }, { merge: true });
+
+          if (succAccount?.email && succAccount.hasStaff) {
+            await setDoc(doc(db, 'staffAccess', succAccount.email), {
+              publicMemberId: newId,
+              startDate: newStart,
+              endDate: '',
+              team: oldMember.team || '',
+            }, { merge: true }).catch(() => {});
+          }
+          if (succAccount?.uid && can('manage_access')) {
+            await updateDoc(doc(db, 'users', succAccount.uid), { publicMemberId: newId }).catch(() => {});
+          }
+
+          if (document.getElementById('tn-reassign-reports').checked) {
+            const directReports = rosterCache.filter((r) => r.parent === oldId && !r.endDate && r.status !== 'alumni');
+            await Promise.all(
+              directReports.map((r) =>
+                setDoc(doc(db, 'teamMembers', r.id), {
+                  id: r.id,
+                  name: r.name,
+                  role: r.role,
+                  team: r.team,
+                  parent: newId,
+                }, { merge: true })
+              )
+            );
+          }
+        }
+
+        await setDoc(doc(db, 'teamMembers', oldId), {
+          id: oldId,
+          name: oldMember.name,
+          role: oldMember.role,
+          team: oldMember.team,
+          startDate: oldMember.startDate || oldMember.cohortDate || '2026-11',
+          endDate,
+          status: 'alumni',
+          ...(newId ? { replacedBy: newId } : {}),
+          archived: false,
+        }, { merge: true });
+
+        await writeAudit('team', 'tenure_end', oldId, newId ? `${oldMember.name} ended ${endDate} -> replaced by ${newName}` : `${oldMember.name} ended tenure ${endDate}`);
+        closeTenureModal();
+        showToast(newId ? `Moved ${oldMember.name} to Alumni & appointed ${newName}` : `Ended ${oldMember.name}'s tenure (Alumni)`);
+        loadRoster();
+      });
 
       document.getElementById('tm-search').addEventListener('input', renderRoster);
       document.getElementById('tm-sync-roster').addEventListener('click', async () => {
@@ -1971,7 +2919,7 @@ const faviconSvg = encodeURIComponent(
           await setDoc(doc(db, 'teamMembers', m.id), m, { merge: true });
         }
         await writeAudit('team', 'sync', 'roster', `Synced ${BASELINE_MEMBERS.length} org members`);
-        showToast('Synced 71-member org roster to Firestore');
+        showToast('Synced baseline org roster to Firestore');
         loadRoster();
       });
 
@@ -1979,26 +2927,35 @@ const faviconSvg = encodeURIComponent(
         e.preventDefault();
         const existingId = document.getElementById('tm-id').value.trim();
         const id = existingId || 'm_' + Date.now();
+        const startDate = document.getElementById('tm-start').value.trim() || currentYm();
+        const endDate = document.getElementById('tm-end').value.trim();
         await setDoc(doc(db, 'teamMembers', id), {
           id,
           name: document.getElementById('tm-name').value.trim(),
           role: document.getElementById('tm-role').value.trim(),
           team: document.getElementById('tm-team').value,
+          tier: Number(document.getElementById('tm-tier').value || 4),
+          startDate,
+          cohortDate: startDate,
+          endDate,
+          status: endDate ? 'alumni' : 'active',
+          parent: document.getElementById('tm-parent').value || null,
           school: document.getElementById('tm-school').value.trim(),
-          cohortDate: document.getElementById('tm-cohort').value.trim(),
           bio: document.getElementById('tm-bio').value.trim(),
           archived: false,
         }, { merge: true });
         await writeAudit('team', existingId ? 'update' : 'create', id, document.getElementById('tm-name').value.trim());
         e.target.reset();
         document.getElementById('tm-id').value = '';
-        showToast('Saved team member');
+        document.getElementById('tm-start').value = currentYm();
+        showToast('Saved org member & tenure');
         loadRoster();
       });
 
       document.getElementById('tm-cancel').addEventListener('click', () => {
         document.getElementById('team-form').reset();
         document.getElementById('tm-id').value = '';
+        document.getElementById('tm-start').value = currentYm();
       });
 
       // 4C. TIME LOGS
@@ -2025,8 +2982,18 @@ const faviconSvg = encodeURIComponent(
       }
 
       // 4D. TOP ACHIEVERS
+      document.getElementById('rec-picker').addEventListener('change', (e) => {
+        const email = e.target.value;
+        const p = peopleDirectoryCache.find((x) => x.email === email);
+        if (p) {
+          document.getElementById('rec-email').value = p.email;
+          document.getElementById('rec-name').value = p.name;
+        }
+      });
+
       async function loadAchievers() {
         document.getElementById('rec-form').classList.toggle('hidden', !can('manage_tasks') && !can('edit_team'));
+        await loadUnifiedDirectoryData();
         const [taskSnap, logSnap, recSnap] = await Promise.all([
           getDocs(collection(db, 'tasks')),
           getDocs(collection(db, 'timeLogs')),
@@ -2107,57 +3074,6 @@ const faviconSvg = encodeURIComponent(
       });
 
       // ---- 5. ACCESS, PEOPLE DIRECTORY & DYNAMIC ROLE RULES ----
-      function fmtDate(val) {
-        if (!val) return '—';
-        try {
-          if (typeof val === 'object' && typeof val.toDate === 'function') {
-            return val.toDate().toISOString().slice(0, 16).replace('T', ' ');
-          }
-          if (typeof val === 'object' && typeof val.seconds === 'number') {
-            return new Date(val.seconds * 1000).toISOString().slice(0, 16).replace('T', ' ');
-          }
-          const s = String(val).trim();
-          if (!s) return '—';
-          return s.length >= 16 ? s.slice(0, 16).replace('T', ' ') : s;
-        } catch {
-          return '—';
-        }
-      }
-
-      function pickStr(...vals) {
-        for (const v of vals) {
-          if (v !== undefined && v !== null && String(v).trim()) return String(v).trim();
-        }
-        return '';
-      }
-
-      function slugifyRole(str) {
-        return String(str || '')
-          .toLowerCase()
-          .trim()
-          .replace(/[^a-z0-9]+/g, '_')
-          .replace(/^_+|_+$/g, '')
-          .slice(0, 40);
-      }
-
-      const TEAM_OPTIONS = new Set([
-        '', 'Founders', 'Marketing Team', 'HR Team', 'PR Team',
-        'Social Media Team', 'IT Team', 'Research & Guides',
-        'Chapters & Connect', 'Finance & Operations',
-      ]);
-
-      let roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
-      let staffAccessCache = [];
-      let peopleDirectoryCache = [];
-      let peopleFilter = 'all';
-
-      function getRoleRule(roleId) {
-        return roleDefinitionsCache.find((r) => r.id === roleId) || null;
-      }
-
-      function permLabel(key) {
-        return ALL_PERMS.find((p) => p.key === key)?.label || key;
-      }
 
       document.querySelectorAll('#access-subtabs .ac-tab').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -2382,11 +3298,61 @@ const faviconSvg = encodeURIComponent(
         document.getElementById('pa-active').checked = p.hasStaff ? Boolean(p.active) : true;
         document.getElementById('pa-demote-btn').classList.toggle('hidden', !p.hasStaff);
 
+        // Populate Org Tree & Tenure synchronization fields
+        const treeLinkSel = document.getElementById('pa-tree-link');
+        treeLinkSel.replaceChildren();
+        const newTreeOpt = document.createElement('option');
+        newTreeOpt.value = '';
+        newTreeOpt.textContent = 'Create new org tree card';
+        treeLinkSel.appendChild(newTreeOpt);
+        rosterCache.forEach((m) => {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = `${m.name} — ${m.role} (${m.team})${m.endDate || m.status === 'alumni' ? ' [Alumni]' : ''}`;
+          treeLinkSel.appendChild(opt);
+        });
+
+        const paParentSel = document.getElementById('pa-parent');
+        paParentSel.replaceChildren();
+        const noParentOpt = document.createElement('option');
+        noParentOpt.value = '';
+        noParentOpt.textContent = 'None / Founder-led';
+        paParentSel.appendChild(noParentOpt);
+        rosterCache.filter((m) => !m.endDate && m.status !== 'alumni').forEach((m) => {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = `${m.name} — ${m.role}`;
+          paParentSel.appendChild(opt);
+        });
+
+        const matchedOrg = (p.publicMemberId && rosterCache.find((x) => x.id === p.publicMemberId))
+          || (!isManual && p.name ? rosterCache.find((x) => x.name.trim().toLowerCase() === p.name.trim().toLowerCase()) : null);
+        treeLinkSel.value = matchedOrg ? matchedOrg.id : '';
+        const syncTreeCb = document.getElementById('pa-sync-tree');
+        syncTreeCb.checked = Boolean(matchedOrg || p.hasStaff);
+        document.getElementById('pa-start-date').value = matchedOrg?.startDate || matchedOrg?.cohortDate || p.startDate || currentYm();
+        document.getElementById('pa-end-date').value = matchedOrg?.endDate || p.endDate || '';
+        paParentSel.value = matchedOrg?.parent || '';
+        document.getElementById('pa-tree-fields').classList.toggle('hidden', !syncTreeCb.checked);
+
         updatePersonRulePreview();
         modal.classList.remove('hidden');
         if (isManual) emailInput.focus();
         else document.getElementById('pdm-close').focus();
       }
+
+      document.getElementById('pa-sync-tree').addEventListener('change', (e) => {
+        document.getElementById('pa-tree-fields').classList.toggle('hidden', !e.target.checked);
+      });
+
+      document.getElementById('pa-tree-link').addEventListener('change', (e) => {
+        const m = rosterCache.find((x) => x.id === e.target.value);
+        if (m) {
+          document.getElementById('pa-start-date').value = m.startDate || m.cohortDate || currentYm();
+          document.getElementById('pa-end-date').value = m.endDate || '';
+          document.getElementById('pa-parent').value = m.parent || '';
+        }
+      });
 
       function closePersonModal() {
         document.getElementById('person-detail-modal').classList.add('hidden');
@@ -2397,16 +3363,37 @@ const faviconSvg = encodeURIComponent(
         if (e.target.id === 'person-detail-modal') closePersonModal();
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !document.getElementById('person-detail-modal').classList.contains('hidden')) {
-          closePersonModal();
+        if (e.key === 'Escape') {
+          if (!document.getElementById('person-detail-modal').classList.contains('hidden')) closePersonModal();
+          if (!document.getElementById('tenure-modal').classList.contains('hidden')) closeTenureModal();
         }
       });
 
       document.getElementById('btn-manual-assign').addEventListener('click', () => openPersonModal(null));
 
+      function rankToTier(rank) {
+        if (rank === 'Owner') return 0;
+        if (rank === 'Head' || rank === 'Lead' || rank === 'Admin') return 1;
+        if (rank === 'Vice Head') return 2;
+        return 4;
+      }
+
+      function formatPublicRoleTitle(team, rank, roleName, existingMember) {
+        if (existingMember && existingMember.role && rank === 'Member' && !team) return existingMember.role;
+        const shortTeam = String(team || '').replace(/\s*Team$/i, '').trim();
+        if (rank === 'Owner') return 'Co-Founder & Owner';
+        if (rank === 'Head' || rank === 'Vice Head' || rank === 'Lead') {
+          return shortTeam ? `${shortTeam} ${rank}` : rank;
+        }
+        if (rank === 'Admin') return 'Operations Admin';
+        if (roleName && roleName !== 'Team Member') return roleName;
+        return shortTeam ? `${shortTeam} Member` : 'Team Member';
+      }
+
       document.getElementById('pa-demote-btn').addEventListener('click', async () => {
         const email = document.getElementById('pa-email').value.trim().toLowerCase();
         const uid = document.getElementById('pa-uid').value.trim();
+        const linkedId = document.getElementById('pa-tree-link').value.trim();
         if (!email) return;
         await deleteDoc(doc(db, 'staffAccess', email));
         if (uid) {
@@ -2417,6 +3404,20 @@ const faviconSvg = encodeURIComponent(
             roleName: 'Normal User',
             updatedAt: serverTimestamp(),
           }).catch(() => {});
+        }
+        if (linkedId && can('edit_team')) {
+          const existing = rosterCache.find((x) => x.id === linkedId);
+          if (existing) {
+            await setDoc(doc(db, 'teamMembers', linkedId), {
+              id: linkedId,
+              name: existing.name,
+              role: existing.role,
+              team: existing.team,
+              endDate: currentYm(),
+              status: 'alumni',
+              archived: false,
+            }, { merge: true }).catch(() => {});
+          }
         }
         await writeAudit('access', 'demote', email, `Moved ${email} to Normal User`);
         closePersonModal();
@@ -2436,6 +3437,7 @@ const faviconSvg = encodeURIComponent(
         const team = rawTeam === '__custom__' ? document.getElementById('pa-team-custom').value.trim() : rawTeam;
         const rank = document.getElementById('pa-rank').value;
         const roleId = document.getElementById('pa-role').value;
+        const chosenLinkId = document.getElementById('pa-tree-link').value.trim();
 
         if (roleId === 'normal_user') {
           if (hadStaff) await deleteDoc(doc(db, 'staffAccess', email)).catch(() => {});
@@ -2447,6 +3449,20 @@ const faviconSvg = encodeURIComponent(
               roleName: 'Normal User',
               updatedAt: serverTimestamp(),
             }).catch(() => {});
+          }
+          if (chosenLinkId && can('edit_team')) {
+            const existing = rosterCache.find((x) => x.id === chosenLinkId);
+            if (existing) {
+              await setDoc(doc(db, 'teamMembers', chosenLinkId), {
+                id: chosenLinkId,
+                name: existing.name,
+                role: existing.role,
+                team: existing.team,
+                endDate: currentYm(),
+                status: 'alumni',
+                archived: false,
+              }, { merge: true }).catch(() => {});
+            }
           }
           await writeAudit('access', 'demote', email, `Set ${email} as Normal User`);
           closePersonModal();
@@ -2465,6 +3481,35 @@ const faviconSvg = encodeURIComponent(
           permissions = ALL_PERMS.map((p) => p.key);
         }
 
+        const syncToTree = document.getElementById('pa-sync-tree').checked && can('edit_team');
+        const startDate = document.getElementById('pa-start-date').value.trim() || currentYm();
+        const endDate = document.getElementById('pa-end-date').value.trim();
+        let publicMemberId = chosenLinkId;
+
+        if (syncToTree && displayName.length >= 2) {
+          publicMemberId = chosenLinkId || ('m_' + Date.now());
+          const existingOrg = chosenLinkId ? rosterCache.find((x) => x.id === chosenLinkId) : null;
+          const personObj = peopleDirectoryCache.find((x) => x.email === email) || {};
+          const safeTeam = team || existingOrg?.team || rule?.defaultTeam || 'Founders';
+          const safeRoleTitle = formatPublicRoleTitle(safeTeam, rank, roleName, existingOrg);
+          // Write ONLY PII-free fields to /teamMembers (never email, phone, or age)
+          await setDoc(doc(db, 'teamMembers', publicMemberId), {
+            id: publicMemberId,
+            name: displayName,
+            role: safeRoleTitle,
+            team: safeTeam,
+            tier: existingOrg && existingOrg.tier !== undefined && rank === 'Member' ? existingOrg.tier : rankToTier(rank),
+            school: existingOrg?.school || personObj.school || 'TF Unions',
+            startDate,
+            cohortDate: startDate,
+            endDate,
+            status: endDate ? 'alumni' : 'active',
+            parent: document.getElementById('pa-parent').value || existingOrg?.parent || null,
+            bio: existingOrg?.bio || personObj.bio || `${safeRoleTitle} in ${safeTeam}.`,
+            archived: false,
+          }, { merge: true });
+        }
+
         await setDoc(doc(db, 'staffAccess', email), {
           email,
           displayName,
@@ -2476,6 +3521,9 @@ const faviconSvg = encodeURIComponent(
           customPermissions: isCustom,
           permissions,
           active: document.getElementById('pa-active').checked,
+          ...(publicMemberId ? { publicMemberId } : {}),
+          startDate,
+          endDate,
           updatedBy: (currentUser?.email || '').toLowerCase(),
           updatedAt: new Date().toISOString(),
         }, { merge: true });
@@ -2486,14 +3534,17 @@ const faviconSvg = encodeURIComponent(
             rank,
             roleId,
             roleName,
+            ...(publicMemberId ? { publicMemberId } : {}),
             updatedAt: serverTimestamp(),
           }).catch(() => {});
         }
 
-        await writeAudit('access', 'assign', email, `${displayName} -> ${team || 'No team'} / ${rank} (${roleName})`);
+        await writeAudit('access', 'assign', email, `${displayName} -> ${team || 'No team'} / ${rank} (${roleName})${syncToTree ? ' + synced org tree' : ''}`);
         closePersonModal();
-        showToast(`Assigned ${displayName} as ${team ? team + ' ' + rank : roleName}`);
-        loadAccessAndAudit();
+        showToast(`Assigned ${displayName}${syncToTree ? ' & synced public org tree' : ''}`);
+        if (activeWorkspace === 'teamwork' && activeTeamTab === 'roster') loadRoster();
+        else if (activeWorkspace === 'content' && activeContentTab === 'submissions') loadSubmissions();
+        else loadAccessAndAudit();
       });
 
       function renderPeopleDirectory() {
@@ -2687,107 +3738,9 @@ const faviconSvg = encodeURIComponent(
         loadAccessAndAudit();
       });
 
-      function buildPeopleDirectory(userDocs, staffDocs, volDocs) {
-        const byEmail = new Map();
-        const ensureBucket = (key, email) => {
-          if (!byEmail.has(key)) {
-            byEmail.set(key, { key, email: email || '', user: null, staff: null, vol: null });
-          }
-          const b = byEmail.get(key);
-          if (email && !b.email) b.email = email;
-          return b;
-        };
-
-        userDocs.forEach((d) => {
-          const data = { id: d.id, uid: d.data().uid || d.id, ...d.data() };
-          const email = String(data.email || '').trim().toLowerCase();
-          const b = ensureBucket(email || `uid:${d.id}`, email);
-          b.user = data;
-        });
-
-        staffDocs.forEach((d) => {
-          const email = String(d.id || d.data().email || '').trim().toLowerCase();
-          const b = ensureBucket(email, email);
-          b.staff = { email, ...d.data() };
-        });
-
-        volDocs.forEach((d) => {
-          const data = { id: d.id, ...d.data() };
-          const email = String(data.email || '').trim().toLowerCase();
-          const b = ensureBucket(email || `vol:${d.id}`, email);
-          if (!b.vol) b.vol = data;
-        });
-
-        const entries = Array.from(byEmail.values()).map((b) => {
-          const u = b.user || {};
-          const s = b.staff || {};
-          const v = b.vol || {};
-          const fullNameFromParts = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
-          const emailPrefix = b.email ? b.email.split('@')[0] : '';
-          const name = pickStr(s.displayName, u.fullName, fullNameFromParts, v.fullName, v.name, emailPrefix, 'Member');
-          const roleId = b.staff ? (s.role || 'team_member') : 'normal_user';
-          const matchedRule = getRoleRule(roleId);
-          return {
-            key: b.key,
-            email: b.email,
-            name,
-            phone: pickStr(s.phone, u.phone, u.phoneNumber, v.phone, v.phoneNumber),
-            uid: pickStr(u.uid, u.id, v.uid),
-            school: pickStr(u.stemSchool, u.school, v.stemSchool, v.school),
-            grade: pickStr(u.grade, u.academicLevel, v.grade, v.academicLevel),
-            gov: pickStr(u.governorate, u.gov, v.governorate, v.gov),
-            track: pickStr(v.track, v.team, v.division, u.track),
-            bio: pickStr(v.motivation, v.notes, v.bio, u.bio),
-            createdAt: fmtDate(u.createdAt || u.registrationDate || v.createdAt),
-            lastLoginAt: fmtDate(u.lastLoginAt || u.updatedAt),
-            team: pickStr(s.team, u.team),
-            rank: pickStr(s.rank, u.rank, b.staff ? 'Member' : 'Normal User'),
-            roleId,
-            roleName: b.staff ? pickStr(s.roleName, matchedRule?.name, roleId) : 'Normal User',
-            permissions: b.staff && Array.isArray(s.permissions) ? s.permissions : [],
-            customPermissions: Boolean(s.customPermissions),
-            active: b.staff ? Boolean(s.active) : false,
-            hasStaff: Boolean(b.staff),
-            hasUser: Boolean(b.user),
-            hasApplicant: Boolean(b.vol),
-          };
-        });
-
-        entries.sort((a, b) => {
-          if (a.hasStaff !== b.hasStaff) return a.hasStaff ? -1 : 1;
-          return a.name.localeCompare(b.name);
-        });
-        return entries;
-      }
-
       async function loadAccessAndAudit() {
-        const [roleSnap, acSnap, usrSnap, volSnap, auSnap] = await Promise.all([
-          getDocs(collection(db, 'roleDefinitions')).catch(() => ({ docs: [] })),
-          getDocs(collection(db, 'staffAccess')).catch(() => ({ docs: [] })),
-          getDocs(collection(db, 'users')).catch(() => ({ docs: [] })),
-          getDocs(collection(db, 'volunteers')).catch(() => ({ docs: [] })),
-          getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60))).catch(() => getDocs(collection(db, 'auditLogs')).catch(() => ({ docs: [] }))),
-        ]);
-
-        if (roleSnap.docs.length === 0 && can('manage_access')) {
-          await Promise.all(
-            DEFAULT_ROLE_RULES.map((r) =>
-              setDoc(doc(db, 'roleDefinitions', r.id), {
-                ...r,
-                updatedBy: (currentUser?.email || '').toLowerCase(),
-                updatedAt: new Date().toISOString(),
-              }, { merge: true }).catch(() => {})
-            )
-          );
-          roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
-        } else {
-          roleDefinitionsCache = roleSnap.docs
-            .map((d) => ({ id: d.id, ...d.data() }))
-            .sort((a, b) => String(a.name || a.id).localeCompare(String(b.name || b.id)));
-        }
-
-        staffAccessCache = acSnap.docs.map((d) => ({ email: d.id, ...d.data() }));
-        peopleDirectoryCache = buildPeopleDirectory(usrSnap.docs, acSnap.docs, volSnap.docs);
+        await loadUnifiedDirectoryData();
+        const auSnap = await getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60))).catch(() => getDocs(collection(db, 'auditLogs')).catch(() => ({ docs: [] })));
 
         renderPeopleDirectory();
         renderRoleRulesList();

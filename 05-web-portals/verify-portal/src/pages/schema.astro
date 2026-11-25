@@ -56,9 +56,9 @@ const faviconSvg = encodeURIComponent(
       <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
         <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
           <div class="font-code text-[12px] font-semibold text-[#0B5F58]">01 · Record Registry</div>
-          <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">PostgreSQL source of truth</h2>
+          <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">Firestore live registry</h2>
           <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
-            Issued credentials store recipient full name, role title, verified service hours, cohort year, and issue date in an append-only ledger table.
+            Issued credentials store recipient full name, role title, verified service hours, issue date, and active/revoked status directly in TF Unions Firestore.
           </p>
         </article>
 
@@ -74,14 +74,14 @@ const faviconSvg = encodeURIComponent(
           <div class="font-code text-[12px] font-semibold text-[#0B5F58]">03 · JSON API Endpoint</div>
           <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">Real-time lookup</h2>
           <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
-            Admissions officers and employers can verify records programmatically via our public CORS-enabled REST endpoint without requiring an account.
+            Admissions officers and employers can verify records programmatically via the public Firestore REST endpoint without requiring an account.
           </p>
         </article>
       </div>
 
       <section class="mt-6 bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
         <div class="font-code text-[12px] text-[#767D8C]">Public GET endpoint</div>
-        <pre class="font-code mt-2 p-3.5 rounded-lg bg-[#EAE8E1]/60 border border-[#DFDDD6] text-[12.5px] text-[#161A22] overflow-x-auto">GET https://n8n.tfunions.com/tf-api/api/verify-certificate?code=TFU-2026-8F92A1</pre>
+        <pre class="font-code mt-2 p-3.5 rounded-lg bg-[#EAE8E1]/60 border border-[#DFDDD6] text-[12.5px] text-[#161A22] overflow-x-auto">GET https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/certificates/&#123;SERIAL_CODE&#125;</pre>
       </section>
     </main>
 

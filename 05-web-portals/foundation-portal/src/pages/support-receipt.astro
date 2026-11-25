@@ -44,6 +44,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             type="number"
             required
             min="10"
+            max="10000000"
             placeholder="e.g. 250"
             class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[14px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
           />
@@ -80,24 +81,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alertBox.classList.remove('hidden');
       try {
         const nameVal = document.getElementById('don-name').value.trim();
-        const res = await fetch('https://n8n.tfunions.com/tf-api/api/submit-donation', {
+        const channelVal = document.getElementById('don-channel').value;
+        const amountVal = Number(document.getElementById('don-amount').value);
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/donations', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            donorName: nameVal || 'Anonymous Supporter',
-            isAnonymous: !nameVal,
-            paymentChannel: document.getElementById('don-channel').value,
-            amountEgp: Number(document.getElementById('don-amount').value),
-            proofUrl: document.getElementById('don-proof').value.trim(),
+            fields: {
+              donorName: { stringValue: nameVal || 'Anonymous Supporter' },
+              isAnonymous: { booleanValue: !nameVal },
+              paymentChannel: { stringValue: channelVal },
+              amountEgp: { doubleValue: amountVal },
+              proofUrl: { stringValue: document.getElementById('don-proof').value.trim() },
+              status: { stringValue: 'pending' },
+              createdAt: { stringValue: new Date().toISOString() },
+            },
           }),
         });
         if (!res.ok) throw new Error('Receipt log failed');
-        window.tfTrack?.('donation_receipt', { channel: document.getElementById('don-channel').value });
-        alertBox.textContent = 'Thank you. Your receipt has been logged for verification.';
+        window.tfTrack?.('donation_receipt', { channel: channelVal });
+        alertBox.textContent = 'Thank you. Your receipt is queued for treasury review and posting to the Open Ledger.';
         alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();
       } catch {
-        alertBox.textContent = 'Could not submit receipt.';
+        alertBox.textContent = 'Could not submit receipt. Please verify your amount and try again.';
         alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] text-[13.5px] font-medium';
       }
     });
