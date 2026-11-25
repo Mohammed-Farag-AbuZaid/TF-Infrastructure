@@ -1,0 +1,26 @@
+name: Firestore Rules CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '02-database-schemas/firestore/**'
+      - '.github/workflows/rules.yml'
+  pull_request:
+    paths:
+      - '02-database-schemas/firestore/**'
+      - '.github/workflows/rules.yml'
+
+jobs:
+  rules:
+    name: Firestore Rules Structural Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Firestore rules invariant tests
+        run: node --test 02-database-schemas/firestore/test/rules.test.mjs

@@ -55,3 +55,6 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npm run build
+
+      - name: Run smoke & a11y checks
+        run: node scripts/smoke-check.mjs "${{ matrix.dir }}"
