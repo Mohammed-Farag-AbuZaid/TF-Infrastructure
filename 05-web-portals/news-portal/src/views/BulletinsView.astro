@@ -1,0 +1,27 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import OppRow from '../components/OppRow.astro';
+import { opportunities } from '../lib/data';
+import { t, href, type Lang } from '../lib/i18n';
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const chip = 'h-9 px-3.5 inline-flex items-center rounded-tf-pill border border-transparent text-[13px] font-medium text-tf-muted hover:text-tf-ink transition aria-pressed:bg-tf-surface aria-pressed:border-tf-border aria-pressed:text-tf-ink aria-pressed:font-semibold';
+---
+<NewsLayout title={`${t(lang, 'bull.title')} — TF News`} description={t(lang, 'bull.subtitle')} lang={lang} altPath="/bulletins" active="deadlines" backHref={href(lang, '/')} backLabel={t(lang, 'nav.home')}>
+  <PageHead title={t(lang, 'bull.title')} subtitle={t(lang, 'bull.subtitle')} kicker="BULLETINS" />
+  <div data-bulletins>
+    <div class="flex flex-wrap gap-2 mb-5" data-ctl="tab" role="group" aria-label="Filter">
+      <button type="button" data-value="all" aria-pressed="true" class={chip}>{t(lang, 'bull.all')}</button>
+      <button type="button" data-value="closing" aria-pressed="false" class={chip}>{t(lang, 'bull.closing')}</button>
+      <button type="button" data-value="must" aria-pressed="false" class={chip}>{t(lang, 'bull.must')}</button>
+    </div>
+    <div class="bg-tf-surface border border-tf-border rounded-tf-card">
+      <ul data-list class="px-5">
+        {opportunities.map((o) => <OppRow o={o} lang={lang} showSection />)}
+      </ul>
+      <p data-empty hidden class="p-10 text-center text-tf-muted">{t(lang, 'section.empty')}</p>
+    </div>
+  </div>
+</NewsLayout>

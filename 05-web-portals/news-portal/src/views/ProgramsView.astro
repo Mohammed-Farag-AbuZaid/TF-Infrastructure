@@ -1,0 +1,78 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { programs, REGION_ORDER, LEVELS, FIELDS } from '../lib/data';
+import { t, href, type Lang } from '../lib/i18n';
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const set = (arr: string[]) => (arr.length ? `|${arr.join('|')}|` : '|*|');
+const field = 'h-10 px-3 rounded-tf-input bg-tf-surface border border-tf-border text-[14px] focus:border-tf-brand focus:outline-none';
+const badge = (c: string) => (c === 'full' ? t(lang, 'prog.full') : c === 'partial' ? t(lang, 'prog.partial') : '');
+---
+<NewsLayout title={`${t(lang, 'prog.title')} — TF News`} description={t(lang, 'prog.subtitle')} lang={lang} altPath="/study/programs" active="browse" backHref={href(lang, '/study')} backLabel={t(lang, 'home.card.study')}>
+  <PageHead title={t(lang, 'prog.title')} subtitle={t(lang, 'prog.subtitle')} kicker="PROGRAMS" />
+
+  <div data-dir data-page-size="60">
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="sr-only" for="p-q">{t(lang, 'prog.search')}</label>
+      <input id="p-q" data-f="q" type="search" placeholder={t(lang, 'prog.search')} class={`${field} flex-1 min-w-[220px]`} />
+      <label class="sr-only" for="p-region">{t(lang, 'uni.region')}</label>
+      <select id="p-region" data-f="regions" class={field}>
+        <option value="">{t(lang, 'uni.region')}</option>
+        {REGION_ORDER.map((r) => <option value={r}>{r}</option>)}
+      </select>
+      <label class="sr-only" for="p-level">{t(lang, 'prog.level')}</label>
+      <select id="p-level" data-f="levels" class={field}>
+        <option value="">{t(lang, 'prog.level')}</option>
+        {LEVELS.map((l) => <option value={l}>{l}</option>)}
+      </select>
+      <label class="sr-only" for="p-field">{t(lang, 'prog.field')}</label>
+      <select id="p-field" data-f="fields" class={field}>
+        <option value="">{t(lang, 'prog.field')}</option>
+        {Object.keys(FIELDS).map((f) => <option value={f}>{f}</option>)}
+      </select>
+      <label class="sr-only" for="p-cov">{t(lang, 'prog.coverage')}</label>
+      <select id="p-cov" data-f="coverage" data-mode="eq" class={field}>
+        <option value="">{t(lang, 'prog.coverage')}: {t(lang, 'prog.any')}</option>
+        <option value="full">{t(lang, 'prog.full')}</option>
+        <option value="partial">{t(lang, 'prog.partial')}</option>
+      </select>
+    </div>
+
+    <div class="mt-6 bg-tf-surface border border-tf-border rounded-tf-card">
+      <div class="px-5 py-3 bg-tf-sunken border-b border-tf-border rounded-t-tf-card text-[12.5px] text-tf-muted font-mono">
+        <span data-count>{programs.length}</span> / {programs.length}
+      </div>
+      <ul class="px-5">
+        {programs.map((p) => (
+          <li
+            data-row
+            hidden
+            data-text={`${p.name} ${p.entries.map((e) => e.way.title).join(' ')} ${p.entries.map((e) => e.uni.name).join(' ')} ${p.countries.join(' ')}`.toLowerCase()}
+            data-regions={set(p.regions)}
+            data-levels={set(p.levels)}
+            data-fields={set(p.fields)}
+            data-coverage={p.coverage}
+            class="border-b border-tf-border last:border-b-0"
+          >
+            <a href={`/admissions/program/${p.key}`} class="flex items-center justify-between gap-4 py-4 group">
+              <div class="min-w-0">
+                <div class="text-[12.5px] text-tf-muted">{p.entries.length} {t(lang, 'prog.unis')} · {p.countries.slice(0, 3).join(', ')}{p.countries.length > 3 ? '…' : ''}</div>
+                <h2 class="font-display text-[18px] font-semibold mt-0.5 group-hover:text-tf-brand transition">{p.name}</h2>
+              </div>
+              {badge(p.coverage) && <span class="tf-serial-chip shrink-0">{badge(p.coverage)}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p data-empty hidden class="p-10 text-center text-tf-muted">
+        {t(lang, 'section.empty')}
+        <button type="button" data-reset class="ms-2 text-[13px] font-medium text-tf-brand hover:underline">{t(lang, 'section.reset')}</button>
+      </p>
+      <div class="p-4 text-center border-t border-tf-border">
+        <button type="button" data-more class="h-10 px-5 rounded-tf-card bg-tf-canvas border border-tf-border hover:border-tf-brand text-[13.5px] font-medium transition">{t(lang, 'uni.more')}</button>
+      </div>
+    </div>
+  </div>
+</NewsLayout>

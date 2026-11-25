@@ -1,0 +1,20 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+---
+<NewsLayout title="Page not found — TF News" description="The page you requested could not be found." lang="en" noindex backHref="/" backLabel="Home">
+  <section class="max-w-[600px] bg-tf-surface border border-tf-border rounded-tf-card p-8">
+    <span class="tf-serial-chip">404 · Not found</span>
+    <h1 class="font-display text-[28px] font-bold mt-4 text-tf-ink">We couldn't find that page.</h1>
+    <p class="mt-2.5 text-[15px] leading-[1.6] text-tf-muted">
+      The link may have moved or the scholarship deadline entry is no longer active.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="/" class="h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13.5px] font-semibold transition">
+        Go to TF News home
+      </a>
+      <a href="/search" class="h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-canvas border border-tf-border hover:border-tf-brand text-[13.5px] font-medium transition">
+        Search all opportunities
+      </a>
+    </div>
+  </section>
+</NewsLayout>

@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Submit Chapter Photos" backLabel="Foundation" backHref="/">
+  <section class="mt-8 max-w-[680px] bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+    <div class="pb-4 border-b border-[#DFDDD6]">
+      <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[12.5px] font-medium text-[#0B5F58]">
+        Documentary Archive &amp; Baserow Review
+      </div>
+      <h1 class="font-display mt-2 text-[28px] font-bold text-[#161A22]">Submit chapter or event photos</h1>
+      <p class="text-[14px] text-[#525866] mt-1.5 leading-[1.6]">
+        Share unposed study circles, lab prototypes, or regional workshops. Approved photos are graded to Calm Alabaster &amp; Fjord Slate and published via Cloudflare R2.
+      </p>
+    </div>
+
+    <div id="photo-alert" class="hidden mt-4 px-4 py-3 rounded-lg border text-[13.5px] font-medium" role="status"></div>
+
+    <form id="photo-form" class="mt-5 space-y-4">
+      <div>
+        <label for="ph-title" class="block text-[13px] font-medium text-[#161A22] mb-1">Photo title</label>
+        <input
+          id="ph-title"
+          type="text"
+          required
+          minlength="3"
+          maxlength="140"
+          placeholder="e.g. Maadi Olympiad Physics Circle"
+          class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="ph-chapter" class="block text-[13px] font-medium text-[#161A22] mb-1">Chapter or event</label>
+          <input
+            id="ph-chapter"
+            type="text"
+            required
+            placeholder="e.g. STEM Maadi / Alexandria Hub"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+        <div>
+          <label for="ph-author" class="block text-[13px] font-medium text-[#161A22] mb-1">Photographer name</label>
+          <input
+            id="ph-author"
+            type="text"
+            required
+            placeholder="Full name for photo credit"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="ph-url" class="block text-[13px] font-medium text-[#161A22] mb-1">Image link (HTTPS)</label>
+        <input
+          id="ph-url"
+          type="url"
+          required
+          placeholder="https://..."
+          class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="ph-alt-en" class="block text-[13px] font-medium text-[#161A22] mb-1">Alt text (English)</label>
+          <input
+            id="ph-alt-en"
+            type="text"
+            required
+            minlength="6"
+            placeholder="Describe what is visibly in the photo"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+        <div>
+          <label for="ph-alt-ar" class="block text-[13px] font-medium text-[#161A22] mb-1">Alt text (Arabic, optional)</label>
+          <input
+            id="ph-alt-ar"
+            type="text"
+            dir="rtl"
+            placeholder="وصف مختصر للصورة باللغة العربية"
+            class="w-full h-10 px-3.5 rounded-lg bg-[#EAE8E1]/60 text-[15px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="ph-cap-en" class="block text-[13px] font-medium text-[#161A22] mb-1">Caption (English)</label>
+          <textarea
+            id="ph-cap-en"
+            rows="2"
+            required
+            minlength="6"
+            placeholder="Context, date, and what the students were working on..."
+            class="w-full px-3.5 py-2.5 rounded-lg bg-[#EAE8E1]/60 text-[14.5px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          ></textarea>
+        </div>
+        <div>
+          <label for="ph-cap-ar" class="block text-[13px] font-medium text-[#161A22] mb-1">Caption (Arabic, optional)</label>
+          <textarea
+            id="ph-cap-ar"
+            rows="2"
+            dir="rtl"
+            placeholder="التعليق العربي أسفل الصورة..."
+            class="w-full px-3.5 py-2.5 rounded-lg bg-[#EAE8E1]/60 text-[14.5px] text-[#161A22] placeholder-[#767D8C] border border-[#DFDDD6] focus:border-[#1B365D] focus:bg-white focus:outline-none transition"
+          ></textarea>
+        </div>
+      </div>
+
+      <label class="flex items-start gap-3 p-3.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] cursor-pointer">
+        <input id="ph-consent" type="checkbox" required class="mt-0.5 w-4 h-4 accent-[#0F766E] cursor-pointer" />
+        <span class="text-[13px] leading-[1.55] text-[#161A22]">
+          I confirm that everyone depicted gave informed release consent (or guardian consent if under 18) for TF Unions to publish this photo under its open-access documentation archive.
+        </span>
+      </label>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <a href="/" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">← Back to Foundation</a>
+        <button
+          type="submit"
+          class="h-11 px-6 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
+        >
+          Send for Baserow review
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById('photo-form');
+    const alertBox = document.getElementById('photo-alert');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.textContent = 'Submitting photo entry for Baserow review...';
+      alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13.5px] font-medium';
+      alertBox.classList.remove('hidden');
+
+      const payload = {
+        title: document.getElementById('ph-title').value.trim(),
+        chapterOrEvent: document.getElementById('ph-chapter').value.trim(),
+        photographerName: document.getElementById('ph-author').value.trim(),
+        imageUrl: document.getElementById('ph-url').value.trim(),
+        altTextEn: document.getElementById('ph-alt-en').value.trim(),
+        altTextAr: document.getElementById('ph-alt-ar').value.trim() || undefined,
+        captionEn: document.getElementById('ph-cap-en').value.trim(),
+        captionAr: document.getElementById('ph-cap-ar').value.trim() || undefined,
+        consentConfirmed: document.getElementById('ph-consent').checked,
+      };
+
+      try {
+        const res = await fetch('https://api.tfunions.com/v1/photos/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({}));
+          throw new Error(errBody.message || `Server returned ${res.status}`);
+        }
+        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
+        alertBox.textContent = 'Photo received cleanly and queued in Baserow for moderation.';
+        form.reset();
+      } catch (err) {
+        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#FEF3F2] border border-[#FECACA] text-[#B42318] text-[13.5px] font-medium';
+        alertBox.textContent = `Could not reach api.tfunions.com yet (${err?.message || 'network error'}). Please ensure tf-api is deployed on the VPS and try again.`;
+      }
+    });
+  </script>
+</BaseLayout>

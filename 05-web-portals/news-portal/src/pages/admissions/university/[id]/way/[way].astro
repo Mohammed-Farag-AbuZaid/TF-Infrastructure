@@ -1,0 +1,150 @@
+---
+import NewsLayout from '../../../../../layouts/NewsLayout.astro';
+import { ways, waysFor, universityById, parseWayMarkdown, buildWayView, isExternal, type Way } from '../../../../../lib/data';
+import { renderMarkdown } from '../../../../../lib/markdown';
+
+export function getStaticPaths() {
+  return ways.map((way) => ({
+    params: { id: String(way.uniId), way: String(way.wayNo) },
+    props: { way },
+  }));
+}
+
+interface Props {
+  way: Way;
+}
+
+const { way } = Astro.props;
+const uni = universityById.get(way.uniId);
+const uniWays = waysFor(way.uniId);
+const idx = uniWays.findIndex((w) => w.wayNo === way.wayNo);
+const prev = idx > 0 ? uniWays[idx - 1] : null;
+const next = idx >= 0 && idx + 1 < uniWays.length ? uniWays[idx + 1] : null;
+
+const parsed = parseWayMarkdown(way.markdown);
+const view = buildWayView(way);
+const applyUrl = parsed.applyUrl ?? (way.sourceUrls[0] || uni?.website || '');
+const renderedSections = view.sections.map((s) => ({
+  title: s.title,
+  html: renderMarkdown(s.markdown),
+}));
+
+const covLabel =
+  way.coverage === 'full' ? 'Full funding' : way.coverage === 'partial' ? 'Partial funding' : 'Funding';
+---
+<NewsLayout
+  title={`${way.title} — ${uni?.name || 'TF News'}`}
+  description={`${covLabel} route at ${uni?.name || 'University'}${way.provider ? ` by ${way.provider}` : ''}.`}
+  lang="en"
+  active="browse"
+  backHref={uni ? `/admissions/university/${uni.uniId}` : '/study/universities'}
+  backLabel={uni ? uni.name : 'Universities'}
+>
+  <article class="max-w-[840px]">
+    <div class="flex flex-wrap items-center gap-2.5 text-[12.5px]">
+      <span class="tf-serial-chip">{covLabel}</span>
+      <span class="text-tf-muted">{isExternal(way) ? 'External program' : "University's own"}</span>
+    </div>
+
+    <h1 class="font-display mt-3 text-[clamp(1.85rem,3.4vw,2.6rem)] font-bold leading-[1.12] tracking-[-0.025em] text-tf-ink">
+      {way.title}
+    </h1>
+
+    {(way.provider || isExternal(way)) && (
+      <p class="mt-3 text-[16px] text-tf-muted">
+        {[way.provider ? `By ${way.provider}` : '', isExternal(way) ? 'May cover other universities too' : '']
+          .filter(Boolean)
+          .join(' · ')}
+      </p>
+    )}
+
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      {applyUrl && (
+        <a
+          href={applyUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          class="h-10 px-5 inline-flex items-center gap-2 rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13.5px] font-semibold transition"
+        >
+          <span>Open official page</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      )}
+      <button
+        type="button"
+        id="copy-way-link"
+        class="h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition"
+      >
+        Copy link
+      </button>
+    </div>
+
+    <div class="mt-5 p-4 rounded-tf-card bg-tf-sunken/70 border border-tf-border text-[13px] text-tf-muted leading-relaxed">
+      {view.sources.length > 0
+        ? `Every passage below is copied word for word from official source page(s) (${view.sources.length} cited). Always confirm dates on the official site.`
+        : 'Always confirm dates directly on the official site.'}
+    </div>
+
+    <div class="mt-10 space-y-10">
+      {renderedSections.length === 0 ? (
+        <p class="text-[15px] text-tf-muted">
+          No detailed breakdown available yet. Use the official page button above for the latest requirements and dates.
+        </p>
+      ) : (
+        renderedSections.map((sec) => (
+          <section class="max-w-[720px]">
+            <h2 class="font-display text-[23px] font-bold text-tf-ink">{sec.title}</h2>
+            <div
+              class="mt-3 text-[15.5px] leading-[1.7] text-tf-ink space-y-3 [&_ul]:list-disc [&_ul]:ps-5 [&_ol]:list-decimal [&_ol]:ps-5 [&_a]:text-tf-brand [&_a]:underline [&_blockquote]:bg-tf-sunken [&_blockquote]:p-4 [&_blockquote]:rounded-tf-card"
+              set:html={sec.html}
+            />
+          </section>
+        ))
+      )}
+
+      {view.sources.length > 0 && (
+        <section class="max-w-[720px] pt-6 border-t border-tf-border">
+          <h2 class="font-display text-[21px] font-bold text-tf-ink">Sources</h2>
+          <ol class="mt-3 space-y-1.5 text-[14px] list-decimal ps-5">
+            {view.sources.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" class="text-tf-brand hover:underline break-all">
+                  {s.host} ({s.url})
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+    </div>
+
+    {(prev || next) && uni && (
+      <nav class="mt-12 pt-6 border-t border-tf-border grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Adjacent scholarships">
+        {prev ? (
+          <a href={`/admissions/university/${uni.uniId}/way/${prev.wayNo}`} class="p-4 rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand transition">
+            <div class="text-[12px] text-tf-muted">← Previous scholarship</div>
+            <div class="font-display text-[16px] font-semibold text-tf-ink mt-1">{prev.title}</div>
+          </a>
+        ) : <div />}
+        {next ? (
+          <a href={`/admissions/university/${uni.uniId}/way/${next.wayNo}`} class="p-4 rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand transition sm:text-end">
+            <div class="text-[12px] text-tf-muted">Next scholarship →</div>
+            <div class="font-display text-[16px] font-semibold text-tf-ink mt-1">{next.title}</div>
+          </a>
+        ) : <div />}
+      </nav>
+    )}
+  </article>
+
+  <script is:inline>
+    const copyWayBtn = document.getElementById('copy-way-link');
+    copyWayBtn?.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyWayBtn.textContent = 'Copied link';
+          setTimeout(() => { copyWayBtn.textContent = 'Copy link'; }, 1600);
+        });
+      }
+    });
+  </script>
+</NewsLayout>

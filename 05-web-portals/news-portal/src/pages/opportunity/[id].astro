@@ -1,0 +1,194 @@
+---
+import NewsLayout from '../../layouts/NewsLayout.astro';
+import { opportunities, sectionById, type Opportunity } from '../../lib/data';
+import { dateLabel, formatDate, parseDate, TONE_CLASS } from '../../lib/dates';
+import { plainExcerpt, renderMarkdown } from '../../lib/markdown';
+
+export function getStaticPaths() {
+  return opportunities.map((o) => ({
+    params: { id: o.id },
+    props: { o },
+  }));
+}
+
+interface Props {
+  o: Opportunity;
+}
+
+const { o } = Astro.props;
+const now = new Date();
+const dl = dateLabel(o, now);
+const startDate = parseDate(o.startDate);
+const deadlineDate = parseDate(o.deadline);
+const applyText = dl.isOpen ? 'Apply now' : 'Visit official page';
+const section = sectionById(o.section);
+const backHref = section ? section.route : '/';
+const backLabel = section ? section.title : 'Back';
+
+const two = (n: number) => String(n).padStart(2, '0');
+const ymd = (d: Date) => `${d.getUTCFullYear()}${two(d.getUTCMonth() + 1)}${two(d.getUTCDate())}`;
+
+let calendarUrl = '';
+if (dl.isOpen && deadlineDate) {
+  const nextDay = new Date(deadlineDate.getTime() + 86_400_000);
+  const details = o.link || `https://news.tfunions.com/opportunity/${o.id}`;
+  calendarUrl =
+    `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(`Deadline: ${o.title}`)}` +
+    `&dates=${ymd(deadlineDate)}/${ymd(nextDay)}` +
+    `&details=${encodeURIComponent(details)}`;
+}
+
+const rawSections = [
+  { title: 'About', markdown: o.aboutMarkdown },
+  { title: 'Requirements', markdown: o.requirementsMarkdown },
+  { title: 'Benefits', markdown: o.benefitsMarkdown },
+  { title: 'How to apply', markdown: o.guidelinesMarkdown },
+].filter((s) => s.markdown.trim().length > 0);
+
+const renderedSections = rawSections.map((s) => ({
+  title: s.title,
+  html: renderMarkdown(s.markdown),
+}));
+
+const overline = [o.category, o.topic].filter((x) => x && x.trim()).join(' · ');
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: o.title,
+  description: plainExcerpt(o.shortDescription || o.aboutMarkdown, 180),
+  url: `https://news.tfunions.com/opportunity/${o.id}`,
+  publisher: {
+    '@type': 'Organization',
+    name: 'TF Unions',
+    url: 'https://www.tfunions.com',
+  },
+};
+---
+<NewsLayout
+  title={`${o.title} — TF News`}
+  description={plainExcerpt(o.shortDescription || o.aboutMarkdown, 160)}
+  lang="en"
+  active="browse"
+  backHref={backHref}
+  backLabel={backLabel}
+  jsonLd={ld}
+>
+  <article class="max-w-[820px]" data-opp data-id={o.id} data-start={o.startDate ?? ''} data-deadline={o.deadline ?? ''}>
+    <div class="flex flex-wrap items-center gap-2.5 text-[13px] text-tf-muted">
+      {overline && <span>{overline}</span>}
+      {o.mustKnow && <span class="font-mono text-[12px] font-semibold text-tf-danger uppercase tracking-wide">Must-know</span>}
+    </div>
+
+    <h1 class="font-display mt-2.5 text-[clamp(1.9rem,3.6vw,2.75rem)] font-bold leading-[1.12] tracking-[-0.025em] text-tf-ink">
+      {o.title}
+    </h1>
+
+    {o.shortDescription.trim() && (
+      <p class="mt-4 text-[17px] leading-[1.6] text-tf-muted">{o.shortDescription}</p>
+    )}
+
+    <div class="mt-7 py-5 border-y border-tf-border flex flex-wrap gap-x-10 gap-y-4">
+      <div>
+        <div class="text-[12px] text-tf-muted">{dl.isOpen ? 'Deadline' : 'Next opening'}</div>
+        <div class="mt-1 text-[15px] font-semibold">
+          <span class={`js-label ${TONE_CLASS[dl.tone]}`}>{dl.text}</span>
+        </div>
+      </div>
+      {dl.isOpen && deadlineDate && (
+        <div>
+          <div class="text-[12px] text-tf-muted">Closes on</div>
+          <div class="mt-1 font-mono text-[15px] font-semibold text-tf-ink">{formatDate(deadlineDate)}</div>
+        </div>
+      )}
+      {!dl.isOpen && startDate && (
+        <div>
+          <div class="text-[12px] text-tf-muted">Usually opens</div>
+          <div class="mt-1 font-mono text-[15px] font-semibold text-tf-ink">{formatDate(startDate)}</div>
+        </div>
+      )}
+      {o.topic && (
+        <div>
+          <div class="text-[12px] text-tf-muted">Field</div>
+          <div class="mt-1 text-[15px] font-semibold text-tf-ink">{o.topic}</div>
+        </div>
+      )}
+      <div>
+        <div class="text-[12px] text-tf-muted">Starred by</div>
+        <div class="mt-1 font-mono text-[15px] font-semibold text-tf-ink">
+          <span data-opp-stars>{o.ratingCount}</span> {o.ratingCount === 1 ? 'student' : 'students'}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      {o.link && (
+        <a
+          href={o.link}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          class="h-10 px-5 inline-flex items-center gap-2 rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13.5px] font-semibold transition"
+        >
+          <span>{applyText}</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      )}
+      {calendarUrl && (
+        <a
+          href={calendarUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition"
+        >
+          Add deadline to calendar
+        </a>
+      )}
+      <button
+        type="button"
+        data-star={o.id}
+        aria-pressed="false"
+        class="h-10 px-3.5 inline-flex items-center gap-1.5 rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-signal text-[13px] font-medium text-tf-muted hover:text-tf-signal transition"
+      >
+        <span>★</span>
+        <span data-star-count>{o.ratingCount}</span>
+      </button>
+      <button
+        type="button"
+        id="copy-opp-link"
+        class="h-10 px-4 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition"
+      >
+        Copy link
+      </button>
+    </div>
+
+    <div class="mt-10 space-y-10">
+      {renderedSections.length === 0 ? (
+        <p class="text-[15px] text-tf-muted leading-relaxed">
+          Details are coming soon. Use the official page for the latest information.
+        </p>
+      ) : (
+        renderedSections.map((sec) => (
+          <section class="max-w-[720px]">
+            <h2 class="font-display text-[24px] font-bold tracking-[-0.015em] text-tf-ink">{sec.title}</h2>
+            <div
+              class="mt-3 text-[15.5px] leading-[1.7] text-tf-ink space-y-3 [&_ul]:list-disc [&_ul]:ps-5 [&_ol]:list-decimal [&_ol]:ps-5 [&_a]:text-tf-brand [&_a]:underline [&_blockquote]:bg-tf-sunken [&_blockquote]:p-4 [&_blockquote]:rounded-tf-card [&_h2]:font-display [&_h2]:font-semibold [&_h2]:text-[19px]"
+              set:html={sec.html}
+            />
+          </section>
+        ))
+      )}
+    </div>
+  </article>
+
+  <script is:inline>
+    const copyBtn = document.getElementById('copy-opp-link');
+    copyBtn?.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyBtn.textContent = 'Copied link';
+          setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1600);
+        });
+      }
+    });
+  </script>
+</NewsLayout>

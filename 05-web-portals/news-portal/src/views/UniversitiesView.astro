@@ -1,0 +1,74 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { universities, regionOf, REGION_ORDER, qsLabel } from '../lib/data';
+import { t, href, type Lang } from '../lib/i18n';
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const rows = universities.map((u) => ({ u, region: regionOf(u) }));
+const regions = [...new Set(rows.map((r) => r.region))].sort((a, b) => {
+  const ia = REGION_ORDER.indexOf(a);
+  const ib = REGION_ORDER.indexOf(b);
+  return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+});
+const countries = [...new Set(universities.map((u) => u.country))].filter(Boolean).sort((a, b) => a.localeCompare(b));
+const field = 'h-10 px-3 rounded-tf-input bg-tf-surface border border-tf-border text-[14px] focus:border-tf-brand focus:outline-none';
+---
+<NewsLayout title={`${t(lang, 'uni.title')} — TF News`} description={t(lang, 'uni.subtitle')} lang={lang} altPath="/study/universities" active="browse" backHref={href(lang, '/study')} backLabel={t(lang, 'home.card.study')}>
+  <PageHead title={t(lang, 'uni.title')} subtitle={t(lang, 'uni.subtitle')} kicker="UNIVERSITIES" />
+
+  <div data-dir data-page-size="80">
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="sr-only" for="u-q">{t(lang, 'uni.search')}</label>
+      <input id="u-q" data-f="q" type="search" placeholder={t(lang, 'uni.search')} class={`${field} flex-1 min-w-[220px]`} />
+      <label class="sr-only" for="u-region">{t(lang, 'uni.region')}</label>
+      <select id="u-region" data-f="region" class={field}>
+        <option value="">{t(lang, 'uni.region')}</option>
+        {regions.map((r) => <option value={r}>{r}</option>)}
+      </select>
+      <label class="sr-only" for="u-country">{t(lang, 'uni.country')}</label>
+      <select id="u-country" data-f="country" data-mode="eq" class={field}>
+        <option value="">{t(lang, 'uni.country')}</option>
+        {countries.map((c) => <option value={c}>{c}</option>)}
+      </select>
+      <label class="inline-flex items-center gap-2 text-[13.5px] text-tf-muted cursor-pointer">
+        <input data-f="ways" type="checkbox" class="w-4 h-4 accent-[#0F766E]" /> {t(lang, 'uni.withways')}
+      </label>
+    </div>
+
+    <div class="mt-6 bg-tf-surface border border-tf-border rounded-tf-card">
+      <div class="px-5 py-3 bg-tf-sunken border-b border-tf-border rounded-t-tf-card text-[12.5px] text-tf-muted font-mono">
+        <span data-count>{universities.length}</span> / {universities.length}
+      </div>
+      <ul class="px-5">
+        {rows.map(({ u, region }) => (
+          <li
+            data-row
+            hidden
+            data-text={`${u.name} ${u.country} ${region}`.toLowerCase()}
+            data-region={`|${region}|`}
+            data-country={u.country}
+            data-ways={u.waysFound > 0 ? '1' : '0'}
+            class="border-b border-tf-border last:border-b-0"
+          >
+            <a href={`/admissions/university/${u.uniId}`} class="flex items-center justify-between gap-4 py-4 group">
+              <div class="min-w-0">
+                <div class="text-[12.5px] text-tf-muted">{qsLabel(u)} · {u.country} · {region}</div>
+                <h2 class="font-display text-[18px] font-semibold mt-0.5 group-hover:text-tf-brand transition truncate">{u.name}</h2>
+              </div>
+              {u.waysFound > 0 && <span class="tf-serial-chip shrink-0">{u.waysFound} {t(lang, 'uni.ways')}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p data-empty hidden class="p-10 text-center text-tf-muted">
+        {t(lang, 'section.empty')}
+        <button type="button" data-reset class="ms-2 text-[13px] font-medium text-tf-brand hover:underline">{t(lang, 'section.reset')}</button>
+      </p>
+      <div class="p-4 text-center border-t border-tf-border">
+        <button type="button" data-more class="h-10 px-5 rounded-tf-card bg-tf-canvas border border-tf-border hover:border-tf-brand text-[13.5px] font-medium transition">{t(lang, 'uni.more')}</button>
+      </div>
+    </div>
+  </div>
+</NewsLayout>

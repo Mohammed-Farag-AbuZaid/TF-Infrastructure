@@ -13,6 +13,7 @@ import {
   CertificateSerialSchema,
   DonationSchema,
   IdeaSchema,
+  PhotoSubmissionSchema,
   RolePromoteSchema,
   VolunteerSchema,
 } from './schemas.js';
@@ -141,6 +142,21 @@ export function createApp(config: AppConfig = {}) {
     const result = await forward('/webhook/submit-donation', 'POST', {
       ...parsed.data,
       uid: user?.uid ?? null,
+    });
+    return c.json(result.data, result.ok ? 201 : (result.status as 400 | 502));
+  });
+
+  app.post('/v1/photos/submit', ...publicWriteMiddlewares, async (c) => {
+    const raw = await c.req.json().catch(() => null);
+    const parsed = PhotoSubmissionSchema.safeParse(raw);
+    if (!parsed.success) {
+      return c.json({ error: 'validation_error', issues: parsed.error.flatten() }, 400);
+    }
+    const user = c.get('user');
+    const result = await forward('/webhook/photo-submit', 'POST', {
+      ...parsed.data,
+      uid: user?.uid ?? null,
+      reviewStatus: 'pending_baserow_review',
     });
     return c.json(result.data, result.ok ? 201 : (result.status as 400 | 502));
   });

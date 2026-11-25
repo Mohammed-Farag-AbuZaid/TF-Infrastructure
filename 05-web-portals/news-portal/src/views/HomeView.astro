@@ -1,0 +1,90 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+import { opportunities, universities, programs, SECTIONS } from '../lib/data';
+import { isOpenAt } from '../lib/dates';
+import { t, href, SECTION_TITLES_AR, type Lang } from '../lib/i18n';
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+const now = new Date();
+const openBy: Record<string, number> = {};
+for (const o of opportunities) if (isOpenAt(o, now)) openBy[o.section] = (openBy[o.section] ?? 0) + 1;
+const dates = JSON.stringify(opportunities.map((o) => ({ s: o.section, st: o.startDate, dl: o.deadline })));
+
+const cards = [
+  { n: '01', path: '/study', title: t(lang, 'home.card.study'), d: t(lang, 'home.card.study.d'), section: 'study' },
+  { n: '02', path: '/directories', title: t(lang, 'home.card.dir'), d: t(lang, 'home.card.dir.d'), section: '' },
+  { n: '03', path: '/bulletins', title: t(lang, 'home.card.bull'), d: t(lang, 'home.card.bull.d'), section: '' },
+  { n: '04', path: '/study/universities', title: t(lang, 'home.card.uni'), d: t(lang, 'home.card.uni.d'), section: '' },
+];
+const totalOpen = Object.values(openBy).reduce((a, b) => a + b, 0);
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'TF News',
+  url: 'https://news.tfunions.com',
+  inLanguage: lang,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://news.tfunions.com/search?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+<NewsLayout title={`TF News — ${t(lang, 'home.title')}`} description={t(lang, 'home.subtitle')} lang={lang} altPath="/" active="home" jsonLd={ld}>
+  <section class="max-w-[760px]">
+    <div class="tf-ledger-line !mt-0 !mb-4">
+      <span class="tf-ledger-line__label">TF News</span>
+    </div>
+    <h1 class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.03em]">{t(lang, 'home.title')}</h1>
+    <p class="mt-4 text-[17px] leading-[1.65] text-tf-muted max-w-[60ch]">{t(lang, 'home.subtitle')}</p>
+
+    <form action={href(lang, '/search')} method="get" role="search" class="mt-7 flex gap-2">
+      <label for="home-q" class="sr-only">{t(lang, 'home.search')}</label>
+      <input
+        id="home-q"
+        name="q"
+        type="search"
+        placeholder={t(lang, 'home.search')}
+        class="flex-1 min-w-0 h-12 px-4 rounded-tf-card bg-tf-surface border border-tf-border text-[16px] placeholder-tf-subtle focus:border-tf-brand focus:outline-none"
+      />
+      <button type="submit" class="h-12 px-5 rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[14px] font-semibold transition">{t(lang, 'search.title')}</button>
+    </form>
+
+    <p data-open-wrap class="mt-4 text-[13px] text-tf-muted">
+      <span class="tf-serial-chip"><span data-open-count="__all">{totalOpen}</span> {t(lang, 'home.open')}</span>
+    </p>
+  </section>
+
+  <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Browse">
+    {cards.map((c) => (
+      <a href={href(lang, c.path)} class="group block bg-tf-surface border border-tf-border hover:border-tf-brand rounded-tf-card p-6 transition">
+        <div class="flex items-center justify-between">
+          <span class="tf-serial-chip">№ {c.n}</span>
+          {c.section && (
+            <span data-open-wrap class="text-[12.5px] text-tf-muted"><span data-open-count={c.section} class="font-mono font-semibold text-tf-accent-text">{openBy[c.section] ?? 0}</span> {t(lang, 'home.open')}</span>
+          )}
+        </div>
+        <h2 class="font-display text-[22px] font-semibold mt-4 leading-snug group-hover:text-tf-brand transition">{c.title}</h2>
+        <p class="mt-1.5 text-[14px] leading-[1.6] text-tf-muted">{c.d}</p>
+        <span class="mt-4 inline-block text-[13px] font-medium text-tf-brand">{lang === 'ar' ? '←' : '→'}</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="mt-10 flex flex-wrap gap-2" aria-label="Sections">
+    {SECTIONS.map((s) => (
+      <a href={href(lang, s.route)} class="h-9 px-3.5 inline-flex items-center rounded-tf-pill bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium transition">
+        {lang === 'ar' ? SECTION_TITLES_AR[s.id].title : s.title}
+      </a>
+    ))}
+    <a href={href(lang, '/study/programs')} class="h-9 px-3.5 inline-flex items-center rounded-tf-pill bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium transition">
+      {t(lang, 'prog.title')} · {programs.length}
+    </a>
+    <a href={href(lang, '/must-know')} class="h-9 px-3.5 inline-flex items-center rounded-tf-pill bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium transition">
+      {t(lang, 'must.title')}
+    </a>
+  </section>
+
+  <script type="application/json" id="opp-dates" set:html={dates}></script>
+</NewsLayout>

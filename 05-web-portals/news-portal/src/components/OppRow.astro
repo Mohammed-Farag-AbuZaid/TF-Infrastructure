@@ -1,0 +1,55 @@
+---
+import type { Opportunity } from '../lib/data';
+import { dateLabel, TONE_CLASS } from '../lib/dates';
+import { plainExcerpt } from '../lib/markdown';
+import { t, type Lang } from '../lib/i18n';
+
+export interface Props {
+  o: Opportunity;
+  lang?: Lang;
+  showSection?: boolean;
+}
+const { o, lang = 'en', showSection = false } = Astro.props;
+const label = dateLabel(o, new Date());
+const overline = [showSection ? o.section : '', o.category, o.topic].filter((s) => s && s.trim()).join(' · ');
+const text = `${o.title} ${o.shortDescription} ${o.category} ${o.topic}`.toLowerCase();
+---
+<li
+  data-opp
+  data-id={o.id}
+  data-start={o.startDate ?? ''}
+  data-deadline={o.deadline ?? ''}
+  data-category={o.category}
+  data-topic={o.topic}
+  data-must={o.mustKnow ? '1' : '0'}
+  data-rating={o.ratingCount}
+  data-text={text}
+  data-status={label.isOpen ? 'open' : 'upcoming'}
+  class="border-b border-tf-border last:border-b-0"
+>
+  <div class="flex items-start gap-3 py-5">
+    <a href={`/opportunity/${o.id}`} class="flex-1 min-w-0 group">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-tf-muted">
+        <span>{overline}</span>
+        {o.mustKnow && <span class="text-tf-danger font-semibold">{t(lang, 'bull.must')}</span>}
+      </div>
+      <h3 class="font-display text-[19px] font-semibold leading-snug mt-1 group-hover:text-tf-brand transition">{o.title}</h3>
+      {o.shortDescription && (
+        <p class="text-[14px] leading-[1.6] text-tf-muted mt-1 max-w-[70ch]">{plainExcerpt(o.shortDescription, 170)}</p>
+      )}
+      <div class="mt-2 text-[13px]">
+        <span class={`js-label ${TONE_CLASS[label.tone]}`}>{label.text}</span>
+      </div>
+    </a>
+    <button
+      type="button"
+      data-star={o.id}
+      aria-pressed="false"
+      aria-label="Star this opportunity"
+      class="shrink-0 inline-flex items-center gap-1.5 h-9 px-2.5 rounded-tf-input border border-tf-border bg-tf-surface text-tf-muted hover:text-tf-signal hover:border-tf-signal transition text-[13px] font-medium aria-pressed:text-tf-signal"
+    >
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>
+      <span data-star-count>{o.ratingCount}</span>
+    </button>
+  </div>
+</li>

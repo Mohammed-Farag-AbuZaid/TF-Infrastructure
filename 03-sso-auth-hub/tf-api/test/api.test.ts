@@ -116,4 +116,49 @@ describe('tf-api gateway', () => {
     });
     expect(adminOk.status).toBe(200);
   });
+
+  it('POST /v1/photos/submit rejects missing consentConfirmed and forwards valid photo submission', async () => {
+    const { app, forwarder } = buildTestApp();
+    const rejected = await app.request('/v1/photos/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: 'Maadi Study Circle',
+        captionEn: 'Weekly Olympiad problem solving session in Maadi.',
+        altTextEn: 'Five STEM students reviewing physics derivation notebooks at a wooden table.',
+        chapterOrEvent: 'STEM Maadi Research Collective',
+        photographerName: 'Nour El-Din',
+        imageUrl: 'https://r2.tfunions.com/uploads/maadi-01.jpg',
+        consentConfirmed: false,
+      }),
+    });
+    expect(rejected.status).toBe(400);
+    expect(forwarder).not.toHaveBeenCalled();
+
+    const accepted = await app.request('/v1/photos/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer student-token' },
+      body: JSON.stringify({
+        title: 'Maadi Study Circle',
+        captionEn: 'Weekly Olympiad problem solving session in Maadi.',
+        captionAr: 'جلسة أسبوعية لحل مسائل الأولمبياد في المعادي.',
+        altTextEn: 'Five STEM students reviewing physics derivation notebooks at a wooden table.',
+        altTextAr: 'خمسة طلاب يراجعون مسائل الفيزياء في جلسة دراسية.',
+        chapterOrEvent: 'STEM Maadi Research Collective',
+        photographerName: 'Nour El-Din',
+        imageUrl: 'https://r2.tfunions.com/uploads/maadi-01.jpg',
+        consentConfirmed: true,
+      }),
+    });
+    expect(accepted.status).toBe(201);
+    expect(forwarder).toHaveBeenCalledWith(
+      '/webhook/photo-submit',
+      'POST',
+      expect.objectContaining({
+        uid: 'student-1',
+        reviewStatus: 'pending_baserow_review',
+        consentConfirmed: true,
+      }),
+    );
+  });
 });

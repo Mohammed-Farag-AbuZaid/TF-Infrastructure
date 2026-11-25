@@ -1,0 +1,68 @@
+---
+import NewsLayout from '../../../layouts/NewsLayout.astro';
+import { programs, qsLabel, type Program } from '../../../lib/data';
+
+export function getStaticPaths() {
+  return programs.map((program) => ({
+    params: { key: program.key },
+    props: { program },
+  }));
+}
+
+interface Props {
+  program: Program;
+}
+
+const { program } = Astro.props;
+const covLabel =
+  program.coverage === 'full' ? 'Full funding' : program.coverage === 'partial' ? 'Partial funding' : 'Funding';
+---
+<NewsLayout
+  title={`${program.name} — Funding Program`}
+  description={`${program.name} covers ${program.entries.length} universities across ${program.countries.slice(0, 5).join(', ')}.`}
+  lang="en"
+  active="browse"
+  backHref="/study/programs"
+  backLabel="Programs"
+>
+  <article class="max-w-[900px]">
+    <span class="tf-serial-chip">{covLabel} · {program.entries.length} {program.entries.length === 1 ? 'university' : 'universities'}</span>
+    <h1 class="font-display mt-3 text-[clamp(1.85rem,3.4vw,2.6rem)] font-bold leading-[1.12] tracking-[-0.025em] text-tf-ink">
+      {program.name}
+    </h1>
+
+    <div class="mt-6 py-5 border-y border-tf-border grid grid-cols-1 sm:grid-cols-3 gap-4 text-[14px]">
+      <div>
+        <div class="text-[12px] text-tf-muted">Degree levels</div>
+        <div class="font-semibold text-tf-ink mt-1">{program.levels.length ? program.levels.join(', ') : 'See university pages'}</div>
+      </div>
+      <div>
+        <div class="text-[12px] text-tf-muted">Fields</div>
+        <div class="font-semibold text-tf-ink mt-1">{program.fields.length ? program.fields.join(', ') : 'All eligible fields'}</div>
+      </div>
+      <div>
+        <div class="text-[12px] text-tf-muted">Regions covered</div>
+        <div class="font-semibold text-tf-ink mt-1">{program.regions.join(', ') || 'Global'}</div>
+      </div>
+    </div>
+
+    <section class="mt-10">
+      <h2 class="font-display text-[22px] font-bold text-tf-ink">Universities accepting this program</h2>
+      <div class="mt-4 bg-tf-surface border border-tf-border rounded-tf-card divide-y divide-tf-border">
+        {program.entries.map(({ uni, way }) => (
+          <a
+            href={`/admissions/university/${uni.uniId}/way/${way.wayNo}`}
+            class="flex items-center justify-between gap-4 p-4 sm:p-5 hover:bg-tf-canvas/50 transition"
+          >
+            <div class="min-w-0">
+              <div class="text-[12px] font-mono text-tf-muted">{qsLabel(uni)} · {uni.country}</div>
+              <div class="font-display text-[17px] font-semibold text-tf-ink mt-0.5 truncate">{uni.name}</div>
+              <div class="text-[13px] text-tf-muted mt-0.5 truncate">{way.title}</div>
+            </div>
+            <span class="tf-serial-chip shrink-0">{way.coverage === 'full' ? 'Full' : way.coverage === 'partial' ? 'Partial' : 'View'} →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </article>
+</NewsLayout>

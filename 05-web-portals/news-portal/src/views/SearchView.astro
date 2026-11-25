@@ -1,0 +1,17 @@
+---
+import NewsLayout from '../layouts/NewsLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { t, href, type Lang } from '../lib/i18n';
+
+export interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<NewsLayout title={`${t(lang, 'search.title')} — TF News`} description={t(lang, 'search.hint')} lang={lang} altPath="/search" active="browse" backHref={href(lang, '/')} backLabel={t(lang, 'nav.home')} noindex>
+  <PageHead title={t(lang, 'search.title')} subtitle={t(lang, 'search.hint')} />
+  <div data-search>
+    <label class="sr-only" for="s-q">{t(lang, 'search.placeholder')}</label>
+    <input id="s-q" data-search-input type="search" autocomplete="off" placeholder={t(lang, 'search.placeholder')} class="w-full h-12 px-4 rounded-tf-card bg-tf-surface border border-tf-border text-[16px] placeholder-tf-subtle focus:border-tf-brand focus:outline-none" />
+    <ul data-search-results class="mt-4"></ul>
+    <p data-search-none hidden class="mt-6 text-tf-muted">{t(lang, 'search.none')}</p>
+  </div>
+</NewsLayout>

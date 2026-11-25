@@ -41,3 +41,21 @@ export const RolePromoteSchema = z.object({
   role: z.enum(['student', 'member', 'volunteer', 'core_team', 'lead', 'admin', 'founder']),
   reason: z.string().trim().min(4).max(500).optional(),
 });
+
+export const PhotoSubmissionSchema = z.object({
+  title: z.string().trim().min(3, 'Title must be at least 3 characters').max(140),
+  captionEn: z.string().trim().min(6, 'English caption must be at least 6 characters').max(500),
+  captionAr: z.string().trim().max(500).optional(),
+  altTextEn: z.string().trim().min(6, 'English alt text is required for accessibility').max(300),
+  altTextAr: z.string().trim().max(300).optional(),
+  chapterOrEvent: z.string().trim().min(2).max(120),
+  photographerName: z.string().trim().min(2).max(120),
+  imageUrl: z
+    .string()
+    .trim()
+    .url('Image URL must be valid')
+    .refine((u) => /^https:\/\//i.test(u), 'Image URL must use https://'),
+  consentConfirmed: z.literal(true, {
+    errorMap: () => ({ message: 'Signed release consent is required before submission' }),
+  }),
+});
