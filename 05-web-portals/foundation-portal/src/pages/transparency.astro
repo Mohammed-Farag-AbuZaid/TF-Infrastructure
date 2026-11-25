@@ -218,7 +218,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     renderTable();
     updateChart(12000, 4200, 7800);
 
+    function decodeFsVal(v) {
+      if (!v || typeof v !== 'object') return undefined;
+      if ('stringValue' in v) return v.stringValue;
+      if ('booleanValue' in v) return v.booleanValue;
+      if ('integerValue' in v) return Number(v.integerValue);
+      if ('doubleValue' in v) return Number(v.doubleValue);
+      return undefined;
+    }
+
     (async () => {
+      try {
+        const fsRes = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ledgerEntries?pageSize=200', { cache: 'no-store' });
+        if (fsRes.ok) {
+          const fsJson = await fsRes.json();
+          const docs = (fsJson.documents || []).map((doc) => {
+            const o = { id: doc.name.split('/').pop() };
+            const f = doc.fields || {};
+            Object.keys(f).forEach((k) => { o[k] = decodeFsVal(f[k]); });
+            return o;
+          });
+          if (docs.length > 0) {
+            docs.sort((a, b) => String(b.txDate || '').localeCompare(String(a.txDate || '')));
+            let inflows = 0;
+            let outflows = 0;
+            docs.forEach((d) => {
+              const amt = Number(d.amountEgp) || 0;
+              if (d.entryType === 'outflow') outflows += amt;
+              else inflows += amt;
+            });
+            const reserve = inflows - outflows;
+            document.getElementById('metric-inflows').textContent = fmtEgp(inflows);
+            document.getElementById('metric-outflows').textContent = fmtEgp(outflows);
+            document.getElementById('metric-reserve').textContent = fmtEgp(reserve);
+            updateChart(inflows, outflows, reserve);
+            allEntries = docs;
+            document.getElementById('ledger-status-label').textContent = `Live Studio Ledger (${allEntries.length} entries)`;
+            renderTable();
+            return;
+          }
+        }
+      } catch {}
+
       try {
         const res = await fetch('https://n8n.tfunions.com/tf-api/api/ledger');
         if (!res.ok) return;

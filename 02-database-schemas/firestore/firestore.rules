@@ -13,12 +13,49 @@ service cloud.firestore {
       return isSignedIn() && (request.auth.token.role in roles);
     }
 
+    function isVerifiedEmail() {
+      return isSignedIn()
+          && request.auth.token.email is string
+          && request.auth.token.email_verified == true;
+    }
+
+    function userEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    function isBootstrapOwner() {
+      return isVerifiedEmail()
+          && userEmail() in ['mohammed.farag.abuzaid@gmail.com', 'mohammed.farag@tfunions.com'];
+    }
+
+    function hasStaffRecord() {
+      return isVerifiedEmail()
+          && exists(/databases/$(database)/documents/staffAccess/$(userEmail()));
+    }
+
+    function staffData() {
+      return get(/databases/$(database)/documents/staffAccess/$(userEmail())).data;
+    }
+
     function isAdmin() {
-      return hasRole(['admin', 'founder']);
+      return isBootstrapOwner()
+          || hasRole(['admin', 'founder', 'owner'])
+          || (hasStaffRecord()
+              && staffData().active == true
+              && staffData().role in ['owner', 'founder', 'admin']);
+    }
+
+    function hasPermission(perm) {
+      return isAdmin()
+          || (hasStaffRecord()
+              && staffData().active == true
+              && staffData().permissions is list
+              && perm in staffData().permissions);
     }
 
     function isLead() {
-      return hasRole(['admin', 'founder', 'core_team', 'lead']);
+      return hasRole(['admin', 'founder', 'owner', 'core_team', 'lead'])
+          || hasPermission('moderate_submissions');
     }
 
     function isStrBound(data, field, minLen, maxLen) {
@@ -63,29 +100,92 @@ service cloud.firestore {
       allow delete: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
     }
 
-    // 3. Public catalogs (opportunities & projects)
+    // 3. Per-Member Website Access Matrix (Owner/Admin-managed; self-read)
+    match /staffAccess/{email} {
+      allow read: if (isVerifiedEmail() && userEmail() == email) || isAdmin();
+      allow create, update: if isAdmin()
+                            && request.resource.data.role is string
+                            && request.resource.data.permissions is list
+                            && request.resource.data.active is bool;
+      allow delete: if isAdmin();
+    }
+
+    // 4. Live Editable Website Content Collections (Permission-gated per division)
+    match /teamMembers/{memberId} {
+      allow read: if true;
+      allow create, update: if hasPermission('edit_team')
+                            && !request.resource.data.keys().hasAny(['email', 'phone', 'age'])
+                            && request.resource.data.name is string
+                            && request.resource.data.name.size() >= 2
+                            && request.resource.data.role is string
+                            && request.resource.data.team is string;
+      allow delete: if hasPermission('edit_team');
+    }
+
+    match /ledgerEntries/{entryId} {
+      allow read: if true;
+      allow create, update: if hasPermission('edit_ledger')
+                            && request.resource.data.entryType in ['inflow', 'outflow']
+                            && request.resource.data.amountEgp is number
+                            && request.resource.data.amountEgp > 0
+                            && request.resource.data.donorOrVendor is string
+                            && request.resource.data.donorOrVendor.size() >= 2;
+      allow delete: if hasPermission('edit_ledger');
+    }
+
+    match /chapters/{chapterId} {
+      allow read: if true;
+      allow create, update: if hasPermission('edit_chapters')
+                            && request.resource.data.name is string
+                            && request.resource.data.name.size() >= 2
+                            && request.resource.data.gov is string;
+      allow delete: if hasPermission('edit_chapters');
+    }
+
+    match /guides/{guideId} {
+      allow read: if true;
+      allow create, update: if hasPermission('edit_guides')
+                            && request.resource.data.title is string
+                            && request.resource.data.title.size() >= 2
+                            && request.resource.data.category is string;
+      allow delete: if hasPermission('edit_guides');
+    }
+
+    // 5. Immutable Studio Audit Trail
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn()
+                    && (isAdmin() || hasStaffRecord())
+                    && request.resource.data.actorUid == request.auth.uid
+                    && request.resource.data.action is string
+                    && request.resource.data.section is string;
+      allow update, delete: if false;
+    }
+
+    // 6. Public catalogs (opportunities & projects)
     match /opportunities/{opportunityId} {
       allow read: if true;
       allow write: if isLead()
+                   || hasPermission('edit_opportunities')
                    || (isSignedIn() && request.auth.token.tracks != null && 'tf_news_editor' in request.auth.token.tracks);
     }
 
     match /allProjects/{projectId} {
       allow read: if true;
-      allow write: if isLead();
+      allow write: if isLead() || hasPermission('edit_chapters');
     }
 
     match /inProgressProjects/{projectId} {
       allow read: if true;
-      allow write: if isLead();
+      allow write: if isLead() || hasPermission('edit_chapters');
     }
 
     match /upcomingProjects/{projectId} {
       allow read: if true;
-      allow write: if isLead();
+      allow write: if isLead() || hasPermission('edit_chapters');
     }
 
-    // 4. Community Ideas Incubator
+    // 7. Community Ideas Incubator
     match /ideas/{ideaId} {
       allow read: if true;
       allow create: if isSignedIn()
@@ -98,7 +198,7 @@ service cloud.firestore {
       allow update, delete: if isLead();
     }
 
-    // 5. Private Volunteer Applications & Donation Receipts
+    // 8. Private Volunteer Applications & Donation Receipts
     match /volunteers/{applicationId} {
       allow read: if isLead() || (isSignedIn() && resource.data.uid == request.auth.uid);
       allow create: if isSignedIn()
@@ -113,10 +213,10 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
-    // 6. Public Credential Registry (admin-managed)
+    // 9. Public Credential Registry (admin or registrar-managed)
     match /certificates/{serial} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isAdmin() || hasPermission('manage_certificates');
     }
 
     // Default deny for any undeclared collections

@@ -1,0 +1,1356 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import teamData from '../data/team-nodes.json';
+import { toPublicMember } from './team.json';
+
+const baselineMembers = (teamData as Parameters<typeof toPublicMember>[0][]).map(toPublicMember);
+---
+<BaseLayout title="TF Studio" backLabel="TF Unions" backHref="/">
+  <!-- Clean Header -->
+  <section class="pt-8 sm:pt-12 pb-6 border-b border-[#DFDDD6] flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+    <div>
+      <h1
+        class="font-display font-bold text-[#161A22] leading-[1.08] tracking-[-0.03em]"
+        style="font-size: clamp(28px, 3.8vw, 42px);"
+      >
+        TF Studio
+      </h1>
+      <p class="mt-2 text-[15px] text-[#525866]">
+        Role-based website publishing workspace for TF Unions owners and division leads.
+      </p>
+    </div>
+
+    <div id="studio-user-bar" class="hidden flex-wrap items-center gap-3">
+      <span id="studio-role-badge" class="font-code px-2.5 py-1 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[12px] font-medium"></span>
+      <span id="studio-user-email" class="text-[13px] text-[#525866]"></span>
+      <button
+        id="studio-signout-btn"
+        type="button"
+        class="h-9 px-3.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-medium text-[#161A22] transition"
+      >
+        Sign out
+      </button>
+    </div>
+  </section>
+
+  <!-- Loading Gate -->
+  <section id="gate-loading" class="py-16 text-center text-[14px] text-[#525866]">
+    Checking Firebase Passport &amp; staff permissions...
+  </section>
+
+  <!-- Signed-Out Auth Gate -->
+  <section id="gate-signin" class="hidden py-10 max-w-[460px] mx-auto">
+    <div class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+      <h2 class="font-display font-bold text-[22px] text-[#161A22]">Sign in to TF Studio</h2>
+      <p class="mt-1.5 text-[14px] text-[#525866]">
+        Sign in with the Google account or verified email assigned to your TF Unions role.
+      </p>
+
+      <div id="auth-error-box" class="hidden mt-4 p-3 rounded-lg bg-[#FEF3F2] border border-[#FECDCA] text-[13px] text-[#B42318]"></div>
+
+      <button
+        id="btn-google-signin"
+        type="button"
+        class="mt-6 w-full h-11 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[14px] font-medium transition flex items-center justify-center gap-2.5"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#FFFFFF" d="M21.35 11.1h-9.17v2.98h5.27c-.23 1.4-1.66 4.1-5.27 4.1-3.17 0-5.76-2.62-5.76-5.85s2.59-5.85 5.76-5.85c1.81 0 3.02.77 3.71 1.43l2.53-2.44C16.81 3.98 14.7 3.1 12.18 3.1 7.09 3.1 2.98 7.21 2.98 12.3s4.11 9.2 9.2 9.2c5.31 0 8.83-3.73 8.83-8.98 0-.6-.06-1.06-.16-1.42Z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="my-5 flex items-center gap-3 text-[12px] text-[#767D8C]">
+        <div class="flex-1 h-px bg-[#DFDDD6]"></div>
+        <span>or email &amp; password</span>
+        <div class="flex-1 h-px bg-[#DFDDD6]"></div>
+      </div>
+
+      <form id="email-signin-form" class="space-y-3.5">
+        <div>
+          <label for="signin-email" class="block text-[12.5px] font-medium text-[#161A22] mb-1">Email</label>
+          <input id="signin-email" type="email" required autocomplete="email" class="w-full h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none text-[14px]" />
+        </div>
+        <div>
+          <label for="signin-password" class="block text-[12.5px] font-medium text-[#161A22] mb-1">Password</label>
+          <input id="signin-password" type="password" required autocomplete="current-password" class="w-full h-10 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none text-[14px]" />
+        </div>
+        <button type="submit" class="w-full h-10 rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] border border-[#DCD9D0] text-[#161A22] text-[13.5px] font-medium transition">
+          Sign in with password
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Unverified Email Notice -->
+  <section id="gate-unverified" class="hidden py-10 max-w-[520px] mx-auto">
+    <div class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+      <h2 class="font-display font-bold text-[22px] text-[#161A22]">Verify your email address</h2>
+      <p class="mt-2 text-[14px] text-[#525866] leading-relaxed">
+        You are signed in as <strong id="unverified-email" class="text-[#161A22]"></strong>, but role permissions require a verified email before Firestore allows edits.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <button id="btn-send-verify" type="button" class="h-10 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13.5px] font-medium transition">
+          Send verification email
+        </button>
+        <button id="btn-refresh-verify" type="button" class="h-10 px-4 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[#161A22] text-[13.5px] font-medium transition">
+          I've verified — refresh
+        </button>
+        <button id="btn-unverified-signout" type="button" class="h-10 px-4 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">
+          Sign out
+        </button>
+      </div>
+      <p id="verify-status-msg" class="hidden mt-3 text-[13px] text-[#0B5F58]"></p>
+    </div>
+  </section>
+
+  <!-- Unauthorized Account Gate -->
+  <section id="gate-denied" class="hidden py-10 max-w-[540px] mx-auto">
+    <div class="bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+      <h2 class="font-display font-bold text-[22px] text-[#161A22]">No editor permissions assigned</h2>
+      <p class="mt-2 text-[14.5px] text-[#525866] leading-relaxed">
+        Signed in as <strong id="denied-email" class="text-[#161A22]"></strong>. Ask the TF Unions Owner to grant your email a role and section permissions under <strong>Access &amp; Roles</strong> inside TF Studio.
+      </p>
+      <div class="mt-5">
+        <button id="btn-denied-signout" type="button" class="h-10 px-4 rounded-lg bg-[#1B365D] text-white text-[13.5px] font-medium transition">
+          Sign out &amp; switch account
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Authorized Role-Based Studio -->
+  <section id="studio-workspace" class="hidden pt-6 pb-12">
+    <!-- Active Permissions Summary -->
+    <div class="bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="text-[12px] font-medium text-[#767D8C]">Active permissions</div>
+        <div id="studio-perm-pills" class="mt-1.5 flex flex-wrap gap-1.5"></div>
+      </div>
+      <div id="studio-toast" class="hidden font-code text-[12.5px] px-3 py-1.5 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]"></div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 items-start">
+      <!-- Permission-Filtered Section Navigation -->
+      <nav id="studio-tabs" class="bg-white border border-[#DFDDD6] rounded-xl p-2 flex lg:flex-col gap-1 overflow-x-auto" aria-label="Studio workspace sections"></nav>
+
+      <!-- Active Editor Panel -->
+      <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 sm:p-7 shadow-[0_1px_2px_rgba(22,26,34,0.04)] min-w-0">
+        <!-- 1. TEAM EDITOR -->
+        <div id="panel-team" class="studio-panel hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
+            <div>
+              <h2 class="font-display font-bold text-[22px] text-[#161A22]">Team &amp; Cohort Editor</h2>
+              <p class="text-[13.5px] text-[#525866] mt-0.5">Edits go live immediately on <a href="/team" class="text-[#1B365D] underline">/team</a> and <a href="/roster" class="text-[#1B365D] underline">/roster</a>. Private emails &amp; phones are never stored publicly.</p>
+            </div>
+            <button id="team-new-btn" type="button" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">+ New member</button>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6 items-start">
+            <div>
+              <input id="team-studio-search" type="search" placeholder="Filter 71+ members by name, team, school..." class="w-full h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] focus:bg-white focus:border-[#1B365D] focus:outline-none" />
+              <div id="team-studio-list" class="mt-3 divide-y divide-[#EAE8E1] max-h-[540px] overflow-y-auto border border-[#DFDDD6] rounded-lg"></div>
+            </div>
+
+            <form id="team-form" class="p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 id="team-form-title" class="font-display font-semibold text-[16px] text-[#161A22]">Add / edit member</h3>
+                <button id="team-reset-btn" type="button" class="text-[12px] text-[#525866] hover:text-[#161A22]">Clear</button>
+              </div>
+              <input id="tf-id" type="hidden" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Full name *</label>
+                  <input id="tf-name" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Arabic name</label>
+                  <input id="tf-arabic" type="text" dir="rtl" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Role *</label>
+                  <input id="tf-role" type="text" required placeholder="e.g. Vice Head" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Division *</label>
+                  <select id="tf-team" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                    <option value="Founders">Founders</option>
+                    <option value="HR Team">HR Team</option>
+                    <option value="PR Team">PR Team</option>
+                    <option value="Marketing Team">Marketing Team</option>
+                    <option value="Social Media Team">Social Media Team</option>
+                  </select>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Leadership tier</label>
+                  <select id="tf-tier" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                    <option value="0">0 · Founder</option>
+                    <option value="1">1 · Head</option>
+                    <option value="2">2 · Vice Head</option>
+                    <option value="3">3 · Coordinator / Panel</option>
+                    <option value="4" selected>4 · Contributor</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Joined cohort</label>
+                  <select id="tf-cohort" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                    <option value="2025-10|Oct 2025">Oct 2025</option>
+                    <option value="2026-01|Jan 2026">Jan 2026</option>
+                    <option value="2026-04|Apr 2026">Apr 2026</option>
+                    <option value="2026-07|Jul 2026">Jul 2026</option>
+                    <option value="2026-11|Nov 2026" selected>Nov 2026</option>
+                  </select>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">School / University</label>
+                  <input id="tf-school" type="text" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                </div>
+                <div>
+                  <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Grade / Cohort label</label>
+                  <input id="tf-grade" type="text" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Reports to (parent ID)</label>
+                <input id="tf-parent" type="text" placeholder="founder-1" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Bio</label>
+                <textarea id="tf-bio" rows="3" class="w-full p-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]"></textarea>
+              </div>
+              <label class="flex items-center gap-2 text-[12.5px] text-[#525866]">
+                <input id="tf-archived" type="checkbox" class="rounded border-[#DCD9D0]" />
+                <span>Hide from public constellation &amp; roster</span>
+              </label>
+              <button type="submit" class="w-full h-9 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                Save live member
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- 2. LEDGER EDITOR -->
+        <div id="panel-ledger" class="studio-panel hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
+            <div>
+              <h2 class="font-display font-bold text-[22px] text-[#161A22]">Open Financial Ledger</h2>
+              <p class="text-[13.5px] text-[#525866] mt-0.5">Manage verified EGP inflows and outflows shown live on <a href="/transparency" class="text-[#1B365D] underline">/transparency</a>.</p>
+            </div>
+            <button id="ledger-seed-btn" type="button" class="h-9 px-3.5 rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] text-[#161A22] text-[12.5px] font-medium transition">Import baseline entries</button>
+          </div>
+
+          <form id="ledger-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
+            <input id="lf-id" type="hidden" />
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Date *</label>
+              <input id="lf-date" type="date" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Contributor / Vendor *</label>
+              <input id="lf-vendor" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Channel *</label>
+              <input id="lf-channel" type="text" required value="Infra / Ops" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Type *</label>
+              <select id="lf-type" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                <option value="inflow">Inflow (+)</option>
+                <option value="outflow">Outflow (-)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Amount (EGP) *</label>
+              <input id="lf-amount" type="number" min="1" step="1" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+            </div>
+            <div class="sm:col-span-6 flex justify-end gap-2">
+              <button id="ledger-reset-btn" type="button" class="h-9 px-3 rounded-lg text-[12.5px] text-[#525866]">Reset</button>
+              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save entry</button>
+            </div>
+          </form>
+
+          <div id="ledger-studio-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 3. CHAPTERS EDITOR -->
+        <div id="panel-chapters" class="studio-panel hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#DFDDD6]">
+            <div>
+              <h2 class="font-display font-bold text-[22px] text-[#161A22]">Governorate Chapters &amp; Guilds</h2>
+              <p class="text-[13.5px] text-[#525866] mt-0.5">Publish chapters live to <a href="https://connect.tfunions.com" class="text-[#1B365D] underline">connect.tfunions.com</a>.</p>
+            </div>
+          </div>
+
+          <form id="chapter-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <input id="cf-id" type="hidden" />
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Serial (e.g. CH-28)</label>
+              <input id="cf-serial" type="text" required value="CH-28" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Chapter / Guild Name *</label>
+              <input id="cf-name" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Type *</label>
+              <select id="cf-type" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                <option value="School Chapter">School Chapter</option>
+                <option value="Project Guild">Project Guild</option>
+                <option value="Research Lab">Research Lab</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Governorate *</label>
+              <input id="cf-gov" type="text" required placeholder="Cairo" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Focus</label>
+              <input id="cf-focus" type="text" placeholder="Physics &amp; Olympiad" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Description *</label>
+              <input id="cf-desc" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-4 flex justify-end gap-2">
+              <button id="chapter-reset-btn" type="button" class="h-9 px-3 rounded-lg text-[12.5px] text-[#525866]">Reset</button>
+              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save chapter</button>
+            </div>
+          </form>
+
+          <div id="chapter-studio-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 4. GUIDES EDITOR -->
+        <div id="panel-guides" class="studio-panel hidden">
+          <div class="pb-4 border-b border-[#DFDDD6]">
+            <h2 class="font-display font-bold text-[22px] text-[#161A22]">Research &amp; Olympiad Guides</h2>
+            <p class="text-[13.5px] text-[#525866] mt-0.5">Publish new guides or announcements live to <a href="https://guides.tfunions.com" class="text-[#1B365D] underline">guides.tfunions.com</a>.</p>
+          </div>
+
+          <form id="guide-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <input id="gf-id" type="hidden" />
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Serial (e.g. GD-07)</label>
+              <input id="gf-serial" type="text" required value="GD-07" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Title *</label>
+              <input id="gf-title" type="text" required minlength="2" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Category *</label>
+              <select id="gf-category" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                <option value="Research & ISEF">Research &amp; ISEF</option>
+                <option value="Olympiads">Olympiads</option>
+                <option value="Global Admissions">Global Admissions</option>
+                <option value="Engineering">Engineering</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Duration / Level</label>
+              <input id="gf-level" type="text" value="6 Weeks" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Summary *</label>
+              <input id="gf-summary" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">External / Docs URL</label>
+              <input id="gf-url" type="url" placeholder="https://docs.tfunions.com" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-4 flex justify-end gap-2">
+              <button id="guide-reset-btn" type="button" class="h-9 px-3 rounded-lg text-[12.5px] text-[#525866]">Reset</button>
+              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save guide</button>
+            </div>
+          </form>
+
+          <div id="guide-studio-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 5. CERTIFICATES EDITOR -->
+        <div id="panel-certificates" class="studio-panel hidden">
+          <div class="pb-4 border-b border-[#DFDDD6]">
+            <h2 class="font-display font-bold text-[22px] text-[#161A22]">Credential Registrar</h2>
+            <p class="text-[13.5px] text-[#525866] mt-0.5">Issue or revoke verifiable credential records checked at <a href="https://verify.tfunions.com" class="text-[#1B365D] underline">verify.tfunions.com</a>.</p>
+          </div>
+
+          <form id="cert-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Serial *</label>
+              <input id="crf-serial" type="text" required placeholder="TFU-2026-000142" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code uppercase" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Recipient Full Name *</label>
+              <input id="crf-recipient" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Credential Role *</label>
+              <input id="crf-role" type="text" required placeholder="Research Mentor" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Cohort Year</label>
+              <input id="crf-cohort" type="text" value="2026" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Verified Hours</label>
+              <input id="crf-hours" type="number" min="0" value="40" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] font-code" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Status</label>
+              <select id="crf-status" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                <option value="valid">Verified / Valid</option>
+                <option value="revoked">Revoked</option>
+              </select>
+            </div>
+            <div class="sm:col-span-3 flex justify-end gap-2">
+              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Issue / Update credential</button>
+            </div>
+          </form>
+
+          <div id="cert-studio-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 6. OPPORTUNITIES EDITOR -->
+        <div id="panel-opportunities" class="studio-panel hidden">
+          <div class="pb-4 border-b border-[#DFDDD6]">
+            <h2 class="font-display font-bold text-[22px] text-[#161A22]">Opportunities &amp; Scholarships</h2>
+            <p class="text-[13.5px] text-[#525866] mt-0.5">Manage Firestore opportunities synced into the TF News mobile/web apps.</p>
+          </div>
+
+          <form id="opp-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+            <input id="opf-id" type="hidden" />
+            <div class="sm:col-span-2">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Title *</label>
+              <input id="opf-title" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Section *</label>
+              <select id="opf-section" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                <option value="Programs">Programs</option>
+                <option value="Scholarships">Scholarships</option>
+                <option value="Internships">Internships</option>
+                <option value="Activities">Activities</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Deadline *</label>
+              <input id="opf-deadline" type="date" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Official Link *</label>
+              <input id="opf-link" type="url" required placeholder="https://" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Short Description *</label>
+              <input id="opf-desc" type="text" required class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+            </div>
+            <div class="sm:col-span-3 flex justify-end gap-2">
+              <button id="opp-reset-btn" type="button" class="h-9 px-3 rounded-lg text-[12.5px] text-[#525866]">Reset</button>
+              <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save opportunity</button>
+            </div>
+          </form>
+
+          <div id="opp-studio-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 7. OWNER/ADMIN ACCESS MANAGER -->
+        <div id="panel-access" class="studio-panel hidden">
+          <div class="pb-4 border-b border-[#DFDDD6]">
+            <h2 class="font-display font-bold text-[22px] text-[#161A22]">Team Access &amp; Permissions</h2>
+            <p class="text-[13.5px] text-[#525866] mt-0.5">Grant each teammate exact permissions. Enforced directly inside Firebase Firestore rules.</p>
+          </div>
+
+          <form id="access-form" class="mt-5 p-4 rounded-xl bg-[#F3F2EE] border border-[#DFDDD6] space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Member Google / Auth Email *</label>
+                <input id="af-email" type="email" required placeholder="member@gmail.com" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Full Name</label>
+                <input id="af-name" type="text" placeholder="Display name" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#161A22] mb-1">Role Preset</label>
+                <select id="af-role" class="w-full h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px]">
+                  <option value="hr_lead">HR Lead (Team + Moderation)</option>
+                  <option value="finance_lead">Finance Lead (Open Ledger)</option>
+                  <option value="chapters_lead">Chapters Lead (Connect)</option>
+                  <option value="guides_lead">Guides Lead (Guides)</option>
+                  <option value="news_editor">News Editor (Opportunities)</option>
+                  <option value="registrar">Registrar (Certificates)</option>
+                  <option value="admin">Admin (Full Access)</option>
+                  <option value="owner">Owner (Full Access)</option>
+                  <option value="custom">Custom Permissions</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-[12px] font-medium text-[#161A22] mb-2">Section Permissions</div>
+              <div id="af-perms-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[12.5px]"></div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#DFDDD6]">
+              <label class="inline-flex items-center gap-2 text-[13px] text-[#161A22] font-medium">
+                <input id="af-active" type="checkbox" checked class="rounded border-[#DCD9D0]" />
+                <span>Access enabled (uncheck to suspend immediately)</span>
+              </label>
+              <button type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                Save access rule
+              </button>
+            </div>
+          </form>
+
+          <div id="access-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+
+        <!-- 8. AUDIT LOG -->
+        <div id="panel-audit" class="studio-panel hidden">
+          <div class="pb-4 border-b border-[#DFDDD6]">
+            <h2 class="font-display font-bold text-[22px] text-[#161A22]">Immutable Audit Trail</h2>
+            <p class="text-[13.5px] text-[#525866] mt-0.5">Every write made through TF Studio is logged automatically with actor email and timestamp.</p>
+          </div>
+          <div id="audit-list" class="mt-5 divide-y divide-[#EAE8E1] border border-[#DFDDD6] rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" define:vars={{ baselineMembers }}>
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signInWithEmailAndPassword,
+      sendEmailVerification,
+      signOut,
+      onAuthStateChanged,
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      getDocs,
+      setDoc,
+      addDoc,
+      deleteDoc,
+      query,
+      orderBy,
+      limit,
+      serverTimestamp,
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyB0bILaWHg8QXuwl3Fhfht3BQnYLgTkWUk',
+      authDomain: 'tf-unions.firebaseapp.com',
+      projectId: 'tf-unions',
+      storageBucket: 'tf-unions.firebasestorage.app',
+      messagingSenderId: '879703010053',
+      appId: '1:879703010053:web:1fe4e4476ab1680a67a56c',
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    const ALL_PERMS = [
+      { key: 'edit_team', label: 'Edit Team & Roster' },
+      { key: 'edit_ledger', label: 'Edit Open Ledger' },
+      { key: 'edit_chapters', label: 'Edit Connect Chapters' },
+      { key: 'edit_guides', label: 'Edit Guides Workbooks' },
+      { key: 'edit_opportunities', label: 'Edit News Opportunities' },
+      { key: 'manage_certificates', label: 'Issue & Revoke Certificates' },
+      { key: 'moderate_submissions', label: 'Moderate Submissions' },
+      { key: 'manage_access', label: 'Manage Roles & Audit Log' },
+    ];
+
+    const ROLE_PRESETS = {
+      owner: ALL_PERMS.map((p) => p.key),
+      admin: ALL_PERMS.map((p) => p.key),
+      hr_lead: ['edit_team', 'moderate_submissions'],
+      finance_lead: ['edit_ledger'],
+      chapters_lead: ['edit_chapters'],
+      guides_lead: ['edit_guides'],
+      news_editor: ['edit_opportunities'],
+      registrar: ['manage_certificates'],
+    };
+
+    const SECTIONS = [
+      { id: 'team', label: 'Team & Roster', perm: 'edit_team' },
+      { id: 'ledger', label: 'Open Ledger', perm: 'edit_ledger' },
+      { id: 'chapters', label: 'Connect Chapters', perm: 'edit_chapters' },
+      { id: 'guides', label: 'Guides', perm: 'edit_guides' },
+      { id: 'certificates', label: 'Certificates', perm: 'manage_certificates' },
+      { id: 'opportunities', label: 'Opportunities', perm: 'edit_opportunities' },
+      { id: 'access', label: 'Access & Roles', perm: 'manage_access' },
+      { id: 'audit', label: 'Audit Trail', perm: 'manage_access' },
+    ];
+
+    let currentUser = null;
+    let activeRole = 'viewer';
+    let activePerms = new Set();
+    let currentTab = null;
+
+    const gateLoading = document.getElementById('gate-loading');
+    const gateSignin = document.getElementById('gate-signin');
+    const gateUnverified = document.getElementById('gate-unverified');
+    const gateDenied = document.getElementById('gate-denied');
+    const workspace = document.getElementById('studio-workspace');
+    const userBar = document.getElementById('studio-user-bar');
+    const authErrBox = document.getElementById('auth-error-box');
+
+    function esc(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('studio-toast');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+    }
+
+    function showOnlyGate(which) {
+      [gateLoading, gateSignin, gateUnverified, gateDenied, workspace].forEach((el) => el.classList.add('hidden'));
+      which.classList.remove('hidden');
+    }
+
+    async function writeAudit(section, action, targetId, summary) {
+      if (!currentUser) return;
+      try {
+        await addDoc(collection(db, 'auditLogs'), {
+          actorUid: currentUser.uid,
+          actorEmail: (currentUser.email || '').toLowerCase(),
+          section,
+          action,
+          targetId: String(targetId || ''),
+          summary: String(summary || '').slice(0, 220),
+          createdAt: serverTimestamp(),
+          createdIso: new Date().toISOString(),
+        });
+      } catch (err) {
+        console.warn('Audit log skipped:', err?.message);
+      }
+    }
+
+    function hasPerm(perm) {
+      return activePerms.has('manage_access') && ['owner', 'admin', 'founder'].includes(activeRole)
+        ? true
+        : activePerms.has(perm);
+    }
+
+    function renderWorkspaceChrome() {
+      document.getElementById('studio-role-badge').textContent = activeRole.toUpperCase();
+      document.getElementById('studio-user-email').textContent = currentUser?.email || '';
+      userBar.classList.remove('hidden');
+      userBar.classList.add('flex');
+
+      const permPills = document.getElementById('studio-perm-pills');
+      permPills.replaceChildren();
+      ALL_PERMS.forEach((p) => {
+        if (!hasPerm(p.key)) return;
+        const span = document.createElement('span');
+        span.className = 'px-2.5 py-0.5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[12px] font-medium text-[#161A22]';
+        span.textContent = p.label;
+        permPills.appendChild(span);
+      });
+
+      const visibleSections = SECTIONS.filter((s) => hasPerm(s.perm));
+      const tabsEl = document.getElementById('studio-tabs');
+      tabsEl.replaceChildren();
+
+      if (!visibleSections.some((s) => s.id === currentTab)) {
+        currentTab = visibleSections[0]?.id || null;
+      }
+
+      visibleSections.forEach((s) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isSel = s.id === currentTab;
+        btn.className =
+          'px-3 py-2 rounded-lg text-[13px] font-medium text-left whitespace-nowrap transition ' +
+          (isSel ? 'bg-[#1B365D] text-white' : 'text-[#525866] hover:text-[#161A22] hover:bg-[#F3F2EE]');
+        btn.textContent = s.label;
+        btn.addEventListener('click', () => {
+          currentTab = s.id;
+          renderWorkspaceChrome();
+          loadTab(s.id);
+        });
+        tabsEl.appendChild(btn);
+      });
+
+      document.querySelectorAll('.studio-panel').forEach((p) => p.classList.add('hidden'));
+      if (currentTab) {
+        document.getElementById('panel-' + currentTab)?.classList.remove('hidden');
+      }
+    }
+
+    // ---- TEAM EDITOR ----
+    let mergedTeam = [];
+    async function loadTeamPanel() {
+      const byId = new Map(baselineMembers.map((m) => [m.id, { ...m }]));
+      const snap = await getDocs(collection(db, 'teamMembers'));
+      snap.forEach((d) => {
+        const data = d.data();
+        const prev = byId.get(d.id) || {};
+        byId.set(d.id, { ...prev, ...data, id: d.id, _live: true });
+      });
+      mergedTeam = Array.from(byId.values()).sort((a, b) => (a.tier ?? 4) - (b.tier ?? 4) || a.name.localeCompare(b.name));
+      renderTeamList();
+    }
+
+    function renderTeamList() {
+      const q = (document.getElementById('team-studio-search').value || '').toLowerCase().trim();
+      const filtered = mergedTeam.filter((m) => {
+        if (!q) return true;
+        return [m.name, m.arabicName, m.role, m.team, m.school].filter(Boolean).join(' ').toLowerCase().includes(q);
+      });
+      const list = document.getElementById('team-studio-list');
+      list.replaceChildren();
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No matching members.</div>';
+        return;
+      }
+      filtered.forEach((m) => {
+        const row = document.createElement('div');
+        row.className = 'p-3 flex items-center justify-between gap-3 hover:bg-[#FAF9F6]';
+        row.innerHTML = `
+          <div class="min-w-0">
+            <div class="text-[13.5px] font-semibold text-[#161A22] truncate">${esc(m.name)} ${m.archived ? '<span class="text-[#B42318] font-normal">(hidden)</span>' : ''} ${m._live ? '<span class="font-code text-[10.5px] text-[#0B5F58]">live</span>' : ''}</div>
+            <div class="text-[12px] text-[#525866] truncate">${esc(m.role)} · ${esc(m.team)}</div>
+          </div>
+          <button type="button" class="shrink-0 h-8 px-3 rounded border border-[#DFDDD6] hover:border-[#1B365D] text-[12px] font-medium text-[#161A22]">Edit</button>
+        `;
+        row.querySelector('button').addEventListener('click', () => fillTeamForm(m));
+        list.appendChild(row);
+      });
+    }
+
+    function fillTeamForm(m) {
+      document.getElementById('team-form-title').textContent = m ? `Edit: ${m.name}` : 'Add new member';
+      document.getElementById('tf-id').value = m?.id || '';
+      document.getElementById('tf-name').value = m?.name || '';
+      document.getElementById('tf-arabic').value = m?.arabicName || '';
+      document.getElementById('tf-role').value = m?.role || '';
+      document.getElementById('tf-team').value = m?.team || 'HR Team';
+      document.getElementById('tf-tier').value = String(m?.tier ?? 4);
+      document.getElementById('tf-cohort').value = `${m?.cohortDate || '2026-11'}|${m?.cohortLabel || 'Nov 2026'}`;
+      document.getElementById('tf-school').value = m?.school || '';
+      document.getElementById('tf-grade').value = m?.grade || '';
+      document.getElementById('tf-parent').value = m?.parent || 'founder-1';
+      document.getElementById('tf-bio').value = m?.bio || '';
+      document.getElementById('tf-archived').checked = Boolean(m?.archived);
+    }
+
+    document.getElementById('team-studio-search').addEventListener('input', renderTeamList);
+    document.getElementById('team-new-btn').addEventListener('click', () => fillTeamForm(null));
+    document.getElementById('team-reset-btn').addEventListener('click', () => fillTeamForm(null));
+    document.getElementById('team-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById('tf-id').value.trim();
+      const id = rawId || 'm-' + Date.now();
+      const [cohortDate, cohortLabel] = document.getElementById('tf-cohort').value.split('|');
+      const payload = {
+        id,
+        name: document.getElementById('tf-name').value.trim(),
+        arabicName: document.getElementById('tf-arabic').value.trim(),
+        role: document.getElementById('tf-role').value.trim(),
+        team: document.getElementById('tf-team').value,
+        tier: Number(document.getElementById('tf-tier').value),
+        school: document.getElementById('tf-school').value.trim() || 'TF Unions',
+        grade: document.getElementById('tf-grade').value.trim(),
+        cohortDate,
+        cohortLabel,
+        parent: document.getElementById('tf-parent').value.trim() || null,
+        bio: document.getElementById('tf-bio').value.trim(),
+        archived: document.getElementById('tf-archived').checked,
+        x: 500,
+        y: 380,
+        r: 12,
+        updatedAt: new Date().toISOString(),
+      };
+      await setDoc(doc(db, 'teamMembers', id), payload, { merge: true });
+      await writeAudit('team', rawId ? 'update' : 'create', id, `${payload.name} (${payload.team})`);
+      showToast(`Saved ${payload.name} live`);
+      await loadTeamPanel();
+    });
+
+    // ---- LEDGER EDITOR ----
+    async function loadLedgerPanel() {
+      const snap = await getDocs(collection(db, 'ledgerEntries'));
+      const items = [];
+      snap.forEach((d) => items.push({ id: d.id, ...d.data() }));
+      items.sort((a, b) => String(b.txDate || '').localeCompare(String(a.txDate || '')));
+      const list = document.getElementById('ledger-studio-list');
+      list.replaceChildren();
+      if (items.length === 0) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No live ledger entries yet. Click "Import baseline entries" or add one above.</div>';
+        return;
+      }
+      items.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        const sign = item.entryType === 'outflow' ? '-' : '+';
+        row.innerHTML = `
+          <div>
+            <div class="text-[13.5px] font-semibold text-[#161A22]">${esc(item.donorOrVendor)}</div>
+            <div class="font-code text-[12px] text-[#525866]">${esc(item.txDate)} · ${esc(item.paymentChannel)} · ${sign}${Number(item.amountEgp).toLocaleString('en-US')} EGP</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
+            <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Delete</button>
+          </div>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('lf-id').value = item.id;
+          document.getElementById('lf-date').value = item.txDate;
+          document.getElementById('lf-vendor').value = item.donorOrVendor;
+          document.getElementById('lf-channel').value = item.paymentChannel;
+          document.getElementById('lf-type').value = item.entryType;
+          document.getElementById('lf-amount').value = item.amountEgp;
+        });
+        row.querySelector('.del-btn').addEventListener('click', async () => {
+          await deleteDoc(doc(db, 'ledgerEntries', item.id));
+          await writeAudit('ledger', 'delete', item.id, item.donorOrVendor);
+          showToast('Deleted ledger entry');
+          await loadLedgerPanel();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('ledger-reset-btn').addEventListener('click', () => {
+      document.getElementById('ledger-form').reset();
+      document.getElementById('lf-id').value = '';
+    });
+    document.getElementById('ledger-seed-btn').addEventListener('click', async () => {
+      await setDoc(doc(db, 'ledgerEntries', 'seed-inflow-1'), {
+        txDate: '2026-01-15', donorOrVendor: 'Founders Seed Allocation', paymentChannel: 'Founders Allocation', verificationStatus: 'Verified', entryType: 'inflow', amountEgp: 12000,
+      });
+      await setDoc(doc(db, 'ledgerEntries', 'seed-outflow-1'), {
+        txDate: '2026-02-01', donorOrVendor: 'Dedicated Ubuntu VPS & Domain Renewal', paymentChannel: 'Infrastructure', verificationStatus: 'Verified', entryType: 'outflow', amountEgp: 4200,
+      });
+      await writeAudit('ledger', 'seed', 'baseline', 'Imported baseline ledger entries');
+      showToast('Imported baseline entries');
+      await loadLedgerPanel();
+    });
+    document.getElementById('ledger-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById('lf-id').value.trim();
+      const id = rawId || 'tx-' + Date.now();
+      const payload = {
+        txDate: document.getElementById('lf-date').value,
+        donorOrVendor: document.getElementById('lf-vendor').value.trim(),
+        paymentChannel: document.getElementById('lf-channel').value.trim(),
+        verificationStatus: 'Verified',
+        entryType: document.getElementById('lf-type').value,
+        amountEgp: Number(document.getElementById('lf-amount').value),
+      };
+      await setDoc(doc(db, 'ledgerEntries', id), payload, { merge: true });
+      await writeAudit('ledger', rawId ? 'update' : 'create', id, `${payload.donorOrVendor} (${payload.amountEgp} EGP)`);
+      document.getElementById('ledger-form').reset();
+      document.getElementById('lf-id').value = '';
+      showToast('Saved ledger entry live');
+      await loadLedgerPanel();
+    });
+
+    // ---- CHAPTERS EDITOR ----
+    async function loadChaptersPanel() {
+      const snap = await getDocs(collection(db, 'chapters'));
+      const list = document.getElementById('chapter-studio-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No live chapter overrides yet. Add a chapter above to publish directly to Connect.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const ch = { id: d.id, ...d.data() };
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        row.innerHTML = `
+          <div>
+            <div class="text-[13.5px] font-semibold text-[#161A22]"><span class="font-code text-[#0B5F58]">${esc(ch.serial)}</span> ${esc(ch.name)}</div>
+            <div class="text-[12px] text-[#525866]">${esc(ch.type)} · ${esc(ch.gov)} · ${esc(ch.focus)}</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
+            <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Delete</button>
+          </div>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('cf-id').value = ch.id;
+          document.getElementById('cf-serial').value = ch.serial || '';
+          document.getElementById('cf-name').value = ch.name || '';
+          document.getElementById('cf-type').value = ch.type || 'School Chapter';
+          document.getElementById('cf-gov').value = ch.gov || '';
+          document.getElementById('cf-focus').value = ch.focus || '';
+          document.getElementById('cf-desc').value = ch.desc || '';
+        });
+        row.querySelector('.del-btn').addEventListener('click', async () => {
+          await deleteDoc(doc(db, 'chapters', ch.id));
+          await writeAudit('chapters', 'delete', ch.id, ch.name);
+          showToast('Deleted chapter');
+          await loadChaptersPanel();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('chapter-reset-btn').addEventListener('click', () => {
+      document.getElementById('chapter-form').reset();
+      document.getElementById('cf-id').value = '';
+    });
+    document.getElementById('chapter-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById('cf-id').value.trim();
+      const id = rawId || 'ch-' + Date.now();
+      const payload = {
+        id,
+        serial: document.getElementById('cf-serial').value.trim(),
+        name: document.getElementById('cf-name').value.trim(),
+        type: document.getElementById('cf-type').value,
+        gov: document.getElementById('cf-gov').value.trim(),
+        focus: document.getElementById('cf-focus').value.trim(),
+        desc: document.getElementById('cf-desc').value.trim(),
+      };
+      await setDoc(doc(db, 'chapters', id), payload, { merge: true });
+      await writeAudit('chapters', rawId ? 'update' : 'create', id, payload.name);
+      document.getElementById('chapter-form').reset();
+      document.getElementById('cf-id').value = '';
+      showToast('Saved chapter live on Connect');
+      await loadChaptersPanel();
+    });
+
+    // ---- GUIDES EDITOR ----
+    async function loadGuidesPanel() {
+      const snap = await getDocs(collection(db, 'guides'));
+      const list = document.getElementById('guide-studio-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No live guide additions yet.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const g = { id: d.id, ...d.data() };
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        row.innerHTML = `
+          <div>
+            <div class="text-[13.5px] font-semibold text-[#161A22]"><span class="font-code text-[#0B5F58]">${esc(g.serial)}</span> ${esc(g.title)}</div>
+            <div class="text-[12px] text-[#525866]">${esc(g.category)} · ${esc(g.level)}</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
+            <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Delete</button>
+          </div>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('gf-id').value = g.id;
+          document.getElementById('gf-serial').value = g.serial || '';
+          document.getElementById('gf-title').value = g.title || '';
+          document.getElementById('gf-category').value = g.category || 'Research & ISEF';
+          document.getElementById('gf-level').value = g.level || '';
+          document.getElementById('gf-summary').value = g.summary || '';
+          document.getElementById('gf-url').value = g.url || '';
+        });
+        row.querySelector('.del-btn').addEventListener('click', async () => {
+          await deleteDoc(doc(db, 'guides', g.id));
+          await writeAudit('guides', 'delete', g.id, g.title);
+          showToast('Deleted guide');
+          await loadGuidesPanel();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('guide-reset-btn').addEventListener('click', () => {
+      document.getElementById('guide-form').reset();
+      document.getElementById('gf-id').value = '';
+    });
+    document.getElementById('guide-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById('gf-id').value.trim();
+      const id = rawId || 'gd-' + Date.now();
+      const payload = {
+        id,
+        serial: document.getElementById('gf-serial').value.trim(),
+        title: document.getElementById('gf-title').value.trim(),
+        category: document.getElementById('gf-category').value,
+        level: document.getElementById('gf-level').value.trim(),
+        summary: document.getElementById('gf-summary').value.trim(),
+        url: document.getElementById('gf-url').value.trim() || 'https://docs.tfunions.com',
+      };
+      await setDoc(doc(db, 'guides', id), payload, { merge: true });
+      await writeAudit('guides', rawId ? 'update' : 'create', id, payload.title);
+      document.getElementById('guide-form').reset();
+      document.getElementById('gf-id').value = '';
+      showToast('Saved guide live on Guides');
+      await loadGuidesPanel();
+    });
+
+    // ---- CERTIFICATES EDITOR ----
+    async function loadCertificatesPanel() {
+      const snap = await getDocs(collection(db, 'certificates'));
+      const list = document.getElementById('cert-studio-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No Firestore certificates issued yet.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const c = { serial: d.id, ...d.data() };
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        row.innerHTML = `
+          <div>
+            <div class="text-[13.5px] font-semibold text-[#161A22]"><span class="font-code text-[#0B5F58]">${esc(c.serial)}</span> ${esc(c.recipientName)}</div>
+            <div class="text-[12px] text-[#525866]">${esc(c.role)} · ${esc(c.cohort)} · ${esc(c.hours)} hrs · <span class="font-code">${esc(c.status)}</span></div>
+          </div>
+          <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Load</button>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('crf-serial').value = c.serial;
+          document.getElementById('crf-recipient').value = c.recipientName || '';
+          document.getElementById('crf-role').value = c.role || '';
+          document.getElementById('crf-cohort').value = c.cohort || '2026';
+          document.getElementById('crf-hours').value = c.hours ?? 40;
+          document.getElementById('crf-status').value = c.status || 'valid';
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('cert-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const serial = document.getElementById('crf-serial').value.trim().toUpperCase();
+      const payload = {
+        serial,
+        recipientName: document.getElementById('crf-recipient').value.trim(),
+        role: document.getElementById('crf-role').value.trim(),
+        cohort: document.getElementById('crf-cohort').value.trim(),
+        hours: Number(document.getElementById('crf-hours').value),
+        status: document.getElementById('crf-status').value,
+        issuedAt: new Date().toISOString().slice(0, 10),
+      };
+      await setDoc(doc(db, 'certificates', serial), payload, { merge: true });
+      await writeAudit('certificates', 'upsert', serial, `${payload.recipientName} (${payload.status})`);
+      showToast(`Saved credential ${serial}`);
+      await loadCertificatesPanel();
+    });
+
+    // ---- OPPORTUNITIES EDITOR ----
+    async function loadOpportunitiesPanel() {
+      const snap = await getDocs(collection(db, 'opportunities'));
+      const list = document.getElementById('opp-studio-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No Firestore opportunities loaded.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const o = { id: d.id, ...d.data() };
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        row.innerHTML = `
+          <div>
+            <div class="text-[13.5px] font-semibold text-[#161A22]">${esc(o.title)}</div>
+            <div class="text-[12px] text-[#525866]">${esc(o.section)} · Deadline ${esc(o.deadline)}</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
+            <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Delete</button>
+          </div>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('opf-id').value = o.id;
+          document.getElementById('opf-title').value = o.title || '';
+          document.getElementById('opf-section').value = o.section || 'Programs';
+          document.getElementById('opf-deadline').value = String(o.deadline || '').slice(0, 10);
+          document.getElementById('opf-link').value = o.link || '';
+          document.getElementById('opf-desc').value = o.shortDescription || '';
+        });
+        row.querySelector('.del-btn').addEventListener('click', async () => {
+          await deleteDoc(doc(db, 'opportunities', o.id));
+          await writeAudit('opportunities', 'delete', o.id, o.title);
+          showToast('Deleted opportunity');
+          await loadOpportunitiesPanel();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('opp-reset-btn').addEventListener('click', () => {
+      document.getElementById('opp-form').reset();
+      document.getElementById('opf-id').value = '';
+    });
+    document.getElementById('opp-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById('opf-id').value.trim();
+      const id = rawId || 'opp-' + Date.now();
+      const payload = {
+        id,
+        title: document.getElementById('opf-title').value.trim(),
+        section: document.getElementById('opf-section').value,
+        deadline: document.getElementById('opf-deadline').value,
+        link: document.getElementById('opf-link').value.trim(),
+        shortDescription: document.getElementById('opf-desc').value.trim(),
+        startDate: new Date().toISOString().slice(0, 10),
+        updatedAt: new Date().toISOString(),
+      };
+      await setDoc(doc(db, 'opportunities', id), payload, { merge: true });
+      await writeAudit('opportunities', rawId ? 'update' : 'create', id, payload.title);
+      document.getElementById('opp-form').reset();
+      document.getElementById('opf-id').value = '';
+      showToast('Saved opportunity');
+      await loadOpportunitiesPanel();
+    });
+
+    // ---- ACCESS & ROLES MANAGER (OWNER / ADMIN ONLY) ----
+    const permsGrid = document.getElementById('af-perms-grid');
+    ALL_PERMS.forEach((p) => {
+      const label = document.createElement('label');
+      label.className = 'flex items-center gap-2 p-2 rounded-lg bg-white border border-[#DFDDD6] cursor-pointer';
+      label.innerHTML = `<input type="checkbox" value="${esc(p.key)}" class="af-perm-cb rounded border-[#DCD9D0]" /><span>${esc(p.label)}</span>`;
+      permsGrid.appendChild(label);
+    });
+
+    function applyPresetToCheckboxes(role) {
+      const set = new Set(ROLE_PRESETS[role] || []);
+      document.querySelectorAll('.af-perm-cb').forEach((cb) => {
+        cb.checked = set.has(cb.value);
+      });
+    }
+    applyPresetToCheckboxes('hr_lead');
+    document.getElementById('af-role').addEventListener('change', (e) => {
+      if (e.target.value !== 'custom') applyPresetToCheckboxes(e.target.value);
+    });
+
+    async function loadAccessPanel() {
+      const snap = await getDocs(collection(db, 'staffAccess'));
+      const list = document.getElementById('access-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No delegated staff accounts yet. Add teammates by email above.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const s = { email: d.id, ...d.data() };
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-3';
+        row.innerHTML = `
+          <div class="min-w-0">
+            <div class="text-[13.5px] font-semibold text-[#161A22]">${esc(s.displayName || s.email)} <span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1]">${esc(s.role)}</span> ${s.active ? '' : '<span class="text-[#B42318] text-[12px]">(suspended)</span>'}</div>
+            <div class="text-[12px] text-[#525866] font-code truncate">${esc(s.email)}</div>
+            <div class="text-[11.5px] text-[#767D8C] mt-0.5">${esc((s.permissions || []).join(' · '))}</div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="edit-btn h-8 px-3 rounded border border-[#DFDDD6] text-[12px] font-medium">Edit</button>
+            <button type="button" class="del-btn h-8 px-3 rounded border border-[#FECDCA] text-[#B42318] text-[12px] font-medium">Revoke</button>
+          </div>
+        `;
+        row.querySelector('.edit-btn').addEventListener('click', () => {
+          document.getElementById('af-email').value = s.email;
+          document.getElementById('af-name').value = s.displayName || '';
+          document.getElementById('af-role').value = ROLE_PRESETS[s.role] ? s.role : 'custom';
+          const pSet = new Set(s.permissions || []);
+          document.querySelectorAll('.af-perm-cb').forEach((cb) => { cb.checked = pSet.has(cb.value); });
+          document.getElementById('af-active').checked = Boolean(s.active);
+        });
+        row.querySelector('.del-btn').addEventListener('click', async () => {
+          await deleteDoc(doc(db, 'staffAccess', s.email));
+          await writeAudit('access', 'revoke', s.email, `Revoked access for ${s.email}`);
+          showToast(`Revoked ${s.email}`);
+          await loadAccessPanel();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('access-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('af-email').value.trim().toLowerCase();
+      const displayName = document.getElementById('af-name').value.trim();
+      const role = document.getElementById('af-role').value;
+      const permissions = Array.from(document.querySelectorAll('.af-perm-cb'))
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+      const active = document.getElementById('af-active').checked;
+      await setDoc(doc(db, 'staffAccess', email), {
+        email,
+        displayName,
+        role,
+        permissions,
+        active,
+        updatedBy: currentUser?.email?.toLowerCase() || '',
+        updatedAt: new Date().toISOString(),
+      });
+      await writeAudit('access', 'grant', email, `${role}: ${permissions.join(', ')}`);
+      showToast(`Saved permissions for ${email}`);
+      await loadAccessPanel();
+    });
+
+    // ---- AUDIT LOG ----
+    async function loadAuditPanel() {
+      const q = query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60));
+      const snap = await getDocs(q).catch(async () => await getDocs(collection(db, 'auditLogs')));
+      const list = document.getElementById('audit-list');
+      list.replaceChildren();
+      if (snap.empty) {
+        list.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No audit actions recorded yet.</div>';
+        return;
+      }
+      snap.forEach((d) => {
+        const a = d.data();
+        const row = document.createElement('div');
+        row.className = 'p-3.5 flex flex-wrap items-center justify-between gap-2 text-[13px]';
+        row.innerHTML = `
+          <div>
+            <span class="font-code text-[11.5px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#161A22]">${esc(a.section)}:${esc(a.action)}</span>
+            <strong class="ml-2 text-[#161A22]">${esc(a.summary || a.targetId)}</strong>
+            <span class="ml-2 text-[#525866]">by ${esc(a.actorEmail)}</span>
+          </div>
+          <span class="font-code text-[11.5px] text-[#767D8C]">${esc(String(a.createdIso || '').slice(0, 19).replace('T', ' '))}</span>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function loadTab(id) {
+      if (id === 'team') loadTeamPanel();
+      else if (id === 'ledger') loadLedgerPanel();
+      else if (id === 'chapters') loadChaptersPanel();
+      else if (id === 'guides') loadGuidesPanel();
+      else if (id === 'certificates') loadCertificatesPanel();
+      else if (id === 'opportunities') loadOpportunitiesPanel();
+      else if (id === 'access') loadAccessPanel();
+      else if (id === 'audit') loadAuditPanel();
+    }
+
+    // ---- AUTH HANDLERS ----
+    document.getElementById('btn-google-signin').addEventListener('click', async () => {
+      authErrBox.classList.add('hidden');
+      try {
+        await signInWithPopup(auth, googleProvider);
+      } catch (err) {
+        authErrBox.textContent = err?.message || 'Google sign-in failed.';
+        authErrBox.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('email-signin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authErrBox.classList.add('hidden');
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          document.getElementById('signin-email').value.trim(),
+          document.getElementById('signin-password').value,
+        );
+      } catch (err) {
+        authErrBox.textContent = err?.message || 'Invalid email or password.';
+        authErrBox.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('btn-send-verify').addEventListener('click', async () => {
+      if (!auth.currentUser) return;
+      await sendEmailVerification(auth.currentUser);
+      const msg = document.getElementById('verify-status-msg');
+      msg.textContent = 'Verification link sent. Open your inbox, then click Refresh.';
+      msg.classList.remove('hidden');
+    });
+
+    document.getElementById('btn-refresh-verify').addEventListener('click', async () => {
+      if (!auth.currentUser) return;
+      await auth.currentUser.reload();
+      resolveUserSession(auth.currentUser);
+    });
+
+    async function doSignOut() {
+      await signOut(auth);
+      userBar.classList.add('hidden');
+      userBar.classList.remove('flex');
+    }
+
+    ['studio-signout-btn', 'btn-unverified-signout', 'btn-denied-signout'].forEach((id) => {
+      document.getElementById(id).addEventListener('click', doSignOut);
+    });
+
+    async function resolveUserSession(user) {
+      currentUser = user;
+      if (!user) {
+        userBar.classList.add('hidden');
+        showOnlyGate(gateSignin);
+        return;
+      }
+
+      if (!user.email || !user.emailVerified) {
+        document.getElementById('unverified-email').textContent = user.email || '(no email)';
+        showOnlyGate(gateUnverified);
+        return;
+      }
+
+      const email = user.email.toLowerCase();
+      activeRole = 'none';
+      activePerms = new Set();
+
+      const applyStaffData = (d) => {
+        if (!d || d.active !== true) return;
+        activeRole = d.role || 'staff';
+        const list = ['owner', 'admin', 'founder'].includes(activeRole)
+          ? ALL_PERMS.map((p) => p.key)
+          : Array.isArray(d.permissions) ? d.permissions : [];
+        activePerms = new Set(list);
+      };
+
+      try {
+        const staffRef = doc(db, 'staffAccess', email);
+        const staffSnap = await getDoc(staffRef);
+        if (staffSnap.exists()) {
+          applyStaffData(staffSnap.data());
+        } else {
+          // Server-enforced bootstrap: succeeds only if email is authorized in firestore.rules
+          const bootPayload = {
+            email,
+            displayName: user.displayName || 'Foundation Owner',
+            role: 'owner',
+            permissions: ALL_PERMS.map((p) => p.key),
+            active: true,
+            updatedAt: new Date().toISOString(),
+          };
+          await setDoc(staffRef, bootPayload);
+          applyStaffData(bootPayload);
+        }
+      } catch (_) {}
+
+      if (activePerms.size === 0) {
+        document.getElementById('denied-email').textContent = email;
+        showOnlyGate(gateDenied);
+        return;
+      }
+
+      showOnlyGate(workspace);
+      renderWorkspaceChrome();
+      if (currentTab) loadTab(currentTab);
+    }
+
+    onAuthStateChanged(auth, resolveUserSession);
+  </script>
+</BaseLayout>

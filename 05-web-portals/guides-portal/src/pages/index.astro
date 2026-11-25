@@ -153,5 +153,86 @@ const categories = ['Research & ISEF', 'Olympiads', 'Global Admissions', 'Engine
     });
 
     syncProgressUI();
+
+    (async () => {
+      function decodeFsVal(v) {
+        if (!v || typeof v !== 'object') return undefined;
+        if ('stringValue' in v) return v.stringValue;
+        if ('booleanValue' in v) return v.booleanValue;
+        if ('integerValue' in v) return Number(v.integerValue);
+        return undefined;
+      }
+      function safeUrl(u) {
+        return typeof u === 'string' && (/^https?:\/\//i.test(u) || /^\/[^/]/.test(u)) ? u : '#';
+      }
+      try {
+        const res = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/guides?pageSize=100', { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = await res.json();
+        const docs = (json.documents || []).map((d) => {
+          const o = { id: d.name.split('/').pop() };
+          const f = d.fields || {};
+          Object.keys(f).forEach((k) => { o[k] = decodeFsVal(f[k]); });
+          return o;
+        });
+        const grid = document.getElementById('guides-grid');
+        if (!grid || docs.length === 0) return;
+
+        docs.forEach((g) => {
+          if (!g.title) return;
+          const existing = grid.querySelector(`.guide-row[data-id="${CSS.escape(g.id)}"]`);
+          if (existing) {
+            if (g.archived) { existing.remove(); return; }
+            existing.setAttribute('data-cat', g.category || '');
+            existing.setAttribute('data-search', `${g.title} ${g.summary || ''} ${g.category || ''}`.toLowerCase());
+            const h2 = existing.querySelector('h2');
+            const p = existing.querySelector('p');
+            if (h2) h2.textContent = g.title;
+            if (p) p.textContent = g.summary || '';
+            return;
+          }
+          if (g.archived) return;
+          const a = document.createElement('a');
+          a.href = safeUrl(g.url);
+          a.className = 'guide-row p-5 sm:p-6 grid grid-cols-1 md:grid-cols-[1fr_200px] gap-5 items-center hover:bg-tf-canvas/60 transition block';
+          a.setAttribute('data-id', g.id);
+          a.setAttribute('data-cat', g.category || 'Research & ISEF');
+          a.setAttribute('data-search', `${g.title} ${g.summary || ''} ${g.category || ''}`.toLowerCase());
+
+          const left = document.createElement('div');
+          const badges = document.createElement('div');
+          badges.className = 'flex flex-wrap items-center gap-2 text-[12px]';
+          const chip = document.createElement('span');
+          chip.className = 'tf-serial-chip';
+          chip.textContent = `№ ${g.serial || 'LIVE'}`;
+          const cat = document.createElement('span');
+          cat.className = 'font-semibold text-tf-accent-text';
+          cat.textContent = g.category || 'Research & ISEF';
+          const lvl = document.createElement('span');
+          lvl.className = 'font-mono bg-tf-sunken border border-tf-border-strong px-2 py-0.5 rounded-tf-input text-tf-muted font-medium';
+          lvl.textContent = g.level || 'Guide';
+          badges.append(chip, cat, lvl);
+
+          const h2 = document.createElement('h2');
+          h2.className = 'font-display text-[19px] font-semibold text-tf-ink mt-2 leading-[1.3]';
+          h2.textContent = g.title;
+          const p = document.createElement('p');
+          p.className = 'text-[13.5px] leading-[1.6] text-tf-muted mt-1.5 max-w-[64ch]';
+          p.textContent = g.summary || '';
+          left.append(badges, h2, p);
+
+          const right = document.createElement('div');
+          right.className = 'flex flex-col items-stretch md:items-end gap-2';
+          const btn = document.createElement('span');
+          btn.className = 'px-3.5 py-2 rounded-tf-input bg-tf-canvas text-tf-ink text-[12.5px] font-medium border border-tf-border text-center';
+          btn.textContent = 'Open guide →';
+          right.appendChild(btn);
+
+          a.append(left, right);
+          grid.prepend(a);
+        });
+        filterRows();
+      } catch {}
+    })();
   </script>
 </GuidesLayout>

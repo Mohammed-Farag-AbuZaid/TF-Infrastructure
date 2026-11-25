@@ -183,16 +183,39 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       renderFilterPills();
       renderRoster();
 
-      fetch('/team.json', { cache: 'no-store' })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (payload) {
-          if (payload && Array.isArray(payload.members) && payload.members.length > 0) {
-            ALL_MEMBERS = payload.members;
-            renderFilterPills();
-            renderRoster();
-          }
-        })
-        .catch(function () {});
+      function decodeFsVal(v) {
+        if (!v || typeof v !== 'object') return undefined;
+        if ('stringValue' in v) return v.stringValue;
+        if ('booleanValue' in v) return v.booleanValue;
+        if ('integerValue' in v) return Number(v.integerValue);
+        if ('doubleValue' in v) return Number(v.doubleValue);
+        return undefined;
+      }
+
+      Promise.all([
+        fetch('/team.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+        fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=200', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+      ]).then(function (results) {
+        var jsonPayload = results[0];
+        var fsPayload = results[1];
+        var base = (jsonPayload && Array.isArray(jsonPayload.members) && jsonPayload.members.length > 0) ? jsonPayload.members : ALL_MEMBERS;
+        var map = new Map(base.map(function (m) { return [m.id, m]; }));
+        if (fsPayload && Array.isArray(fsPayload.documents)) {
+          fsPayload.documents.forEach(function (doc) {
+            var id = doc.name.split('/').pop();
+            var f = doc.fields || {};
+            var ov = { id: id };
+            Object.keys(f).forEach(function (k) {
+              if (k !== 'email' && k !== 'phone' && k !== 'age') ov[k] = decodeFsVal(f[k]);
+            });
+            var prev = map.get(id) || {};
+            map.set(id, Object.assign({}, prev, ov, { id: id }));
+          });
+        }
+        ALL_MEMBERS = Array.from(map.values()).filter(function (m) { return !m.archived && m.name; });
+        renderFilterPills();
+        renderRoster();
+      }).catch(function () {});
     })();
   </script>
 </BaseLayout>

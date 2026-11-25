@@ -38,7 +38,16 @@ test('firestore.rules declares v2 syntax and balanced braces', () => {
 });
 
 test('defines required auth and RBAC helper functions', () => {
-  for (const fn of ['isSignedIn()', 'isOwner(uid)', 'hasRole(roles)', 'isAdmin()', 'isLead()']) {
+  for (const fn of [
+    'isSignedIn()',
+    'isOwner(uid)',
+    'hasRole(roles)',
+    'isVerifiedEmail()',
+    'isBootstrapOwner()',
+    'hasPermission(perm)',
+    'isAdmin()',
+    'isLead()',
+  ]) {
     assert.ok(rulesText.includes(`function ${fn}`), `Missing helper function ${fn}`);
   }
 });
@@ -96,10 +105,43 @@ test('private intake collections forbid blanket public reads', () => {
   }
 });
 
-test('/certificates/{serial} allows public verification read and restricts writes to admins', () => {
+test('/staffAccess/{email} restricts reads to self/admin and writes to admin', () => {
+  const block = extractMatchBlock(rulesText, 'match /staffAccess/{email}');
+  assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/);
+  assert.match(block, /userEmail\(\)\s*==\s*email/);
+  assert.match(block, /isAdmin\(\)/);
+});
+
+test('studio content collections enforce granular per-permission writes and PII protection', () => {
+  const teamBlock = extractMatchBlock(rulesText, 'match /teamMembers/{memberId}');
+  assert.match(teamBlock, /hasPermission\(['"]edit_team['"]\)/);
+  for (const blocked of ['email', 'phone', 'age']) {
+    assert.ok(teamBlock.includes(`'${blocked}'`), `/teamMembers must forbid PII field "${blocked}"`);
+  }
+
+  const ledgerBlock = extractMatchBlock(rulesText, 'match /ledgerEntries/{entryId}');
+  assert.match(ledgerBlock, /hasPermission\(['"]edit_ledger['"]\)/);
+  assert.match(ledgerBlock, /amountEgp/);
+
+  const chaptersBlock = extractMatchBlock(rulesText, 'match /chapters/{chapterId}');
+  assert.match(chaptersBlock, /hasPermission\(['"]edit_chapters['"]\)/);
+
+  const guidesBlock = extractMatchBlock(rulesText, 'match /guides/{guideId}');
+  assert.match(guidesBlock, /hasPermission\(['"]edit_guides['"]\)/);
+});
+
+test('/auditLogs/{logId} is append-only for verified staff/admins and readable only by admin', () => {
+  const block = extractMatchBlock(rulesText, 'match /auditLogs/{logId}');
+  assert.match(block, /allow\s+read:\s*if\s+isAdmin\(\)\s*;/);
+  assert.match(block, /actorUid\s*==\s*request\.auth\.uid/);
+  assert.match(block, /allow\s+update,\s*delete:\s*if\s+false\s*;/);
+});
+
+test('/certificates/{serial} allows public verification read and restricts writes to admins or registrars', () => {
   const block = extractMatchBlock(rulesText, 'match /certificates/{serial}');
   assert.match(block, /allow\s+read:\s*if\s+true\s*;/);
-  assert.match(block, /allow\s+write:\s*if\s+isAdmin\(\)\s*;/);
+  assert.match(block, /isAdmin\(\)/);
+  assert.match(block, /manage_certificates/);
 });
 
 test('contains default deny catch-all rule', () => {

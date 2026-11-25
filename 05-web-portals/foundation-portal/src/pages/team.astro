@@ -1500,26 +1500,96 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (BY_ID.has(targetId)) selectMember(targetId, true);
       }
 
+      function decodeFsValue(v) {
+        if (!v || typeof v !== 'object') return undefined;
+        if ('stringValue' in v) return v.stringValue;
+        if ('booleanValue' in v) return v.booleanValue;
+        if ('integerValue' in v) return Number(v.integerValue);
+        if ('doubleValue' in v) return Number(v.doubleValue);
+        if ('nullValue' in v) return null;
+        if ('timestampValue' in v) return v.timestampValue;
+        if ('arrayValue' in v) return (v.arrayValue.values || []).map(decodeFsValue);
+        if ('mapValue' in v) {
+          var o = {};
+          var f = v.mapValue.fields || {};
+          Object.keys(f).forEach(function (k) { o[k] = decodeFsValue(f[k]); });
+          return o;
+        }
+        return undefined;
+      }
+
+      async function fetchFsTeamMembers() {
+        var res = await fetch(
+          'https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=200',
+          { cache: 'no-store' }
+        );
+        if (!res.ok) return [];
+        var data = await res.json();
+        return (data.documents || []).map(function (doc) {
+          var o = { id: doc.name.split('/').pop() };
+          var fields = doc.fields || {};
+          Object.keys(fields).forEach(function (k) { o[k] = decodeFsValue(fields[k]); });
+          return {
+            id: o.id,
+            name: o.name || '',
+            arabicName: o.arabicName || '',
+            role: o.role || '',
+            team: o.team || 'HR Team',
+            tier: typeof o.tier === 'number' ? o.tier : 4,
+            school: o.school || 'TF Unions',
+            grade: o.grade || '',
+            cohortDate: o.cohortDate || '2026-11',
+            cohortLabel: o.cohortLabel || '',
+            bio: o.bio || '',
+            x: typeof o.x === 'number' ? o.x : 500,
+            y: typeof o.y === 'number' ? o.y : 380,
+            r: typeof o.r === 'number' ? o.r : 12,
+            parent: o.parent || null,
+            hub: o.hub || o.team || 'HR Team',
+            archived: Boolean(o.archived),
+          };
+        });
+      }
+
       async function refreshDynamicMembers() {
+        var baseList = initialMembers.slice();
         try {
           var ctrl = new AbortController();
           var timer = setTimeout(function () { ctrl.abort(); }, 2500);
           var res = await fetch('/team.json', { signal: ctrl.signal, cache: 'no-store' });
           clearTimeout(timer);
-          if (!res.ok) return;
-          var payload = await res.json();
-          var list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.members) ? payload.members : null;
-          if (!list || list.length === 0) return;
+          if (res.ok) {
+            var payload = await res.json();
+            var list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.members) ? payload.members : null;
+            if (list && list.length > 0) baseList = list;
+          }
+        } catch (_) {}
 
-          indexMembers(list);
+        try {
+          var overrides = await fetchFsTeamMembers();
+          var map = new Map(baseList.map(function (m) { return [m.id, m]; }));
+          overrides.forEach(function (ov) {
+            var prev = map.get(ov.id) || {};
+            map.set(ov.id, Object.assign({}, prev, ov, { id: ov.id }));
+          });
+          var merged = Array.from(map.values()).filter(function (m) { return !m.archived && m.name; });
+          if (merged.length > 0) {
+            indexMembers(merged);
+            updateTargets();
+            renderControls();
+            renderDirectory();
+            if (state.selectedId && BY_ID.has(state.selectedId)) {
+              renderInspector(BY_ID.get(state.selectedId));
+            }
+            sourceStatusEl.textContent = overrides.length > 0 ? 'Live Studio synced' : 'Live registry synced';
+          }
+        } catch (_) {
+          indexMembers(baseList);
           updateTargets();
           renderControls();
           renderDirectory();
-          if (state.selectedId && BY_ID.has(state.selectedId)) {
-            renderInspector(BY_ID.get(state.selectedId));
-          }
           sourceStatusEl.textContent = 'Live registry synced';
-        } catch (_) {}
+        }
       }
       refreshDynamicMembers();
     })();

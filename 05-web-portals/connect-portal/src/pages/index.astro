@@ -221,14 +221,42 @@ const orgJsonLd = JSON.stringify({
 
     render();
 
+    function decodeFsVal(v) {
+      if (!v || typeof v !== 'object') return undefined;
+      if ('stringValue' in v) return v.stringValue;
+      if ('booleanValue' in v) return v.booleanValue;
+      if ('integerValue' in v) return Number(v.integerValue);
+      if ('doubleValue' in v) return Number(v.doubleValue);
+      return undefined;
+    }
+
     (async () => {
       try {
-        const [orgsRes, projRes] = await Promise.all([
+        const [fsChRes, orgsRes, projRes] = await Promise.all([
+          fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/chapters?pageSize=200', { cache: 'no-store' }).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
           fetch('https://n8n.tfunions.com/tf-api/api/collections/orgs').then((r) => r.json()).catch(() => ({})),
           fetch('https://n8n.tfunions.com/tf-api/api/collections/allProjects').then((r) => r.json()).catch(() => ({}))
         ]);
         const extra = [];
-        const seen = new Set(allItems.map((x) => x.name.toLowerCase()));
+        const byId = new Map(BASELINE_CHAPTERS.map((x) => [x.id, x]));
+        (fsChRes.documents || []).forEach((doc, idx) => {
+          const id = doc.name.split('/').pop();
+          const f = doc.fields || {};
+          const ch = {};
+          Object.keys(f).forEach((k) => { ch[k] = decodeFsVal(f[k]); });
+          if (ch.name) {
+            byId.set(id, {
+              id,
+              serial: ch.serial || `CH-${String(idx + 1).padStart(2, '0')}`,
+              type: ch.type || 'School Chapter',
+              gov: ch.gov || 'Nationwide',
+              name: ch.name,
+              desc: ch.desc || '',
+              focus: ch.focus || 'Verified Chapter',
+            });
+          }
+        });
+        const seen = new Set(Array.from(byId.values()).map((x) => x.name.toLowerCase()));
         (orgsRes.documents || []).forEach((doc, idx) => {
           const name = doc.name || doc.title;
           if (name && !seen.has(name.toLowerCase())) {
@@ -259,9 +287,10 @@ const orgJsonLd = JSON.stringify({
             });
           }
         });
-        if (extra.length > 0) {
-          allItems = [...extra, ...BASELINE_CHAPTERS];
-          document.getElementById('live-sync-status').textContent = `Synced (${allItems.length} entries)`;
+        const combined = [...Array.from(byId.values()), ...extra];
+        if (combined.length !== BASELINE_CHAPTERS.length || (fsChRes.documents || []).length > 0) {
+          allItems = combined;
+          document.getElementById('live-sync-status').textContent = `Live Studio Synced (${allItems.length} entries)`;
           render();
         }
       } catch {}

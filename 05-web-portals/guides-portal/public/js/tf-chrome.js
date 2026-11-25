@@ -46,6 +46,7 @@
     { label: 'Open Financial Ledger', url: 'https://www.tfunions.com/transparency', cat: 'Trust' },
     { label: 'Charter & Bylaws', url: 'https://www.tfunions.com/charter', cat: 'Trust' },
     { label: 'Privacy & Data Policy', url: 'https://www.tfunions.com/privacy', cat: 'Trust' },
+    { label: 'Team Studio — Role Editor', url: 'https://www.tfunions.com/studio', cat: 'Act' },
     { label: 'Submit Chapter Photos', url: 'https://www.tfunions.com/photos-submit', cat: 'Act' },
     { label: 'Volunteer Tracks', url: 'https://www.tfunions.com/volunteer', cat: 'Act' },
     { label: 'Volunteer Application Form', url: 'https://www.tfunions.com/volunteer-apply', cat: 'Act' },
