@@ -37,7 +37,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         ></textarea>
       </div>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <a href="/ideas" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">â† Back to backlog</a>
+        <a href="/ideas" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">← Back to backlog</a>
         <button
           type="submit"
           class="h-10 px-6 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
@@ -80,6 +80,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           }),
         });
         if (!res.ok) throw new Error('Publish failed');
+        window.tfTrack?.('idea_submit', { service: 'Foundation_Portal' });
         alertBox.textContent = 'Idea published to the community backlog.';
         alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();

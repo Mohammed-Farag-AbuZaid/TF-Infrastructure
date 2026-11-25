@@ -1,6 +1,6 @@
 ﻿/**
  * WebCrypto Utilities for Firebase Admin Operations on Cloudflare Edge Workers
- * Zero Node.js dependencies â€” runs natively on Cloudflare Pages Functions Free Tier.
+ * Zero Node.js dependencies — runs natively on Cloudflare Pages Functions Free Tier.
  */
 
 export interface Env {

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#F3F2EE"/>
+  <rect x="40" y="40" width="1120" height="550" rx="18" fill="#FFFFFF" stroke="#DFDDD6" stroke-width="2"/>
+  <g transform="translate(96, 96)">
+    <rect width="64" height="64" rx="14" fill="#1B365D"/>
+    <rect x="44" y="10" width="10" height="10" rx="3" fill="#0F766E"/>
+    <path d="M13.6 19H36.4V24.4H28V46H22V24.4H13.6V19ZM35.2 19H50V24.4H41.2V30.2H48.8V35.4H41.2V46H35.2V19Z" fill="#FFFFFF"/>
+  </g>
+  <text x="184" y="126" font-family="system-ui, -apple-system, sans-serif" font-size="30" font-weight="700" fill="#161A22">TF Unions</text>
+  <text x="184" y="156" font-family="ui-monospace, monospace" font-size="18" font-weight="500" fill="#0B5F58">№ EGYPTIAN STEM &amp; UNIVERSITY UNION</text>
+
+  <line x1="96" y1="208" x2="1104" y2="208" stroke="#0F766E" stroke-width="2" stroke-opacity="0.45"/>
+
+  <text x="96" y="295" font-family="system-ui, -apple-system, sans-serif" font-size="54" font-weight="700" letter-spacing="-1.2" fill="#161A22">Verified admissions, roadmaps,</text>
+  <text x="96" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="54" font-weight="700" letter-spacing="-1.2" fill="#161A22">chapters &amp; open accountability.</text>
+
+  <text x="96" y="432" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="400" fill="#5B606B">Equipping students across all 27 Egyptian governorates · Calm Alabaster &amp; Fjord Slate</text>
+
+  <g transform="translate(96, 488)">
+    <rect width="230" height="44" rx="22" fill="#EDF7F5" stroke="#BCE3DC" stroke-width="1.5"/>
+    <text x="24" y="29" font-family="ui-monospace, monospace" font-size="18" font-weight="600" fill="#0B5F58">WWW.TFUNIONS.COM</text>
+    <text x="270" y="29" font-family="ui-monospace, monospace" font-size="18" fill="#5B606B">news · guides · connect · verify · docs</text>
+  </g>
+</svg>

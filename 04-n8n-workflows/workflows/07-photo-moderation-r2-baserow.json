@@ -1,0 +1,108 @@
+{
+  "name": "07_Photo_Moderation_R2_And_Baserow_Review",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "photo-submit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-photo-submit",
+      "name": "Webhook (POST /webhook/photo-submit)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 280],
+      "webhookId": "tf-photo-submit"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ Boolean($json.body.consentConfirmed) }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "if-consent-confirmed",
+      "name": "IF: Consent Confirmed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 280]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": "={{ $env.BASEROW_DATABASE_ID }}",
+        "tableId": "={{ $env.BASEROW_TABLE_PHOTO_MODERATION }}",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "title", "fieldValue": "={{ $json.body.title }}" },
+            { "fieldId": "chapter_or_event", "fieldValue": "={{ $json.body.chapterOrEvent }}" },
+            { "fieldId": "photographer_name", "fieldValue": "={{ $json.body.photographerName }}" },
+            { "fieldId": "source_image_url", "fieldValue": "={{ $json.body.imageUrl }}" },
+            { "fieldId": "alt_text_en", "fieldValue": "={{ $json.body.altTextEn }}" },
+            { "fieldId": "alt_text_ar", "fieldValue": "={{ $json.body.altTextAr || '' }}" },
+            { "fieldId": "caption_en", "fieldValue": "={{ $json.body.captionEn }}" },
+            { "fieldId": "caption_ar", "fieldValue": "={{ $json.body.captionAr || '' }}" },
+            { "fieldId": "consent_confirmed", "fieldValue": "true" },
+            { "fieldId": "moderation_status", "fieldValue": "Pending_Review" },
+            { "fieldId": "submitted_at", "fieldValue": "={{ new Date().toISOString() }}" }
+          ]
+        }
+      },
+      "id": "baserow-insert-photo",
+      "name": "Baserow: Queue Photo Review",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": true, \"status\": \"queued_for_review\", \"rowId\": $json.id || null } }}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "respond-queued",
+      "name": "Respond: 201 Queued",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [920, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": false, \"error\": \"consent_required\", \"message\": \"Signed consent confirmation is required.\" } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "respond-rejected",
+      "name": "Respond: 400 Missing Consent",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 400]
+    }
+  ],
+  "connections": {
+    "Webhook (POST /webhook/photo-submit)": {
+      "main": [[{ "node": "IF: Consent Confirmed", "type": "main", "index": 0 }]]
+    },
+    "IF: Consent Confirmed": {
+      "main": [
+        [{ "node": "Baserow: Queue Photo Review", "type": "main", "index": 0 }],
+        [{ "node": "Respond: 400 Missing Consent", "type": "main", "index": 0 }]
+      ]
+    },
+    "Baserow: Queue Photo Review": {
+      "main": [[{ "node": "Respond: 201 Queued", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "TF-Photos" }]
+}

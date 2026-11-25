@@ -28,7 +28,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="/support"
           class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
         >
-          Support TF Unions â†’
+          Support TF Unions →
         </a>
       </div>
     </div>
@@ -51,6 +51,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="font-code mt-1 text-[22px] font-semibold text-[#161A22]">$0 / mo</div>
       </div>
     </div>
+
+    <div class="tf-ledger-line">
+      <span class="tf-ledger-line__label">№ 01 · Treasury Ratio</span>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+      <p class="text-[13px] text-[#525866]">Direct-labeled comparison of verified inflows, server infrastructure expenses, and net reserve.</p>
+      <span class="tf-stamp">Audited · Append-Only</span>
+    </div>
+    <svg id="ledger-bar-chart" viewBox="0 0 680 132" class="w-full h-auto block" role="img" aria-label="Treasury inflows, outflows, and net reserve chart">
+      <text x="0" y="24" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Verified inflows</text>
+      <rect id="bar-inflows" x="148" y="10" width="380" height="20" rx="5" fill="#0F766E" />
+      <text id="lbl-inflows" x="538" y="25" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#0B5F58">12,000 EGP</text>
+
+      <text x="0" y="66" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Infrastructure outflows</text>
+      <rect id="bar-outflows" x="148" y="52" width="133" height="20" rx="5" fill="#1B365D" />
+      <text id="lbl-outflows" x="291" y="67" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#161A22">4,200 EGP</text>
+
+      <text x="0" y="108" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Net reserve</text>
+      <rect id="bar-reserve" x="148" y="94" width="247" height="20" rx="5" fill="#E4EAF2" stroke="#1B365D" stroke-width="1.5" stroke-dasharray="4 3" />
+      <text id="lbl-reserve" x="405" y="109" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#1B365D">7,800 EGP</text>
+    </svg>
   </section>
 
   <!-- Crisp Paper Audit Trail Table -->
@@ -174,7 +195,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       URL.revokeObjectURL(url);
     });
 
+    function updateChart(inflows, outflows, reserve) {
+      const maxVal = Math.max(Number(inflows) || 0, Number(outflows) || 0, Number(reserve) || 0, 1);
+      const maxWidth = 380;
+      const items = [
+        ['inflows', Number(inflows) || 0],
+        ['outflows', Number(outflows) || 0],
+        ['reserve', Math.max(0, Number(reserve) || 0)],
+      ];
+      items.forEach(([key, val]) => {
+        const w = Math.max(12, Math.round((val / maxVal) * maxWidth));
+        const bar = document.getElementById('bar-' + key);
+        const lbl = document.getElementById('lbl-' + key);
+        if (bar) bar.setAttribute('width', String(w));
+        if (lbl) {
+          lbl.setAttribute('x', String(148 + w + 10));
+          lbl.textContent = fmtEgp(val);
+        }
+      });
+    }
+
     renderTable();
+    updateChart(12000, 4200, 7800);
 
     (async () => {
       try {
@@ -187,6 +229,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           document.getElementById('metric-inflows').textContent = fmtEgp(data.summary.totalInflowsEgp);
           document.getElementById('metric-outflows').textContent = fmtEgp(data.summary.totalOutflowsEgp);
           document.getElementById('metric-reserve').textContent = fmtEgp(data.summary.netBalanceEgp);
+          updateChart(data.summary.totalInflowsEgp, data.summary.totalOutflowsEgp, data.summary.netBalanceEgp);
         }
 
         if (Array.isArray(data.entries) && data.entries.length > 0) {

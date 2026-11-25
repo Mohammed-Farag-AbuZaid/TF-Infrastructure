@@ -15,7 +15,12 @@ const faviconSvg = encodeURIComponent(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TF Passport Single Sign-On â€” TF Unions</title>
+    <title>TF Passport Single Sign-On — TF Unions</title>
+    <meta property="og:title" content="TF Passport Single Sign-On — TF Unions" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://auth.tfunions.com/og-card.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://auth.tfunions.com/og-card.svg" />
     <meta name="theme-color" content="#F3F2EE" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +52,7 @@ const faviconSvg = encodeURIComponent(
             </div>
           </a>
           <a id="back-link" href="https://www.tfunions.com" class="text-[12.5px] font-medium text-[#1B365D] hover:underline">
-            â† Return to portal
+            ← Return to portal
           </a>
         </div>
 
@@ -76,7 +81,7 @@ const faviconSvg = encodeURIComponent(
 
       <div class="mt-8 pt-4 border-t border-[#DFDDD6] flex items-center justify-between text-[12px] text-[#767D8C]">
         <span>Firebase Auth unified SSO</span>
-        <a href="https://docs.tfunions.com#account" class="text-[#1B365D] font-medium hover:underline">SSO Documentation â†’</a>
+        <a href="https://docs.tfunions.com#account" class="text-[#1B365D] font-medium hover:underline">SSO Documentation →</a>
       </div>
     </aside>
 
@@ -94,7 +99,7 @@ const faviconSvg = encodeURIComponent(
             <span class="font-display text-[17px] font-bold text-[#161A22]">TF Passport</span>
           </a>
           <a id="mobile-back-link" href="https://www.tfunions.com" class="text-[12.5px] font-medium text-[#1B365D] hover:underline">
-            â† Return
+            ← Return
           </a>
         </div>
         <!-- Active Session Banner -->
@@ -127,8 +132,8 @@ const faviconSvg = encodeURIComponent(
             </button>
           </div>
           <div class="mt-4 flex flex-wrap gap-2 text-[12.5px]">
-            <a id="continue-portal-btn" href="https://www.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#1B365D] text-white font-medium hover:bg-[#132847] transition">Continue to portal â†’</a>
-            <a href="https://news.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22] hover:border-[#1B365D]/40 transition">Open TF News â†’</a>
+            <a id="continue-portal-btn" href="https://www.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#1B365D] text-white font-medium hover:bg-[#132847] transition">Continue to portal →</a>
+            <a href="https://news.tfunions.com" class="px-3 py-1.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] font-medium text-[#161A22] hover:border-[#1B365D]/40 transition">Open TF News →</a>
           </div>
         </section>
 
@@ -498,7 +503,7 @@ const faviconSvg = encodeURIComponent(
           nameEl.textContent = item.name || item.email;
           const emailEl = document.createElement('span');
           emailEl.className = 'block text-[11px] text-[#525866] truncate';
-          emailEl.textContent = item.provider === 'google' ? `${item.email} Â· Google` : item.email;
+          emailEl.textContent = item.provider === 'google' ? `${item.email} · Google` : item.email;
           meta.appendChild(nameEl);
           meta.appendChild(emailEl);
 
@@ -825,6 +830,7 @@ const faviconSvg = encodeURIComponent(
             } catch {}
 
             renderSessionCard(cred.user, profile);
+            window.tfTrack?.('signup', { method: 'email' });
             showStatus('Account created! Redirecting...');
             setTimeout(() => { window.location.href = redirectUrl; }, 500);
           } else {
@@ -833,6 +839,7 @@ const faviconSvg = encodeURIComponent(
               const cred = await signInWithEmailAndPassword(auth, email, password);
               const profile = await syncUserProfile(cred.user);
               renderSessionCard(cred.user, profile);
+              window.tfTrack?.('signin', { method: 'email' });
               showStatus('Signed in. Redirecting...');
               setTimeout(() => { window.location.href = redirectUrl; }, 450);
             } catch (signErr) {

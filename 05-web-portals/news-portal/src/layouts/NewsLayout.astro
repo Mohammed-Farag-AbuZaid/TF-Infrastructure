@@ -55,6 +55,9 @@ const updated = new Date(dataMeta.fetchedAt).toISOString().slice(0, 10);
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="TF News" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/og-card.svg`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={`${site}/og-card.svg`} />
     <meta name="theme-color" content="#F3F2EE" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

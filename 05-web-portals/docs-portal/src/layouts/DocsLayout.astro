@@ -38,6 +38,11 @@ const faviconSvg = encodeURIComponent(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — TF Docs</title>
     <link rel="canonical" href={Astro.url.href} />
+    <meta property="og:title" content={`${title} — TF Docs`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://docs.tfunions.com/og-card.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://docs.tfunions.com/og-card.svg" />
     <meta name="theme-color" content="#F3F2EE" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

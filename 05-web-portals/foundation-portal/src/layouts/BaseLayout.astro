@@ -7,6 +7,8 @@ export interface Props {
   description?: string;
   backLabel?: string;
   backHref?: string;
+  lang?: 'en' | 'ar';
+  altPath?: string;
 }
 
 const {
@@ -14,7 +16,19 @@ const {
   description = 'TF Unions — Egyptian STEM & University Union. Verified admissions, Olympiad & research roadmaps, regional study chapters, and open financial ledger.',
   backLabel,
   backHref = '/',
+  lang = 'en',
+  altPath,
 } = Astro.props;
+
+const orgJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'TF Unions',
+  url: 'https://www.tfunions.com',
+  logo: 'https://www.tfunions.com/og-card.svg',
+  description: 'Independent non-profit Egyptian student academic and scientific union serving STEM and university scholars across all 27 governorates.',
+  areaServed: 'Egypt',
+});
 
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 
@@ -34,24 +48,30 @@ const faviconSvg = encodeURIComponent(
 );
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — TF Unions</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url.href} />
+    {altPath && <link rel="alternate" hreflang="en" href={`https://www.tfunions.com${altPath}`} />}
+    {altPath && <link rel="alternate" hreflang="ar" href={`https://www.tfunions.com${altPath === '/' ? '/ar/' : '/ar' + altPath}`} />}
     <meta property="og:title" content={`${title} — TF Unions`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://www.tfunions.com/og-card.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.tfunions.com/og-card.svg" />
     <meta name="theme-color" content="#F3F2EE" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Readex+Pro:wght@500;600&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={orgJsonLd}></script>
     <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
     <style is:global>
       :root {
@@ -120,6 +140,13 @@ const faviconSvg = encodeURIComponent(
         </div>
 
         <div class="flex items-center gap-2">
+          <a
+            href={lang === 'ar' ? '/' : '/ar/'}
+            hreflang={lang === 'ar' ? 'en' : 'ar'}
+            class="h-9 px-2.5 inline-flex items-center rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#161A22] text-[12px] font-medium transition"
+          >
+            {lang === 'ar' ? 'English' : 'العربية'}
+          </a>
           <button
             type="button"
             data-tf-cmd-open
@@ -239,6 +266,8 @@ const faviconSvg = encodeURIComponent(
             <li><a href="https://verify.tfunions.com" class="hover:text-[#1B365D] transition">Verify certificate serial</a></li>
             <li><a href="/transparency" class="hover:text-[#1B365D] transition">Open financial ledger</a></li>
             <li><a href="/charter" class="hover:text-[#1B365D] transition">Non-profit charter</a></li>
+            <li><a href="/privacy" class="hover:text-[#1B365D] transition">Privacy &amp; data policy</a></li>
+            <li><a href="/photos-submit" class="hover:text-[#1B365D] transition">Submit chapter photos</a></li>
             <li><a href="https://docs.tfunions.com" class="hover:text-[#1B365D] transition">Documentation &amp; API</a></li>
             <li><a href="https://status.tfunions.com" class="hover:text-[#1B365D] transition">System status</a></li>
           </ul>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Privacy & Data Policy" description="PII data inventory, retention limits, and deletion rights across TF Unions." backLabel="TF Unions" backHref="/">
+  <section class="mt-8 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)] max-w-[920px]">
+    <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#0B5F58]">
+      Bilingual Data Governance (EN / العربية)
+    </div>
+    <h1 class="font-display mt-2.5 text-[30px] sm:text-[36px] font-bold leading-[1.12] text-[#161A22]">
+      Privacy &amp; Data Policy
+    </h1>
+    <p class="mt-2.5 text-[15px] leading-[1.65] text-[#525866]">
+      TF Unions is a student non-profit operating zero commercial advertising and zero third-party data brokerage. Below is our exact data inventory and retention schedule.
+    </p>
+
+    <div class="tf-ledger-line">
+      <span class="tf-ledger-line__label">№ 01 · PII Inventory</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-[13.5px]">
+        <thead>
+          <tr class="bg-[#EAE8E1] border-b border-[#DFDDD6] text-[#525866]">
+            <th class="py-2.5 px-4">Data Category</th>
+            <th class="py-2.5 px-4">Where Stored</th>
+            <th class="py-2.5 px-4">Retention Period</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#EAE8E1]">
+          <tr>
+            <td class="py-3 px-4 font-medium text-[#161A22]">TF Passport Identity (UID, email, name)</td>
+            <td class="py-3 px-4 text-[#525866]">Firebase Auth &amp; Cloud Firestore (`users/{'{uid}'}`)</td>
+            <td class="py-3 px-4 text-[#525866]">Until account deletion by the member</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 font-medium text-[#161A22]">Volunteer Track Applications</td>
+            <td class="py-3 px-4 text-[#525866]">Firestore (`volunteers`) &amp; internal Baserow HR</td>
+            <td class="py-3 px-4 font-mono text-[#0B5F58]">12 months after review decision, then purged</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 font-medium text-[#161A22]">Donation Receipts &amp; Reference Codes</td>
+            <td class="py-3 px-4 text-[#525866]">Private Cloudflare R2 bucket (signed URLs) &amp; treasury ledger</td>
+            <td class="py-3 px-4 text-[#525866]">Public ledger shows anonymized/consented aggregates only</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 font-medium text-[#161A22]">Community Photos &amp; Release Consent</td>
+            <td class="py-3 px-4 text-[#525866]">Baserow review queue &amp; Cloudflare R2 (`consentConfirmed = true`)</td>
+            <td class="py-3 px-4 text-[#525866]">Removed immediately upon contributor/subject request</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tf-ledger-line">
+      <span class="tf-ledger-line__label">№ 02 · Rights &amp; Account Deletion</span>
+    </div>
+    <p class="text-[14.5px] leading-[1.65] text-[#525866]">
+      You can permanently delete your TF Passport account and Firestore profile at any time from your account settings or email <a href="mailto:founders@tfunions.com" class="text-[#1B365D] font-medium hover:underline">founders@tfunions.com</a> for immediate data export or erasure.
+    </p>
+
+    <div class="tf-ledger-line">
+      <span class="tf-ledger-line__label">№ 03 · الملخص بالعربية</span>
+    </div>
+    <div dir="rtl" class="p-5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-right space-y-2.5 text-[14.5px] leading-[1.75] text-[#161A22]">
+      <p><strong>سياسة الخصوصية وحماية البيانات:</strong> لا يبيع اتحاد TF Unions أي بيانات طلابية ولا يعرض أي إعلانات تجارية.</p>
+      <p><strong>الاحتفاظ بالبيانات:</strong> تُحذف طلبات التطوّع خلال <strong>١٢ شهرًا</strong> من قرار القبول أو الرفض، وتُحفظ إيصالات التبرعات بشكل خاص مع عرض الأرقام الإجمالية فقط في السجل المالي المفتوح.</p>
+      <p><strong>حقوق الحذف والوصول:</strong> يمكنك حذف حسابك وملفك الشخصي مباشرة من التطبيق أو مراسلتنا على <span class="font-code" dir="ltr">founders@tfunions.com</span> لحذف أو تصدير بياناتك فورًا.</p>
+    </div>
+  </section>
+</BaseLayout>

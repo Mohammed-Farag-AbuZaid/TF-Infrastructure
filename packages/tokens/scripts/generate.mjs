@@ -217,8 +217,18 @@ const targets = [
 
 const uiCssPath = path.join(UI_WEB_DIR, 'tf-ui.css');
 const uiJsPath = path.join(UI_WEB_DIR, 'tf-chrome.js');
+const ogCardPath = path.join(UI_WEB_DIR, 'og-card.svg');
 const uiCssContent = fs.existsSync(uiCssPath) ? fs.readFileSync(uiCssPath, 'utf8') : null;
 const uiJsContent = fs.existsSync(uiJsPath) ? fs.readFileSync(uiJsPath, 'utf8') : null;
+const ogCardContent = fs.existsSync(ogCardPath) ? fs.readFileSync(ogCardPath, 'utf8') : null;
+
+const illuDir = path.join(UI_WEB_DIR, 'illustrations');
+const illuFiles = fs.existsSync(illuDir)
+  ? fs.readdirSync(illuDir).filter((n) => n.endsWith('.svg')).map((n) => ({
+      name: n,
+      content: fs.readFileSync(path.join(illuDir, n), 'utf8'),
+    }))
+  : [];
 
 const astroPortals = [
   path.join(INFRA_ROOT, '05-web-portals', 'foundation-portal'),
@@ -239,6 +249,20 @@ for (const portalDir of astroPortals) {
     if (uiJsContent !== null) {
       targets.push({ file: path.join(portalDir, 'public', 'js', 'tf-chrome.js'), content: uiJsContent, required: true });
     }
+    if (ogCardContent !== null) {
+      targets.push({ file: path.join(portalDir, 'public', 'og-card.svg'), content: ogCardContent, required: true });
+    }
+  }
+}
+
+const foundationDir = path.join(INFRA_ROOT, '05-web-portals', 'foundation-portal');
+if (fs.existsSync(foundationDir)) {
+  for (const illu of illuFiles) {
+    targets.push({
+      file: path.join(foundationDir, 'public', 'illustrations', illu.name),
+      content: illu.content,
+      required: true,
+    });
   }
 }
 

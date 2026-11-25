@@ -17,6 +17,12 @@ const faviconSvg = encodeURIComponent(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify Credential — TF Unions</title>
     <meta name="theme-color" content="#F3F2EE" />
+    <meta property="og:title" content="Verify Credential — TF Unions" />
+    <meta property="og:description" content="Verify official TF Unions volunteer and leadership credential serial codes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://verify.tfunions.com/og-card.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://verify.tfunions.com/og-card.svg" />
     <link rel="canonical" href={Astro.url.href} />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -194,6 +200,7 @@ const faviconSvg = encodeURIComponent(
           const res = await fetch(`https://n8n.tfunions.com/tf-api/api/verify-certificate?code=${encodeURIComponent(clean)}`);
           const data = await res.json();
           if (res.ok && data.valid) {
+            window.tfTrack?.('certificate_verify', { valid: true });
             const shareUrl = `https://verify.tfunions.com/?code=${encodeURIComponent(data.serialCode)}`;
             resultBox.innerHTML = `
               <div class="px-6 py-3.5 bg-[#EDF7F5] border-b border-[#BCE3DC] flex flex-wrap items-center justify-between gap-3">

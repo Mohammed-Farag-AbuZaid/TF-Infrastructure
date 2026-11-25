@@ -18,13 +18,35 @@
     } catch (_) {}
   };
 
+  var ALLOWED_EVENTS = {
+    signup: true,
+    signin: true,
+    idea_submit: true,
+    volunteer_apply: true,
+    donation_receipt: true,
+    certificate_verify: true,
+  };
+
+  window.tfTrack = function (eventName, props) {
+    try {
+      if (navigator && navigator.doNotTrack === '1') return;
+      if (!ALLOWED_EVENTS[eventName]) return;
+      if (window.umami && typeof window.umami.track === 'function') {
+        window.umami.track(eventName, props || {});
+      }
+    } catch (_) {}
+  };
+
   var ITEMS = [
     { label: 'Foundation Home', url: 'https://www.tfunions.com/', cat: 'Home' },
+    { label: 'Arabic Foundation Home (العربية)', url: 'https://www.tfunions.com/ar/', cat: 'Home' },
     { label: 'Divisions & Programs', url: 'https://www.tfunions.com/divisions', cat: 'Home' },
     { label: 'Quick Actions Desk', url: 'https://www.tfunions.com/desk', cat: 'Act' },
     { label: 'Team & Governance', url: 'https://www.tfunions.com/team', cat: 'Trust' },
     { label: 'Open Financial Ledger', url: 'https://www.tfunions.com/transparency', cat: 'Trust' },
     { label: 'Charter & Bylaws', url: 'https://www.tfunions.com/charter', cat: 'Trust' },
+    { label: 'Privacy & Data Policy', url: 'https://www.tfunions.com/privacy', cat: 'Trust' },
+    { label: 'Submit Chapter Photos', url: 'https://www.tfunions.com/photos-submit', cat: 'Act' },
     { label: 'Volunteer Tracks', url: 'https://www.tfunions.com/volunteer', cat: 'Act' },
     { label: 'Volunteer Application Form', url: 'https://www.tfunions.com/volunteer-apply', cat: 'Act' },
     { label: 'Ideas Backlog', url: 'https://www.tfunions.com/ideas', cat: 'Act' },
