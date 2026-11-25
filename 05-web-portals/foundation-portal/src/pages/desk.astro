@@ -75,7 +75,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="p-4 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] grid grid-cols-3 gap-3 text-center">
           <div>
             <div class="text-[11.5px] text-[#767D8C]">Inflows</div>
-            <div id="home-ledger-in" class="font-code text-[15px] font-semibold text-[#0F766E] mt-0.5">12,000 EGP</div>
+            <div id="home-ledger-in" class="font-code text-[15px] font-semibold text-[#0B5F58] mt-0.5">12,000 EGP</div>
           </div>
           <div>
             <div class="text-[11.5px] text-[#767D8C]">Outflows</div>
@@ -93,7 +93,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="mt-6 pt-4 border-t border-[#DFDDD6] flex items-center justify-between text-[13px]">
         <a id="desk-footer-link" href="https://news.tfunions.com" class="font-medium text-[#1B365D] hover:underline">
-          View all open deadlines →
+          View all open deadlines â†’
         </a>
         <a href="/transparency" class="text-[#767D8C] hover:text-[#161A22] font-medium transition">
           Audit ledger
@@ -113,9 +113,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     const footerLinks = {
-      deadlines: { text: 'View all open deadlines →', href: 'https://news.tfunions.com' },
-      chapters: { text: 'Browse all regional chapters →', href: 'https://connect.tfunions.com' },
-      ledger: { text: 'Open full audit trail →', href: '/transparency' },
+      deadlines: { text: 'View all open deadlines â†’', href: 'https://news.tfunions.com' },
+      chapters: { text: 'Browse all regional chapters â†’', href: 'https://connect.tfunions.com' },
+      ledger: { text: 'Open full audit trail â†’', href: '/transparency' },
     };
     const deskFooterLink = document.getElementById('desk-footer-link');
 
@@ -150,7 +150,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           (o) => `
           <a href="https://news.tfunions.com" class="py-3.5 flex items-center justify-between gap-3 hover:bg-[#F3F2EE]/70 px-2.5 -mx-2.5 rounded-lg transition group">
             <div class="min-w-0">
-              <div class="text-[12px] font-medium text-[#0F766E]">${esc(o.category || o.section || 'Opportunity')}</div>
+              <div class="text-[12px] font-medium text-[#0B5F58]">${esc(o.category || o.section || 'Opportunity')}</div>
               <div class="text-[14px] font-medium text-[#161A22] group-hover:text-[#1B365D] truncate mt-0.5">${esc(o.title)}</div>
             </div>
             <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] shrink-0">${esc(o.topic || 'Open')}</span>

@@ -1,0 +1,109 @@
+---
+import '../styles/tf-tokens.css';
+import '../styles/tf-ui.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+
+const {
+  title,
+  description = 'Interactive research roadmaps for ISEF, EOI & Physics Olympiads, global university admissions, and STEM capstone engineering across Egypt.',
+  backHref,
+  backLabel,
+} = Astro.props;
+
+const faviconSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
+);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+    <meta name="theme-color" content="#F3F2EE" />
+    <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen bg-tf-canvas text-tf-ink antialiased flex flex-col">
+    <div class="w-full max-w-[1160px] mx-auto px-4 sm:px-6 pt-6">
+      <div class="pb-5 border-b border-tf-border flex flex-wrap items-center justify-between gap-4">
+        <a href={backHref || 'https://guides.tfunions.com'} class="flex items-center gap-3">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="rounded-[7px] shrink-0">
+            <rect width="32" height="32" rx="7" fill="#1B365D" />
+            <rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E" />
+            <path d="M6.8 9.5H18.2V12.2H14V23H11V12.2H6.8V9.5ZM17.6 9.5H25V12.2H20.6V15.1H24.4V17.7H20.6V23H17.6V9.5Z" fill="#FFFFFF" />
+          </svg>
+          <div>
+            <span class="font-display text-[19px] font-bold text-tf-ink leading-none block">
+              {backLabel ? `← ${backLabel}` : 'TF Guides'}
+            </span>
+            <span class="text-[11px] text-tf-subtle">Academic &amp; Research Workbooks</span>
+          </div>
+        </a>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            data-tf-cmd-open
+            class="hidden sm:inline-flex items-center gap-2 h-9 px-3 rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[12.5px] font-medium text-tf-muted transition"
+          >
+            <span>Jump</span>
+            <kbd class="font-mono text-[11px] text-tf-subtle bg-tf-sunken px-1.5 py-0.5 rounded">⌘K</kbd>
+          </button>
+          <a
+            href="https://www.tfunions.com"
+            class="h-9 px-3.5 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium text-tf-ink transition"
+          >
+            Foundation
+          </a>
+          <a
+            href="https://auth.tfunions.com/?redirect_to=https://guides.tfunions.com"
+            class="h-9 px-4 inline-flex items-center rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13px] font-medium transition"
+          >
+            Sign in
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1 w-full">
+      <slot />
+    </div>
+
+    <footer class="tf-eco-footer bg-tf-surface">
+      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
+        <span>TF Guides — Academic &amp; Research Workbooks</span>
+        <div class="flex flex-wrap items-center gap-5">
+          <a href="https://www.tfunions.com">Foundation</a>
+          <a href="https://news.tfunions.com">News</a>
+          <a href="https://connect.tfunions.com">Connect</a>
+          <a href="https://verify.tfunions.com">Verify</a>
+          <a href="https://docs.tfunions.com">Docs</a>
+          <a href="https://www.tfunions.com/volunteer" class="!text-tf-brand font-medium">Author a New Guide →</a>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="tf-mobile-dock" aria-label="Mobile quick navigation">
+      <a href="https://www.tfunions.com">Home</a>
+      <a href="/" class="is-active" aria-current="page">Learn</a>
+      <a href="https://www.tfunions.com/volunteer">Act</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://guides.tfunions.com">Me</a>
+    </nav>
+
+    <script src="/js/tf-chrome.js" defer></script>
+  </body>
+</html>

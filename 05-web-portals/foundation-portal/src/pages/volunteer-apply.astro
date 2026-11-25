@@ -13,7 +13,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           Applying for: <strong id="selected-track-label" class="text-[#1B365D] font-semibold">TF News Researcher</strong>
         </p>
       </div>
-      <a href="/volunteer" class="text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">← Change track</a>
+      <a href="/volunteer" class="text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">â† Change track</a>
     </div>
 
     <div id="vol-alert" class="hidden mt-5 px-4 py-3 rounded-lg border text-[13.5px] font-medium"></div>
@@ -135,7 +135,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         });
         if (!res.ok) throw new Error('Submission failed');
         alertBox.textContent = 'Application received. Our HR committee will review and follow up by email.';
-        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
+        alertBox.className = 'mt-5 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();
         syncTrackLabel(trackSelect.value);
       } catch (err) {

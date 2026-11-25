@@ -1,0 +1,56 @@
+name: Web Portals, Tokens & tf-api CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tokens-and-api:
+    name: Tokens Check & tf-api Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check design token sync
+        run: node packages/tokens/scripts/generate.mjs --check
+      - name: Install, typecheck, and test tf-api
+        working-directory: 03-sso-auth-hub/tf-api
+        run: |
+          npm install --no-audit --no-fund
+          npm run typecheck
+          npm test
+
+  portals:
+    name: Build ${{ matrix.dir }}
+    runs-on: ubuntu-latest
+    needs: tokens-and-api
+    strategy:
+      fail-fast: false
+      matrix:
+        dir:
+          - 05-web-portals/foundation-portal
+          - 05-web-portals/verify-portal
+          - 05-web-portals/docs-portal
+          - 05-web-portals/connect-portal
+          - 05-web-portals/guides-portal
+          - 03-sso-auth-hub/web-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check zero top switcher/header regressions
+        run: |
+          if grep -rnE 'class="switcher"|ecosystemLinks|<header\b|\.masthead' "${{ matrix.dir }}/src"; then
+            echo "Forbidden top switcher or sticky header found in ${{ matrix.dir }}/src"
+            exit 1
+          fi
+      - name: Install and build Astro portal
+        working-directory: ${{ matrix.dir }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build

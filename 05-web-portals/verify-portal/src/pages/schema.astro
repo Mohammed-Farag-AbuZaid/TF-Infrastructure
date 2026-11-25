@@ -3,6 +3,9 @@
  * Cryptographic Verification Schema (`https://verify.tfunions.com/schema`)
  * Dedicated page explaining how TF Unions issues, signs, and verifies credentials.
  */
+import '../styles/tf-tokens.css';
+import '../styles/tf-ui.css';
+
 const faviconSvg = encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
 );
@@ -55,7 +58,7 @@ const faviconSvg = encodeURIComponent(
 
       <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
         <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-          <div class="font-code text-[12px] font-semibold text-[#0F766E]">01 · Record Registry</div>
+          <div class="font-code text-[12px] font-semibold text-[#0B5F58]">01 · Record Registry</div>
           <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">PostgreSQL source of truth</h2>
           <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
             Issued credentials store recipient full name, role title, verified service hours, cohort year, and issue date in an append-only ledger table.
@@ -63,7 +66,7 @@ const faviconSvg = encodeURIComponent(
         </article>
 
         <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-          <div class="font-code text-[12px] font-semibold text-[#0F766E]">02 · Serial Format</div>
+          <div class="font-code text-[12px] font-semibold text-[#0B5F58]">02 · Serial Format</div>
           <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">Deterministic code</h2>
           <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
             Codes strictly match <span class="font-code text-[#161A22]">TFU-YYYY-XXXXXX</span>, preventing collisions and allowing direct QR code deep-linking via <span class="font-code text-[#161A22]">?code=</span>.
@@ -71,7 +74,7 @@ const faviconSvg = encodeURIComponent(
         </article>
 
         <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-          <div class="font-code text-[12px] font-semibold text-[#0F766E]">03 · JSON API Endpoint</div>
+          <div class="font-code text-[12px] font-semibold text-[#0B5F58]">03 · JSON API Endpoint</div>
           <h2 class="font-display mt-2 text-[19px] font-bold text-[#161A22]">Real-time lookup</h2>
           <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
             Admissions officers and employers can verify records programmatically via our public CORS-enabled REST endpoint without requiring an account.
@@ -85,11 +88,20 @@ const faviconSvg = encodeURIComponent(
       </section>
     </main>
 
-    <footer class="bg-white border-t border-[#DFDDD6] text-[#525866] py-5 mt-auto">
+    <footer class="tf-eco-footer bg-white">
       <div class="max-w-[1040px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 text-[12px]">
         <span>TF Unions Credential Verification Registry</span>
-        <a href="/" class="text-[#1B365D] font-medium hover:underline">Lookup a certificate →</a>
+        <a href="/" class="!text-[#1B365D] font-medium hover:underline">Lookup a certificate →</a>
       </div>
     </footer>
+
+    <nav class="tf-mobile-dock" aria-label="Mobile quick navigation">
+      <a href="https://www.tfunions.com">Home</a>
+      <a href="https://guides.tfunions.com">Learn</a>
+      <a href="https://www.tfunions.com/desk">Act</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://verify.tfunions.com">Me</a>
+    </nav>
+
+    <script src="/js/tf-chrome.js" defer></script>
   </body>
 </html>

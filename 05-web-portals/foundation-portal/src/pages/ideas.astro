@@ -16,14 +16,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
       </div>
       <div class="flex items-center gap-2.5 shrink-0">
-        <span id="ideas-count" class="font-code text-[12px] font-medium text-[#0F766E] bg-[#EDF7F5] border border-[#BCE3DC] px-3 py-1.5 rounded-lg">
+        <span id="ideas-count" class="font-code text-[12px] font-medium text-[#0B5F58] bg-[#EDF7F5] border border-[#BCE3DC] px-3 py-1.5 rounded-lg">
           1 proposal
         </span>
         <a
           href="/ideas-submit"
           class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
         >
-          Propose an idea →
+          Propose an idea â†’
         </a>
       </div>
     </div>
@@ -46,7 +46,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="p-6 flex items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2 text-[12px]">
-            <span class="font-medium text-[#0F766E]">TF News</span>
+            <span class="font-medium text-[#0B5F58]">TF News</span>
             <span class="px-2 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] font-medium">Planned</span>
           </div>
           <div class="font-display text-[18px] font-semibold text-[#161A22] mt-1">
@@ -61,7 +61,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           data-id="1"
           class="upvote-btn px-3.5 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-semibold text-[#161A22] shrink-0 transition"
         >
-          ▲ <span class="count font-code">142</span>
+          â–² <span class="count font-code">142</span>
         </button>
       </div>
     </div>
@@ -127,7 +127,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div class="p-6 flex items-center justify-between gap-4 hover:bg-[#FAF9F6] transition">
             <div>
               <div class="flex items-center gap-2 text-[12px]">
-                <span class="font-medium text-[#0F766E]">${esc(item.source_service || 'Ecosystem')}</span>
+                <span class="font-medium text-[#0B5F58]">${esc(item.source_service || 'Ecosystem')}</span>
                 <span class="px-2 py-0.5 rounded-md bg-[#EAE8E1] border border-[#DCD9D0] text-[#525866] font-medium">${esc(String(item.status || 'Open').replace(/_/g, ' '))}</span>
               </div>
               <div class="font-display text-[18px] font-semibold text-[#161A22] mt-1">${esc(item.title)}</div>
@@ -138,7 +138,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               data-id="${Number(item.item_id)}"
               class="upvote-btn px-3.5 py-2 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-semibold text-[#161A22] shrink-0 transition"
             >
-              ▲ <span class="count font-code">${Number(item.upvote_count || 1)}</span>
+              â–² <span class="count font-code">${Number(item.upvote_count || 1)}</span>
             </button>
           </div>
         `
@@ -173,7 +173,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             const data = await res.json();
             if (data.upvoteCount) {
               countEl.textContent = data.upvoteCount;
-              btn.classList.add('border-[#0F766E]', 'text-[#0F766E]', 'bg-[#EDF7F5]');
+              btn.classList.add('border-[#0F766E]', 'text-[#0B5F58]', 'bg-[#EDF7F5]');
             }
           } catch {}
         };

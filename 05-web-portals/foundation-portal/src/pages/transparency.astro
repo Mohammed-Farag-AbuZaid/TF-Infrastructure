@@ -28,7 +28,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="/support"
           class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
         >
-          Support TF Unions →
+          Support TF Unions â†’
         </a>
       </div>
     </div>
@@ -36,7 +36,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="mt-7 pt-6 border-t border-[#DFDDD6] grid grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
         <div class="text-[12px] text-[#767D8C]">Verified inflows</div>
-        <div id="metric-inflows" class="font-code mt-1 text-[22px] font-semibold text-[#0F766E]">12,000 EGP</div>
+        <div id="metric-inflows" class="font-code mt-1 text-[22px] font-semibold text-[#0B5F58]">12,000 EGP</div>
       </div>
       <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
         <div class="text-[12px] text-[#767D8C]">Infrastructure outflows</div>
@@ -127,7 +127,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         .map((e) => {
           const isOutflow = e.entryType === 'outflow';
           const sign = isOutflow ? '-' : '+';
-          const colorCls = isOutflow ? 'text-[#161A22]' : 'text-[#0F766E]';
+          const colorCls = isOutflow ? 'text-[#161A22]' : 'text-[#0B5F58]';
           const statusLabel = String(e.verificationStatus || 'Verified').replace(/_/g, ' ');
           const channelLabel = String(e.paymentChannel || '').replace(/_/g, ' ');
           return `
@@ -136,7 +136,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <td class="py-3.5 px-4 font-medium text-[#161A22]">${esc(e.donorOrVendor)}</td>
               <td class="py-3.5 px-4 text-[#525866]">${esc(channelLabel)}</td>
               <td class="py-3.5 px-4">
-                <span class="px-2 py-0.5 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[11.5px] font-medium text-[#0F766E]">
+                <span class="px-2 py-0.5 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[11.5px] font-medium text-[#0B5F58]">
                   ${esc(statusLabel)}
                 </span>
               </td>

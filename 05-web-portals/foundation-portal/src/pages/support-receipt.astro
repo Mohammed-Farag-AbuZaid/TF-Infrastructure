@@ -59,7 +59,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         />
       </div>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <a href="/support" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">← Back to channels</a>
+        <a href="/support" class="text-[13px] font-medium text-[#525866] hover:text-[#161A22]">â† Back to channels</a>
         <button
           type="submit"
           class="h-10 px-6 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white font-medium text-[14px] transition"
@@ -93,7 +93,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         });
         if (!res.ok) throw new Error('Receipt log failed');
         alertBox.textContent = 'Thank you. Your receipt has been logged for verification.';
-        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[13.5px] font-medium';
+        alertBox.className = 'mt-4 px-4 py-3 rounded-lg bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[13.5px] font-medium';
         form.reset();
       } catch {
         alertBox.textContent = 'Could not submit receipt.';

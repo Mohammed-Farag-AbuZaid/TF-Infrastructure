@@ -16,9 +16,13 @@ volumes:
 services:
   # 1. Reverse Proxy & Auto-SSL
   caddy:
-    image: caddy:2-alpine
+    image: caddy:2.8.4-alpine
     container_name: tf_caddy
     restart: unless-stopped
+    mem_limit: 128m
+    read_only: true
+    tmpfs:
+      - /tmp
     ports:
       - "80:80"
       - "443:443"
@@ -31,9 +35,10 @@ services:
 
   # 2. Shared PostgreSQL 16 Server
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16.4-alpine
     container_name: tf_postgres
     restart: unless-stopped
+    mem_limit: 768m
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -57,9 +62,11 @@ services:
 
   # 3. Shared Redis 7 Server
   redis:
-    image: redis:7-alpine
+    image: redis:7.4.1-alpine
     container_name: tf_redis
     restart: unless-stopped
+    mem_limit: 192m
+    read_only: true
     command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 128mb --maxmemory-policy allkeys-lru
     volumes:
       - redis_data:/data
@@ -71,11 +78,39 @@ services:
       timeout: 5s
       retries: 5
 
-  # 4. n8n Automation & Webhook Hub
+  # 4. Typed API Gateway (Firebase JWT + Zod + Turnstile + Redis Rate Limit)
+  tf-api:
+    build: ../03-sso-auth-hub/tf-api
+    container_name: tf_api
+    restart: unless-stopped
+    mem_limit: 256m
+    read_only: true
+    tmpfs:
+      - /tmp
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - PORT=${TF_API_PORT:-4000}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-tf-unions}
+      - N8N_BASE_URL=http://n8n:5678
+      - N8N_WEBHOOK_SECRET=${N8N_WEBHOOK_SECRET}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+    networks:
+      - tf_internal
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:4000/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # 5. n8n Automation & Webhook Hub
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:1.68.0
     container_name: tf_n8n
     restart: unless-stopped
+    mem_limit: 768m
     depends_on:
       postgres:
         condition: service_healthy
@@ -102,11 +137,12 @@ services:
     networks:
       - tf_internal
 
-  # 5. Baserow (Internal CRM, HR, Ledger & CMS)
+  # 6. Baserow (Internal CRM, HR, Ledger & CMS)
   baserow:
     image: baserow/baserow:1.28.0
     container_name: tf_baserow
     restart: unless-stopped
+    mem_limit: 1536m
     depends_on:
       postgres:
         condition: service_healthy
@@ -138,11 +174,12 @@ services:
     networks:
       - tf_internal
 
-  # 6. Listmonk (Newsletter & Digest Manager)
+  # 7. Listmonk (Newsletter & Digest Manager)
   listmonk:
-    image: listmonk/listmonk:latest
+    image: listmonk/listmonk:v4.0.1
     container_name: tf_listmonk
     restart: unless-stopped
+    mem_limit: 192m
     depends_on:
       postgres:
         condition: service_healthy
@@ -159,11 +196,12 @@ services:
     networks:
       - tf_internal
 
-  # 7. Umami (Privacy-First Web Analytics)
+  # 8. Umami (Privacy-First Web Analytics)
   umami:
-    image: ghcr.io/umami-software/umami:postgresql-latest
+    image: ghcr.io/umami-software/umami:postgresql-v2.13.2
     container_name: tf_umami
     restart: unless-stopped
+    mem_limit: 256m
     depends_on:
       postgres:
         condition: service_healthy
@@ -174,11 +212,15 @@ services:
     networks:
       - tf_internal
 
-  # 8. Gotenberg (Internal Stateless HTML-to-PDF Engine for Certificates)
+  # 9. Gotenberg (Internal Stateless HTML-to-PDF Engine for Certificates)
   gotenberg:
-    image: gotenberg/gotenberg:8
+    image: gotenberg/gotenberg:8.11.0
     container_name: tf_gotenberg
     restart: unless-stopped
+    mem_limit: 512m
+    read_only: true
+    tmpfs:
+      - /tmp
     command:
       - "gotenberg"
       - "--chromium-disable-javascript=true"
@@ -186,11 +228,12 @@ services:
     networks:
       - tf_internal
 
-  # 9. Uptime Kuma (Public Ecosystem Status Page)
+  # 10. Uptime Kuma (Public Ecosystem Status Page)
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:1.23.15
     container_name: tf_uptime_kuma
     restart: unless-stopped
+    mem_limit: 256m
     volumes:
       - uptime_kuma_data:/app/data
     networks:

@@ -4,32 +4,124 @@ service cloud.firestore {
     function isSignedIn() {
       return request.auth != null;
     }
-    function isFounderOrCore() {
-      return isSignedIn() && (request.auth.token.role == 'founder' || request.auth.token.role == 'core_team');
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
     }
 
-    // 1. Unified Student & Ecosystem Member Passport
+    function hasRole(roles) {
+      return isSignedIn() && (request.auth.token.role in roles);
+    }
+
+    function isAdmin() {
+      return hasRole(['admin', 'founder']);
+    }
+
+    function isLead() {
+      return hasRole(['admin', 'founder', 'core_team', 'lead']);
+    }
+
+    function isStrBound(data, field, minLen, maxLen) {
+      return !(field in data) || (
+        data[field] is string &&
+        data[field].size() >= minLen &&
+        data[field].size() <= maxLen
+      );
+    }
+
+    // 1. Unified Member Passport (owner or lead read; strict anti-privilege-escalation on writes)
     match /users/{userId} {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && request.auth.uid == userId
-                    && (!('role' in request.resource.data) || request.resource.data.role == 'student');
-      allow update: if (isSignedIn() && request.auth.uid == userId 
-                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'badges', 'baserowRowId']))
-                    || isFounderOrCore();
+      allow read: if isOwner(userId) || isLead();
+
+      allow create: if isOwner(userId)
+                    && (!('role' in request.resource.data) || request.resource.data.role == 'student')
+                    && !request.resource.data.keys().hasAny(['badges', 'tracks', 'baserowRowId'])
+                    && isStrBound(request.resource.data, 'email', 3, 160)
+                    && isStrBound(request.resource.data, 'fullName', 1, 160)
+                    && isStrBound(request.resource.data, 'firstName', 0, 80)
+                    && isStrBound(request.resource.data, 'lastName', 0, 80);
+
+      allow update: if (
+                      isOwner(userId)
+                      && !request.resource.data.diff(resource.data).affectedKeys()
+                          .hasAny(['role', 'badges', 'tracks', 'baserowRowId', 'uid'])
+                      && isStrBound(request.resource.data, 'email', 3, 160)
+                      && isStrBound(request.resource.data, 'fullName', 1, 160)
+                    ) || isAdmin();
+
+      allow delete: if isOwner(userId) || isAdmin();
     }
 
-    // 2. Username reservation lookup (used by TF Unions account registration)
+    // 2. Unique username reservation
     match /usernames/{username} {
       allow read: if true;
-      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
-      allow delete: if isFounderOrCore();
+      allow create: if isSignedIn()
+                    && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+                    && request.resource.data.uid == request.auth.uid
+                    && username.matches('^[a-z0-9._-]{3,32}$');
+      allow update: if false;
+      allow delete: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
     }
 
-    // 3. TF News Opportunities Feed
+    // 3. Public catalogs (opportunities & projects)
     match /opportunities/{opportunityId} {
       allow read: if true;
-      allow write: if isFounderOrCore()
+      allow write: if isLead()
                    || (isSignedIn() && request.auth.token.tracks != null && 'tf_news_editor' in request.auth.token.tracks);
+    }
+
+    match /allProjects/{projectId} {
+      allow read: if true;
+      allow write: if isLead();
+    }
+
+    match /inProgressProjects/{projectId} {
+      allow read: if true;
+      allow write: if isLead();
+    }
+
+    match /upcomingProjects/{projectId} {
+      allow read: if true;
+      allow write: if isLead();
+    }
+
+    // 4. Community Ideas Incubator
+    match /ideas/{ideaId} {
+      allow read: if true;
+      allow create: if isSignedIn()
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() >= 4
+                    && request.resource.data.title.size() <= 160
+                    && request.resource.data.description is string
+                    && request.resource.data.description.size() >= 10
+                    && request.resource.data.description.size() <= 4000;
+      allow update, delete: if isLead();
+    }
+
+    // 5. Private Volunteer Applications & Donation Receipts
+    match /volunteers/{applicationId} {
+      allow read: if isLead() || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isSignedIn()
+                    && (!('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /donations/{donationId} {
+      allow read: if isLead() || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isSignedIn()
+                    && (!('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // 6. Public Credential Registry (admin-managed)
+    match /certificates/{serial} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Default deny for any undeclared collections
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -14,7 +14,7 @@ import teamData from '../data/team-nodes.json';
           Union cohort and leadership constellation.
         </h1>
         <p class="mt-2.5 text-[15px] leading-[1.6] text-[#525866] max-w-[680px]">
-          Trace how TF Unions grew from two founding systems architects in <strong class="text-[#161A22] font-semibold">October 2025</strong> to <strong class="text-[#0F766E] font-semibold">71 student leaders</strong> across Egypt in <strong class="text-[#161A22] font-semibold">November 2026</strong>.
+          Trace how TF Unions grew from two founding systems architects in <strong class="text-[#161A22] font-semibold">October 2025</strong> to <strong class="text-[#0B5F58] font-semibold">71 student leaders</strong> across Egypt in <strong class="text-[#161A22] font-semibold">November 2026</strong>.
         </p>
       </div>
       <div class="flex flex-wrap items-center gap-2.5 shrink-0">
@@ -22,17 +22,17 @@ import teamData from '../data/team-nodes.json';
           href="/roster"
           class="h-9 px-4 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[#161A22] text-[13px] font-medium transition flex items-center gap-1.5"
         >
-          <span>Searchable roster (71) →</span>
+          <span>Searchable roster (71) â†’</span>
         </a>
         <button
           id="play-btn"
           type="button"
           class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition flex items-center gap-1.5"
         >
-          <span id="play-icon" class="text-[11px]">▶</span>
+          <span id="play-icon" class="text-[11px]">â–¶</span>
           <span id="play-label">Play timeline</span>
         </button>
-        <span class="font-code px-3 py-1.5 bg-[#EDF7F5] border border-[#BCE3DC] text-[#0F766E] text-[12px] font-medium rounded-lg" id="active-count-badge">
+        <span class="font-code px-3 py-1.5 bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[12px] font-medium rounded-lg" id="active-count-badge">
           71 active
         </span>
       </div>
@@ -42,8 +42,8 @@ import teamData from '../data/team-nodes.json';
     <div class="mt-7 pt-5 border-t border-[#DFDDD6]">
       <div class="flex items-center justify-between text-[12px] text-[#525866] mb-3">
         <span class="font-code text-[#767D8C]">Oct 2025 (Inception)</span>
-        <span id="cohort-desc" class="text-center text-[#161A22] font-medium hidden sm:inline">November 2026 — Nationwide Scale (71 Active Members Across Egypt)</span>
-        <span class="font-code text-[#0F766E] font-medium">Nov 2026 (71 Members)</span>
+        <span id="cohort-desc" class="text-center text-[#161A22] font-medium hidden sm:inline">November 2026 â€” Nationwide Scale (71 Active Members Across Egypt)</span>
+        <span class="font-code text-[#0B5F58] font-medium">Nov 2026 (71 Members)</span>
       </div>
 
       <div class="p-3 bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg">
@@ -112,7 +112,7 @@ import teamData from '../data/team-nodes.json';
       <!-- Zoom Controls -->
       <div class="absolute top-4 right-4 z-10 flex flex-col gap-1 bg-white p-1 rounded-lg border border-[#DFDDD6] shadow-[0_1px_3px_rgba(22,26,34,0.06)]">
         <button id="btn-zoom-in" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#161A22] hover:bg-[#F3F2EE] font-medium text-[15px]" title="Zoom In">+</button>
-        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#161A22] hover:bg-[#F3F2EE] font-medium text-[15px]" title="Zoom Out">−</button>
+        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#161A22] hover:bg-[#F3F2EE] font-medium text-[15px]" title="Zoom Out">âˆ’</button>
         <button id="btn-zoom-reset" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#525866] hover:bg-[#F3F2EE] text-[10.5px] font-code font-medium" title="Reset View">100%</button>
       </div>
 
@@ -181,7 +181,7 @@ import teamData from '../data/team-nodes.json';
           </div>
           <div class="flex items-center justify-between">
             <span>Joined timeline</span>
-            <span id="insp-cohort" class="font-code text-[#0F766E] font-medium">Oct 2025</span>
+            <span id="insp-cohort" class="font-code text-[#0B5F58] font-medium">Oct 2025</span>
           </div>
         </div>
 
@@ -202,7 +202,7 @@ import teamData from '../data/team-nodes.json';
       href="/roster"
       class="h-10 px-5 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13.5px] font-medium transition shrink-0"
     >
-      Open directory roster →
+      Open directory roster â†’
     </a>
   </section>
 
@@ -219,11 +219,11 @@ import teamData from '../data/team-nodes.json';
     }
 
     const STEPS = [
-      { key: '2025-10', label: 'Oct 2025', desc: 'October 2025 — Co-Founders Inception (Mohammed Farag & Mohammed Abdelghany)' },
-      { key: '2026-01', label: 'Jan 2026', desc: 'January 2026 — Executive Heads of HR, Marketing, PR & Social Media' },
-      { key: '2026-04', label: 'Apr 2026', desc: 'April 2026 — Vice Heads & Regional Guild Leaders' },
-      { key: '2026-07', label: 'Jul 2026', desc: 'July 2026 — Interview Committees, Outreach Leads & Managers' },
-      { key: '2026-11', label: 'Nov 2026', desc: 'November 2026 — Nationwide Scale (71 Active Members Across Egypt)' }
+      { key: '2025-10', label: 'Oct 2025', desc: 'October 2025 â€” Co-Founders Inception (Mohammed Farag & Mohammed Abdelghany)' },
+      { key: '2026-01', label: 'Jan 2026', desc: 'January 2026 â€” Executive Heads of HR, Marketing, PR & Social Media' },
+      { key: '2026-04', label: 'Apr 2026', desc: 'April 2026 â€” Vice Heads & Regional Guild Leaders' },
+      { key: '2026-07', label: 'Jul 2026', desc: 'July 2026 â€” Interview Committees, Outreach Leads & Managers' },
+      { key: '2026-11', label: 'Nov 2026', desc: 'November 2026 â€” Nationwide Scale (71 Active Members Across Egypt)' }
     ];
 
     let currentStepIndex = 4;
@@ -407,11 +407,11 @@ import teamData from '../data/team-nodes.json';
       if (isPlaying) {
         clearInterval(playInterval);
         isPlaying = false;
-        playIcon.textContent = '▶';
+        playIcon.textContent = 'â–¶';
         playLabel.textContent = 'Play timeline';
       } else {
         isPlaying = true;
-        playIcon.textContent = '⏸';
+        playIcon.textContent = 'â¸';
         playLabel.textContent = 'Pause';
         playInterval = setInterval(() => {
           currentStepIndex = (currentStepIndex + 1) % STEPS.length;

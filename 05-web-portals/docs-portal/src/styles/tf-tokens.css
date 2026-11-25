@@ -1,0 +1,112 @@
+/* GENERATED FILE — DO NOT EDIT DIRECTLY. Source: packages/tokens/tokens.json (2.0.0) */
+:root {
+  color-scheme: light dark;
+  --tf-canvas: #F3F2EE;
+  --tf-surface: #FFFFFF;
+  --tf-surface-sunken: #EAE8E1;
+  --tf-border: #DFDDD6;
+  --tf-border-strong: #C9C6BC;
+  --tf-text: #161A22;
+  --tf-text-muted: #5B606B;
+  --tf-text-subtle: #767D8C;
+  --tf-brand: #1B365D;
+  --tf-brand-hover: #132847;
+  --tf-brand-soft: #E4EAF2;
+  --tf-accent: #0F766E;
+  --tf-accent-text: #0B5F58;
+  --tf-accent-soft: #EDF7F5;
+  --tf-accent-border: #BCE3DC;
+  --tf-signal: #A2570F;
+  --tf-signal-soft: #FEF6EB;
+  --tf-danger: #B42318;
+  --tf-danger-soft: #FEF3F2;
+  /* Backward-compatible semantic aliases */
+  --tf-well: var(--tf-surface-sunken);
+  --tf-ink: var(--tf-text);
+  --tf-slate: var(--tf-text-muted);
+  --tf-navy: var(--tf-brand);
+  --tf-navy-alt: var(--tf-brand-hover);
+  --tf-teal: var(--tf-accent);
+  --tf-ochre: var(--tf-signal);
+  /* Typography */
+  --tf-font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --tf-font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --tf-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --tf-font-arabic-display: 'Readex Pro', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --tf-font-arabic-body: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --tf-text-display: clamp(2.5rem, 4.5vw, 4rem);
+  --tf-text-h1: clamp(2rem, 3.2vw, 2.75rem);
+  --tf-text-h2: clamp(1.5rem, 2.2vw, 1.875rem);
+  --tf-text-h3: clamp(1.1875rem, 1.5vw, 1.375rem);
+  --tf-text-body: clamp(1rem, 1.05vw, 1.0625rem);
+  --tf-text-small: 0.875rem;
+  --tf-text-mono: 0.8125rem;
+  /* Radius & Motion */
+  --tf-radius-input: 6px;
+  --tf-radius-card: 10px;
+  --tf-radius-pill: 999px;
+  --tf-motion-fast: 120ms;
+  --tf-motion-base: 200ms;
+  --tf-motion-page: 320ms;
+  --tf-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --tf-shadow-float: 0 1px 2px rgb(22 26 34 / 0.06);
+}
+
+[data-theme='dark'] {
+  --tf-canvas: #0F1216;
+  --tf-surface: #161A20;
+  --tf-surface-sunken: #1C2129;
+  --tf-border: #2A303A;
+  --tf-border-strong: #3B4352;
+  --tf-text: #ECEAE4;
+  --tf-text-muted: #9AA0AA;
+  --tf-text-subtle: #7A818D;
+  --tf-brand: #8FB1E0;
+  --tf-brand-hover: #A8C4EA;
+  --tf-brand-soft: #1B2A40;
+  --tf-accent: #5EC4B8;
+  --tf-accent-text: #7DD3C8;
+  --tf-accent-soft: #132C2A;
+  --tf-accent-border: #214B47;
+  --tf-signal: #E7A35C;
+  --tf-signal-soft: #2E2012;
+  --tf-danger: #F97066;
+  --tf-danger-soft: #2C1616;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --tf-canvas: #0F1216;
+    --tf-surface: #161A20;
+    --tf-surface-sunken: #1C2129;
+    --tf-border: #2A303A;
+    --tf-border-strong: #3B4352;
+    --tf-text: #ECEAE4;
+    --tf-text-muted: #9AA0AA;
+    --tf-text-subtle: #7A818D;
+    --tf-brand: #8FB1E0;
+    --tf-brand-hover: #A8C4EA;
+    --tf-brand-soft: #1B2A40;
+    --tf-accent: #5EC4B8;
+    --tf-accent-text: #7DD3C8;
+    --tf-accent-soft: #132C2A;
+    --tf-accent-border: #214B47;
+    --tf-signal: #E7A35C;
+    --tf-signal-soft: #2E2012;
+    --tf-danger: #F97066;
+    --tf-danger-soft: #2C1616;
+  }
+}
+
+[dir='rtl'] {
+  --tf-font-display: var(--tf-font-arabic-display);
+  --tf-font-body: var(--tf-font-arabic-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tf-motion-fast: 0ms;
+    --tf-motion-base: 0ms;
+    --tf-motion-page: 0ms;
+  }
+}

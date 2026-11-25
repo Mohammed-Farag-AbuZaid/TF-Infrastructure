@@ -1,8 +1,11 @@
 ---
 /**
  * Official Credential & Certificate Verifier (`https://verify.tfunions.com`)
- * Calm Alabaster & Fjord Slate (#F3F2EE canvas, #FFFFFF masthead & sheets, #DFDDD6 borders, #0F766E verified accent).
+ * Calm Alabaster & Fjord Slate v2 (uses shared tf-tokens & tf-ui, zero sticky top bar).
  */
+import '../styles/tf-tokens.css';
+import '../styles/tf-ui.css';
+
 const faviconSvg = encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
 );
@@ -14,11 +17,12 @@ const faviconSvg = encodeURIComponent(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify Credential — TF Unions</title>
     <meta name="theme-color" content="#F3F2EE" />
+    <link rel="canonical" href={Astro.url.href} />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style is:global>
@@ -43,6 +47,14 @@ const faviconSvg = encodeURIComponent(
           </div>
         </a>
         <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            data-tf-cmd-open
+            class="hidden sm:inline-flex items-center gap-1.5 h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[#5B606B] text-[12px] font-medium transition"
+          >
+            <span>Jump</span>
+            <kbd class="font-code text-[10.5px] bg-[#EAE8E1] px-1.5 py-0.5 rounded">⌘K</kbd>
+          </button>
           <a
             href="/schema"
             class="h-9 px-3.5 inline-flex items-center rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[13px] font-medium text-[#161A22] transition"
@@ -74,7 +86,7 @@ const faviconSvg = encodeURIComponent(
             Verify a certificate
           </h1>
           <p class="mt-2.5 text-[14px] leading-[1.6] text-[#525866]">
-            Enter the permanent serial code printed on any TF Unions volunteer or leadership credential (<span class="font-code text-[#0F766E]">TFU-YYYY-XXXXXX</span>).
+            Enter the permanent serial code printed on any TF Unions volunteer or leadership credential (<span class="font-code text-[#0B5F58]">TFU-YYYY-XXXXXX</span>).
           </p>
 
           <form id="verify-form" class="mt-6 space-y-3">
@@ -124,15 +136,28 @@ const faviconSvg = encodeURIComponent(
       </div>
     </main>
 
-    <footer class="bg-white border-t border-[#DFDDD6] text-[#525866] py-5 mt-auto">
+    <footer class="tf-eco-footer bg-white">
       <div class="max-w-[1160px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 text-[12px]">
         <span>TF Unions Credential Verification Registry — Backed by VPS PostgreSQL</span>
-        <div class="flex items-center gap-4">
-          <a href="/schema" class="text-[#161A22] font-medium hover:underline">Verification schema</a>
-          <a href="https://docs.tfunions.com/api" class="text-[#1B365D] font-medium hover:underline">Verification API Docs →</a>
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="https://www.tfunions.com">Foundation</a>
+          <a href="https://news.tfunions.com">News</a>
+          <a href="https://guides.tfunions.com">Guides</a>
+          <a href="https://connect.tfunions.com">Connect</a>
+          <a href="/schema" class="!text-[#161A22] font-medium hover:underline">Verification schema</a>
+          <a href="https://docs.tfunions.com/api" class="!text-[#1B365D] font-medium hover:underline">Verification API Docs →</a>
         </div>
       </div>
     </footer>
+
+    <nav class="tf-mobile-dock" aria-label="Mobile quick navigation">
+      <a href="https://www.tfunions.com">Home</a>
+      <a href="https://guides.tfunions.com">Learn</a>
+      <a href="https://www.tfunions.com/desk">Act</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://verify.tfunions.com">Me</a>
+    </nav>
+
+    <script src="/js/tf-chrome.js" defer></script>
 
     <script is:inline>
       function esc(str) {
@@ -172,8 +197,8 @@ const faviconSvg = encodeURIComponent(
             const shareUrl = `https://verify.tfunions.com/?code=${encodeURIComponent(data.serialCode)}`;
             resultBox.innerHTML = `
               <div class="px-6 py-3.5 bg-[#EDF7F5] border-b border-[#BCE3DC] flex flex-wrap items-center justify-between gap-3">
-                <span class="px-2.5 py-0.5 rounded-md bg-[#0F766E] text-white text-[12px] font-medium">Verified Authentic Credential</span>
-                <span class="font-code text-[12.5px] font-medium text-[#0F766E]">${esc(data.serialCode)}</span>
+                <span class="tf-stamp">Verified Authentic Credential</span>
+                <span class="tf-serial-chip">№ ${esc(data.serialCode)}</span>
               </div>
               <div class="p-6 sm:p-8">
                 <div class="text-[12px] font-medium text-[#767D8C]">Issued to recipient</div>

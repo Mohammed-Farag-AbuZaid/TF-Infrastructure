@@ -3,6 +3,9 @@
  * Calm Alabaster & Fjord Slate layout for TF Docs (`https://docs.tfunions.com`).
  * Zero top ecosystem switcher or sticky header bars — uses clean inline canvas navigation across 4 dedicated pages.
  */
+import '../styles/tf-tokens.css';
+import '../styles/tf-ui.css';
+
 export interface Props {
   title: string;
   activeTab: 'platforms' | 'sso' | 'api' | 'faq';
@@ -34,12 +37,13 @@ const faviconSvg = encodeURIComponent(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — TF Docs</title>
+    <link rel="canonical" href={Astro.url.href} />
     <meta name="theme-color" content="#F3F2EE" />
     <link rel="icon" type="image/svg+xml" href={`data:image/svg+xml,${faviconSvg}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style is:global>
@@ -76,6 +80,14 @@ const faviconSvg = encodeURIComponent(
               <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[10.5px] font-code text-[#767D8C]">/</kbd>
             </div>
           )}
+          <button
+            type="button"
+            data-tf-cmd-open
+            class="hidden sm:inline-flex items-center gap-1.5 h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D] text-[#5B606B] text-[12px] font-medium transition"
+          >
+            <span>Jump</span>
+            <kbd class="font-code text-[10.5px] bg-[#EAE8E1] px-1.5 py-0.5 rounded">⌘K</kbd>
+          </button>
           <a
             href="https://www.tfunions.com"
             class="h-9 px-3.5 inline-flex items-center rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22] hover:bg-white/70 transition"
@@ -110,12 +122,28 @@ const faviconSvg = encodeURIComponent(
       <slot />
     </main>
 
-    <footer class="bg-white border-t border-[#DFDDD6] text-[#525866] py-5 mt-auto">
+    <footer class="tf-eco-footer bg-white">
       <div class="max-w-[1040px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 text-[12px]">
         <span>TF Unions System Handbook</span>
-        <span class="font-code text-[#767D8C]">https://n8n.tfunions.com/tf-api</span>
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="https://www.tfunions.com">Foundation</a>
+          <a href="https://news.tfunions.com">News</a>
+          <a href="https://guides.tfunions.com">Guides</a>
+          <a href="https://connect.tfunions.com">Connect</a>
+          <a href="https://verify.tfunions.com">Verify</a>
+          <span class="font-code text-[#5B606B]">https://n8n.tfunions.com/tf-api</span>
+        </div>
       </div>
     </footer>
+
+    <nav class="tf-mobile-dock" aria-label="Mobile quick navigation">
+      <a href="https://www.tfunions.com">Home</a>
+      <a href="/" class="is-active" aria-current="page">Learn</a>
+      <a href="https://www.tfunions.com/desk">Act</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://docs.tfunions.com">Me</a>
+    </nav>
+
+    <script src="/js/tf-chrome.js" defer></script>
 
     {showSearch && (
       <script is:inline>

@@ -1,8 +1,8 @@
 /**
- * TF Unions — Self-Hosted VPS Auth, Unified SSO & Ecosystem API Engine
- * Eliminates reliance on Firebase by storing accounts, sessions, and profiles
- * directly in VPS PostgreSQL (`tf_sso_db`), while syncing with Baserow, Listmonk,
- * n8n, Telegram Bot (Zain), and WhatsApp Evolution API.
+ * DEPRECATED LEGACY SERVICE (Phase 0 Notice):
+ * Firebase Auth is now the sole Identity Provider (IdP) across TF Unions.
+ * Active API routes have moved to `../tf-api` (`https://api.tfunions.com`).
+ * Retained temporarily only for legacy data migration utilities.
  */
 
 const http = require('http');
@@ -11,10 +11,12 @@ const { Pool } = require('pg');
 
 const PORT = Number(process.env.PORT || 4000);
 const ROOT_DOMAIN = process.env.ROOT_DOMAIN || 'tfunions.com';
-const JWT_SECRET = process.env.JWT_SECRET || 'tfunions_super_secret_jwt_key_2026';
-const DATABASE_URL =
-  process.env.DATABASE_URL ||
-  'postgresql://evolution:Tfunions.postgresql%402009@postgres:5432/tf_sso_db';
+const JWT_SECRET = process.env.JWT_SECRET;
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!JWT_SECRET || !DATABASE_URL) {
+  throw new Error('Missing required environment variables: JWT_SECRET and DATABASE_URL must be set explicitly.');
+}
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '5414706226';

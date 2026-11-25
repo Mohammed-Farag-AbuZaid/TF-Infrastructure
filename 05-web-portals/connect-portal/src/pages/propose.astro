@@ -1,0 +1,84 @@
+---
+import ConnectLayout from '../layouts/ConnectLayout.astro';
+---
+<ConnectLayout title="Propose a Study Group — TF Connect" backHref="/" backLabel="Back to chapters directory">
+  <main class="max-w-[720px] mx-auto px-4 sm:px-6 mt-7 mb-16">
+    <section class="bg-tf-surface border border-tf-border rounded-tf-card p-6 sm:p-8 shadow-[0_1px_2px_rgb(22_26_34/0.04)]">
+      <div class="pl-2.5 border-l-2 border-tf-accent text-[12.5px] font-medium text-tf-accent-text">
+        Chapter registration
+      </div>
+      <h1 class="font-display text-[28px] tracking-[-0.02em] text-tf-ink mt-2.5">
+        Propose a regional study group
+      </h1>
+      <p class="mt-2 text-[14px] leading-[1.6] text-tf-muted">
+        Submit your school chapter, Olympiad peer circle, or engineering guild to be reviewed and listed in the TF Connect atlas.
+      </p>
+
+      <div id="form-alert" class="hidden mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-border"></div>
+
+      <form id="propose-form" class="mt-4">
+        <label for="group-name" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Chapter or guild name</label>
+        <input id="group-name" type="text" required placeholder="e.g. Mansoura Olympiad Physics Circle" class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="group-type" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Classification</label>
+            <select id="group-type" class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none">
+              <option value="School Chapter">School Chapter</option>
+              <option value="Project Guild">Project Guild</option>
+              <option value="Research Lab">Research Lab</option>
+            </select>
+          </div>
+          <div>
+            <label for="group-gov" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Governorate</label>
+            <input id="group-gov" type="text" required placeholder="e.g. Dakahlia" class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none" />
+          </div>
+        </div>
+
+        <label for="group-desc" class="block text-[13px] font-medium text-tf-ink mt-4 mb-1.5">Focus areas &amp; meeting format</label>
+        <textarea id="group-desc" rows="4" required placeholder="Describe topics covered, target student track, and how students can join..." class="w-full px-3 py-2.5 rounded-tf-input bg-tf-sunken/60 border border-tf-border text-base text-tf-ink focus:bg-tf-surface focus:border-tf-brand focus:outline-none"></textarea>
+
+        <button type="submit" class="mt-5 w-full h-11 rounded-tf-input bg-tf-brand hover:bg-tf-brand-hover text-white text-[14px] font-semibold transition">
+          Submit chapter proposal
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script is:inline>
+    const form = document.getElementById('propose-form');
+    const alertBox = document.getElementById('form-alert');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.className = 'mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-border bg-tf-sunken text-tf-ink';
+      alertBox.textContent = 'Submitting chapter proposal...';
+
+      const name = document.getElementById('group-name').value.trim();
+      const type = document.getElementById('group-type').value;
+      const gov = document.getElementById('group-gov').value.trim();
+      const desc = document.getElementById('group-desc').value.trim();
+
+      try {
+        const res = await fetch('https://n8n.tfunions.com/tf-api/api/qa-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            submissionType: 'Project_Idea',
+            service: 'Connect_Portal',
+            title: `[${type} · ${gov}] ${name}`,
+            description: desc,
+            pageUrl: window.location.href,
+            uid: localStorage.getItem('tf_voter_id') || 'connect_visitor'
+          })
+        });
+        if (!res.ok) throw new Error('Request failed');
+        alertBox.className = 'mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-accent-border bg-tf-accent-soft text-tf-accent-text';
+        alertBox.textContent = 'Proposal received. Our regional coordinators will review and publish it.';
+        form.reset();
+      } catch {
+        alertBox.className = 'mt-4 p-3.5 rounded-tf-input text-[13.5px] font-medium border border-tf-danger/30 bg-tf-danger-soft text-tf-danger';
+        alertBox.textContent = 'Could not submit chapter proposal. Please try again.';
+      }
+    });
+  </script>
+</ConnectLayout>

@@ -1,19 +1,49 @@
-auto.tfunions.org {
+(security_headers) {
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+}
+
+api.tfunions.com {
+    import security_headers
+    reverse_proxy tf-api:4000
+}
+
+n8n.tfunions.com {
+    import security_headers
+    handle_path /tf-api/* {
+        reverse_proxy tf-api:4000
+    }
+    handle {
+        reverse_proxy n8n:5678
+    }
+}
+
+auto.tfunions.com {
+    import security_headers
     reverse_proxy n8n:5678
 }
 
-ops.tfunions.org {
+ops.tfunions.com {
+    import security_headers
     reverse_proxy baserow:80
 }
 
-mail.tfunions.org {
+mail.tfunions.com {
+    import security_headers
     reverse_proxy listmonk:9000
 }
 
-analytics.tfunions.org {
+analytics.tfunions.com {
+    import security_headers
     reverse_proxy umami:3000
 }
 
-status.tfunions.org {
+status.tfunions.com {
+    import security_headers
     reverse_proxy uptime-kuma:3001
 }

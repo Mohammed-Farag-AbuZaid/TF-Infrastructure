@@ -1,4 +1,7 @@
 ---
+import '../styles/tf-tokens.css';
+import '../styles/tf-ui.css';
+
 export interface Props {
   title: string;
   description?: string;
@@ -37,6 +40,7 @@ const faviconSvg = encodeURIComponent(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — TF Unions</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
     <meta property="og:title" content={`${title} — TF Unions`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -45,40 +49,26 @@ const faviconSvg = encodeURIComponent(
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script defer src="https://analytics.tfunions.com/script.js" data-website-id="tfunions-foundation"></script>
     <style is:global>
       :root {
-        --tf-canvas: #F3F2EE;
-        --tf-well: #EAE8E1;
-        --tf-surface: #FFFFFF;
-        --tf-border: #DFDDD6;
-        --tf-border-strong: #C9C6BC;
-        --tf-ink: #161A22;
-        --tf-slate: #525866;
-        --tf-muted: #767D8C;
-        --tf-primary: #1B365D;
-        --tf-primary-hover: #132847;
-        --tf-teal: #0F766E;
-        --tf-ochre: #B45309;
+        --tf-primary: var(--tf-brand);
+        --tf-primary-hover: var(--tf-brand-hover);
       }
       body {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-        background-color: #F3F2EE;
-        color: #161A22;
+        font-family: var(--tf-font-body);
+        background-color: var(--tf-canvas);
+        color: var(--tf-text);
       }
       .font-display {
-        font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: var(--tf-font-display);
       }
       .font-code {
-        font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+        font-family: var(--tf-font-mono);
         font-variant-numeric: tabular-nums;
-      }
-      *:focus-visible {
-        outline: 2px solid #1B365D;
-        outline-offset: 2px;
       }
     </style>
   </head>
@@ -130,6 +120,15 @@ const faviconSvg = encodeURIComponent(
         </div>
 
         <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-tf-cmd-open
+            class="hidden sm:inline-flex items-center gap-1.5 h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#5B606B] text-[12px] font-medium transition"
+            aria-label="Open command search"
+          >
+            <span>Jump</span>
+            <kbd class="font-code text-[10.5px] bg-[#EAE8E1] px-1.5 py-0.5 rounded">⌘K</kbd>
+          </button>
           <div id="sso-nav-slot" class="flex items-center gap-1.5">
             <a
               href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
@@ -254,6 +253,14 @@ const faviconSvg = encodeURIComponent(
       </div>
     </footer>
 
+    <nav class="tf-mobile-dock" aria-label="Mobile quick navigation">
+      <a href="/" class={pathname === '/' ? 'is-active' : undefined} aria-current={pathname === '/' ? 'page' : undefined}>Home</a>
+      <a href="https://guides.tfunions.com">Learn</a>
+      <a href="/desk" class={pathname === '/desk' || pathname === '/volunteer' || pathname === '/ideas' ? 'is-active' : undefined}>Act</a>
+      <a href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com">Me</a>
+    </nav>
+
+    <script src="/js/tf-chrome.js" defer></script>
     <script src="/widgets/tf-qa-widget.js" defer></script>
     <tf-qa-widget service="Foundation_Portal"></tf-qa-widget>
 
