@@ -1,0 +1,40 @@
+name: API Gateway CI (tf-api)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '03-sso-auth-hub/tf-api/**'
+      - '.github/workflows/api.yml'
+  pull_request:
+    paths:
+      - '03-sso-auth-hub/tf-api/**'
+      - '.github/workflows/api.yml'
+
+jobs:
+  test-and-build:
+    name: Typecheck, Test & Build tf-api
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 03-sso-auth-hub/tf-api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 03-sso-auth-hub/tf-api/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Build bundle
+        run: npm run build

@@ -1,0 +1,30 @@
+name: Nightly Verification
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    name: Token Drift, Rules & API Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check design token sync
+        run: node packages/tokens/scripts/generate.mjs --check
+
+      - name: Run Firestore rules invariant tests
+        run: node --test 02-database-schemas/firestore/test/rules.test.mjs
+
+      - name: Verify tf-api typecheck and tests
+        working-directory: 03-sso-auth-hub/tf-api
+        run: |
+          npm install --no-audit --no-fund
+          npm run typecheck
+          npm test

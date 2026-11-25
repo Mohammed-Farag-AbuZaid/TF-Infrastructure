@@ -270,6 +270,8 @@ const flutterTargets = [
   path.join(WORKSPACE_ROOT, 'TF-Preset', 'lib', 'src', 'tokens', 'tf_tokens.dart'),
   path.join(WORKSPACE_ROOT, 'tf_news', 'lib', 'utils', 'constants', 'tf_tokens.dart'),
   path.join(WORKSPACE_ROOT, 'TF-Union', 'tf_union', 'lib', 'constants', 'tf_tokens.dart'),
+  path.join(WORKSPACE_ROOT, 'stem_union', 'lib', 'utils', 'constants', 'tf_tokens.dart'),
+  path.join(WORKSPACE_ROOT, 'stem_shop', 'lib', 'utils', 'constants', 'tf_tokens.dart'),
 ];
 
 for (const dartPath of flutterTargets) {
