@@ -191,73 +191,99 @@
 
   // Live visual copy + global text replacement hydration from Firestore siteCopy/{pageKey}
   if (typeof document !== 'undefined' && !document.getElementById('dash-shell')) {
-    fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteCopy?pageSize=200', { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (data) {
-        if (!data || !Array.isArray(data.documents)) return;
-        var flat = {};
-        var globalRules = [];
-        data.documents.forEach(function (doc) {
-          var pageKey = doc.name.split('/').pop();
-          var fields = doc.fields || {};
-          if (pageKey === '_global') {
-            var rawJson = fields.replacementsJson && fields.replacementsJson.stringValue;
-            if (rawJson) {
-              try {
-                var parsed = JSON.parse(rawJson);
-                if (Array.isArray(parsed)) {
-                  parsed.forEach(function (rule) {
-                    if (rule && typeof rule.from === 'string' && rule.from && typeof rule.to === 'string') {
-                      globalRules.push({ from: rule.from, to: rule.to });
-                    }
-                  });
-                }
-              } catch (_) {}
+    var lastCopyFetch = 0;
+    function hydrateSiteCopy(force) {
+      if (document.getElementById('dash-shell')) return;
+      var now = Date.now();
+      if (!force && now - lastCopyFetch < 1500) return;
+      lastCopyFetch = now;
+      var url = 'https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteCopy?pageSize=200';
+      fetch(url, { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data || !Array.isArray(data.documents)) return;
+          var flat = {};
+          var globalRules = [];
+          data.documents.forEach(function (doc) {
+            var pageKey = doc.name.split('/').pop();
+            var fields = doc.fields || {};
+            if (pageKey === '_global') {
+              var rawJson = fields.replacementsJson && fields.replacementsJson.stringValue;
+              if (rawJson) {
+                try {
+                  var parsed = JSON.parse(rawJson);
+                  if (Array.isArray(parsed)) {
+                    parsed.forEach(function (rule) {
+                      if (rule && typeof rule.from === 'string' && rule.from && typeof rule.to === 'string') {
+                        globalRules.push({ from: rule.from, to: rule.to });
+                      }
+                    });
+                  }
+                } catch (_) {}
+              }
+              return;
             }
-            return;
-          }
-          Object.keys(fields).forEach(function (k) {
-            var v = fields[k];
-            if (v && typeof v.stringValue === 'string' && v.stringValue.trim()) {
-              flat[pageKey + '.' + k] = v.stringValue;
-            }
-          });
-        });
-
-        document.querySelectorAll('[data-tf-copy]').forEach(function (el) {
-          var key = el.getAttribute('data-tf-copy');
-          if (!key || !Object.prototype.hasOwnProperty.call(flat, key)) return;
-          var val = flat[key];
-          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.setAttribute('placeholder', val);
-          } else {
-            el.textContent = val;
-          }
-        });
-
-        if (globalRules.length > 0 && document.body && document.createTreeWalker) {
-          var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-          var textNodes = [];
-          var current;
-          while ((current = walker.nextNode())) {
-            var parent = current.parentElement;
-            if (!parent || parent.closest('script, style, noscript, input, textarea, code, pre')) continue;
-            textNodes.push(current);
-          }
-          textNodes.forEach(function (node) {
-            var txt = node.nodeValue;
-            if (!txt || !txt.trim()) return;
-            var changed = false;
-            globalRules.forEach(function (rule) {
-              if (txt.indexOf(rule.from) !== -1) {
-                txt = txt.split(rule.from).join(rule.to);
-                changed = true;
+            Object.keys(fields).forEach(function (k) {
+              var v = fields[k];
+              if (v && typeof v.stringValue === 'string' && v.stringValue.trim()) {
+                flat[pageKey + '.' + k] = v.stringValue;
               }
             });
-            if (changed) node.nodeValue = txt;
           });
-        }
-      })
-      .catch(function () {});
+
+          document.querySelectorAll('[data-tf-copy]').forEach(function (el) {
+            var isInput = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA';
+            if (!el.dataset.tfOrigSet) {
+              el.dataset.tfOrig = isInput ? (el.getAttribute('placeholder') || '') : (el.textContent || '');
+              el.dataset.tfOrigSet = '1';
+            }
+            var key = el.getAttribute('data-tf-copy');
+            var val = (key && Object.prototype.hasOwnProperty.call(flat, key)) ? flat[key] : el.dataset.tfOrig;
+            if (isInput) {
+              if (el.getAttribute('placeholder') !== val) el.setAttribute('placeholder', val);
+            } else {
+              if (el.textContent !== val) el.textContent = val;
+            }
+          });
+
+          if ((globalRules.length > 0 || window.__tfHadGlobalRules) && document.body && document.createTreeWalker) {
+            window.__tfHadGlobalRules = globalRules.length > 0;
+            var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+            var textNodes = [];
+            var current;
+            while ((current = walker.nextNode())) {
+              var parent = current.parentElement;
+              if (!parent || parent.closest('script, style, noscript, input, textarea, code, pre')) continue;
+              textNodes.push(current);
+            }
+            textNodes.forEach(function (node) {
+              if (typeof node.__tfOrigText !== 'string') {
+                node.__tfOrigText = node.nodeValue || '';
+              }
+              var baseTxt = node.__tfOrigText;
+              if (!baseTxt || !baseTxt.trim()) return;
+              var nextTxt = baseTxt;
+              globalRules.forEach(function (rule) {
+                if (nextTxt.indexOf(rule.from) !== -1) {
+                  nextTxt = nextTxt.split(rule.from).join(rule.to);
+                }
+              });
+              if (node.nodeValue !== nextTxt) node.nodeValue = nextTxt;
+            });
+          }
+        })
+        .catch(function () {});
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { hydrateSiteCopy(true); });
+    } else {
+      hydrateSiteCopy(true);
+    }
+    window.addEventListener('focus', function () { hydrateSiteCopy(false); });
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) hydrateSiteCopy(false);
+    });
+    window.tfRefreshCopy = function () { hydrateSiteCopy(true); };
   }
 })();

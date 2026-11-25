@@ -281,50 +281,28 @@ const faviconSvg = encodeURIComponent(
               <div id="copy-search-results" class="hidden rounded-xl border border-[#BCE3DC] bg-[#EDF7F5]/60 p-3 space-y-1.5 max-h-[260px] overflow-y-auto"></div>
             </div>
 
-            <!-- Main 3-Pane Visual Editor -->
-            <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr_320px] gap-5 items-start">
-              <!-- Page Selector -->
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-3 space-y-1 max-h-[600px] overflow-y-auto">
+            <!-- Main 2-Pane In-Place Click-to-Edit Workspace -->
+            <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-5 items-start">
+              <!-- Desktop Page Selector -->
+              <div class="hidden lg:block bg-white border border-[#DFDDD6] rounded-xl p-3 space-y-1 max-h-[620px] overflow-y-auto">
                 <div class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#767D8C]">Pages</div>
                 <div id="copy-page-list" class="space-y-1"></div>
               </div>
 
-              <!-- Click-to-Edit Visual Page Canvas -->
+              <!-- Click-to-Edit Visual Page Canvas (Each sentence expands & saves inline) -->
               <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-sm">
                 <div class="px-4 py-2.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-2 text-[12px]">
-                  <div class="flex items-center gap-2 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 min-w-0">
+                    <select id="copy-page-select" class="lg:hidden h-8 max-w-[210px] px-2 rounded-lg bg-white border border-[#DFDDD6] text-[12px] font-medium text-[#161A22]"></select>
                     <span id="copy-preview-portal" class="px-2 py-0.5 rounded bg-[#1B365D] text-white font-medium text-[11px]"></span>
                     <span id="copy-preview-url" class="font-code text-[#525866] truncate"></span>
                   </div>
                   <div class="flex items-center gap-3 shrink-0">
+                    <button id="copy-reset-page-btn" type="button" class="text-[11.5px] font-medium text-[#B42318] hover:underline">Reset page</button>
                     <a id="copy-open-live" href="#" target="_blank" rel="noopener noreferrer" class="font-medium text-[#1B365D] hover:underline">Open page ↗</a>
                   </div>
                 </div>
-                <div id="copy-canvas" class="p-5 sm:p-6 bg-[#F3F2EE] space-y-2.5 max-h-[560px] overflow-y-auto"></div>
-              </div>
-
-              <!-- Selected Sentence Inspector -->
-              <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3.5 lg:sticky lg:top-6">
-                <div class="flex items-center justify-between">
-                  <h3 class="font-display font-semibold text-[16px] text-[#161A22]">Edit sentence</h3>
-                  <span id="copy-field-kind" class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]"></span>
-                </div>
-                <div id="copy-field-path" class="font-code text-[11.5px] text-[#0B5F58] break-all">Click any sentence on the canvas</div>
-                <textarea id="copy-input" rows="5" placeholder="Click any sentence in the page preview to edit it..." class="w-full p-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] focus:bg-white focus:border-[#1B365D] focus:outline-none text-[14px] leading-relaxed"></textarea>
-                <div class="text-[11.5px] text-[#767D8C] bg-[#FAF9F6] border border-[#EAE8E1] rounded-lg p-2.5">
-                  <strong class="text-[#525866]">Default:</strong> <span id="copy-default-val">—</span>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <button id="copy-save-btn" type="button" class="flex-1 h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-                    Save live
-                  </button>
-                  <button id="copy-reset-field-btn" type="button" class="h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">
-                    Revert
-                  </button>
-                </div>
-                <button id="copy-reset-page-btn" type="button" class="w-full h-8 rounded-lg text-[12px] text-[#B42318] border border-[#FECDCA] hover:bg-[#FEF3F2] transition">
-                  Reset entire page to defaults
-                </button>
+                <div id="copy-canvas" class="p-4 sm:p-6 bg-[#F3F2EE] space-y-2.5 max-h-[640px] overflow-y-auto"></div>
               </div>
             </div>
 
@@ -663,7 +641,7 @@ const faviconSvg = encodeURIComponent(
     </div>
 
     <script id="dash-seed" type="application/json" set:html={seedPayload}></script>
-    <script src="/js/tf-chrome.js" defer></script>
+    <script src="/js/tf-chrome.js?v=20261126b" defer></script>
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
       import {
@@ -981,7 +959,7 @@ const faviconSvg = encodeURIComponent(
       let globalRules = [];
       let selectedPortal = 'all';
       let selectedPageKey = COPY_CATALOG[0]?.pageKey || 'home';
-      let selectedFieldKey = COPY_CATALOG[0]?.fields?.[0]?.key || '';
+      let selectedFieldKey = '';
 
       async function loadWebsiteEditor() {
         const snap = await getDocs(collection(db, 'siteCopy'));
@@ -999,7 +977,7 @@ const faviconSvg = encodeURIComponent(
         });
         renderPortalTabs();
         renderPageList();
-        renderVisualCanvas();
+        renderVisualCanvas(false);
         renderGlobalRules();
       }
 
@@ -1026,11 +1004,11 @@ const faviconSvg = encodeURIComponent(
             const visible = COPY_CATALOG.filter((p) => selectedPortal === 'all' || p.portal === selectedPortal);
             if (!visible.some((p) => p.pageKey === selectedPageKey) && visible[0]) {
               selectedPageKey = visible[0].pageKey;
-              selectedFieldKey = visible[0].fields[0]?.key || '';
+              selectedFieldKey = '';
             }
             renderPortalTabs();
             renderPageList();
-            renderVisualCanvas();
+            renderVisualCanvas(false);
           });
           wrap.appendChild(btn);
         });
@@ -1038,10 +1016,18 @@ const faviconSvg = encodeURIComponent(
 
       function renderPageList() {
         const wrap = document.getElementById('copy-page-list');
+        const selEl = document.getElementById('copy-page-select');
         wrap.replaceChildren();
+        selEl.replaceChildren();
         const filtered = COPY_CATALOG.filter((p) => selectedPortal === 'all' || p.portal === selectedPortal);
         filtered.forEach((pg) => {
           const ovCount = Object.keys(liveCopyMap[pg.pageKey] || {}).filter((k) => pg.fields.some((f) => f.key === k)).length;
+          const opt = document.createElement('option');
+          opt.value = pg.pageKey;
+          opt.textContent = `${pg.label} (${pg.fields.length})`;
+          if (pg.pageKey === selectedPageKey) opt.selected = true;
+          selEl.appendChild(opt);
+
           const btn = document.createElement('button');
           btn.type = 'button';
           const sel = pg.pageKey === selectedPageKey;
@@ -1051,15 +1037,22 @@ const faviconSvg = encodeURIComponent(
           btn.innerHTML = `<span class="truncate font-medium">${esc(pg.label)}</span><span class="font-code text-[10.5px] shrink-0 ${sel ? 'text-[#7DD3C8]' : 'text-[#767D8C]'}">${ovCount > 0 ? ovCount + '/' : ''}${pg.fields.length}</span>`;
           btn.addEventListener('click', () => {
             selectedPageKey = pg.pageKey;
-            selectedFieldKey = pg.fields[0]?.key || '';
+            selectedFieldKey = '';
             renderPageList();
-            renderVisualCanvas();
+            renderVisualCanvas(false);
           });
           wrap.appendChild(btn);
         });
       }
 
-      function renderVisualCanvas() {
+      document.getElementById('copy-page-select').addEventListener('change', (e) => {
+        selectedPageKey = e.target.value;
+        selectedFieldKey = '';
+        renderPageList();
+        renderVisualCanvas(false);
+      });
+
+      function renderVisualCanvas(focusInline) {
         const pg = COPY_CATALOG.find((x) => x.pageKey === selectedPageKey);
         if (!pg) return;
         document.getElementById('copy-preview-portal').textContent = pg.portalLabel;
@@ -1074,36 +1067,79 @@ const faviconSvg = encodeURIComponent(
         pg.fields.forEach((f) => {
           const val = overrides[f.key] || f.def;
           const modified = Boolean(overrides[f.key] && overrides[f.key] !== f.def);
+          const isEditing = f.key === selectedFieldKey;
           const box = document.createElement('div');
-          box.className = 'copy-hot' + (f.key === selectedFieldKey ? ' is-selected' : '');
+          box.className = 'copy-hot' + (isEditing ? ' is-selected' : '');
 
           const badge = f.kind.toUpperCase() + (modified ? ' · LIVE EDITED' : '');
-          const typCls =
-            f.kind === 'h1' ? 'font-display font-bold text-[22px] text-[#161A22] leading-snug'
-              : f.kind === 'h2' ? 'font-display font-semibold text-[17px] text-[#161A22]'
-              : f.kind === 'btn' ? 'inline-block px-3.5 py-1.5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium'
-              : f.kind === 'link' ? 'text-[13.5px] font-medium text-[#1B365D] underline'
-              : f.kind === 'input' ? 'px-3 py-1.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#767D8C] font-code'
-              : 'text-[13.5px] text-[#525866] leading-relaxed';
+          if (!isEditing) {
+            const typCls =
+              f.kind === 'h1' ? 'font-display font-bold text-[22px] text-[#161A22] leading-snug'
+                : f.kind === 'h2' ? 'font-display font-semibold text-[17px] text-[#161A22]'
+                : f.kind === 'btn' ? 'inline-block px-3.5 py-1.5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium'
+                : f.kind === 'link' ? 'text-[13.5px] font-medium text-[#1B365D] underline'
+                : f.kind === 'input' ? 'px-3 py-1.5 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#767D8C] font-code'
+                : 'text-[13.5px] text-[#525866] leading-relaxed';
 
-          box.innerHTML = `<div class="flex items-center justify-between gap-2 mb-1"><span class="text-[11px] font-medium text-[#767D8C]">${esc(f.label)}</span><span class="font-code text-[10px] ${modified ? 'text-[#0B5F58] font-semibold' : 'text-[#767D8C]'}">${esc(badge)}</span></div><div class="${typCls}">${esc(val)}</div>`;
-          box.addEventListener('click', () => {
-            selectedFieldKey = f.key;
-            renderVisualCanvas();
-          });
+            box.innerHTML = `<div class="flex items-center justify-between gap-2 mb-1"><span class="text-[11px] font-medium text-[#767D8C]">${esc(f.label)}</span><span class="font-code text-[10px] ${modified ? 'text-[#0B5F58] font-semibold' : 'text-[#767D8C]'}">${esc(badge)} · Click to edit</span></div><div class="${typCls}">${esc(val)}</div>`;
+            box.addEventListener('click', () => {
+              selectedFieldKey = f.key;
+              renderVisualCanvas(true);
+            });
+          } else {
+            box.innerHTML = `
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-code text-[11px] font-semibold text-[#1B365D]">${esc(pg.pageKey)}.${esc(f.key)}</span>
+                <button type="button" class="inline-close text-[12px] text-[#525866] hover:text-[#161A22] px-2 py-0.5 rounded bg-white border border-[#DFDDD6]">Close ×</button>
+              </div>
+              <textarea dir="${pg.rtl ? 'rtl' : 'ltr'}" rows="3" class="inline-ta w-full p-2.5 rounded-lg bg-white border border-[#1B365D] focus:outline-none text-[14px] text-[#161A22] leading-relaxed"></textarea>
+              <div class="mt-2 text-[11.5px] text-[#525866]"><strong>Default:</strong> ${esc(f.def)}</div>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <button type="button" class="inline-save h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">Save live</button>
+                <button type="button" class="inline-revert h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">Revert to default</button>
+              </div>`;
+            const ta = box.querySelector('.inline-ta');
+            ta.value = val;
+            box.querySelector('.inline-close').addEventListener('click', (ev) => {
+              ev.stopPropagation();
+              selectedFieldKey = '';
+              renderVisualCanvas(false);
+            });
+            box.querySelector('.inline-save').addEventListener('click', async (ev) => {
+              ev.stopPropagation();
+              const nextVal = ta.value.trim();
+              if (!nextVal) return;
+              const existing = { ...(liveCopyMap[pg.pageKey] || {}), [f.key]: nextVal, updatedAt: new Date().toISOString() };
+              await setDoc(doc(db, 'siteCopy', pg.pageKey), existing);
+              liveCopyMap[pg.pageKey] = existing;
+              await writeAudit('siteCopy', 'edit', `${pg.pageKey}.${f.key}`, nextVal.slice(0, 80));
+              selectedFieldKey = '';
+              showToast(`Saved live to ${pg.url}`);
+              renderPageList();
+              renderVisualCanvas(false);
+            });
+            box.querySelector('.inline-revert').addEventListener('click', async (ev) => {
+              ev.stopPropagation();
+              const existing = { ...(liveCopyMap[pg.pageKey] || {}) };
+              delete existing[f.key];
+              existing.updatedAt = new Date().toISOString();
+              await setDoc(doc(db, 'siteCopy', pg.pageKey), existing);
+              liveCopyMap[pg.pageKey] = existing;
+              await writeAudit('siteCopy', 'revert', `${pg.pageKey}.${f.key}`, 'Reverted field');
+              selectedFieldKey = '';
+              showToast('Reverted sentence to default');
+              renderPageList();
+              renderVisualCanvas(false);
+            });
+            if (focusInline) {
+              setTimeout(() => {
+                ta.focus();
+                box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }, 20);
+            }
+          }
           canvas.appendChild(box);
         });
-
-        const cur = pg.fields.find((x) => x.key === selectedFieldKey) || pg.fields[0];
-        if (cur) {
-          selectedFieldKey = cur.key;
-          document.getElementById('copy-field-kind').textContent = cur.kind.toUpperCase();
-          document.getElementById('copy-field-path').textContent = `${pg.pageKey}.${cur.key}`;
-          const ta = document.getElementById('copy-input');
-          ta.setAttribute('dir', pg.rtl ? 'rtl' : 'ltr');
-          ta.value = overrides[cur.key] || cur.def;
-          document.getElementById('copy-default-val').textContent = cur.def;
-        }
       }
 
       document.getElementById('copy-global-search').addEventListener('input', (e) => {
@@ -1141,44 +1177,20 @@ const faviconSvg = encodeURIComponent(
             box.classList.add('hidden');
             renderPortalTabs();
             renderPageList();
-            renderVisualCanvas();
+            renderVisualCanvas(true);
           });
           box.appendChild(btn);
         });
-      });
-
-      document.getElementById('copy-save-btn').addEventListener('click', async () => {
-        if (!selectedPageKey || !selectedFieldKey) return;
-        const val = document.getElementById('copy-input').value.trim();
-        if (!val) return;
-        const existing = { ...(liveCopyMap[selectedPageKey] || {}), [selectedFieldKey]: val, updatedAt: new Date().toISOString() };
-        await setDoc(doc(db, 'siteCopy', selectedPageKey), existing);
-        liveCopyMap[selectedPageKey] = existing;
-        await writeAudit('siteCopy', 'edit', `${selectedPageKey}.${selectedFieldKey}`, val.slice(0, 80));
-        showToast(`Published ${selectedPageKey}.${selectedFieldKey}`);
-        renderPageList();
-        renderVisualCanvas();
-      });
-
-      document.getElementById('copy-reset-field-btn').addEventListener('click', async () => {
-        const existing = { ...(liveCopyMap[selectedPageKey] || {}) };
-        delete existing[selectedFieldKey];
-        existing.updatedAt = new Date().toISOString();
-        await setDoc(doc(db, 'siteCopy', selectedPageKey), existing);
-        liveCopyMap[selectedPageKey] = existing;
-        await writeAudit('siteCopy', 'revert', `${selectedPageKey}.${selectedFieldKey}`, 'Reverted field');
-        showToast('Reverted sentence to default');
-        renderPageList();
-        renderVisualCanvas();
       });
 
       document.getElementById('copy-reset-page-btn').addEventListener('click', async () => {
         await deleteDoc(doc(db, 'siteCopy', selectedPageKey));
         delete liveCopyMap[selectedPageKey];
         await writeAudit('siteCopy', 'reset_page', selectedPageKey, 'Reset page copy');
+        selectedFieldKey = '';
         showToast('Reset page copy to defaults');
         renderPageList();
-        renderVisualCanvas();
+        renderVisualCanvas(false);
       });
 
       function renderGlobalRules() {
