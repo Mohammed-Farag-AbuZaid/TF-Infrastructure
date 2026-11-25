@@ -46,7 +46,8 @@
     { label: 'Open Financial Ledger', url: 'https://www.tfunions.com/transparency', cat: 'Trust' },
     { label: 'Charter & Bylaws', url: 'https://www.tfunions.com/charter', cat: 'Trust' },
     { label: 'Privacy & Data Policy', url: 'https://www.tfunions.com/privacy', cat: 'Trust' },
-    { label: 'Team Studio — Role Editor', url: 'https://www.tfunions.com/studio', cat: 'Act' },
+    { label: 'TF Dashboard — Team & Owner Hub', url: 'https://dashboard.tfunions.com/', cat: 'Act' },
+    { label: 'Team Studio — Quick Editor', url: 'https://www.tfunions.com/studio', cat: 'Act' },
     { label: 'Submit Chapter Photos', url: 'https://www.tfunions.com/photos-submit', cat: 'Act' },
     { label: 'Volunteer Tracks', url: 'https://www.tfunions.com/volunteer', cat: 'Act' },
     { label: 'Volunteer Application Form', url: 'https://www.tfunions.com/volunteer-apply', cat: 'Act' },
@@ -205,4 +206,29 @@
       openPalette();
     }
   });
+
+  // Live visual copy hydration from Firestore siteCopy/{pageKey}
+  if (typeof document !== 'undefined' && document.querySelectorAll('[data-tf-copy]').length > 0) {
+    fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteCopy?pageSize=50', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data || !Array.isArray(data.documents)) return;
+        var flat = {};
+        data.documents.forEach(function (doc) {
+          var pageKey = doc.name.split('/').pop();
+          var fields = doc.fields || {};
+          Object.keys(fields).forEach(function (k) {
+            var v = fields[k];
+            if (v && typeof v.stringValue === 'string' && v.stringValue.trim()) {
+              flat[pageKey + '.' + k] = v.stringValue;
+            }
+          });
+        });
+        document.querySelectorAll('[data-tf-copy]').forEach(function (el) {
+          var key = el.getAttribute('data-tf-copy');
+          if (key && flat[key]) el.textContent = flat[key];
+        });
+      })
+      .catch(function () {});
+  }
 })();

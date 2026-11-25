@@ -237,6 +237,7 @@ const astroPortals = [
   path.join(INFRA_ROOT, '05-web-portals', 'connect-portal'),
   path.join(INFRA_ROOT, '05-web-portals', 'guides-portal'),
   path.join(INFRA_ROOT, '05-web-portals', 'news-portal'),
+  path.join(INFRA_ROOT, '05-web-portals', 'dashboard-portal'),
   path.join(INFRA_ROOT, '03-sso-auth-hub', 'web-portal'),
 ];
 

@@ -28,8 +28,8 @@ const orgJsonLd = JSON.stringify({
       <div class="pl-2.5 border-l-2 border-tf-accent text-[12.5px] text-tf-muted font-medium">
         27 Egyptian governorates
       </div>
-      <h1 class="font-display text-[27px] leading-[1.1] mt-2.5 text-tf-ink">Chapters, unions &amp; guilds</h1>
-      <p class="text-[13.5px] leading-[1.6] text-tf-muted mt-2.5">
+      <h1 data-tf-copy="connect.headline" class="font-display text-[27px] leading-[1.1] mt-2.5 text-tf-ink">Chapters, unions &amp; guilds</h1>
+      <p data-tf-copy="connect.subtitle" class="text-[13.5px] leading-[1.6] text-tf-muted mt-2.5">
         Locate STEM high school chapters, regional study circles, and student-led research labs operating across Egypt.
       </p>
 
@@ -244,7 +244,9 @@ const orgJsonLd = JSON.stringify({
           const f = doc.fields || {};
           const ch = {};
           Object.keys(f).forEach((k) => { ch[k] = decodeFsVal(f[k]); });
-          if (ch.name) {
+          if (ch.archived) {
+            byId.delete(id);
+          } else if (ch.name) {
             byId.set(id, {
               id,
               serial: ch.serial || `CH-${String(idx + 1).padStart(2, '0')}`,

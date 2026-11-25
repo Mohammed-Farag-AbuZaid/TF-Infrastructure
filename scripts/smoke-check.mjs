@@ -12,6 +12,7 @@ const PORTALS = [
   { dir: '05-web-portals/docs-portal', isPublic: true, hasAr: false },
   { dir: '05-web-portals/connect-portal', isPublic: true, hasAr: false },
   { dir: '05-web-portals/guides-portal', isPublic: true, hasAr: false },
+  { dir: '05-web-portals/dashboard-portal', isPublic: false, hasAr: false },
   { dir: '03-sso-auth-hub/web-portal', isPublic: false, hasAr: false },
 ];
 

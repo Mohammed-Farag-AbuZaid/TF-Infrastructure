@@ -27,24 +27,27 @@ const destinations = [
 <BaseLayout title="Home">
   <section class="pt-12 sm:pt-20 pb-10 max-w-[680px]">
     <h1
+      data-tf-copy="home.headline"
       class="font-display font-bold text-[#161A22] leading-[1.08] tracking-[-0.03em]"
       style="font-size: clamp(32px, 4.2vw, 48px);"
     >
       Egypt’s student union for STEM research and global admissions.
     </h1>
 
-    <p class="mt-4 text-[16px] leading-[1.65] text-[#525866]">
+    <p data-tf-copy="home.subtitle" class="mt-4 text-[16px] leading-[1.65] text-[#525866]">
       Independent and student-run across all 27 governorates — verified admission data, research roadmaps, local chapters, and an open ledger.
     </p>
 
     <div class="mt-8 flex flex-wrap items-center gap-5">
       <a
+        data-tf-copy="home.cta_primary"
         href="https://news.tfunions.com"
         class="h-10 px-5 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[14px] font-medium transition"
       >
         Browse opportunities
       </a>
       <a
+        data-tf-copy="home.cta_secondary"
         href="https://verify.tfunions.com"
         class="text-[14px] font-medium text-[#1B365D] hover:underline"
       >
@@ -54,15 +57,15 @@ const destinations = [
   </section>
 
   <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
-    {destinations.map((item) => (
+    {destinations.map((item, idx) => (
       <a href={item.href} class="group block border-t border-[#DFDDD6] pt-5">
         <div class="flex items-center justify-between gap-3">
-          <h2 class="font-display text-[19px] font-semibold text-[#161A22] group-hover:text-[#1B365D] transition">
+          <h2 data-tf-copy={`home.dest_${idx}_title`} class="font-display text-[19px] font-semibold text-[#161A22] group-hover:text-[#1B365D] transition">
             {item.title}
           </h2>
           <span class="text-[#767D8C] group-hover:text-[#1B365D] group-hover:translate-x-0.5 transition-all">→</span>
         </div>
-        <p class="mt-1.5 text-[14px] leading-[1.6] text-[#525866]">
+        <p data-tf-copy={`home.dest_${idx}_desc`} class="mt-1.5 text-[14px] leading-[1.6] text-[#525866]">
           {item.desc}
         </p>
       </a>

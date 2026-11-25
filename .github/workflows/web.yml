@@ -38,6 +38,7 @@ jobs:
           - 05-web-portals/connect-portal
           - 05-web-portals/guides-portal
           - 05-web-portals/news-portal
+          - 05-web-portals/dashboard-portal
           - 03-sso-auth-hub/web-portal
     steps:
       - uses: actions/checkout@v4

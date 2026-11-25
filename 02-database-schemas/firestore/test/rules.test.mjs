@@ -37,7 +37,7 @@ test('firestore.rules declares v2 syntax and balanced braces', () => {
   assert.equal(depth, 0, 'All braces in firestore.rules must be balanced');
 });
 
-test('defines required auth and RBAC helper functions', () => {
+test('defines required auth and RBAC helper functions including tfunions@gmail.com owner bootstrap', () => {
   for (const fn of [
     'isSignedIn()',
     'isOwner(uid)',
@@ -50,6 +50,8 @@ test('defines required auth and RBAC helper functions', () => {
   ]) {
     assert.ok(rulesText.includes(`function ${fn}`), `Missing helper function ${fn}`);
   }
+  const bootBlock = extractMatchBlock(rulesText, 'function isBootstrapOwner()');
+  assert.ok(bootBlock.includes('tfunions@gmail.com'), 'isBootstrapOwner must include tfunions@gmail.com');
 });
 
 test('never grants unconditional public write or read+write access', () => {
@@ -128,6 +130,27 @@ test('studio content collections enforce granular per-permission writes and PII 
 
   const guidesBlock = extractMatchBlock(rulesText, 'match /guides/{guideId}');
   assert.match(guidesBlock, /hasPermission\(['"]edit_guides['"]\)/);
+
+  const siteCopyBlock = extractMatchBlock(rulesText, 'match /siteCopy/{pageKey}');
+  assert.match(siteCopyBlock, /allow\s+read:\s*if\s+true\s*;/);
+  assert.match(siteCopyBlock, /hasPermission\(['"]edit_site_copy['"]\)/);
+
+  const siteConfigBlock = extractMatchBlock(rulesText, 'match /siteConfig/{configKey}');
+  assert.match(siteConfigBlock, /allow\s+read:\s*if\s+true\s*;/);
+  assert.match(siteConfigBlock, /edit_ledger/);
+});
+
+test('team dashboard collections (/tasks, /timeLogs, /recognitions) restrict reads and writes to staff/admin', () => {
+  for (const header of [
+    'match /tasks/{taskId}',
+    'match /timeLogs/{logId}',
+    'match /recognitions/{recId}',
+  ]) {
+    const block = extractMatchBlock(rulesText, header);
+    assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/, `${header} must not be public read`);
+    assert.match(block, /isAdmin\(\)/);
+    assert.match(block, /hasStaffRecord\(\)|edit_team/);
+  }
 });
 
 test('/auditLogs/{logId} is append-only for verified staff/admins and readable only by admin', () => {

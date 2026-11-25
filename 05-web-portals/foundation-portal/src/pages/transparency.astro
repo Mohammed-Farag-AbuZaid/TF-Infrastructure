@@ -9,10 +9,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
           Financial accountability registry
         </div>
-        <h1 class="font-display mt-2.5 text-[30px] sm:text-[38px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
+        <h1 data-tf-copy="ledger.headline" class="font-display mt-2.5 text-[30px] sm:text-[38px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
           Open financial ledger
         </h1>
-        <p class="mt-2.5 text-[14.5px] leading-[1.6] text-[#525866] max-w-[620px]">
+        <p data-tf-copy="ledger.subtitle" class="mt-2.5 text-[14.5px] leading-[1.6] text-[#525866] max-w-[620px]">
           Every verified contribution inflow and self-hosted server infrastructure expense is audited publicly in Egyptian Pounds.
         </p>
       </div>
@@ -229,7 +229,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     (async () => {
       try {
-        const fsRes = await fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ledgerEntries?pageSize=200', { cache: 'no-store' });
+        const [cfgRes, fsRes] = await Promise.all([
+          fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/siteConfig/ledger', { cache: 'no-store' }),
+          fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/ledgerEntries?pageSize=200', { cache: 'no-store' }),
+        ]);
+        const cfgJson = cfgRes.ok ? await cfgRes.json() : null;
+        const isManaged = Boolean(cfgJson?.fields?.managed && decodeFsVal(cfgJson.fields.managed));
         if (fsRes.ok) {
           const fsJson = await fsRes.json();
           const docs = (fsJson.documents || []).map((doc) => {
@@ -238,7 +243,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Object.keys(f).forEach((k) => { o[k] = decodeFsVal(f[k]); });
             return o;
           });
-          if (docs.length > 0) {
+          if (docs.length > 0 || isManaged) {
             docs.sort((a, b) => String(b.txDate || '').localeCompare(String(a.txDate || '')));
             let inflows = 0;
             let outflows = 0;
@@ -253,7 +258,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             document.getElementById('metric-reserve').textContent = fmtEgp(reserve);
             updateChart(inflows, outflows, reserve);
             allEntries = docs;
-            document.getElementById('ledger-status-label').textContent = `Live Studio Ledger (${allEntries.length} entries)`;
+            document.getElementById('ledger-status-label').textContent = `Live Dashboard Ledger (${allEntries.length} ${allEntries.length === 1 ? 'entry' : 'entries'})`;
             renderTable();
             return;
           }

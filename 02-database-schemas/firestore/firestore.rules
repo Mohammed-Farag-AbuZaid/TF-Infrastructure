@@ -25,7 +25,7 @@ service cloud.firestore {
 
     function isBootstrapOwner() {
       return isVerifiedEmail()
-          && userEmail() in ['mohammed.farag.abuzaid@gmail.com', 'mohammed.farag@tfunions.com'];
+          && userEmail() in ['tfunions@gmail.com', 'mohammed.farag.abuzaid@gmail.com', 'mohammed.farag@tfunions.com'];
     }
 
     function hasStaffRecord() {
@@ -151,7 +151,44 @@ service cloud.firestore {
       allow delete: if hasPermission('edit_guides');
     }
 
-    // 5. Immutable Studio Audit Trail
+    // 5. Visual Site Copy & Dashboard Configuration (Owner / Copy-Editor writable; public read)
+    match /siteCopy/{pageKey} {
+      allow read: if true;
+      allow write: if hasPermission('edit_site_copy');
+    }
+
+    match /siteConfig/{configKey} {
+      allow read: if true;
+      allow write: if isAdmin() || hasPermission('edit_ledger');
+    }
+
+    // 6. Team Operations: Tasks, Time Logs & Top Achiever Recognitions
+    match /tasks/{taskId} {
+      allow read: if isAdmin() || hasStaffRecord();
+      allow create, delete: if isAdmin() || isLead() || hasPermission('manage_tasks');
+      allow update: if isAdmin()
+                    || isLead()
+                    || hasPermission('manage_tasks')
+                    || (hasStaffRecord() && staffData().active == true);
+    }
+
+    match /timeLogs/{logId} {
+      allow read: if isAdmin() || hasStaffRecord();
+      allow create: if isSignedIn()
+                    && (isAdmin() || hasStaffRecord())
+                    && request.resource.data.actorUid == request.auth.uid
+                    && request.resource.data.minutes is number
+                    && request.resource.data.minutes > 0
+                    && request.resource.data.minutes <= 720;
+      allow update, delete: if isAdmin() || (isSignedIn() && resource.data.actorUid == request.auth.uid);
+    }
+
+    match /recognitions/{recId} {
+      allow read: if isAdmin() || hasStaffRecord();
+      allow write: if isAdmin() || hasPermission('edit_team') || hasPermission('manage_tasks');
+    }
+
+    // 7. Immutable Studio Audit Trail
     match /auditLogs/{logId} {
       allow read: if isAdmin();
       allow create: if isSignedIn()
