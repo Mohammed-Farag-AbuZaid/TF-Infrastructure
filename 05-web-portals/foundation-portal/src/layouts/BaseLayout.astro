@@ -34,6 +34,13 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 const navLinks = [
   { label: 'Divisions', href: '/divisions' },
+  { label: 'About', href: '/about' },
+  { label: 'Volunteer', href: '/volunteer' },
+  { label: 'Ledger', href: '/transparency' },
+];
+
+const mobileNavLinks = [
+  { label: 'Divisions', href: '/divisions' },
   { label: 'Desk', href: '/desk' },
   { label: 'About', href: '/about' },
   { label: 'Team', href: '/team' },
@@ -113,13 +120,10 @@ const faviconSvg = encodeURIComponent(
                   TF Unions
                 </span>
               )}
-              <span class="text-[11px] text-[#767D8C] font-medium mt-1 leading-none">
-                Egyptian STEM &amp; University Union
-              </span>
             </div>
           </a>
 
-          <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+          <nav class="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -128,8 +132,8 @@ const faviconSvg = encodeURIComponent(
                   aria-current={isActive ? 'page' : undefined}
                   class={
                     isActive
-                      ? 'px-2.5 py-1.5 rounded-lg text-[13px] font-semibold text-[#161A22] bg-white border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.03)]'
-                      : 'px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22] hover:bg-white/60 transition'
+                      ? 'px-2.5 py-1.5 rounded-lg text-[13px] font-semibold text-[#161A22]'
+                      : 'px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22] transition'
                   }
                 >
                   {link.label}
@@ -139,35 +143,20 @@ const faviconSvg = encodeURIComponent(
           </nav>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-4">
           <a
             href={lang === 'ar' ? '/' : '/ar/'}
             hreflang={lang === 'ar' ? 'en' : 'ar'}
-            class="h-9 px-2.5 inline-flex items-center rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#161A22] text-[12px] font-medium transition"
+            class="text-[13px] font-medium text-[#525866] hover:text-[#161A22] transition"
           >
             {lang === 'ar' ? 'English' : 'العربية'}
           </a>
-          <button
-            type="button"
-            data-tf-cmd-open
-            class="hidden sm:inline-flex items-center gap-1.5 h-9 px-2.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#5B606B] text-[12px] font-medium transition"
-            aria-label="Open command search"
-          >
-            <span>Jump</span>
-            <kbd class="font-code text-[10.5px] bg-[#EAE8E1] px-1.5 py-0.5 rounded">⌘K</kbd>
-          </button>
-          <div id="sso-nav-slot" class="flex items-center gap-1.5">
+          <div id="sso-nav-slot" class="flex items-center gap-3">
             <a
               href="https://auth.tfunions.com/?redirect_to=https://www.tfunions.com"
-              class="inline-flex items-center justify-center h-8 sm:h-9 px-3 sm:px-3.5 rounded-lg bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 text-[#161A22] text-[12.5px] sm:text-[13px] font-medium transition"
+              class="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition"
             >
               Sign in
-            </a>
-            <a
-              href="https://auth.tfunions.com/?mode=register&redirect_to=https://www.tfunions.com"
-              class="hidden sm:inline-flex items-center justify-center h-9 px-3.5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition shadow-[0_1px_2px_rgba(22,26,34,0.06)]"
-            >
-              Create account
             </a>
           </div>
 
@@ -191,7 +180,7 @@ const faviconSvg = encodeURIComponent(
       <!-- Mobile / Tablet Navigation Drawer -->
       <div id="mobile-nav-drawer" class="hidden lg:hidden mt-2 rounded-xl border border-[#DFDDD6] bg-white p-3 space-y-1 shadow-[0_4px_12px_rgba(22,26,34,0.06)]">
         <div class="grid grid-cols-2 gap-1">
-          {navLinks.map((link) => {
+          {mobileNavLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <a
@@ -290,8 +279,6 @@ const faviconSvg = encodeURIComponent(
     </nav>
 
     <script src="/js/tf-chrome.js" defer></script>
-    <script src="/widgets/tf-qa-widget.js" defer></script>
-    <tf-qa-widget service="Foundation_Portal"></tf-qa-widget>
 
     <script is:inline>
       (function () {
@@ -322,12 +309,12 @@ const faviconSvg = encodeURIComponent(
 
               const badge = document.createElement('a');
               badge.href = 'https://auth.tfunions.com';
-              badge.className = 'inline-flex items-center gap-2 h-9 px-3 rounded-lg bg-[#EAE8E1] border border-[#DCD9D0] text-[13px] font-medium text-[#161A22] hover:border-[#B8B4A8] transition';
+              badge.className = 'text-[13px] font-medium text-[#161A22] hover:text-[#1B365D] transition';
               badge.textContent = String(hint.name).slice(0, 32);
 
               const signOutBtn = document.createElement('button');
               signOutBtn.type = 'button';
-              signOutBtn.className = 'h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[12px] font-medium text-[#525866] hover:text-[#161A22] hover:border-[#B8B4A8] transition';
+              signOutBtn.className = 'text-[13px] font-medium text-[#525866] hover:text-[#161A22] transition';
               signOutBtn.textContent = 'Sign out';
               signOutBtn.addEventListener('click', () => {
                 document.cookie = 'tf_user_hint=; Secure; SameSite=Lax; Domain=.tfunions.com; Path=/; Max-Age=0';

@@ -83,34 +83,25 @@ const updated = new Date(dataMeta.fetchedAt).toISOString().slice(0, 10);
             <span class="font-display text-[19px] font-bold leading-none block truncate">
               {backLabel ? `${lang === 'ar' ? '→' : '←'} ${backLabel}` : 'TF News'}
             </span>
-            <span class="text-[11px] text-tf-subtle block truncate">{t(lang, 'brand.sub')}</span>
           </div>
         </a>
 
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex flex-wrap items-center gap-4">
           {altPath && (
             <a
               href={href(other, altPath)}
               hreflang={other}
               lang={other}
-              class="h-9 px-3 inline-flex items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium transition"
+              class="text-[13px] font-medium text-tf-muted hover:text-tf-ink transition"
             >{t(lang, 'lang.switch')}</a>
           )}
-          <button
-            type="button"
-            data-tf-cmd-open
-            class="hidden sm:inline-flex items-center gap-2 h-9 px-3 rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[12.5px] font-medium text-tf-muted transition"
-          >
-            <span>{t(lang, 'nav.jump')}</span>
-            <kbd class="font-mono text-[11px] text-tf-subtle bg-tf-sunken px-1.5 py-0.5 rounded">⌘K</kbd>
-          </button>
           <a
             href="https://www.tfunions.com"
-            class="hidden sm:inline-flex h-9 px-3.5 items-center rounded-tf-card bg-tf-surface border border-tf-border hover:border-tf-brand text-[13px] font-medium transition"
+            class="hidden sm:inline-flex items-center text-[13px] font-medium text-tf-muted hover:text-tf-ink transition"
           >{t(lang, 'nav.foundation')}</a>
           <a
             href="https://auth.tfunions.com/?redirect_to=https://news.tfunions.com"
-            class="h-9 px-4 inline-flex items-center rounded-tf-card bg-tf-brand hover:bg-tf-brand-hover text-white text-[13px] font-medium transition"
+            class="h-9 px-4 inline-flex items-center rounded-lg bg-tf-brand hover:bg-tf-brand-hover text-white text-[13px] font-medium transition"
           >{t(lang, 'nav.signin')}</a>
         </div>
       </div>

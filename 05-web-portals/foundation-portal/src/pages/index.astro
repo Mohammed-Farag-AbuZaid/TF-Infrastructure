@@ -3,196 +3,69 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const destinations = [
   {
-    code: '01 · Registry',
-    title: 'Union Divisions & Platforms',
+    title: 'Divisions & platforms',
     desc: 'Access TF News admissions, TF Guides research roadmaps, TF Connect chapters, and STEM Shop.',
     href: '/divisions',
-    cta: 'Open divisions',
   },
   {
-    code: '02 · Real-time',
-    title: 'Live Union Desk',
-    desc: 'Inspect live opportunity deadlines, active governorate chapters, and treasury reserve snapshots.',
+    title: 'Live union desk',
+    desc: 'Inspect active opportunity deadlines, regional governorate chapters, and treasury snapshots.',
     href: '/desk',
-    cta: 'Open union desk',
   },
   {
-    code: '03 · People',
-    title: '71-Member Constellation & Roster',
-    desc: 'Trace leadership history from October 2025 or search every contributor across Egypt.',
+    title: 'Team & chapters',
+    desc: 'Trace leadership history from October 2025 or browse active student contributors across Egypt.',
     href: '/team',
-    cta: 'Explore team',
   },
   {
-    code: '04 · Accountability',
-    title: 'Open Ledger & Governance',
-    desc: 'Verify public EGP inflows/outflows, review our non-profit charter, or propose student tools.',
+    title: 'Open ledger & charter',
+    desc: 'Verify public EGP inflows and outflows, read the non-profit charter, or submit chapter ideas.',
     href: '/transparency',
-    cta: 'View transparency',
   },
 ];
 ---
 <BaseLayout title="Home">
-  <!-- Focused Hero & Quick Union Console -->
-  <section class="pt-8 sm:pt-12 pb-6 max-w-[820px]">
-    <div class="inline-flex items-center gap-2 pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
-      Egyptian student academic and scientific union
-    </div>
-
-    <h1 class="font-display mt-4 font-bold text-[#161A22] leading-[1.06] tracking-[-0.03em]" style="font-size: clamp(32px, 4.4vw, 52px);">
-      Where Egypt’s STEM scholars research, build, and reach the world’s universities.
+  <section class="pt-12 sm:pt-20 pb-10 max-w-[680px]">
+    <h1
+      class="font-display font-bold text-[#161A22] leading-[1.08] tracking-[-0.03em]"
+      style="font-size: clamp(32px, 4.2vw, 48px);"
+    >
+      Egypt’s student union for STEM research and global admissions.
     </h1>
 
-    <p class="mt-4 text-[15.5px] leading-[1.65] text-[#525866] max-w-[600px]">
-      Founded in October 2025 to equip high school and university students across all 27 governorates with verified admission datasets, research roadmaps, regional study circles, and credential infrastructure.
+    <p class="mt-4 text-[16px] leading-[1.65] text-[#525866]">
+      Independent and student-run across all 27 governorates — verified admission data, research roadmaps, local chapters, and an open ledger.
     </p>
 
-    <!-- Interactive Quick Command Well -->
-    <div class="mt-7 bg-white border border-[#DFDDD6] rounded-xl p-4 sm:p-5 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-      <div class="flex flex-wrap items-center gap-1 p-1 bg-[#EAE8E1] border border-[#DCD9D0] rounded-lg w-fit" role="tablist" aria-label="Quick Union Actions">
-        <button
-          type="button"
-          data-console-tab="verify"
-          class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition"
-        >
-          Verify certificate
-        </button>
-        <button
-          type="button"
-          data-console-tab="opps"
-          class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition"
-        >
-          Browse admissions
-        </button>
-        <button
-          type="button"
-          data-console-tab="team"
-          class="console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition"
-        >
-          Team timeline
-        </button>
-      </div>
-
-      <div id="console-verify" class="console-pane pt-4">
-        <form id="hero-verify-form" class="flex flex-col sm:flex-row gap-2.5">
-          <div class="relative flex-1">
-            <input
-              id="hero-serial-input"
-              type="text"
-              placeholder="Enter serial code (e.g. TFU-2026-8F92A1)"
-              class="font-code w-full h-10 pl-3.5 pr-9 rounded-lg bg-[#EAE8E1]/60 border border-[#DFDDD6] text-[13px] text-[#161A22] placeholder-[#767D8C] focus:bg-white focus:border-[#1B365D] focus:outline-none uppercase transition"
-            />
-            <kbd class="hidden sm:inline-flex items-center justify-center absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-[#EAE8E1] border border-[#DCD9D0] text-[11px] font-code text-[#767D8C]" title="Press / to focus">/</kbd>
-          </div>
-          <button
-            type="submit"
-            class="h-10 px-5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition shrink-0"
-          >
-            Inspect credential
-          </button>
-        </form>
-        <div class="mt-2.5 flex flex-wrap items-center gap-2 text-[12px] text-[#767D8C]">
-          <span>Sample serials:</span>
-          <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition" data-serial="TFU-2026-8F92A1">
-            TFU-2026-8F92A1
-          </button>
-          <button type="button" class="hero-sample font-code px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] hover:border-[#1B365D] transition" data-serial="TFU-2026-000001">
-            TFU-2026-000001
-          </button>
-        </div>
-      </div>
-
-      <div id="console-opps" class="console-pane hidden pt-4">
-        <p class="text-[13.5px] text-[#525866] mb-3">
-          Jump directly to TF News university pathways, full-need financial aid filters, or active seasonal deadlines.
-        </p>
-        <div class="flex flex-wrap gap-2.5">
-          <a href="https://news.tfunions.com" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-            Open TF News directory →
-          </a>
-          <a href="https://guides.tfunions.com" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#EAE8E1] hover:bg-[#DFDDD6] border border-[#DCD9D0] text-[#161A22] text-[13px] font-medium transition">
-            Read admissions guide
-          </a>
-        </div>
-      </div>
-
-      <div id="console-team" class="console-pane hidden pt-4">
-        <p class="text-[13.5px] text-[#525866] mb-3">
-          Scrub across five milestones from October 2025 founding to 71 contributors nationwide in November 2026.
-        </p>
-        <a href="/team" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
-          Launch team constellation →
-        </a>
-      </div>
+    <div class="mt-8 flex flex-wrap items-center gap-5">
+      <a
+        href="https://news.tfunions.com"
+        class="h-10 px-5 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[14px] font-medium transition"
+      >
+        Browse opportunities
+      </a>
+      <a
+        href="https://verify.tfunions.com"
+        class="text-[14px] font-medium text-[#1B365D] hover:underline"
+      >
+        Verify a certificate →
+      </a>
     </div>
   </section>
 
-  <!-- Clean 4-Card Entry Grid to Focused Pages -->
-  <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <section class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
     {destinations.map((item) => (
-      <a
-        href={item.href}
-        class="group bg-white border border-[#DFDDD6] hover:border-[#1B365D]/40 rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between transition"
-      >
-        <div>
-          <div class="font-code text-[12px] font-medium text-[#0B5F58]">{item.code}</div>
-          <h2 class="font-display text-[20px] font-bold text-[#161A22] mt-1.5 group-hover:text-[#1B365D] transition">
+      <a href={item.href} class="group block border-t border-[#DFDDD6] pt-5">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="font-display text-[19px] font-semibold text-[#161A22] group-hover:text-[#1B365D] transition">
             {item.title}
           </h2>
-          <p class="mt-2 text-[13.5px] leading-[1.6] text-[#525866]">
-            {item.desc}
-          </p>
+          <span class="text-[#767D8C] group-hover:text-[#1B365D] group-hover:translate-x-0.5 transition-all">→</span>
         </div>
-        <div class="mt-4 pt-3 border-t border-[#EAE8E1] text-[13px] font-semibold text-[#1B365D] flex items-center justify-between">
-          <span>{item.cta}</span>
-          <span class="group-hover:translate-x-0.5 transition-transform">→</span>
-        </div>
+        <p class="mt-1.5 text-[14px] leading-[1.6] text-[#525866]">
+          {item.desc}
+        </p>
       </a>
     ))}
   </section>
-
-  <script is:inline>
-    document.addEventListener('keydown', (e) => {
-      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
-        const input = document.getElementById('hero-serial-input');
-        if (input) {
-          e.preventDefault();
-          input.focus();
-        }
-      }
-    });
-
-    document.querySelectorAll('.console-tab').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const target = btn.getAttribute('data-console-tab');
-        document.querySelectorAll('.console-tab').forEach((b) => {
-          b.className = 'console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
-        });
-        btn.className = 'console-tab px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition';
-        document.querySelectorAll('.console-pane').forEach((p) => p.classList.add('hidden'));
-        const pane = document.getElementById('console-' + target);
-        if (pane) pane.classList.remove('hidden');
-      });
-    });
-
-    const verifyForm = document.getElementById('hero-verify-form');
-    const serialInput = document.getElementById('hero-serial-input');
-    if (verifyForm && serialInput) {
-      verifyForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const code = serialInput.value.trim().toUpperCase();
-        window.location.href = code
-          ? `https://verify.tfunions.com/?code=${encodeURIComponent(code)}`
-          : 'https://verify.tfunions.com';
-      });
-    }
-    document.querySelectorAll('.hero-sample').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (serialInput) {
-          serialInput.value = btn.getAttribute('data-serial') || '';
-          serialInput.focus();
-        }
-      });
-    });
-  </script>
 </BaseLayout>
