@@ -4,310 +4,410 @@ import teamData from '../data/team-nodes.json';
 import { toPublicMember } from './team.json';
 
 const publicMembers = (teamData as Parameters<typeof toPublicMember>[0][]).map(toPublicMember);
+const founders = publicMembers.filter((m) => m.tier === 0);
 const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 ---
-<BaseLayout title="Team Constellation" backLabel="TF Unions" backHref="/">
-  <!-- Calm Editorial Header -->
-  <section class="pt-8 sm:pt-12 pb-6 border-b border-[#DFDDD6]">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
-      <div class="max-w-[660px]">
-        <h1
-          class="font-display font-bold text-[#161A22] leading-[1.08] tracking-[-0.03em]"
-          style="font-size: clamp(30px, 4vw, 44px);"
-        >
-          The people behind TF Unions.
-        </h1>
-        <p id="hero-subtitle" class="mt-3 text-[15.5px] leading-[1.6] text-[#525866]">
-          Showing <strong class="text-[#161A22] font-semibold">{publicMembers.length}</strong> student leaders across <strong class="text-[#161A22] font-semibold">{teamCount}</strong> teams — November 2026 full network.
-        </p>
-      </div>
+<BaseLayout title="Team" backLabel="TF Unions" backHref="/">
+  <style is:inline>
+    @keyframes tf-flow {
+      from { stroke-dashoffset: 24; }
+      to { stroke-dashoffset: 0; }
+    }
+    .tf-edge-flow {
+      stroke-dasharray: 6 6;
+      animation: tf-flow 1.15s linear infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tf-edge-flow {
+        animation: none;
+        stroke-dasharray: none;
+      }
+    }
+  </style>
 
-      <div class="flex flex-wrap items-center gap-3 shrink-0">
-        <!-- View Mode Toggle -->
-        <div class="inline-flex p-1 rounded-lg bg-[#EAE8E1] border border-[#DCD9D0]" role="tablist" aria-label="View mode">
-          <button
-            id="view-constellation-btn"
-            type="button"
-            role="tab"
-            aria-selected="true"
-            class="px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition"
-          >
-            Constellation
-          </button>
-          <button
-            id="view-directory-btn"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            class="px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition"
-          >
-            Directory
-          </button>
+  <!-- Asymmetric 12-Column Editorial Hero -->
+  <section class="pt-8 sm:pt-12 pb-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
+    <div class="lg:col-span-7">
+      <h1
+        class="font-display font-bold text-[#161A22] leading-[1.03] tracking-[-0.03em]"
+        style="font-size: clamp(34px, 4.6vw, 54px);"
+      >
+        Seventy-one students building Egypt’s STEM union.
+      </h1>
+      <p class="mt-4 text-[16px] leading-[1.65] text-[#525866] max-w-[58ch]">
+        From two founding systems architects in October 2025 to {publicMembers.length} active leaders across {teamCount} operational divisions — scrub the timeline below or explore the live directory.
+      </p>
+    </div>
+
+    <!-- Clean White Summary & Morphing Division Bar -->
+    <div class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-5 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-[12.5px] font-medium text-[#525866]">
+            <span class="w-2 h-2 rounded-full bg-[#0F766E] inline-block" aria-hidden="true"></span>
+            <span id="hero-milestone-name">Nov 2026 · Full Network</span>
+          </div>
+          <div class="mt-2 flex items-baseline gap-2.5">
+            <span id="hero-active-num" class="font-display font-bold text-[46px] leading-none tracking-[-0.03em] text-[#161A22] tabular-nums">
+              {publicMembers.length}
+            </span>
+            <span class="text-[13.5px] text-[#525866] font-medium">active contributors</span>
+          </div>
         </div>
 
+        <a
+          href="/roster"
+          class="text-[12.5px] font-medium text-[#1B365D] hover:underline shrink-0 pt-0.5"
+        >
+          Full roster →
+        </a>
+      </div>
+
+      <!-- Morphing Proportional Division Bar -->
+      <div id="division-bar" class="mt-4 h-2.5 w-full rounded-full overflow-hidden bg-[#EAE8E1] flex gap-[2px]" aria-label="Division proportions"></div>
+
+      <!-- Clickable Division Legend -->
+      <div id="division-legend" class="mt-3 flex flex-wrap gap-x-3.5 gap-y-1.5 text-[12px] text-[#525866]"></div>
+    </div>
+  </section>
+
+  <!-- Deep Fjord Architectural Observatory Stage -->
+  <section
+    id="constellation-stage"
+    class="rounded-2xl overflow-hidden bg-[#0F1D33] border border-[#1B365D]/40 shadow-[0_12px_36px_rgba(15,29,51,0.16)]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px]">
+      <!-- Interactive SVG Orbital Canvas -->
+      <div class="relative bg-[#0F1D33] overflow-hidden">
+        <!-- Floating Top Controls Row -->
+        <div class="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between gap-2 pointer-events-none">
+          <div id="stage-status-chip" class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#142540]/90 border border-white/10 text-[11.5px] text-[#CBD5E1]">
+            <span id="data-source-dot" class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]"></span>
+            <span id="data-source-status">Live registry</span>
+          </div>
+
+          <div class="pointer-events-auto flex items-center gap-1 bg-[#142540]/95 p-1 rounded-lg border border-white/15">
+            <button id="btn-zoom-in" type="button" class="w-7 h-7 rounded flex items-center justify-center text-[#ECEAE4] hover:bg-white/10 transition" aria-label="Zoom in" title="Zoom in">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+            <button id="btn-zoom-out" type="button" class="w-7 h-7 rounded flex items-center justify-center text-[#ECEAE4] hover:bg-white/10 transition" aria-label="Zoom out" title="Zoom out">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+            <button id="btn-zoom-reset" type="button" class="px-2 h-7 rounded flex items-center justify-center text-[#CBD5E1] hover:bg-white/10 text-[11px] font-code font-medium transition" title="Fit orbital map">
+              Fit
+            </button>
+          </div>
+        </div>
+
+        <!-- Crisp Hover Tooltip -->
+        <div
+          id="node-tooltip"
+          class="hidden pointer-events-none absolute z-30 px-3 py-1.5 rounded-lg bg-[#F3F2EE] text-[#161A22] border border-[#DFDDD6] text-[12px] font-medium shadow-lg whitespace-nowrap"
+        ></div>
+
+        <div id="graph-viewport" class="w-full h-[430px] sm:h-[520px] lg:h-[620px] cursor-grab active:cursor-grabbing select-none touch-none">
+          <svg
+            id="network-svg"
+            viewBox="0 0 1000 760"
+            class="w-full h-full"
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            aria-label="Interactive TF Unions orbital team constellation"
+          >
+            <defs>
+              <radialGradient id="stage-glow" cx="50%" cy="50%" r="52%">
+                <stop offset="0%" stop-color="#1B365D" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#0F1D33" stop-opacity="0" />
+              </radialGradient>
+              <filter id="node-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#08101E" flood-opacity="0.45" />
+              </filter>
+            </defs>
+
+            <rect width="1000" height="760" fill="url(#stage-glow)" />
+
+            <g id="graph-content">
+              <!-- Architectural Orbital Rings & Quadrant Axes -->
+              <g id="orbits-layer" pointer-events="none">
+                <line x1="500" y1="36" x2="500" y2="724" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+                <line x1="135" y1="380" x2="865" y2="380" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+                <circle cx="500" cy="380" r="130" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="500" cy="380" r="200" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="500" cy="380" r="268" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="500" cy="380" r="334" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5" />
+
+                <!-- Quadrant Titles -->
+                <text x="175" y="64" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#8FB1E0">HR TEAM</text>
+                <text x="825" y="64" text-anchor="end" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#5EC4B8">PR &amp; OUTREACH</text>
+                <text x="175" y="712" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#CBD5E1">MARKETING</text>
+                <text x="825" y="712" text-anchor="end" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#E7A35C">SOCIAL MEDIA</text>
+              </g>
+
+              <g id="edges-layer"></g>
+              <g id="nodes-layer"></g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="hidden sm:flex items-center justify-between px-4 pb-2.5 text-[11px] text-[#9AA7BC]">
+          <span>Click any node to inspect lineage · Drag canvas to pan · Scroll to zoom</span>
+          <span class="font-code">/ search · ← → step · Space play</span>
+        </div>
+      </div>
+
+      <!-- Docked Right Panel: Cohort Spotlight OR Selected Member Inspector -->
+      <aside
+        id="side-panel"
+        aria-label="Member spotlight and inspector"
+        class="bg-[#142540] border-t lg:border-t-0 lg:border-l border-white/10 text-[#ECEAE4] p-5 flex flex-col lg:h-[648px] overflow-y-auto"
+      >
+        <!-- Default State: Cohort Spotlight -->
+        <div id="spotlight-view" class="flex flex-col h-full">
+          <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
+            <div>
+              <h2 class="font-display font-semibold text-[17px] text-[#F3F2EE]">Cohort spotlight</h2>
+              <p id="spotlight-sub" class="text-[12px] text-[#9AA7BC] mt-0.5">Select a node on the orbital map or click below</p>
+            </div>
+          </div>
+
+          <div id="spotlight-list" class="mt-3 space-y-2 overflow-y-auto flex-1 pr-0.5"></div>
+
+          <div class="mt-4 pt-3 border-t border-white/10 text-[12px] text-[#9AA7BC] flex items-center justify-between">
+            <span>Browse all contributors</span>
+            <a href="#directory-section" class="text-[#5EC4B8] font-medium hover:underline">Jump to directory ↓</a>
+          </div>
+        </div>
+
+        <!-- Selected Member State -->
+        <div id="inspector-view" class="hidden flex-col h-full">
+          <div class="flex items-start justify-between gap-3 pb-4 border-b border-white/10">
+            <div class="flex items-center gap-3 min-w-0">
+              <div id="insp-avatar" class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-[#0F1D33] text-[14px] shrink-0"></div>
+              <div class="min-w-0">
+                <h2 id="insp-name" class="font-display font-bold text-[18px] text-[#F3F2EE] leading-tight"></h2>
+                <div id="insp-arabic" class="text-[12.5px] text-[#C7D0DE] mt-0.5 hidden"></div>
+                <span id="insp-team-badge" class="inline-block mt-1.5 px-2 py-0.5 rounded text-[11px] font-medium"></span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1 shrink-0">
+              <button
+                id="copy-link-btn"
+                type="button"
+                class="h-7 px-2 rounded border border-white/15 hover:border-[#5EC4B8] text-[11px] font-medium text-[#C7D0DE] hover:text-white transition inline-flex items-center gap-1"
+                title="Copy deep link"
+              >
+                <span id="copy-link-label">Copy</span>
+              </button>
+              <button
+                id="close-inspector-btn"
+                type="button"
+                class="w-7 h-7 rounded flex items-center justify-center text-[#9AA7BC] hover:text-white hover:bg-white/10 transition"
+                aria-label="Back to cohort spotlight"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2 text-[13px]">
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="text-[#9AA7BC]">Role</span>
+              <strong id="insp-role" class="text-[#F3F2EE] font-medium text-right"></strong>
+            </div>
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="text-[#9AA7BC]">School / Univ.</span>
+              <span id="insp-school" class="text-[#ECEAE4] text-right"></span>
+            </div>
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="text-[#9AA7BC]">Grade</span>
+              <span id="insp-grade" class="text-[#ECEAE4] text-right"></span>
+            </div>
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="text-[#9AA7BC]">Joined</span>
+              <span id="insp-cohort" class="font-code text-[#7DD3C8] font-medium"></span>
+            </div>
+          </div>
+
+          <p id="insp-bio" class="mt-4 p-3.5 rounded-xl bg-[#0F1D33]/80 border border-white/10 text-[12.5px] leading-[1.6] text-[#C7D0DE]"></p>
+
+          <div id="insp-lineage" class="mt-4 pt-3 border-t border-white/10 space-y-3 hidden">
+            <div id="insp-parent-wrap" class="hidden">
+              <div class="text-[11px] font-medium text-[#9AA7BC] mb-1.5">Reports to</div>
+              <div id="insp-parent-slot" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div id="insp-reports-wrap" class="hidden">
+              <div id="insp-reports-label" class="text-[11px] font-medium text-[#9AA7BC] mb-1.5">Direct reports</div>
+              <div id="insp-reports-slot" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Integrated Timeline Control Bar -->
+    <div class="bg-[#0B1628] border-t border-white/10 px-5 py-4 text-[#ECEAE4]">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
         <button
           id="play-btn"
           type="button"
-          class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition inline-flex items-center gap-2"
+          class="h-9 px-4 rounded-lg bg-[#F3F2EE] hover:bg-white text-[#0F1D33] text-[13px] font-semibold transition inline-flex items-center gap-2 shrink-0 w-fit"
         >
-          <svg id="play-svg" width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+          <svg id="play-svg" width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
             <polygon points="2,1 11,6 2,11" />
           </svg>
-          <svg id="pause-svg" width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" class="hidden">
+          <svg id="pause-svg" width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" class="hidden">
             <rect x="2" y="1.5" width="3" height="9" rx="0.5" />
             <rect x="7" y="1.5" width="3" height="9" rx="0.5" />
           </svg>
           <span id="play-label">Play growth</span>
         </button>
 
-        <a
-          href="/roster"
-          class="text-[13px] font-medium text-[#1B365D] hover:underline px-1"
-        >
-          Full roster →
-        </a>
-      </div>
-    </div>
-
-    <!-- Interactive Milestone Scrubber -->
-    <div class="mt-6 pt-5 border-t border-[#DFDDD6]">
-      <div class="flex flex-wrap items-center justify-between gap-2 text-[12.5px] text-[#525866] mb-3">
-        <span id="cohort-desc" class="text-[#161A22] font-medium">
-          November 2026 — Nationwide Scale (71 Active Members Across Egypt)
-        </span>
-        <div class="flex items-center gap-3">
-          <span id="data-source-status" class="font-code text-[11.5px] text-[#767D8C]">Static snapshot</span>
-          <span id="active-count-badge" class="font-code text-[12px] font-medium text-[#0B5F58]">
-            {publicMembers.length} active
-          </span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between text-[12px] text-[#9AA7BC] mb-1.5">
+            <span id="cohort-desc" class="text-[#F3F2EE] font-medium truncate">
+              November 2026 — Nationwide Scale Across All 27 Governorates
+            </span>
+            <span id="active-count-badge" class="font-code text-[#7DD3C8] shrink-0 ml-2">{publicMembers.length} active</span>
+          </div>
+          <input
+            id="timeline-slider"
+            type="range"
+            min="0"
+            max="4"
+            step="1"
+            value="4"
+            aria-label="Cohort timeline milestone slider"
+            class="w-full h-1.5 bg-white/15 rounded-lg appearance-none cursor-pointer accent-[#5EC4B8] focus:outline-none"
+          />
+          <div id="milestone-buttons" class="grid grid-cols-5 gap-1.5 text-[11px] mt-2"></div>
         </div>
       </div>
-
-      <input
-        id="timeline-slider"
-        type="range"
-        min="0"
-        max="4"
-        step="1"
-        value="4"
-        aria-label="Cohort timeline milestone slider"
-        class="w-full h-1.5 bg-[#DCD9D0] rounded-lg appearance-none cursor-pointer accent-[#1B365D] focus:outline-none"
-      />
-
-      <div id="milestone-buttons" class="grid grid-cols-5 gap-2 text-[11.5px] text-[#767D8C] mt-3"></div>
     </div>
   </section>
 
-  <!-- Dynamic Filter & Search Bar -->
-  <section class="pt-5 pb-4 flex flex-wrap items-center justify-between gap-3">
-    <div class="flex flex-wrap items-center gap-1.5" id="team-filter-buttons" role="group" aria-label="Filter by team"></div>
-
-    <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-      <div class="relative flex-1 sm:w-64">
-        <input
-          id="graph-search"
-          type="search"
-          placeholder="Search name, school, role..."
-          aria-label="Search members"
-          class="w-full h-9 pl-3 pr-14 bg-white border border-[#DFDDD6] rounded-lg text-[13px] text-[#161A22] placeholder-[#767D8C] focus:border-[#1B365D] focus:outline-none"
-        />
-        <span id="search-match-pill" class="hidden absolute right-7 top-1/2 -translate-y-1/2 font-code text-[11px] text-[#0B5F58]"></span>
-        <button
-          id="search-clear-btn"
-          type="button"
-          aria-label="Clear search"
-          class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-[#767D8C] hover:text-[#161A22] p-0.5"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-      </div>
-
-      <select
-        id="directory-sort"
-        aria-label="Sort members"
-        class="hidden h-9 px-2.5 bg-white border border-[#DFDDD6] rounded-lg text-[12.5px] text-[#161A22] focus:border-[#1B365D] focus:outline-none"
-      >
-        <option value="tier">Sort: Leadership tier</option>
-        <option value="name">Sort: Name A–Z</option>
-        <option value="cohort">Sort: Joined oldest first</option>
-      </select>
+  <!-- Founding Leadership Editorial Strip -->
+  <section class="pt-12 pb-6">
+    <div class="flex items-baseline justify-between gap-4 pb-4 border-b border-[#DFDDD6]">
+      <h2 class="font-display font-bold text-[22px] text-[#161A22] tracking-[-0.02em]">Founding leadership</h2>
+      <span class="font-code text-[12px] text-[#0B5F58]">Oct 2025 · Inception</span>
     </div>
-  </section>
 
-  <!-- Constellation View -->
-  <section id="constellation-panel" class="bg-white border border-[#DFDDD6] rounded-xl shadow-[0_1px_2px_rgba(22,26,34,0.04)] overflow-hidden">
-    <div class="relative bg-[#FAF9F6] overflow-hidden" style="min-height: 580px; background-image: radial-gradient(#DCD9D0 1px, transparent 1px); background-size: 24px 24px;">
-      <!-- Zoom & Fit Controls -->
-      <div class="absolute top-4 right-4 z-10 flex flex-col gap-1 bg-white p-1 rounded-lg border border-[#DFDDD6] shadow-[0_1px_3px_rgba(22,26,34,0.06)]">
-        <button id="btn-zoom-in" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#161A22] hover:bg-[#F3F2EE] transition" aria-label="Zoom in" title="Zoom in">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
-        <button id="btn-zoom-out" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#161A22] hover:bg-[#F3F2EE] transition" aria-label="Zoom out" title="Zoom out">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
-        <button id="btn-zoom-reset" type="button" class="w-8 h-8 rounded-md flex items-center justify-center text-[#525866] hover:bg-[#F3F2EE] text-[10.5px] font-code font-medium transition" title="Fit to screen">
-          Fit
-        </button>
-      </div>
-
-      <!-- Keyboard Hint (desktop) -->
-      <div class="hidden sm:flex items-center gap-3 absolute top-4 left-4 z-10 text-[11px] text-[#767D8C] bg-white/85 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-[#DFDDD6]">
-        <span>Drag to pan · Scroll to zoom</span>
-        <span class="font-code">/ search · ← → step · Space play</span>
-      </div>
-
-      <!-- Hover Tooltip -->
-      <div
-        id="node-tooltip"
-        class="hidden pointer-events-none absolute z-30 px-3 py-1.5 rounded-lg bg-[#161A22] text-white text-[12px] shadow-md whitespace-nowrap"
-      ></div>
-
-      <div id="graph-viewport" class="w-full cursor-grab active:cursor-grabbing select-none touch-none" style="height: 600px;">
-        <svg id="network-svg" viewBox="0 0 1000 680" class="w-full h-full" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Interactive TF Unions organizational constellation">
-          <defs>
-            <filter id="node-shadow" x="-25%" y="-25%" width="150%" height="150%">
-              <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#161A22" flood-opacity="0.10" />
-            </filter>
-            <filter id="glow-founder" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1B365D" flood-opacity="0.20" />
-            </filter>
-          </defs>
-
-          <g id="graph-content">
-            <g id="hubs-layer">
-              <circle cx="230" cy="170" r="34" fill="#1B365D" fill-opacity="0.04" stroke="#1B365D" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3,3" />
-              <text x="230" y="124" text-anchor="middle" font-size="11" font-weight="600" fill="#1B365D">HR Team</text>
-
-              <circle cx="770" cy="170" r="34" fill="#0F766E" fill-opacity="0.05" stroke="#0F766E" stroke-opacity="0.30" stroke-width="1" stroke-dasharray="3,3" />
-              <text x="770" y="124" text-anchor="middle" font-size="11" font-weight="600" fill="#0B5F58">PR &amp; Outreach</text>
-
-              <circle cx="250" cy="480" r="34" fill="#334155" fill-opacity="0.05" stroke="#334155" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3,3" />
-              <text x="250" y="526" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Marketing</text>
-
-              <circle cx="750" cy="480" r="34" fill="#A2570F" fill-opacity="0.05" stroke="#A2570F" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3,3" />
-              <text x="750" y="526" text-anchor="middle" font-size="11" font-weight="600" fill="#A2570F">Social Media</text>
-            </g>
-
-            <g id="edges-layer"></g>
-            <g id="nodes-layer"></g>
-          </g>
-        </svg>
-      </div>
-
-      <!-- Slide-Over Member Inspector -->
-      <aside
-        id="member-inspector"
-        aria-label="Member details"
-        class="hidden absolute bottom-4 left-4 right-4 sm:right-auto sm:w-[420px] max-h-[82%] overflow-y-auto bg-white border border-[#DFDDD6] rounded-xl p-5 shadow-[0_12px_32px_rgba(22,26,34,0.12)] z-20"
-      >
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex items-center gap-3 min-w-0">
-            <div id="insp-avatar" class="w-11 h-11 rounded-lg flex items-center justify-center font-semibold text-white text-[14px] shrink-0"></div>
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2">
-                <h2 id="insp-name" class="font-display font-bold text-[18px] text-[#161A22] leading-tight"></h2>
-                <span id="insp-team-badge" class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#EAE8E1] text-[#525866]"></span>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+      {founders.map((f) => (
+        <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-display font-bold text-[20px] text-[#161A22]">{f.name}</h3>
+                <div class="text-[13.5px] font-medium text-[#1B365D] mt-0.5">{f.role}</div>
               </div>
-              <div id="insp-arabic" class="text-[12.5px] text-[#5B606B] mt-0.5 hidden"></div>
-              <div id="insp-role" class="text-[13px] font-medium text-[#1B365D] mt-0.5"></div>
+              <span class="font-code text-[12px] text-[#767D8C]">{f.arabicName}</span>
             </div>
+            <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">{f.bio}</p>
           </div>
-
-          <div class="flex items-center gap-1 shrink-0">
+          <div class="mt-4 pt-3 border-t border-[#EAE8E1] flex items-center justify-between text-[13px]">
+            <span class="text-[#767D8C]">{f.school}</span>
             <button
-              id="copy-link-btn"
               type="button"
-              class="h-7 px-2 rounded-md border border-[#DFDDD6] hover:border-[#1B365D] text-[11.5px] font-medium text-[#525866] hover:text-[#161A22] transition inline-flex items-center gap-1"
-              title="Copy direct link"
+              data-highlight-founder={f.id}
+              class="font-medium text-[#1B365D] hover:underline"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-              </svg>
-              <span id="copy-link-label">Copy</span>
-            </button>
-            <button
-              id="close-inspector-btn"
-              type="button"
-              class="w-7 h-7 rounded-md flex items-center justify-center text-[#767D8C] hover:text-[#161A22] hover:bg-[#F3F2EE] transition"
-              aria-label="Close inspector"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              Highlight branch ↑
             </button>
           </div>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-[#DFDDD6] text-[13px] space-y-1.5 text-[#525866]">
-          <div class="flex items-center justify-between gap-3">
-            <span>School / University</span>
-            <strong id="insp-school" class="text-[#161A22] font-medium text-right"></strong>
-          </div>
-          <div class="flex items-center justify-between gap-3">
-            <span>Academic grade</span>
-            <span id="insp-grade" class="text-[#161A22] text-right"></span>
-          </div>
-          <div class="flex items-center justify-between gap-3">
-            <span>Joined milestone</span>
-            <span id="insp-cohort" class="font-code text-[#0B5F58] font-medium"></span>
-          </div>
-        </div>
-
-        <p id="insp-bio" class="mt-3 p-3 bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg text-[12.5px] text-[#525866] leading-relaxed"></p>
-
-        <div id="insp-lineage" class="mt-3 pt-3 border-t border-[#DFDDD6] space-y-2.5 hidden">
-          <div id="insp-parent-wrap" class="hidden">
-            <div class="text-[11px] font-medium text-[#767D8C] mb-1">Reports to</div>
-            <div id="insp-parent-slot" class="flex flex-wrap gap-1.5"></div>
-          </div>
-          <div id="insp-reports-wrap" class="hidden">
-            <div id="insp-reports-label" class="text-[11px] font-medium text-[#767D8C] mb-1">Direct reports</div>
-            <div id="insp-reports-slot" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
-          </div>
-        </div>
-      </aside>
+        </article>
+      ))}
     </div>
   </section>
 
-  <!-- Synchronized Dynamic Directory View -->
-  <section id="directory-panel" class="hidden pt-2">
-    <div id="directory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6"></div>
+  <!-- Synchronized Searchable Member Directory -->
+  <section id="directory-section" class="pt-8 pb-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 border-b border-[#DFDDD6]">
+      <div>
+        <h2 class="font-display font-bold text-[24px] text-[#161A22] tracking-[-0.02em]">
+          Active cohort directory
+        </h2>
+        <p id="dir-subtitle" class="mt-1 text-[14.5px] text-[#525866]">
+          Showing {publicMembers.length} active contributors synced to the selected milestone.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+        <div class="relative flex-1 md:w-64">
+          <input
+            id="graph-search"
+            type="search"
+            placeholder="Search name, school, role..."
+            aria-label="Search team directory"
+            class="w-full h-9 pl-3 pr-14 bg-white border border-[#DFDDD6] rounded-lg text-[13px] text-[#161A22] placeholder-[#767D8C] focus:border-[#1B365D] focus:outline-none"
+          />
+          <span id="search-match-pill" class="hidden absolute right-7 top-1/2 -translate-y-1/2 font-code text-[11px] text-[#0B5F58]"></span>
+          <button
+            id="search-clear-btn"
+            type="button"
+            aria-label="Clear search"
+            class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-[#767D8C] hover:text-[#161A22] p-0.5"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <select
+          id="directory-sort"
+          aria-label="Sort directory"
+          class="h-9 px-2.5 bg-white border border-[#DFDDD6] rounded-lg text-[12.5px] text-[#161A22] focus:border-[#1B365D] focus:outline-none"
+        >
+          <option value="tier">Sort: Leadership tier</option>
+          <option value="name">Sort: Name A–Z</option>
+          <option value="cohort">Sort: Joined oldest first</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Dynamic Team Filter Pills -->
+    <div id="team-filter-buttons" class="mt-4 flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter directory and orbital map by team"></div>
+
+    <!-- Editorial 3-Column Hairline Grid -->
+    <div id="directory-grid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6"></div>
   </section>
 
   <script is:inline define:vars={{ initialMembers: publicMembers }}>
     (function () {
       var STEPS = [
-        { key: '2025-10', short: 'Oct 2025', title: 'Founders', desc: 'October 2025 — Founding Architects (Mohammed Farag & Mohammed Abdelghany)' },
-        { key: '2026-01', short: 'Jan 2026', title: 'Heads', desc: 'January 2026 — Executive Heads across HR, Marketing, PR & Social Media' },
-        { key: '2026-04', short: 'Apr 2026', title: 'Vice Heads', desc: 'April 2026 — Vice Heads & Regional Guild Coordinators' },
-        { key: '2026-07', short: 'Jul 2026', title: 'Committees', desc: 'July 2026 — Interview Committees, Outreach Leads & Managers' },
-        { key: '2026-11', short: 'Nov 2026', title: 'Full Network', desc: 'November 2026 — Full Network Active Across All 27 Governorates' },
+        { key: '2025-10', short: 'Oct 2025', title: 'Founders', desc: 'October 2025 — Co-Founding Systems & Operations Architects' },
+        { key: '2026-01', short: 'Jan 2026', title: 'Heads', desc: 'January 2026 — Division Heads Across HR, PR, Marketing & Social Media' },
+        { key: '2026-04', short: 'Apr 2026', title: 'Vice Heads', desc: 'April 2026 — Vice Heads & Regional Chapter Coordinators' },
+        { key: '2026-07', short: 'Jul 2026', title: 'Committees', desc: 'July 2026 — Interview Panels, Outreach Leads & Guild Managers' },
+        { key: '2026-11', short: 'Nov 2026', title: 'Full Network', desc: 'November 2026 — Nationwide Scale Across All 27 Governorates' },
       ];
 
-      var TEAM_COLORS = {
-        Founders: { fill: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' },
-        'HR Team': { fill: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
-        'Marketing Team': { fill: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
-        'PR Team': { fill: '#2563EB', badgeBg: '#EFF6FF', badgeText: '#1D4ED8' },
-        'Social Media Team': { fill: '#A2570F', badgeBg: '#FEF6EB', badgeText: '#A2570F' },
+      var DIV_META = {
+        Founders: { label: 'Founders', nodeFill: '#F3F2EE', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' },
+        'HR Team': { label: 'HR', nodeFill: '#8FB1E0', nodeInk: '#0F1D33', ring: '#8FB1E0', barColor: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
+        'PR Team': { label: 'PR & Outreach', nodeFill: '#5EC4B8', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
+        'Marketing Team': { label: 'Marketing', nodeFill: '#CBD5E1', nodeInk: '#0F1D33', ring: '#CBD5E1', barColor: '#64748B', badgeBg: '#F1F5F9', badgeText: '#334155' },
+        'Social Media Team': { label: 'Social Media', nodeFill: '#E7A35C', nodeInk: '#0F1D33', ring: '#E7A35C', barColor: '#A2570F', badgeBg: '#FEF6EB', badgeText: '#A2570F' },
       };
 
-      var FALLBACK_COLOR = { fill: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' };
+      var FALLBACK_META = DIV_META.Founders;
       var prefersReducedMotion =
         window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       var ALL_MEMBERS = [];
       var BY_ID = new Map();
+      var POS = new Map();
       var REPORTS_BY_ID = new Map();
       var NODE_ANIM = new Map();
       var NODE_ELS = new Map();
@@ -317,12 +417,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         stepIdx: 4,
         team: 'All',
         search: '',
-        view: 'constellation',
         sort: 'tier',
         selectedId: null,
         hoveredId: null,
         isPlaying: false,
         playTimer: null,
+        displayedHeroCount: initialMembers.length,
       };
 
       var cam = { x: 0, y: 0, zoom: 1, tx: 0, ty: 0, tzoom: 1 };
@@ -331,22 +431,27 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       var rafId = null;
 
       var SVG_NS = 'http://www.w3.org/2000/svg';
-      var heroSubtitle = document.getElementById('hero-subtitle');
+      var stageEl = document.getElementById('constellation-stage');
+      var heroMilestoneEl = document.getElementById('hero-milestone-name');
+      var heroActiveNumEl = document.getElementById('hero-active-num');
+      var divBarEl = document.getElementById('division-bar');
+      var divLegendEl = document.getElementById('division-legend');
       var milestoneButtonsEl = document.getElementById('milestone-buttons');
       var teamFiltersEl = document.getElementById('team-filter-buttons');
       var sliderEl = document.getElementById('timeline-slider');
       var cohortDescEl = document.getElementById('cohort-desc');
       var activeBadgeEl = document.getElementById('active-count-badge');
       var sourceStatusEl = document.getElementById('data-source-status');
+      var dirSubtitleEl = document.getElementById('dir-subtitle');
       var searchInput = document.getElementById('graph-search');
       var searchMatchPill = document.getElementById('search-match-pill');
       var searchClearBtn = document.getElementById('search-clear-btn');
       var sortSelect = document.getElementById('directory-sort');
-      var constellationPanel = document.getElementById('constellation-panel');
-      var directoryPanel = document.getElementById('directory-panel');
       var directoryGrid = document.getElementById('directory-grid');
-      var viewConstBtn = document.getElementById('view-constellation-btn');
-      var viewDirBtn = document.getElementById('view-directory-btn');
+      var spotlightView = document.getElementById('spotlight-view');
+      var spotlightList = document.getElementById('spotlight-list');
+      var spotlightSub = document.getElementById('spotlight-sub');
+      var inspectorView = document.getElementById('inspector-view');
       var playBtn = document.getElementById('play-btn');
       var playSvg = document.getElementById('play-svg');
       var pauseSvg = document.getElementById('pause-svg');
@@ -357,7 +462,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       var edgesLayer = document.getElementById('edges-layer');
       var nodesLayer = document.getElementById('nodes-layer');
       var tooltipEl = document.getElementById('node-tooltip');
-      var inspectorEl = document.getElementById('member-inspector');
 
       function esc(str) {
         return String(str == null ? '' : str)
@@ -368,26 +472,26 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           .replace(/'/g, '&#39;');
       }
 
+      function metaFor(team) {
+        return DIV_META[team] || FALLBACK_META;
+      }
+
       function initialsOf(name) {
         return String(name || '')
           .trim()
           .split(/\s+/)
           .slice(0, 2)
-          .map(function (p) {
-            return p[0] || '';
-          })
+          .map(function (p) { return p[0] || ''; })
           .join('')
           .toUpperCase();
       }
 
       function shortLabel(m) {
         var parts = String(m.name || '').trim().split(/\s+/);
-        if (m.tier === 0) return parts.slice(0, 2).join(' ');
+        if (m.tier === 0 && parts.length > 1) {
+          return parts[0].charAt(0) + '. ' + parts[1];
+        }
         return parts[0] || '';
-      }
-
-      function colorFor(team) {
-        return TEAM_COLORS[team] || FALLBACK_COLOR;
       }
 
       function isActiveAtStep(m, idx) {
@@ -405,36 +509,134 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         return teamOk && hay.includes(q);
       }
 
+      // Guarded ancestor + direct report walk (avoids founder mutual parent cycle)
       function getLineageSet(memberId) {
         var set = new Set();
         if (!memberId) return set;
         var cur = BY_ID.get(memberId);
-        var steps = 0;
-        while (cur && !set.has(cur.id) && steps < 12) {
+        var hops = 0;
+        while (cur && !set.has(cur.id) && hops < 12) {
           set.add(cur.id);
           cur = cur.parent ? BY_ID.get(cur.parent) : null;
-          steps++;
+          hops++;
         }
         var children = REPORTS_BY_ID.get(memberId) || [];
-        children.forEach(function (c) {
-          set.add(c.id);
-        });
+        children.forEach(function (c) { set.add(c.id); });
         return set;
+      }
+
+      // Compute balanced non-overlapping orbital coordinates around center (500, 380)
+      function computeOrbitalLayout(members) {
+        POS.clear();
+        var CX = 500;
+        var CY = 380;
+
+        var foundersList = members.filter(function (m) {
+          return m.team === 'Founders' || m.tier === 0;
+        });
+        if (foundersList.length === 1) {
+          POS.set(foundersList[0].id, { x: CX, y: CY, r: 23 });
+        } else if (foundersList.length === 2) {
+          POS.set(foundersList[0].id, { x: CX + 54, y: CY, r: 22 });
+          POS.set(foundersList[1].id, { x: CX - 54, y: CY, r: 22 });
+        } else {
+          foundersList.forEach(function (f, idx) {
+            var a = (idx / Math.max(1, foundersList.length)) * Math.PI * 2;
+            POS.set(f.id, { x: CX + Math.cos(a) * 48, y: CY + Math.sin(a) * 48, r: 22 });
+          });
+        }
+
+        // Quadrant angular ranges in radians (padded away from vertical/horizontal axes)
+        var QUADRANTS = {
+          'HR Team': [(-168 * Math.PI) / 180, (-102 * Math.PI) / 180],
+          'PR Team': [(-78 * Math.PI) / 180, (-12 * Math.PI) / 180],
+          'Marketing Team': [(102 * Math.PI) / 180, (168 * Math.PI) / 180],
+          'Social Media Team': [(12 * Math.PI) / 180, (78 * Math.PI) / 180],
+        };
+
+        var TIER_RINGS = {
+          1: { baseR: 130, spread: 0, nodeR: 17 },
+          2: { baseR: 200, spread: 14, nodeR: 13.5 },
+          3: { baseR: 266, spread: 24, nodeR: 11 },
+          4: { baseR: 328, spread: 22, nodeR: 9.5 },
+        };
+
+        var teams = [...new Set(members.map(function (m) { return m.team; }))].filter(function (t) { return t !== 'Founders'; });
+        var fallbackQuadrants = Object.values(QUADRANTS);
+
+        teams.forEach(function (teamName, qIdx) {
+          var range = QUADRANTS[teamName] || fallbackQuadrants[qIdx % fallbackQuadrants.length];
+          var startA = range[0];
+          var endA = range[1];
+
+          for (var tier = 1; tier <= 4; tier++) {
+            var bucket = members
+              .filter(function (m) { return m.team === teamName && m.tier === tier; })
+              .slice()
+              .sort(function (a, b) {
+                return String(a.parent || '').localeCompare(String(b.parent || '')) || a.name.localeCompare(b.name);
+              });
+
+            if (bucket.length === 0) continue;
+            var ring = TIER_RINGS[tier] || TIER_RINGS[4];
+
+            if (bucket.length <= 7 || ring.spread === 0) {
+              bucket.forEach(function (m, i) {
+                var frac = bucket.length === 1 ? 0.5 : i / (bucket.length - 1);
+                var angle = startA + frac * (endA - startA);
+                POS.set(m.id, {
+                  x: CX + Math.cos(angle) * ring.baseR,
+                  y: CY + Math.sin(angle) * ring.baseR,
+                  r: ring.nodeR,
+                });
+              });
+            } else {
+              // Split larger tiers into staggered inner & outer sub-arcs for clean separation
+              var innerCount = Math.ceil(bucket.length / 2);
+              var outerCount = bucket.length - innerCount;
+              var innerR = ring.baseR - ring.spread * 0.55;
+              var outerR = ring.baseR + ring.spread * 0.65;
+
+              bucket.forEach(function (m, i) {
+                var isOuter = i % 2 === 1;
+                var idxInBand = Math.floor(i / 2);
+                var bandTotal = isOuter ? outerCount : innerCount;
+                var frac = bandTotal === 1 ? 0.5 : (idxInBand + (isOuter ? 0.25 : 0)) / (bandTotal - 1 + 0.25);
+                var clamped = Math.max(0.02, Math.min(0.98, frac));
+                var angle = startA + clamped * (endA - startA);
+                var radius = isOuter ? outerR : innerR;
+                POS.set(m.id, {
+                  x: CX + Math.cos(angle) * radius,
+                  y: CY + Math.sin(angle) * radius,
+                  r: ring.nodeR,
+                });
+              });
+            }
+          }
+        });
+      }
+
+      function curvePath(x1, y1, x2, y2) {
+        var mx = (x1 + x2) / 2;
+        var my = (y1 + y2) / 2;
+        // Gently bow toward stage center (500, 380) for architectural curvature
+        var cx = mx + (500 - mx) * 0.16;
+        var cy = my + (380 - my) * 0.16;
+        return 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1);
       }
 
       function indexMembers(members) {
         ALL_MEMBERS = members;
         BY_ID.clear();
         REPORTS_BY_ID.clear();
-        members.forEach(function (m) {
-          BY_ID.set(m.id, m);
-        });
+        members.forEach(function (m) { BY_ID.set(m.id, m); });
         members.forEach(function (m) {
           if (m.parent && m.parent !== m.id) {
             if (!REPORTS_BY_ID.has(m.parent)) REPORTS_BY_ID.set(m.parent, []);
             REPORTS_BY_ID.get(m.parent).push(m);
           }
         });
+        computeOrbitalLayout(members);
         syncSvgDom();
       }
 
@@ -445,28 +647,36 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         EDGE_ELS.clear();
 
         ALL_MEMBERS.forEach(function (m) {
+          var pos = POS.get(m.id) || { x: m.x, y: m.y, r: m.r };
+          var pPos = m.parent ? POS.get(m.parent) : null;
+          var active = isActiveAtStep(m, state.stepIdx);
+
           if (!NODE_ANIM.has(m.id)) {
-            var p = m.parent ? BY_ID.get(m.parent) : null;
-            var active = isActiveAtStep(m, state.stepIdx);
             NODE_ANIM.set(m.id, {
-              x: active ? m.x : p ? p.x : m.x,
-              y: active ? m.y : p ? p.y : m.y,
+              x: active ? pos.x : pPos ? pPos.x : pos.x,
+              y: active ? pos.y : pPos ? pPos.y : pos.y,
               scale: active ? 1 : 0.25,
               opacity: active ? 1 : 0,
-              tx: m.x,
-              ty: m.y,
+              tx: pos.x,
+              ty: pos.y,
               tscale: active ? 1 : 0.25,
               topacity: active ? 1 : 0,
+              r: pos.r,
             });
+          } else {
+            NODE_ANIM.get(m.id).r = pos.r;
           }
 
           if (m.parent && BY_ID.has(m.parent)) {
-            var line = document.createElementNS(SVG_NS, 'line');
-            line.setAttribute('stroke-linecap', 'round');
-            edgesLayer.appendChild(line);
-            EDGE_ELS.set(m.id, line);
+            var path = document.createElementNS(SVG_NS, 'path');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', 'round');
+            edgesLayer.appendChild(path);
+            EDGE_ELS.set(m.id, path);
           }
 
+          var meta = metaFor(m.team);
+          var isFounder = m.tier === 0;
           var g = document.createElementNS(SVG_NS, 'g');
           g.setAttribute('class', 'node-group cursor-pointer');
           g.setAttribute('tabindex', '0');
@@ -476,32 +686,31 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
           var halo = document.createElementNS(SVG_NS, 'circle');
           halo.setAttribute('fill', 'none');
-          halo.setAttribute('stroke', '#0B5F58');
+          halo.setAttribute('stroke', meta.ring);
           halo.setAttribute('stroke-width', '2.2');
           halo.setAttribute('opacity', '0');
 
-          var isFounder = m.tier === 0;
           var circle = document.createElementNS(SVG_NS, 'circle');
-          circle.setAttribute('r', String(m.r));
-          circle.setAttribute('fill', colorFor(m.team).fill);
-          circle.setAttribute('stroke', '#FFFFFF');
-          circle.setAttribute('stroke-width', isFounder ? '2.5' : '1.8');
-          circle.setAttribute('filter', isFounder ? 'url(#glow-founder)' : 'url(#node-shadow)');
+          circle.setAttribute('r', String(pos.r));
+          circle.setAttribute('fill', meta.nodeFill);
+          circle.setAttribute('stroke', '#0F1D33');
+          circle.setAttribute('stroke-width', isFounder ? '2.5' : '1.6');
+          circle.setAttribute('filter', 'url(#node-glow)');
 
           var abbr = document.createElementNS(SVG_NS, 'text');
           abbr.setAttribute('text-anchor', 'middle');
           abbr.setAttribute('dominant-baseline', 'central');
-          abbr.setAttribute('fill', '#FFFFFF');
-          abbr.setAttribute('font-size', m.r > 20 ? '11' : m.r > 14 ? '9' : '8');
-          abbr.setAttribute('font-weight', '600');
+          abbr.setAttribute('fill', meta.nodeInk);
+          abbr.setAttribute('font-size', pos.r > 18 ? '11' : pos.r > 12 ? '9' : '7.5');
+          abbr.setAttribute('font-weight', '700');
           abbr.setAttribute('pointer-events', 'none');
           abbr.textContent = initialsOf(m.name);
 
           var label = document.createElementNS(SVG_NS, 'text');
           label.setAttribute('text-anchor', 'middle');
-          label.setAttribute('y', String(m.r + 13));
-          label.setAttribute('fill', '#161A22');
-          label.setAttribute('font-size', isFounder ? '11.5' : '9.5');
+          label.setAttribute('y', String(pos.r + 13));
+          label.setAttribute('fill', '#F3F2EE');
+          label.setAttribute('font-size', isFounder ? '11.5' : '10');
           label.setAttribute('font-weight', isFounder ? '600' : '500');
           label.setAttribute('pointer-events', 'none');
           label.setAttribute('class', 'select-none');
@@ -534,7 +743,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           });
 
           nodesLayer.appendChild(g);
-          NODE_ELS.set(m.id, { g: g, halo: halo, circle: circle });
+          NODE_ELS.set(m.id, { g: g, halo: halo, label: label, pos: pos });
         });
       }
 
@@ -543,15 +752,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (!anim) return;
         var svgRect = svgEl.getBoundingClientRect();
         var vpRect = viewportEl.getBoundingClientRect();
-        var scale = Math.min(svgRect.width / 1000, svgRect.height / 680);
-        var offsetX = (svgRect.width - 1000 * scale) / 2;
-        var offsetY = (svgRect.height - 680 * scale) / 2;
-        var screenX = offsetX + (anim.x * cam.zoom + cam.x) * scale;
-        var screenY = offsetY + (anim.y * cam.zoom + cam.y) * scale;
+        var scale = Math.min(svgRect.width / 1000, svgRect.height / 760);
+        var ox = (svgRect.width - 1000 * scale) / 2;
+        var oy = (svgRect.height - 760 * scale) / 2;
+        var sx = ox + (anim.x * cam.zoom + cam.x) * scale;
+        var sy = oy + (anim.y * cam.zoom + cam.y) * scale;
 
         tooltipEl.textContent = m.name + ' · ' + m.role;
-        tooltipEl.style.left = Math.min(Math.max(12, screenX + 14), vpRect.width - 220) + 'px';
-        tooltipEl.style.top = Math.max(12, screenY - 36) + 'px';
+        tooltipEl.style.left = Math.min(Math.max(12, sx + 14), vpRect.width - 230) + 'px';
+        tooltipEl.style.top = Math.max(12, sy - 34) + 'px';
         tooltipEl.classList.remove('hidden');
       }
 
@@ -561,24 +770,26 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       function updateTargets() {
         ALL_MEMBERS.forEach(function (m) {
-          var anim = NODE_ANIM.get(m.id);
-          if (!anim) return;
+          var a = NODE_ANIM.get(m.id);
+          var pos = POS.get(m.id) || { x: m.x, y: m.y, r: m.r };
+          var pPos = m.parent ? POS.get(m.parent) : null;
+          if (!a) return;
+
           var active = isActiveAtStep(m, state.stepIdx);
-          var p = m.parent ? BY_ID.get(m.parent) : null;
           if (active) {
-            if (anim.topacity === 0 && p && isActiveAtStep(p, state.stepIdx) && !prefersReducedMotion) {
-              anim.x = p.x;
-              anim.y = p.y;
+            if (a.topacity === 0 && pPos && m.parent && isActiveAtStep(BY_ID.get(m.parent), state.stepIdx) && !prefersReducedMotion) {
+              a.x = pPos.x;
+              a.y = pPos.y;
             }
-            anim.tx = m.x;
-            anim.ty = m.y;
-            anim.tscale = 1;
-            anim.topacity = 1;
+            a.tx = pos.x;
+            a.ty = pos.y;
+            a.tscale = 1;
+            a.topacity = 1;
           } else {
-            anim.tx = p ? p.x : m.x;
-            anim.ty = p ? p.y : m.y;
-            anim.tscale = 0.25;
-            anim.topacity = 0;
+            a.tx = pPos ? pPos.x : pos.x;
+            a.ty = pPos ? pPos.y : pos.y;
+            a.tscale = 0.25;
+            a.topacity = 0;
           }
         });
         startAnimation();
@@ -635,7 +846,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       function refreshVisualStyles() {
         var focusId = state.hoveredId || state.selectedId;
         var lineage = getLineageSet(focusId);
-        var hasSearchOrTeam = state.team !== 'All' || state.search.trim().length > 0;
+        var hasSearch = state.search.trim().length > 0;
+        var hasTeam = state.team !== 'All';
 
         ALL_MEMBERS.forEach(function (m) {
           var a = NODE_ANIM.get(m.id);
@@ -661,9 +873,19 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
           var isSelected = state.selectedId === m.id;
           var isHovered = state.hoveredId === m.id;
-          els.halo.setAttribute('r', String(m.r + (isSelected ? 6 : 4)));
-          els.halo.setAttribute('opacity', isSelected || isHovered ? '1' : '0');
-          els.halo.setAttribute('stroke', isSelected ? '#1B365D' : '#0B5F58');
+          els.halo.setAttribute('r', String(els.pos.r + (isSelected ? 6 : 4)));
+          els.halo.setAttribute('opacity', isSelected || isHovered || m.tier === 0 ? '1' : '0');
+
+          // Declutter small outer labels at 100% view; reveal on focus/team/search/zoom
+          var showLabel =
+            m.tier <= 1 ||
+            isSelected ||
+            isHovered ||
+            (focusId && inLineage) ||
+            (hasSearch && matched) ||
+            (hasTeam && matched && m.tier <= 2) ||
+            cam.zoom >= 1.28;
+          els.label.style.opacity = showLabel ? '1' : '0';
 
           var edge = EDGE_ELS.get(m.id);
           if (edge && m.parent) {
@@ -672,32 +894,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               edge.style.display = 'none';
             } else {
               edge.style.display = '';
-              edge.setAttribute('x1', a.x.toFixed(2));
-              edge.setAttribute('y1', a.y.toFixed(2));
-              edge.setAttribute('x2', pa.x.toFixed(2));
-              edge.setAttribute('y2', pa.y.toFixed(2));
+              edge.setAttribute('d', curvePath(a.x, a.y, pa.x, pa.y));
 
               var isFounderLink = m.id === 'founder-1' && m.parent === 'founder-2';
               var highlightEdge = focusId && lineage.has(m.id) && lineage.has(m.parent);
-              var filterDim = hasSearchOrTeam && !matched && !matchesFilter(BY_ID.get(m.parent));
-              edge.setAttribute('stroke', highlightEdge ? '#0B5F58' : isFounderLink ? '#1B365D' : '#DCD9D0');
-              edge.setAttribute('stroke-width', isFounderLink ? '2.4' : highlightEdge ? '2.1' : '1.1');
-              edge.setAttribute('stroke-opacity', String(Math.min(a.opacity, pa.opacity) * (highlightEdge ? 1 : filterDim ? 0.25 : 0.85)));
+              edge.setAttribute('stroke', highlightEdge ? '#5EC4B8' : isFounderLink ? '#8FB1E0' : 'rgba(255,255,255,0.16)');
+              edge.setAttribute('stroke-width', isFounderLink ? '2.2' : highlightEdge ? '2' : '1');
+              edge.setAttribute('stroke-opacity', String(Math.min(a.opacity, pa.opacity) * (highlightEdge ? 1 : (hasTeam || hasSearch) && !matched ? 0.25 : 0.85)));
+              edge.classList.toggle('tf-edge-flow', Boolean(highlightEdge));
             }
           }
         });
-      }
-
-      function focusCameraOnBox(minX, maxX, minY, maxY, maxZoom) {
-        var w = Math.max(120, maxX - minX + 160);
-        var h = Math.max(120, maxY - minY + 160);
-        var zoom = Math.min(maxZoom || 1.65, Math.max(0.85, Math.min(1000 / w, 680 / h)));
-        var cx = (minX + maxX) / 2;
-        var cy = (minY + maxY) / 2;
-        cam.tzoom = zoom;
-        cam.tx = 500 - cx * zoom;
-        cam.ty = 340 - cy * zoom;
-        startAnimation();
       }
 
       function fitTeamCamera(team) {
@@ -708,13 +915,46 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           startAnimation();
           return;
         }
-        var activeInTeam = ALL_MEMBERS.filter(function (m) {
-          return m.team === team && isActiveAtStep(m, state.stepIdx);
-        });
-        if (activeInTeam.length === 0) return;
-        var xs = activeInTeam.map(function (m) { return m.x; });
-        var ys = activeInTeam.map(function (m) { return m.y; });
-        focusCameraOnBox(Math.min.apply(null, xs), Math.max.apply(null, xs), Math.min.apply(null, ys), Math.max.apply(null, ys), 1.55);
+        var coords = ALL_MEMBERS
+          .filter(function (m) { return m.team === team && isActiveAtStep(m, state.stepIdx); })
+          .map(function (m) { return POS.get(m.id); })
+          .filter(Boolean);
+        if (coords.length === 0) return;
+
+        var minX = Math.min.apply(null, coords.map(function (c) { return c.x; }));
+        var maxX = Math.max.apply(null, coords.map(function (c) { return c.x; }));
+        var minY = Math.min.apply(null, coords.map(function (c) { return c.y; }));
+        var maxY = Math.max.apply(null, coords.map(function (c) { return c.y; }));
+        var w = Math.max(160, maxX - minX + 180);
+        var h = Math.max(160, maxY - minY + 180);
+        var zoom = Math.min(1.65, Math.max(0.95, Math.min(1000 / w, 760 / h)));
+        var cx = (minX + maxX) / 2;
+        var cy = (minY + maxY) / 2;
+        cam.tzoom = zoom;
+        cam.tx = 500 - cx * zoom;
+        cam.ty = 380 - cy * zoom;
+        startAnimation();
+      }
+
+      function animateHeroCounter(target) {
+        if (prefersReducedMotion) {
+          state.displayedHeroCount = target;
+          heroActiveNumEl.textContent = String(target);
+          return;
+        }
+        var start = state.displayedHeroCount;
+        var diff = target - start;
+        if (diff === 0) return;
+        var startTime = performance.now();
+        var duration = 360;
+        function step(now) {
+          var p = Math.min(1, (now - startTime) / duration);
+          var eased = 1 - Math.pow(1 - p, 3);
+          state.displayedHeroCount = Math.round(start + diff * eased);
+          heroActiveNumEl.textContent = String(state.displayedHeroCount);
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
       }
 
       function selectMember(id, flyTo) {
@@ -735,9 +975,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         renderInspector(m);
         if (flyTo) {
+          var pos = POS.get(m.id) || { x: m.x, y: m.y };
           cam.tzoom = Math.max(cam.tzoom, 1.35);
-          cam.tx = 560 - m.x * cam.tzoom;
-          cam.ty = 330 - m.y * cam.tzoom;
+          cam.tx = 500 - pos.x * cam.tzoom;
+          cam.ty = 380 - pos.y * cam.tzoom;
           startAnimation();
         } else {
           refreshVisualStyles();
@@ -745,30 +986,30 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function closeInspector() {
-        inspectorEl.classList.add('hidden');
         state.selectedId = null;
+        inspectorView.classList.add('hidden');
+        inspectorView.classList.remove('flex');
+        spotlightView.classList.remove('hidden');
         if (window.location.hash.startsWith('#member=')) {
           history.replaceState(null, '', window.location.pathname + window.location.search);
         }
         refreshVisualStyles();
       }
 
-      function makeChip(member) {
+      function makeDarkChip(member) {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'px-2.5 py-1 rounded-md bg-[#F3F2EE] border border-[#DFDDD6] hover:border-[#1B365D] text-[12px] font-medium text-[#161A22] transition text-left';
+        btn.className = 'px-2.5 py-1 rounded bg-[#1D3253] border border-white/15 hover:border-[#5EC4B8] text-[12px] font-medium text-[#ECEAE4] transition text-left';
         btn.textContent = member.name;
-        btn.addEventListener('click', function () {
-          selectMember(member.id, true);
-        });
+        btn.addEventListener('click', function () { selectMember(member.id, true); });
         return btn;
       }
 
       function renderInspector(m) {
-        var c = colorFor(m.team);
+        var meta = metaFor(m.team);
         var avatarEl = document.getElementById('insp-avatar');
         avatarEl.textContent = initialsOf(m.name);
-        avatarEl.style.backgroundColor = c.fill;
+        avatarEl.style.backgroundColor = meta.nodeFill;
 
         document.getElementById('insp-name').textContent = m.name;
         var arabicEl = document.getElementById('insp-arabic');
@@ -781,8 +1022,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         var teamBadge = document.getElementById('insp-team-badge');
         teamBadge.textContent = m.team;
-        teamBadge.style.backgroundColor = c.badgeBg;
-        teamBadge.style.color = c.badgeText;
+        teamBadge.style.backgroundColor = meta.badgeBg;
+        teamBadge.style.color = meta.badgeText;
 
         document.getElementById('insp-role').textContent = m.role;
         document.getElementById('insp-school').textContent = m.school || 'TF Unions';
@@ -803,7 +1044,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         reportsSlot.replaceChildren();
 
         if (parent) {
-          parentSlot.appendChild(makeChip(parent));
+          parentSlot.appendChild(makeDarkChip(parent));
           parentWrap.classList.remove('hidden');
         } else {
           parentWrap.classList.add('hidden');
@@ -811,39 +1052,117 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         if (reports.length > 0) {
           reportsLabel.textContent = 'Direct reports (' + reports.length + ')';
-          reports.slice(0, 12).forEach(function (r) {
-            reportsSlot.appendChild(makeChip(r));
-          });
+          reports.slice(0, 10).forEach(function (r) { reportsSlot.appendChild(makeDarkChip(r)); });
           reportsWrap.classList.remove('hidden');
         } else {
           reportsWrap.classList.add('hidden');
         }
 
         lineageBox.classList.toggle('hidden', !parent && reports.length === 0);
-        inspectorEl.classList.remove('hidden');
+        spotlightView.classList.add('hidden');
+        inspectorView.classList.remove('hidden');
+        inspectorView.classList.add('flex');
+      }
+
+      function renderSpotlight(activeMembers) {
+        var heads = activeMembers
+          .filter(function (m) {
+            return m.tier <= 1 && (state.team === 'All' || m.team === state.team);
+          })
+          .slice(0, 10);
+
+        spotlightSub.textContent = heads.length + ' core leaders active at ' + STEPS[state.stepIdx].short;
+        spotlightList.replaceChildren();
+
+        heads.forEach(function (m) {
+          var meta = metaFor(m.team);
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'w-full text-left p-2.5 rounded-lg bg-[#0F1D33]/65 hover:bg-[#1D3253] border border-white/10 hover:border-[#5EC4B8]/60 flex items-center justify-between gap-3 transition group';
+
+          var left = document.createElement('div');
+          left.className = 'flex items-center gap-2.5 min-w-0';
+
+          var dot = document.createElement('span');
+          dot.className = 'w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[11px] text-[#0F1D33] shrink-0';
+          dot.style.backgroundColor = meta.nodeFill;
+          dot.textContent = initialsOf(m.name);
+
+          var info = document.createElement('div');
+          info.className = 'min-w-0';
+          info.innerHTML =
+            '<div class="text-[13px] font-semibold text-[#F3F2EE] truncate group-hover:text-white">' +
+            esc(m.name) +
+            '</div><div class="text-[11.5px] text-[#9AA7BC] truncate">' +
+            esc(m.role + ' · ' + m.team.replace(' Team', '')) +
+            '</div>';
+
+          left.appendChild(dot);
+          left.appendChild(info);
+
+          var arrow = document.createElement('span');
+          arrow.className = 'text-[#5EC4B8] text-[12px] shrink-0';
+          arrow.textContent = '→';
+
+          btn.appendChild(left);
+          btn.appendChild(arrow);
+          btn.addEventListener('click', function () { selectMember(m.id, true); });
+          spotlightList.appendChild(btn);
+        });
       }
 
       function renderControls() {
-        var active = ALL_MEMBERS.filter(function (m) {
-          return isActiveAtStep(m, state.stepIdx);
-        });
+        var active = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, state.stepIdx); });
         var matched = active.filter(matchesFilter);
 
+        heroMilestoneEl.textContent = STEPS[state.stepIdx].short + ' · ' + STEPS[state.stepIdx].title;
+        animateHeroCounter(active.length);
         activeBadgeEl.textContent = active.length + ' active';
         cohortDescEl.textContent = STEPS[state.stepIdx].desc;
+        dirSubtitleEl.textContent =
+          'Showing ' + matched.length + ' of ' + active.length + ' active contributors at ' + STEPS[state.stepIdx].short + '.';
 
-        var activeTeams = new Set(active.map(function (m) { return m.team; }));
-        heroSubtitle.innerHTML =
-          'Showing <strong class="text-[#161A22] font-semibold">' +
-          matched.length +
-          '</strong> of <strong class="text-[#161A22] font-semibold">' +
-          active.length +
-          '</strong> student leaders across <strong class="text-[#161A22] font-semibold">' +
-          activeTeams.size +
-          '</strong> teams — ' +
-          esc(STEPS[state.stepIdx].short) +
-          '.';
+        // Proportional division bar + interactive legend
+        var teamOrder = [...new Set(ALL_MEMBERS.map(function (m) { return m.team; }))];
+        divBarEl.replaceChildren();
+        divLegendEl.replaceChildren();
 
+        teamOrder.forEach(function (teamName) {
+          var count = active.filter(function (m) { return m.team === teamName; }).length;
+          if (count === 0) return;
+          var meta = metaFor(teamName);
+          var pct = (count / Math.max(1, active.length)) * 100;
+
+          var seg = document.createElement('div');
+          seg.className = 'h-full transition-all duration-500';
+          seg.style.width = pct.toFixed(2) + '%';
+          seg.style.backgroundColor = meta.barColor;
+          seg.title = meta.label + ': ' + count;
+          divBarEl.appendChild(seg);
+
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          var isSelected = state.team === teamName;
+          chip.className = 'inline-flex items-center gap-1.5 hover:text-[#161A22] transition ' + (isSelected ? 'text-[#1B365D] font-semibold underline' : '');
+          chip.innerHTML =
+            '<span class="w-2 h-2 rounded-full inline-block" style="background-color:' +
+            meta.barColor +
+            ';"></span><span>' +
+            esc(meta.label) +
+            ' <strong class="font-code text-[#161A22]">' +
+            count +
+            '</strong></span>';
+          chip.addEventListener('click', function () {
+            state.team = isSelected ? 'All' : teamName;
+            renderControls();
+            renderDirectory();
+            fitTeamCamera(state.team);
+            refreshVisualStyles();
+          });
+          divLegendEl.appendChild(chip);
+        });
+
+        // Search UI badge
         if (state.search.trim()) {
           searchMatchPill.textContent = matched.length + ' match' + (matched.length === 1 ? '' : 'es');
           searchMatchPill.classList.remove('hidden');
@@ -853,33 +1172,33 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           searchClearBtn.classList.add('hidden');
         }
 
+        // Milestone buttons in dark footer bar
         milestoneButtonsEl.replaceChildren();
         STEPS.forEach(function (step, idx) {
           var count = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, idx); }).length;
           var btn = document.createElement('button');
           btn.type = 'button';
           var align = idx === 0 ? 'text-left' : idx === STEPS.length - 1 ? 'text-right' : 'text-center';
-          var isCurrent = idx === state.stepIdx;
-          btn.className = align + ' transition ' + (isCurrent ? 'text-[#1B365D]' : 'text-[#767D8C] hover:text-[#161A22]');
+          var isCur = idx === state.stepIdx;
+          btn.className = align + ' transition ' + (isCur ? 'text-[#5EC4B8]' : 'text-[#9AA7BC] hover:text-white');
           btn.innerHTML =
             '<span class="font-code block">' +
             esc(step.short) +
             ' (' +
             count +
-            ')</span><strong class="font-semibold ' +
-            (isCurrent ? 'text-[#1B365D]' : 'text-[#161A22]') +
+            ')</span><strong class="font-medium ' +
+            (isCur ? 'text-white' : '') +
             '">' +
             esc(step.title) +
             '</strong>';
-          btn.addEventListener('click', function () {
-            setStep(idx, false);
-          });
+          btn.addEventListener('click', function () { setStep(idx, false); });
           milestoneButtonsEl.appendChild(btn);
         });
 
-        var teamOrder = ['All'].concat([...new Set(ALL_MEMBERS.map(function (m) { return m.team; }))]);
+        // Directory filter pills
+        var filterOrder = ['All'].concat(teamOrder);
         teamFiltersEl.replaceChildren();
-        teamOrder.forEach(function (teamName) {
+        filterOrder.forEach(function (teamName) {
           var count = teamName === 'All' ? active.length : active.filter(function (m) { return m.team === teamName; }).length;
           if (teamName !== 'All' && count === 0) return;
 
@@ -891,7 +1210,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             (isSel
               ? 'bg-[#1B365D] text-white border-[#1B365D]'
               : 'bg-white text-[#525866] border-[#DFDDD6] hover:border-[#1B365D]/50 hover:text-[#161A22]');
-          btn.textContent = (teamName === 'All' ? 'All teams' : teamName.replace(' Team', '')) + ' (' + count + ')';
+          btn.textContent = (teamName === 'All' ? 'All teams' : metaFor(teamName).label) + ' (' + count + ')';
           btn.addEventListener('click', function () {
             state.team = teamName;
             renderControls();
@@ -901,6 +1220,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           });
           teamFiltersEl.appendChild(btn);
         });
+
+        renderSpotlight(active);
       }
 
       function renderDirectory() {
@@ -920,21 +1241,22 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (sorted.length === 0) {
           var empty = document.createElement('div');
           empty.className = 'sm:col-span-2 lg:col-span-3 py-12 text-center border-t border-[#DFDDD6] text-[14px] text-[#767D8C]';
-          empty.textContent = 'No members match your current filter.';
+          empty.textContent = 'No contributors match your filter at this milestone.';
           directoryGrid.appendChild(empty);
           return;
         }
 
         sorted.forEach(function (m) {
-          var c = colorFor(m.team);
+          var meta = metaFor(m.team);
           var card = document.createElement('article');
           card.className = 'border-t border-[#DFDDD6] pt-4 flex flex-col justify-between';
 
-          var topHtml =
+          card.innerHTML =
+            '<div>' +
             '<div class="flex items-start justify-between gap-3">' +
             '<div class="flex items-center gap-3 min-w-0">' +
-            '<div class="w-9 h-9 rounded-lg flex items-center justify-center font-semibold text-white text-[12px] shrink-0" style="background-color:' +
-            c.fill +
+            '<div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-[#F3F2EE] text-[12px] shrink-0" style="background-color:' +
+            meta.barColor +
             ';">' +
             esc(initialsOf(m.name)) +
             '</div>' +
@@ -948,18 +1270,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             '</div>' +
             '</div>' +
             '<span class="px-2 py-0.5 rounded text-[11px] font-medium shrink-0" style="background-color:' +
-            c.badgeBg +
+            meta.badgeBg +
             ';color:' +
-            c.badgeText +
+            meta.badgeText +
             ';">' +
-            esc(m.team.replace(' Team', '')) +
+            esc(meta.label) +
             '</span>' +
             '</div>' +
-            '<p class="mt-2.5 text-[13px] text-[#525866] leading-relaxed line-clamp-3">' +
+            '<p class="mt-2.5 text-[13px] text-[#525866] leading-relaxed line-clamp-2">' +
             esc(m.bio || m.school || 'TF Unions contributor') +
-            '</p>';
-
-          card.innerHTML = topHtml;
+            '</p>' +
+            '</div>';
 
           var footer = document.createElement('div');
           footer.className = 'mt-3 flex items-center justify-between gap-2 text-[12px] text-[#767D8C]';
@@ -967,17 +1288,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           metaSpan.className = 'truncate';
           metaSpan.textContent = (m.school || 'TF Unions') + ' · ' + (m.cohortLabel || m.cohortDate);
 
-          var focusBtn = document.createElement('button');
-          focusBtn.type = 'button';
-          focusBtn.className = 'text-[#1B365D] font-medium hover:underline shrink-0';
-          focusBtn.textContent = 'View on map →';
-          focusBtn.addEventListener('click', function () {
-            setView('constellation');
+          var mapBtn = document.createElement('button');
+          mapBtn.type = 'button';
+          mapBtn.className = 'text-[#1B365D] font-medium hover:underline shrink-0';
+          mapBtn.textContent = 'Locate ↑';
+          mapBtn.addEventListener('click', function () {
+            stageEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
             selectMember(m.id, true);
           });
 
           footer.appendChild(metaSpan);
-          footer.appendChild(focusBtn);
+          footer.appendChild(mapBtn);
           card.appendChild(footer);
           directoryGrid.appendChild(card);
         });
@@ -992,23 +1313,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (!skipCameraFit && state.team !== 'All') {
           fitTeamCamera(state.team);
         }
-      }
-
-      function setView(mode) {
-        state.view = mode === 'directory' ? 'directory' : 'constellation';
-        var isDir = state.view === 'directory';
-        constellationPanel.classList.toggle('hidden', isDir);
-        directoryPanel.classList.toggle('hidden', !isDir);
-        sortSelect.classList.toggle('hidden', !isDir);
-
-        viewConstBtn.setAttribute('aria-selected', String(!isDir));
-        viewDirBtn.setAttribute('aria-selected', String(isDir));
-        viewConstBtn.className = !isDir
-          ? 'px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition'
-          : 'px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
-        viewDirBtn.className = isDir
-          ? 'px-3 py-1.5 rounded-md text-[12.5px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition'
-          : 'px-3 py-1.5 rounded-md text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition';
       }
 
       function togglePlay() {
@@ -1031,18 +1335,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             } else {
               setStep(state.stepIdx + 1, true);
             }
-          }, 1600);
+          }, 1500);
         }
       }
 
       // Wire events
-      sliderEl.addEventListener('input', function (e) {
-        setStep(e.target.value, true);
-      });
+      sliderEl.addEventListener('input', function (e) { setStep(e.target.value, true); });
       playBtn.addEventListener('click', togglePlay);
-      viewConstBtn.addEventListener('click', function () { setView('constellation'); });
-      viewDirBtn.addEventListener('click', function () { setView('directory'); });
-
       searchInput.addEventListener('input', function (e) {
         state.search = e.target.value;
         renderControls();
@@ -1054,7 +1353,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           var first = ALL_MEMBERS.find(function (m) {
             return isActiveAtStep(m, state.stepIdx) && matchesFilter(m);
           });
-          if (first) selectMember(first.id, true);
+          if (first) {
+            stageEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+            selectMember(first.id, true);
+          }
         }
       });
       searchClearBtn.addEventListener('click', function () {
@@ -1082,19 +1384,27 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         setTimeout(function () { lbl.textContent = 'Copy'; }, 1500);
       });
 
+      document.querySelectorAll('[data-highlight-founder]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var fid = btn.getAttribute('data-highlight-founder');
+          stageEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+          if (fid) selectMember(fid, true);
+        });
+      });
+
       document.getElementById('btn-zoom-in').addEventListener('click', function () {
         var nextZoom = Math.min(2.4, cam.tzoom * 1.22);
         var ratio = nextZoom / cam.tzoom;
         cam.tx = 500 - (500 - cam.tx) * ratio;
-        cam.ty = 340 - (340 - cam.ty) * ratio;
+        cam.ty = 380 - (380 - cam.ty) * ratio;
         cam.tzoom = nextZoom;
         startAnimation();
       });
       document.getElementById('btn-zoom-out').addEventListener('click', function () {
-        var nextZoom = Math.max(0.65, cam.tzoom / 1.22);
+        var nextZoom = Math.max(0.7, cam.tzoom / 1.22);
         var ratio = nextZoom / cam.tzoom;
         cam.tx = 500 - (500 - cam.tx) * ratio;
-        cam.ty = 340 - (340 - cam.ty) * ratio;
+        cam.ty = 380 - (380 - cam.ty) * ratio;
         cam.tzoom = nextZoom;
         startAnimation();
       });
@@ -1105,18 +1415,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         startAnimation();
       });
 
-      // Wheel zoom toward pointer
       viewportEl.addEventListener('wheel', function (e) {
         e.preventDefault();
         var rect = svgEl.getBoundingClientRect();
-        var scale = Math.min(rect.width / 1000, rect.height / 680);
+        var scale = Math.min(rect.width / 1000, rect.height / 760) || 1;
         var ox = (rect.width - 1000 * scale) / 2;
-        var oy = (rect.height - 680 * scale) / 2;
+        var oy = (rect.height - 760 * scale) / 2;
         var px = (e.clientX - rect.left - ox) / scale;
         var py = (e.clientY - rect.top - oy) / scale;
 
         var factor = e.deltaY < 0 ? 1.12 : 0.89;
-        var nextZoom = Math.min(2.5, Math.max(0.65, cam.tzoom * factor));
+        var nextZoom = Math.min(2.4, Math.max(0.7, cam.tzoom * factor));
         var ratio = nextZoom / cam.tzoom;
         cam.x = cam.tx = px - (px - cam.tx) * ratio;
         cam.y = cam.ty = py - (py - cam.ty) * ratio;
@@ -1125,7 +1434,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         refreshVisualStyles();
       }, { passive: false });
 
-      // Pointer drag-to-pan (mouse + touch unified)
       viewportEl.addEventListener('pointerdown', function (e) {
         if (e.target.closest('.node-group')) return;
         dragging = true;
@@ -1135,7 +1443,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       viewportEl.addEventListener('pointermove', function (e) {
         if (!dragging) return;
         var rect = svgEl.getBoundingClientRect();
-        var scale = Math.min(rect.width / 1000, rect.height / 680) || 1;
+        var scale = Math.min(rect.width / 1000, rect.height / 760) || 1;
         cam.x = cam.tx = dragStart.camX + (e.clientX - dragStart.x) / scale;
         cam.y = cam.ty = dragStart.camY + (e.clientY - dragStart.y) / scale;
         graphContent.setAttribute('transform', 'translate(' + cam.x.toFixed(2) + ', ' + cam.y.toFixed(2) + ') scale(' + cam.zoom.toFixed(4) + ')');
@@ -1148,7 +1456,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         }
       });
 
-      // Keyboard navigation
       document.addEventListener('keydown', function (e) {
         var tag = document.activeElement && document.activeElement.tagName;
         var inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
@@ -1175,15 +1482,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         }
       });
 
-      // Boot from embedded sanitized snapshot immediately
+      // Boot immediately from sanitized snapshot
       indexMembers(initialMembers);
       updateTargets();
       renderControls();
       renderDirectory();
 
-      // Restore URL deep link (#member=... or ?team=...&view=directory)
       var params = new URLSearchParams(window.location.search);
-      if (params.get('view') === 'directory') setView('directory');
       if (params.get('team')) {
         state.team = params.get('team');
         renderControls();
@@ -1195,32 +1500,26 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (BY_ID.has(targetId)) selectMember(targetId, true);
       }
 
-      // Async dynamic refresh (live API -> static /team.json fallback)
       async function refreshDynamicMembers() {
-        var urls = ['https://api.tfunions.com/v1/team', '/team.json'];
-        for (var i = 0; i < urls.length; i++) {
-          try {
-            var ctrl = new AbortController();
-            var timer = setTimeout(function () { ctrl.abort(); }, 2500);
-            var res = await fetch(urls[i], { signal: ctrl.signal, cache: 'no-store' });
-            clearTimeout(timer);
-            if (!res.ok) continue;
-            var payload = await res.json();
-            var list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.members) ? payload.members : null;
-            if (!list || list.length === 0) continue;
+        try {
+          var ctrl = new AbortController();
+          var timer = setTimeout(function () { ctrl.abort(); }, 2500);
+          var res = await fetch('/team.json', { signal: ctrl.signal, cache: 'no-store' });
+          clearTimeout(timer);
+          if (!res.ok) return;
+          var payload = await res.json();
+          var list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.members) ? payload.members : null;
+          if (!list || list.length === 0) return;
 
-            indexMembers(list);
-            updateTargets();
-            renderControls();
-            renderDirectory();
-            if (state.selectedId && BY_ID.has(state.selectedId)) {
-              renderInspector(BY_ID.get(state.selectedId));
-            }
-            sourceStatusEl.textContent = i === 0 ? 'Live feed' : 'Synced · ' + list.length + ' members';
-            sourceStatusEl.className = 'font-code text-[11.5px] text-[#0B5F58]';
-            return;
-          } catch (_) {}
-        }
+          indexMembers(list);
+          updateTargets();
+          renderControls();
+          renderDirectory();
+          if (state.selectedId && BY_ID.has(state.selectedId)) {
+            renderInspector(BY_ID.get(state.selectedId));
+          }
+          sourceStatusEl.textContent = 'Live registry synced';
+        } catch (_) {}
       }
       refreshDynamicMembers();
     })();
