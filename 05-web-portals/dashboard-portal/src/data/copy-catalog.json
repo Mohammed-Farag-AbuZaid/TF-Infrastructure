@@ -720,6 +720,12 @@
         "def": "Financial accountability registry"
       },
       {
+        "key": "open_badge",
+        "label": "Open Badge",
+        "kind": "p",
+        "def": "100% Open Finances · Public Audit"
+      },
+      {
         "key": "headline",
         "label": "Headline",
         "kind": "h1",
@@ -738,22 +744,22 @@
         "def": "Support TF Unions →"
       },
       {
+        "key": "metric_reserve_label",
+        "label": "Metric Reserve Label",
+        "kind": "p",
+        "def": "Current balance"
+      },
+      {
         "key": "metric_inflows_label",
         "label": "Metric Inflows Label",
         "kind": "p",
-        "def": "Verified inflows"
+        "def": "Total raised"
       },
       {
         "key": "metric_outflows_label",
         "label": "Metric Outflows Label",
         "kind": "p",
-        "def": "Infrastructure outflows"
-      },
-      {
-        "key": "metric_reserve_label",
-        "label": "Metric Reserve Label",
-        "kind": "p",
-        "def": "Net reserve"
+        "def": "Total spent"
       },
       {
         "key": "metric_saas_label",

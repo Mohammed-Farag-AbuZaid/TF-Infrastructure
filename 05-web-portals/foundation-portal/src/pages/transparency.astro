@@ -2,27 +2,39 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Open Ledger" backLabel="TF Unions" backHref="/">
-  <!-- Calm White Treasury Header & Telemetry -->
+  <!-- Calm White Treasury Card & Live Telemetry -->
   <section class="mt-8 bg-white border border-[#DFDDD6] rounded-xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div data-tf-copy="ledger.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
-          Financial accountability registry
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div data-tf-copy="ledger.eyebrow" class="inline-block pl-2.5 border-l-2 border-[#0F766E] text-[13px] font-medium text-[#525866]">
+            Financial accountability registry
+          </div>
+          <span data-tf-copy="ledger.open_badge" class="px-2.5 py-0.5 rounded-full bg-[#EDF7F5] border border-[#BCE3DC] text-[11.5px] font-medium text-[#0B5F58]">
+            100% Open Finances · Public Audit
+          </span>
         </div>
         <h1 data-tf-copy="ledger.headline" class="font-display mt-2.5 text-[30px] sm:text-[38px] font-bold leading-[1.1] tracking-[-0.025em] text-[#161A22]">
           Open financial ledger
         </h1>
-        <p data-tf-copy="ledger.subtitle" class="mt-2.5 text-[14.5px] leading-[1.6] text-[#525866] max-w-[620px]">
+        <p data-tf-copy="ledger.subtitle" class="mt-2.5 text-[14.5px] leading-[1.6] text-[#525866] max-w-[640px]">
           Every verified contribution inflow and self-hosted server infrastructure expense is audited publicly in Egyptian Pounds.
         </p>
       </div>
-      <div class="flex flex-wrap gap-2.5 shrink-0">
+      <div class="flex flex-wrap gap-2 shrink-0">
         <button
           id="export-csv-btn"
           type="button"
-          class="h-9 px-4 rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[13px] font-medium transition"
+          class="h-9 px-3.5 rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[12.5px] font-medium transition"
         >
           Export CSV
+        </button>
+        <button
+          id="export-json-btn"
+          type="button"
+          class="h-9 px-3.5 rounded-lg bg-[#F3F2EE] hover:bg-[#EAE8E1] border border-[#DFDDD6] text-[#161A22] text-[12.5px] font-medium transition"
+        >
+          Export JSON
         </button>
         <a
           data-tf-copy="ledger.support_cta"
@@ -34,18 +46,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
+    <!-- HCB-Inspired Live Financial Summary Cards -->
     <div class="mt-7 pt-6 border-t border-[#DFDDD6] grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="col-span-2 lg:col-span-1 bg-[#FAF9F6] border-2 border-[#1B365D]/20 rounded-lg p-4">
+        <div data-tf-copy="ledger.metric_reserve_label" class="text-[12px] font-medium text-[#525866]">Current balance</div>
+        <div id="metric-reserve" class="font-code mt-1 text-[24px] font-bold text-[#1B365D]">0 EGP</div>
+      </div>
       <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
-        <div data-tf-copy="ledger.metric_inflows_label" class="text-[12px] text-[#767D8C]">Verified inflows</div>
+        <div data-tf-copy="ledger.metric_inflows_label" class="text-[12px] text-[#767D8C]">Total raised</div>
         <div id="metric-inflows" class="font-code mt-1 text-[22px] font-semibold text-[#0B5F58]">0 EGP</div>
       </div>
       <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
-        <div data-tf-copy="ledger.metric_outflows_label" class="text-[12px] text-[#767D8C]">Infrastructure outflows</div>
+        <div data-tf-copy="ledger.metric_outflows_label" class="text-[12px] text-[#767D8C]">Total spent</div>
         <div id="metric-outflows" class="font-code mt-1 text-[22px] font-semibold text-[#161A22]">0 EGP</div>
-      </div>
-      <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
-        <div data-tf-copy="ledger.metric_reserve_label" class="text-[12px] text-[#767D8C]">Net reserve</div>
-        <div id="metric-reserve" class="font-code mt-1 text-[22px] font-semibold text-[#1B365D]">0 EGP</div>
       </div>
       <div class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-lg p-4">
         <div data-tf-copy="ledger.metric_saas_label" class="text-[12px] text-[#767D8C]">Commercial SaaS spend</div>
@@ -61,29 +74,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span class="tf-stamp">Live Firestore Ledger</span>
     </div>
     <svg id="ledger-bar-chart" viewBox="0 0 680 132" class="w-full h-auto block" role="img" aria-label="Treasury inflows, outflows, and net reserve chart">
-      <text x="0" y="24" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Verified inflows</text>
+      <text x="0" y="24" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Total raised</text>
       <rect id="bar-inflows" x="148" y="10" width="0" height="20" rx="5" fill="#0F766E" />
       <text id="lbl-inflows" x="158" y="25" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#0B5F58">0 EGP</text>
 
-      <text x="0" y="66" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Infrastructure outflows</text>
+      <text x="0" y="66" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Total spent</text>
       <rect id="bar-outflows" x="148" y="52" width="0" height="20" rx="5" fill="#1B365D" />
       <text id="lbl-outflows" x="158" y="67" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#161A22">0 EGP</text>
 
-      <text x="0" y="108" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Net reserve</text>
+      <text x="0" y="108" font-family="Plus Jakarta Sans, sans-serif" font-size="13" fill="#5B606B">Current balance</text>
       <rect id="bar-reserve" x="148" y="94" width="0" height="20" rx="5" fill="#E4EAF2" stroke="#1B365D" stroke-width="1.5" stroke-dasharray="4 3" />
       <text id="lbl-reserve" x="158" y="109" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="600" fill="#1B365D">0 EGP</text>
     </svg>
+
+    <!-- Proportional Spending by Category Bar (shown only when real outflows exist) -->
+    <div id="category-breakdown-wrap" class="hidden mt-6 pt-5 border-t border-[#EAE8E1] space-y-2.5">
+      <div class="flex items-center justify-between text-[12.5px]">
+        <span class="font-semibold text-[#161A22]">Spending by category</span>
+        <span id="cat-breakdown-total" class="font-code text-[#525866]"></span>
+      </div>
+      <div id="cat-breakdown-bar" class="h-3 w-full rounded-full overflow-hidden flex bg-[#F3F2EE] border border-[#DFDDD6]"></div>
+      <div id="cat-breakdown-legend" class="flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] text-[#525866]"></div>
+    </div>
   </section>
 
-  <!-- Crisp Paper Audit Trail Table -->
+  <!-- Crisp Paper Searchable Audit Trail -->
   <section class="mt-6 bg-white border border-[#DFDDD6] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(22,26,34,0.04)]">
-    <div class="px-6 py-3.5 bg-[#EAE8E1] border-b border-[#DFDDD6] flex flex-wrap items-center justify-between gap-3">
-      <div class="flex flex-wrap gap-1">
-        <button type="button" data-ledger-filter="all" class="ledger-tab active px-3.5 py-1.5 rounded-lg text-[12px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition">All entries</button>
-        <button type="button" data-ledger-filter="inflow" class="ledger-tab px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Inflows</button>
-        <button type="button" data-ledger-filter="outflow" class="ledger-tab px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Outflows</button>
+    <div class="px-6 py-4 bg-[#EAE8E1] border-b border-[#DFDDD6] space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap gap-1">
+          <button type="button" data-ledger-filter="all" class="ledger-tab active px-3.5 py-1.5 rounded-lg text-[12px] font-medium bg-white text-[#161A22] border border-[#DFDDD6] shadow-[0_1px_1px_rgba(22,26,34,0.04)] transition">All transactions</button>
+          <button type="button" data-ledger-filter="inflow" class="ledger-tab px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Raised (+)</button>
+          <button type="button" data-ledger-filter="outflow" class="ledger-tab px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] border border-transparent transition">Spent (-)</button>
+        </div>
+        <span id="ledger-status-label" class="font-code text-[12px] text-[#525866]">Loading ledger...</span>
       </div>
-      <span id="ledger-status-label" class="font-code text-[12px] text-[#525866]">Loading ledger...</span>
+
+      <div class="grid grid-cols-1 sm:grid-cols-[1fr_220px] gap-2.5">
+        <input
+          id="ledger-search"
+          type="search"
+          placeholder="Search memo, contributor, vendor, channel..."
+          class="h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#161A22] focus:border-[#1B365D] focus:outline-none"
+        />
+        <select
+          id="ledger-cat-filter"
+          aria-label="Filter by category"
+          class="h-9 px-3 rounded-lg bg-white border border-[#DFDDD6] text-[13px] text-[#161A22] focus:border-[#1B365D] focus:outline-none"
+        >
+          <option value="all">All categories</option>
+          <option value="Donations">Donations</option>
+          <option value="Infrastructure">Infrastructure</option>
+          <option value="Events & Workshops">Events &amp; Workshops</option>
+          <option value="Grants & Prizes">Grants &amp; Prizes</option>
+          <option value="Hardware & Kits">Hardware &amp; Kits</option>
+          <option value="Operations">Operations</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
     </div>
 
     <div class="overflow-x-auto">
@@ -91,18 +139,72 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <thead>
           <tr class="bg-[#F3F2EE] border-b border-[#DFDDD6] text-[12px] font-medium text-[#767D8C]">
             <th class="py-3 px-6">Date</th>
-            <th class="py-3 px-4">Contributor / Vendor</th>
+            <th class="py-3 px-4">Memo &amp; Counterparty</th>
+            <th class="py-3 px-4">Category</th>
             <th class="py-3 px-4">Channel</th>
             <th class="py-3 px-4">Status</th>
             <th class="py-3 px-6 text-right">Amount</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-[#EAE8E1]" id="ledger-rows">
-          <tr><td colspan="5" class="py-8 px-6 text-center text-[#767D8C]">Loading financial records...</td></tr>
+          <tr><td colspan="6" class="py-8 px-6 text-center text-[#767D8C]">Loading financial records...</td></tr>
         </tbody>
       </table>
     </div>
   </section>
+
+  <!-- Public Transaction Receipt & Audit Modal -->
+  <div
+    id="tx-detail-modal"
+    class="hidden fixed inset-0 z-50 bg-[#0F1D33]/45 backdrop-blur-[1px] flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="txm-title"
+  >
+    <div class="w-full max-w-[540px] bg-white border border-[#DFDDD6] rounded-2xl shadow-xl overflow-hidden">
+      <div class="px-6 py-4 bg-[#FAF9F6] border-b border-[#DFDDD6] flex items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="txm-type-badge" class="px-2.5 py-0.5 rounded-full text-[11.5px] font-semibold"></span>
+          <span id="txm-status-badge" class="px-2.5 py-0.5 rounded-full bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[11.5px] font-medium"></span>
+        </div>
+        <button id="txm-close" type="button" class="h-8 px-3 rounded-lg border border-[#DFDDD6] bg-white text-[12.5px] font-medium text-[#525866] hover:text-[#161A22]">Close</button>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div>
+          <div id="txm-amount" class="font-code text-[28px] font-bold"></div>
+          <h2 id="txm-title" class="font-display text-[20px] font-bold text-[#161A22] mt-1"></h2>
+          <p id="txm-counterparty" class="text-[13.5px] text-[#525866] mt-0.5"></p>
+        </div>
+
+        <dl class="grid grid-cols-2 gap-3 text-[13px] bg-[#F3F2EE] border border-[#DFDDD6] rounded-xl p-4">
+          <div>
+            <dt class="text-[11px] uppercase tracking-wide text-[#767D8C]">Date</dt>
+            <dd id="txm-date" class="font-code font-medium text-[#161A22] mt-0.5"></dd>
+          </div>
+          <div>
+            <dt class="text-[11px] uppercase tracking-wide text-[#767D8C]">Category</dt>
+            <dd id="txm-category" class="font-medium text-[#161A22] mt-0.5"></dd>
+          </div>
+          <div>
+            <dt class="text-[11px] uppercase tracking-wide text-[#767D8C]">Channel</dt>
+            <dd id="txm-channel" class="font-medium text-[#161A22] mt-0.5"></dd>
+          </div>
+          <div>
+            <dt class="text-[11px] uppercase tracking-wide text-[#767D8C]">Audit ID</dt>
+            <dd id="txm-id" class="font-code text-[12px] text-[#525866] mt-0.5 truncate"></dd>
+          </div>
+        </dl>
+
+        <div>
+          <div class="text-[12px] font-semibold text-[#525866] mb-1">Public audit note</div>
+          <p id="txm-notes" class="text-[13.5px] leading-relaxed text-[#161A22] bg-[#FAF9F6] border border-[#EAE8E1] rounded-lg p-3"></p>
+        </div>
+
+        <div id="txm-receipt-wrap" class="pt-2 border-t border-[#EAE8E1] flex items-center justify-between gap-3"></div>
+      </div>
+    </div>
+  </div>
 
   <script is:inline>
     function esc(str) {
@@ -118,40 +220,218 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       return Number(n || 0).toLocaleString('en-US') + ' EGP';
     }
 
+    function safeHttpUrl(raw) {
+      const s = String(raw || '').trim();
+      if (!s) return '';
+      try {
+        const u = new URL(s);
+        return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '';
+      } catch {
+        return '';
+      }
+    }
+
+    const CAT_COLORS = {
+      'Infrastructure': '#1B365D',
+      'Events & Workshops': '#0F766E',
+      'Grants & Prizes': '#B45309',
+      'Hardware & Kits': '#334155',
+      'Operations': '#64748B',
+      'Donations': '#0B5F58',
+      'Other': '#94A3B8',
+    };
+
     let allEntries = [];
     let currentFilter = 'all';
+    let currentCategory = 'all';
+    let currentQuery = '';
+
+    function entryCategory(e) {
+      if (e.category && String(e.category).trim()) return String(e.category).trim();
+      return e.entryType === 'outflow' ? 'Operations' : 'Donations';
+    }
+
+    function getFilteredEntries() {
+      const q = currentQuery.trim().toLowerCase();
+      return allEntries.filter((e) => {
+        if (currentFilter !== 'all' && e.entryType !== currentFilter) return false;
+        const cat = entryCategory(e);
+        if (currentCategory !== 'all' && cat !== currentCategory) return false;
+        if (q) {
+          const hay = `${e.memo || ''} ${e.donorOrVendor || ''} ${cat} ${e.paymentChannel || ''} ${e.notes || ''} ${e.txDate || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function openTxModal(entry) {
+      const modal = document.getElementById('tx-detail-modal');
+      const isOutflow = entry.entryType === 'outflow';
+      const typeBadge = document.getElementById('txm-type-badge');
+      typeBadge.textContent = isOutflow ? 'Spent (-)' : 'Raised (+)';
+      typeBadge.className = isOutflow
+        ? 'px-2.5 py-0.5 rounded-full bg-[#F3F2EE] border border-[#DFDDD6] text-[#161A22] text-[11.5px] font-semibold'
+        : 'px-2.5 py-0.5 rounded-full bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[11.5px] font-semibold';
+
+      document.getElementById('txm-status-badge').textContent = String(entry.verificationStatus || 'Verified').replace(/_/g, ' ');
+      const amtEl = document.getElementById('txm-amount');
+      amtEl.textContent = `${isOutflow ? '-' : '+'}${fmtEgp(entry.amountEgp)}`;
+      amtEl.className = `font-code text-[28px] font-bold ${isOutflow ? 'text-[#161A22]' : 'text-[#0B5F58]'}`;
+
+      document.getElementById('txm-title').textContent = entry.memo ? String(entry.memo) : String(entry.donorOrVendor || 'Ledger transaction');
+      document.getElementById('txm-counterparty').textContent = entry.memo
+        ? `Counterparty: ${entry.donorOrVendor || '—'}`
+        : `Registered entry`;
+
+      document.getElementById('txm-date').textContent = entry.txDate || '—';
+      document.getElementById('txm-category').textContent = entryCategory(entry);
+      document.getElementById('txm-channel').textContent = String(entry.paymentChannel || '—').replace(/_/g, ' ');
+      document.getElementById('txm-id').textContent = entry.id || '—';
+      document.getElementById('txm-notes').textContent = entry.notes && String(entry.notes).trim()
+        ? String(entry.notes).trim()
+        : 'No additional audit note recorded for this transaction.';
+
+      const receiptWrap = document.getElementById('txm-receipt-wrap');
+      const safeUrl = safeHttpUrl(entry.receiptUrl);
+      if (safeUrl) {
+        let host = 'external receipt';
+        try { host = new URL(safeUrl).hostname; } catch {}
+        receiptWrap.innerHTML = `<span class="text-[12.5px] text-[#525866]">Receipt proof hosted on <span class="font-code">${esc(host)}</span></span><a href="${esc(safeUrl)}" target="_blank" rel="noopener noreferrer" class="h-9 px-4 inline-flex items-center rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[12.5px] font-medium transition">View receipt proof ↗</a>`;
+      } else {
+        receiptWrap.innerHTML = `<span class="text-[12.5px] text-[#767D8C]">No external receipt proof link attached.</span>`;
+      }
+
+      modal.classList.remove('hidden');
+      document.getElementById('txm-close').focus();
+    }
+
+    function closeTxModal() {
+      document.getElementById('tx-detail-modal').classList.add('hidden');
+    }
+
+    document.getElementById('txm-close').addEventListener('click', closeTxModal);
+    document.getElementById('tx-detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'tx-detail-modal') closeTxModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !document.getElementById('tx-detail-modal').classList.contains('hidden')) {
+        closeTxModal();
+      }
+    });
 
     function renderTable() {
       const tbody = document.getElementById('ledger-rows');
-      const filtered = allEntries.filter((e) => currentFilter === 'all' || e.entryType === currentFilter);
+      const filtered = getFilteredEntries();
+      const statusEl = document.getElementById('ledger-status-label');
+      if (allEntries.length === 0) {
+        statusEl.textContent = '0 entries recorded';
+      } else if (filtered.length !== allEntries.length) {
+        statusEl.textContent = `Showing ${filtered.length} of ${allEntries.length} entries`;
+      } else {
+        statusEl.textContent = `${allEntries.length} verified ${allEntries.length === 1 ? 'entry' : 'entries'}`;
+      }
+
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" data-tf-copy="ledger.empty_state" class="py-10 px-6 text-center text-[#767D8C]">No verified financial entries recorded yet.</td></tr>';
+        const emptyMsg = allEntries.length === 0
+          ? 'No verified financial entries recorded yet.'
+          : 'No transactions match your current filter.';
+        tbody.innerHTML = `<tr><td colspan="6" data-tf-copy="ledger.empty_state" class="py-10 px-6 text-center text-[#767D8C]">${esc(emptyMsg)}</td></tr>`;
         return;
       }
-      tbody.innerHTML = filtered
-        .map((e) => {
-          const isOutflow = e.entryType === 'outflow';
-          const sign = isOutflow ? '-' : '+';
-          const colorCls = isOutflow ? 'text-[#161A22]' : 'text-[#0B5F58]';
-          const statusLabel = String(e.verificationStatus || 'Verified').replace(/_/g, ' ');
-          const channelLabel = String(e.paymentChannel || '').replace(/_/g, ' ');
-          return `
-            <tr class="hover:bg-[#FAF9F6] transition">
-              <td class="py-3.5 px-6 font-code text-[12.5px] text-[#767D8C] whitespace-nowrap">${esc(e.txDate)}</td>
-              <td class="py-3.5 px-4 font-medium text-[#161A22]">${esc(e.donorOrVendor)}</td>
-              <td class="py-3.5 px-4 text-[#525866]">${esc(channelLabel)}</td>
-              <td class="py-3.5 px-4">
-                <span class="px-2 py-0.5 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[11.5px] font-medium text-[#0B5F58]">
-                  ${esc(statusLabel)}
-                </span>
-              </td>
-              <td class="py-3.5 px-6 text-right font-code font-medium whitespace-nowrap ${colorCls}">
-                ${sign}${fmtEgp(e.amountEgp)}
-              </td>
-            </tr>
-          `;
-        })
-        .join('');
+
+      tbody.replaceChildren();
+      filtered.forEach((e) => {
+        const isOutflow = e.entryType === 'outflow';
+        const sign = isOutflow ? '-' : '+';
+        const colorCls = isOutflow ? 'text-[#161A22]' : 'text-[#0B5F58]';
+        const statusLabel = String(e.verificationStatus || 'Verified').replace(/_/g, ' ');
+        const channelLabel = String(e.paymentChannel || '').replace(/_/g, ' ');
+        const cat = entryCategory(e);
+        const primaryTitle = e.memo && String(e.memo).trim() ? e.memo : e.donorOrVendor;
+        const secondarySub = e.memo && String(e.memo).trim() ? e.donorOrVendor : '';
+        const hasReceipt = Boolean(safeHttpUrl(e.receiptUrl));
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-[#FAF9F6] transition cursor-pointer focus:bg-[#FAF9F6] focus:outline-none';
+        tr.tabIndex = 0;
+        tr.setAttribute('role', 'button');
+        tr.setAttribute('aria-label', `Inspect transaction ${primaryTitle}`);
+        tr.innerHTML = `
+          <td class="py-3.5 px-6 font-code text-[12.5px] text-[#767D8C] whitespace-nowrap">${esc(e.txDate)}</td>
+          <td class="py-3.5 px-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-medium text-[#161A22]">${esc(primaryTitle)}</span>
+              ${hasReceipt ? '<span class="font-code px-1.5 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[10.5px] text-[#1B365D]">Receipt ↗</span>' : ''}
+            </div>
+            ${secondarySub ? `<div class="text-[12px] text-[#767D8C] mt-0.5">${esc(secondarySub)}</div>` : ''}
+          </td>
+          <td class="py-3.5 px-4">
+            <span class="px-2 py-0.5 rounded-md bg-[#F3F2EE] border border-[#DFDDD6] text-[11.5px] font-medium text-[#525866] whitespace-nowrap">
+              ${esc(cat)}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 text-[#525866] whitespace-nowrap">${esc(channelLabel)}</td>
+          <td class="py-3.5 px-4">
+            <span class="px-2 py-0.5 rounded-md bg-[#EDF7F5] border border-[#BCE3DC] text-[11.5px] font-medium text-[#0B5F58] whitespace-nowrap">
+              ${esc(statusLabel)}
+            </span>
+          </td>
+          <td class="py-3.5 px-6 text-right font-code font-medium whitespace-nowrap ${colorCls}">
+            ${sign}${fmtEgp(e.amountEgp)}
+          </td>
+        `;
+        tr.addEventListener('click', () => openTxModal(e));
+        tr.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            openTxModal(e);
+          }
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCategoryBreakdown(docs) {
+      const wrap = document.getElementById('category-breakdown-wrap');
+      const bar = document.getElementById('cat-breakdown-bar');
+      const legend = document.getElementById('cat-breakdown-legend');
+      const totalEl = document.getElementById('cat-breakdown-total');
+
+      const outflows = docs.filter((d) => d.entryType === 'outflow');
+      const totalOut = outflows.reduce((acc, d) => acc + (Number(d.amountEgp) || 0), 0);
+      if (totalOut <= 0) {
+        wrap.classList.add('hidden');
+        return;
+      }
+
+      const byCat = new Map();
+      outflows.forEach((d) => {
+        const cat = entryCategory(d);
+        byCat.set(cat, (byCat.get(cat) || 0) + (Number(d.amountEgp) || 0));
+      });
+      const sorted = Array.from(byCat.entries()).sort((a, b) => b[1] - a[1]);
+
+      wrap.classList.remove('hidden');
+      totalEl.textContent = fmtEgp(totalOut);
+      bar.replaceChildren();
+      legend.replaceChildren();
+
+      sorted.forEach(([cat, amt]) => {
+        const pct = Math.max(2, Math.round((amt / totalOut) * 100));
+        const color = CAT_COLORS[cat] || '#64748B';
+
+        const seg = document.createElement('div');
+        seg.style.width = ((amt / totalOut) * 100).toFixed(2) + '%';
+        seg.style.backgroundColor = color;
+        seg.title = `${cat}: ${fmtEgp(amt)} (${pct}%)`;
+        bar.appendChild(seg);
+
+        const item = document.createElement('div');
+        item.className = 'inline-flex items-center gap-1.5';
+        item.innerHTML = `<span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:${color}"></span><span class="font-medium text-[#161A22]">${esc(cat)}</span><span class="font-code text-[11.5px] text-[#767D8C]">${pct}% (${fmtEgp(amt)})</span>`;
+        legend.appendChild(item);
+      });
     }
 
     document.querySelectorAll('.ledger-tab').forEach((btn) => {
@@ -165,18 +445,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     });
 
-    document.getElementById('export-csv-btn').addEventListener('click', () => {
-      const header = 'Date,Contributor_or_Vendor,Channel,Status,Type,Amount_EGP\n';
-      const lines = allEntries
-        .map((e) => [e.txDate, `"${String(e.donorOrVendor || '').replace(/"/g, '""')}"`, e.paymentChannel, e.verificationStatus, e.entryType, e.amountEgp].join(','))
-        .join('\n');
-      const blob = new Blob([header + lines], { type: 'text/csv;charset=utf-8;' });
+    document.getElementById('ledger-search').addEventListener('input', (e) => {
+      currentQuery = e.target.value || '';
+      renderTable();
+    });
+
+    document.getElementById('ledger-cat-filter').addEventListener('change', (e) => {
+      currentCategory = e.target.value || 'all';
+      renderTable();
+    });
+
+    function triggerDownload(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'tfunions-open-ledger.csv';
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      const csvHdr = 'ID,Date,Memo,Contributor_or_Vendor,Category,Channel,Status,Type,Amount_EGP,Receipt_URL,Notes\n';
+      const escCsv = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+      const lines = allEntries
+        .map((e) => [
+          escCsv(e.id),
+          escCsv(e.txDate),
+          escCsv(e.memo || ''),
+          escCsv(e.donorOrVendor),
+          escCsv(entryCategory(e)),
+          escCsv(e.paymentChannel),
+          escCsv(e.verificationStatus),
+          escCsv(e.entryType),
+          Number(e.amountEgp || 0),
+          escCsv(e.receiptUrl || ''),
+          escCsv(e.notes || ''),
+        ].join(','))
+        .join('\n');
+      triggerDownload('tfunions-open-ledger.csv', csvHdr + lines, 'text/csv;charset=utf-8;');
+    });
+
+    document.getElementById('export-json-btn').addEventListener('click', () => {
+      const payload = allEntries.map((e) => ({
+        id: e.id,
+        date: e.txDate || '',
+        memo: e.memo || '',
+        counterparty: e.donorOrVendor || '',
+        category: entryCategory(e),
+        channel: e.paymentChannel || '',
+        status: e.verificationStatus || '',
+        type: e.entryType || 'inflow',
+        amountEgp: Number(e.amountEgp || 0),
+        receiptUrl: safeHttpUrl(e.receiptUrl) || null,
+        notes: e.notes || '',
+      }));
+      triggerDownload('tfunions-open-ledger.json', JSON.stringify(payload, null, 2), 'application/json;charset=utf-8;');
     });
 
     function updateChart(inflows, outflows, reserve) {
@@ -230,15 +554,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           document.getElementById('metric-outflows').textContent = fmtEgp(outflows);
           document.getElementById('metric-reserve').textContent = fmtEgp(reserve);
           updateChart(inflows, outflows, reserve);
+          renderCategoryBreakdown(docs);
           allEntries = docs;
-          document.getElementById('ledger-status-label').textContent =
-            docs.length === 0 ? '0 entries recorded' : `${docs.length} verified ${docs.length === 1 ? 'entry' : 'entries'}`;
           renderTable();
           return;
         }
       } catch {}
-      document.getElementById('ledger-status-label').textContent = '0 entries recorded';
       updateChart(0, 0, 0);
+      renderCategoryBreakdown([]);
       renderTable();
     })();
   </script>

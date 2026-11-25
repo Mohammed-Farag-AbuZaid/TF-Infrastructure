@@ -350,11 +350,27 @@ const faviconSvg = encodeURIComponent(
                     <option value="inflow">Inflow (+ EGP)</option>
                     <option value="outflow">Outflow (- EGP)</option>
                   </select>
+                  <select id="ld-category" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                    <option value="Donations">Donations</option>
+                    <option value="Infrastructure">Infrastructure</option>
+                    <option value="Events & Workshops">Events &amp; Workshops</option>
+                    <option value="Grants & Prizes">Grants &amp; Prizes</option>
+                    <option value="Hardware & Kits">Hardware &amp; Kits</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <input id="ld-amount" type="number" min="1" required placeholder="Amount EGP" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input id="ld-memo" type="text" placeholder="Memo / purpose (shown on public ledger)" class="sm:col-span-2 h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
                   <select id="ld-status" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
                     <option value="Verified">Verified</option>
                     <option value="Audited">Audited</option>
                   </select>
-                  <input id="ld-amount" type="number" min="1" required placeholder="Amount EGP" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input id="ld-receipt" type="url" placeholder="Receipt proof URL (https://..., optional)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  <input id="ld-notes" type="text" placeholder="Public audit note (optional)" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
                 </div>
                 <div class="flex gap-2">
                   <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save entry</button>
@@ -592,45 +608,110 @@ const faviconSvg = encodeURIComponent(
           <!-- ================= WORKSPACE 5: ACCESS & ACTIVITY ================= -->
           <section id="view-access" class="dash-view hidden space-y-5">
             <div class="flex flex-wrap gap-1.5 bg-white border border-[#DFDDD6] rounded-xl p-2" id="access-subtabs">
-              <button type="button" data-ac="perms" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white">Team Access</button>
+              <button type="button" data-ac="people" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-semibold bg-[#1B365D] text-white">People &amp; Assign</button>
+              <button type="button" data-ac="roles" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Role Rules</button>
               <button type="button" data-ac="audit" class="ac-tab px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-[#525866] hover:text-[#161A22]">Activity Log</button>
             </div>
 
-            <div id="ac-pane-perms" class="ac-pane space-y-5">
-              <form id="ac-form" class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-4">
-                <h3 class="font-display font-semibold text-[16px]">Assign teammate role &amp; exact permissions</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <input id="ac-email" type="email" required placeholder="teammate@gmail.com" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <input id="ac-name" type="text" placeholder="Display name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
-                  <select id="ac-role" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
-                    <option value="owner">Owner (Full access)</option>
-                    <option value="hr_lead">HR Lead (Team &amp; Tasks)</option>
-                    <option value="copy_editor">Copy Editor (All website text)</option>
-                    <option value="finance_lead">Finance Lead (Open Ledger)</option>
-                    <option value="chapters_lead">Chapters Lead (TF Connect)</option>
-                    <option value="guides_lead">Guides Lead (TF Guides)</option>
-                    <option value="news_editor">News Editor (TF News)</option>
-                    <option value="registrar">Registrar (TF Verify)</option>
-                    <option value="member">Team Member (Tasks &amp; Time)</option>
-                    <option value="custom">Custom checkboxes</option>
-                  </select>
+            <!-- 5A: ALL MEMBERS & CANDIDATES DIRECTORY -->
+            <div id="ac-pane-people" class="ac-pane space-y-5">
+              <div class="bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div>
+                    <h3 class="font-display font-semibold text-[17px] text-[#161A22]">Members &amp; Logged-In Users Directory</h3>
+                    <p class="text-[13px] text-[#525866] mt-0.5">Search everyone who signed into TF Unions or applied to volunteer. Click any person to inspect full info, set their team rank, and assign a Role Rule.</p>
+                  </div>
+                  <button id="btn-manual-assign" type="button" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium shrink-0 transition">
+                    + Assign by email
+                  </button>
                 </div>
-                <div id="ac-perms" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[12.5px]"></div>
-                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#EAE8E1]">
-                  <label class="inline-flex items-center gap-2 text-[13px] font-medium">
-                    <input id="ac-active" type="checkbox" checked class="rounded border-[#DCD9D0]" />
-                    <span>Account active</span>
-                  </label>
-                  <button type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] text-white text-[13px] font-medium">Save teammate permissions</button>
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <input id="people-search" type="search" placeholder="Search by name, phone, email, team, or role..." class="w-full sm:w-[360px] h-9 px-3 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] focus:bg-white focus:border-[#1B365D] focus:outline-none" />
+                  <div class="flex flex-wrap gap-1.5" id="people-filter-bar">
+                    <button type="button" data-pf="all" class="pf-btn px-3 py-1 rounded-lg text-[12px] font-semibold bg-[#1B365D] text-white">All</button>
+                    <button type="button" data-pf="staff" class="pf-btn px-3 py-1 rounded-lg text-[12px] font-medium bg-[#F3F2EE] text-[#525866] hover:text-[#161A22]">Assigned Staff</button>
+                    <button type="button" data-pf="normal" class="pf-btn px-3 py-1 rounded-lg text-[12px] font-medium bg-[#F3F2EE] text-[#525866] hover:text-[#161A22]">Normal Users</button>
+                    <button type="button" data-pf="applicant" class="pf-btn px-3 py-1 rounded-lg text-[12px] font-medium bg-[#F3F2EE] text-[#525866] hover:text-[#161A22]">Applicants</button>
+                  </div>
                 </div>
-              </form>
+              </div>
 
               <div class="bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
-                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Assigned dashboard accounts</div>
-                <div id="ac-list" class="divide-y divide-[#EAE8E1]"></div>
+                <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                  <span class="font-display font-semibold text-[15px] text-[#161A22]">TF Unions People</span>
+                  <span id="people-count" class="font-code text-[12px] text-[#525866]">0 accounts</span>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-[13.5px]">
+                    <thead>
+                      <tr class="bg-[#F3F2EE] border-b border-[#DFDDD6] text-[12px] font-medium text-[#767D8C]">
+                        <th class="py-2.5 px-5">Name</th>
+                        <th class="py-2.5 px-4">Phone</th>
+                        <th class="py-2.5 px-4">Email</th>
+                        <th class="py-2.5 px-4">Team &amp; Rule</th>
+                        <th class="py-2.5 px-5 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="people-list" class="divide-y divide-[#EAE8E1]"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
+            <!-- 5B: DYNAMIC ROLE RULES BUILDER -->
+            <div id="ac-pane-roles" class="ac-pane hidden space-y-5">
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                <form id="role-rule-form" class="lg:col-span-5 bg-white border border-[#DFDDD6] rounded-xl p-5 space-y-3.5">
+                  <input type="hidden" id="rr-original-id" />
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 id="rr-form-title" class="font-display font-semibold text-[16px] text-[#161A22]">Create or edit role rule</h3>
+                    <button id="rr-new-btn" type="button" class="text-[12px] font-medium text-[#1B365D] hover:underline">+ New rule</button>
+                  </div>
+                  <p class="text-[12.5px] text-[#525866]">
+                    Define what each Role Rule can do across the dashboard &amp; Firestore. Updating a rule syncs every teammate assigned to it right away.
+                  </p>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Rule Name</label>
+                      <input id="rr-name" type="text" required placeholder="e.g. Marketing Head" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                    </div>
+                    <div>
+                      <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Rule ID (slug)</label>
+                      <input id="rr-id" type="text" required pattern="[a-z0-9_]{2,40}" placeholder="marketing_head" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Default Team (optional)</label>
+                    <input id="rr-team" type="text" placeholder="e.g. Marketing Team" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  </div>
+                  <div>
+                    <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Description</label>
+                    <input id="rr-desc" type="text" placeholder="What does this rule manage?" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+                  </div>
+                  <div>
+                    <div class="text-[12px] font-semibold text-[#161A22] mb-2">Allowed capabilities (enforced in Firestore)</div>
+                    <div id="rr-perms" class="space-y-1.5 max-h-[300px] overflow-y-auto pr-1 text-[12.5px]"></div>
+                  </div>
+                  <div class="flex flex-wrap gap-2 pt-2 border-t border-[#EAE8E1]">
+                    <button type="submit" class="h-9 px-4 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                      Save rule &amp; sync teammates
+                    </button>
+                    <button id="rr-cancel-btn" type="button" class="h-9 px-3 rounded-lg border border-[#DFDDD6] text-[13px]">Reset</button>
+                  </div>
+                </form>
+
+                <div class="lg:col-span-7 bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
+                  <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] flex items-center justify-between">
+                    <span class="font-display font-semibold text-[15px] text-[#161A22]">Defined Role Rules</span>
+                    <span id="rr-count" class="font-code text-[12px] text-[#525866]">0 rules</span>
+                  </div>
+                  <div id="role-rules-list" class="divide-y divide-[#EAE8E1]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5C: AUDIT LOG -->
             <div id="ac-pane-audit" class="ac-pane hidden bg-white border border-[#DFDDD6] rounded-xl overflow-hidden">
               <div class="px-5 py-3 bg-[#EAE8E1] border-b border-[#DFDDD6] font-display font-semibold text-[15px]">Dashboard audit log</div>
               <div id="audit-list" class="divide-y divide-[#EAE8E1] max-h-[480px] overflow-y-auto"></div>
@@ -638,6 +719,138 @@ const faviconSvg = encodeURIComponent(
           </section>
         </div>
       </main>
+    </div>
+
+    <!-- Candidate & Member Full Detail + Role Assignment Modal -->
+    <div
+      id="person-detail-modal"
+      class="hidden fixed inset-0 z-50 bg-[#0F1D33]/45 backdrop-blur-[1px] flex items-center justify-center p-3 sm:p-5 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pdm-name"
+    >
+      <div class="w-full max-w-[920px] bg-white border border-[#DFDDD6] rounded-2xl shadow-xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+        <div class="px-5 sm:px-6 py-4 bg-[#FAF9F6] border-b border-[#DFDDD6] flex items-center justify-between gap-3 shrink-0">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 id="pdm-name" class="font-display font-bold text-[19px] text-[#161A22] truncate">Candidate Profile</h2>
+              <div id="pdm-badges" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+          <button id="pdm-close" type="button" class="h-8 px-3 rounded-lg border border-[#DFDDD6] bg-white text-[12.5px] font-medium text-[#525866] hover:text-[#161A22] shrink-0">Close</button>
+        </div>
+
+        <div class="p-5 sm:p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+          <!-- Left: Complete Candidate Profile -->
+          <div class="md:col-span-5 space-y-4">
+            <div>
+              <div class="text-[11.5px] font-semibold uppercase tracking-wide text-[#767D8C] mb-2">Full Candidate Details</div>
+              <dl class="bg-[#F3F2EE] border border-[#DFDDD6] rounded-xl p-4 space-y-2.5 text-[12.5px]">
+                <div><dt class="text-[#767D8C]">Email</dt><dd id="pdm-email" class="font-code font-medium text-[#161A22] break-all"></dd></div>
+                <div><dt class="text-[#767D8C]">Phone</dt><dd id="pdm-phone" class="font-code text-[#161A22]"></dd></div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div><dt class="text-[#767D8C]">School / Uni</dt><dd id="pdm-school" class="font-medium text-[#161A22]"></dd></div>
+                  <div><dt class="text-[#767D8C]">Grade / Level</dt><dd id="pdm-grade" class="font-medium text-[#161A22]"></dd></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div><dt class="text-[#767D8C]">Governorate</dt><dd id="pdm-gov" class="font-medium text-[#161A22]"></dd></div>
+                  <div><dt class="text-[#767D8C]">Applied Track</dt><dd id="pdm-track" class="font-medium text-[#161A22]"></dd></div>
+                </div>
+                <div><dt class="text-[#767D8C]">Bio / Notes</dt><dd id="pdm-bio" class="text-[#161A22] leading-relaxed"></dd></div>
+                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-[#DFDDD6]">
+                  <div><dt class="text-[#767D8C]">Registered</dt><dd id="pdm-created" class="font-code text-[11.5px] text-[#525866]"></dd></div>
+                  <div><dt class="text-[#767D8C]">Last Login</dt><dd id="pdm-lastlogin" class="font-code text-[11.5px] text-[#525866]"></dd></div>
+                </div>
+                <div><dt class="text-[#767D8C]">Firebase UID</dt><dd id="pdm-uid" class="font-code text-[11px] text-[#525866] break-all"></dd></div>
+                <div><dt class="text-[#767D8C]">Sources</dt><dd id="pdm-sources" class="flex flex-wrap gap-1 mt-1"></dd></div>
+              </dl>
+            </div>
+          </div>
+
+          <!-- Right: Promote / Assign Team, Rank & Role Rule -->
+          <form id="person-assign-form" class="md:col-span-7 space-y-4">
+            <input type="hidden" id="pa-uid" />
+            <input type="hidden" id="pa-existing-staff" />
+            <div class="text-[11.5px] font-semibold uppercase tracking-wide text-[#767D8C]">Assign Team, Position &amp; Role Rule</div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Account Email</label>
+                <input id="pa-email" type="email" required placeholder="member@gmail.com" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Display Name</label>
+                <input id="pa-name" type="text" placeholder="Full name" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Phone</label>
+                <input id="pa-phone" type="text" placeholder="+20..." class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-code" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Team / Division</label>
+                <select id="pa-team" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                  <option value="">None (Normal User)</option>
+                  <option value="Founders">Founders</option>
+                  <option value="Marketing Team">Marketing Team</option>
+                  <option value="HR Team">HR Team</option>
+                  <option value="PR Team">PR Team</option>
+                  <option value="Social Media Team">Social Media Team</option>
+                  <option value="IT Team">IT Team</option>
+                  <option value="Research & Guides">Research &amp; Guides</option>
+                  <option value="Chapters & Connect">Chapters &amp; Connect</option>
+                  <option value="Finance & Operations">Finance &amp; Operations</option>
+                  <option value="__custom__">Custom team name...</option>
+                </select>
+                <input id="pa-team-custom" type="text" placeholder="Enter custom team name..." class="hidden mt-2 w-full h-9 px-2.5 rounded-lg bg-white border border-[#1B365D] text-[13px]" />
+              </div>
+              <div>
+                <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Position / Rank</label>
+                <select id="pa-rank" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]">
+                  <option value="Normal User">Normal User</option>
+                  <option value="Member">Member</option>
+                  <option value="Vice Head">Vice Head</option>
+                  <option value="Head">Head</option>
+                  <option value="Lead">Lead</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Owner">Owner</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11.5px] font-medium text-[#525866] mb-1">Role Rule (governs dashboard capabilities)</label>
+              <select id="pa-role" class="w-full h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px] font-medium"></select>
+              <div id="pa-rule-preview" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div class="pt-1">
+              <label class="inline-flex items-center gap-2 text-[12.5px] font-medium text-[#525866] cursor-pointer">
+                <input id="pa-custom-toggle" type="checkbox" class="rounded border-[#DCD9D0]" />
+                <span>Override individual permissions for this user (customizes beyond Role Rule)</span>
+              </label>
+              <div id="pa-perms-wrap" class="hidden mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[12px]"></div>
+            </div>
+
+            <div id="pa-active-wrap" class="pt-2 border-t border-[#EAE8E1] flex flex-wrap items-center justify-between gap-3">
+              <label class="inline-flex items-center gap-2 text-[13px] font-medium text-[#161A22]">
+                <input id="pa-active" type="checkbox" checked class="rounded border-[#DCD9D0]" />
+                <span>Account active (dashboard enabled)</span>
+              </label>
+              <div class="flex flex-wrap gap-2">
+                <button id="pa-demote-btn" type="button" class="hidden h-9 px-3 rounded-lg border border-[#FECDCA] bg-[#FEF3F2] text-[#B42318] text-[12.5px] font-medium">
+                  Demote to Normal User
+                </button>
+                <button id="pa-save-btn" type="submit" class="h-9 px-5 rounded-lg bg-[#1B365D] hover:bg-[#132847] text-white text-[13px] font-medium transition">
+                  Save assignment
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <script id="dash-seed" type="application/json" set:html={seedPayload}></script>
@@ -687,30 +900,62 @@ const faviconSvg = encodeURIComponent(
       googleProvider.setCustomParameters({ prompt: 'select_account' });
 
       const ALL_PERMS = [
-        { key: 'edit_site_copy', label: 'Edit Website Sentences (All 6 portals)' },
-        { key: 'edit_ledger', label: 'Manage Open Ledger' },
-        { key: 'edit_chapters', label: 'Manage Connect Chapters' },
-        { key: 'edit_guides', label: 'Manage Research Guides' },
-        { key: 'edit_opportunities', label: 'Manage News Opportunities' },
-        { key: 'manage_certificates', label: 'Issue & Revoke Certificates' },
-        { key: 'edit_team', label: 'Manage Team & HR Roster' },
-        { key: 'manage_tasks', label: 'Create & Assign Tasks / Awards' },
-        { key: 'moderate_submissions', label: 'Moderate Submissions' },
-        { key: 'manage_access', label: 'Manage Access & Audit Log' },
+        { key: 'edit_site_copy', label: 'Edit Website Sentences', desc: 'Inline click-to-edit copy across all 6 TF portals & Global Replace.' },
+        { key: 'edit_ledger', label: 'Manage Open Ledger', desc: 'Add, edit, or delete public EGP inflows, outflows & receipts.' },
+        { key: 'edit_chapters', label: 'Manage Connect Chapters', desc: 'Create and edit school chapters & project guilds on TF Connect.' },
+        { key: 'edit_guides', label: 'Manage Research Guides', desc: 'Publish and edit research & olympiad workbooks on TF Guides.' },
+        { key: 'edit_opportunities', label: 'Manage News Opportunities', desc: 'Publish and update live scholarships & deadlines on TF News.' },
+        { key: 'manage_certificates', label: 'Issue & Revoke Certificates', desc: 'Mint and manage verifiable serial credentials on TF Verify.' },
+        { key: 'edit_team', label: 'Manage Team & HR Roster', desc: 'Edit public team members and view applicant/member profiles.' },
+        { key: 'manage_tasks', label: 'Create & Assign Tasks / Awards', desc: 'Create tasks across teams and grant Top Achiever awards.' },
+        { key: 'moderate_submissions', label: 'Moderate Submissions', desc: 'Review private volunteer applications & community idea submissions.' },
+        { key: 'manage_access', label: 'Manage Access & Role Rules', desc: 'View all logged-in users, create Role Rules, and assign teammates.' },
       ];
 
-      const ROLE_PRESETS = {
-        owner: ALL_PERMS.map((p) => p.key),
-        admin: ALL_PERMS.map((p) => p.key),
-        hr_lead: ['edit_team', 'moderate_submissions', 'manage_tasks'],
-        finance_lead: ['edit_ledger'],
-        copy_editor: ['edit_site_copy'],
-        chapters_lead: ['edit_chapters'],
-        guides_lead: ['edit_guides'],
-        news_editor: ['edit_opportunities'],
-        registrar: ['manage_certificates'],
-        member: [],
-      };
+      const DEFAULT_ROLE_RULES = [
+        {
+          id: 'owner',
+          name: 'Owner',
+          defaultTeam: 'Founders',
+          description: 'Full platform ownership, Role Rules builder, financial oversight, and access control.',
+          permissions: ALL_PERMS.map((p) => p.key),
+        },
+        {
+          id: 'hr_lead',
+          name: 'HR Lead',
+          defaultTeam: 'HR Team',
+          description: 'Inspect logged-in candidates & applicants, assign teams, and manage tasks.',
+          permissions: ['edit_team', 'manage_tasks', 'moderate_submissions', 'manage_access'],
+        },
+        {
+          id: 'marketing_head',
+          name: 'Marketing Head',
+          defaultTeam: 'Marketing Team',
+          description: 'Manage public website messaging, news opportunities, and marketing tasks.',
+          permissions: ['edit_site_copy', 'edit_opportunities', 'manage_tasks'],
+        },
+        {
+          id: 'content_editor',
+          name: 'Content Editor',
+          defaultTeam: 'Research & Guides',
+          description: 'Edit portal copy, publish TF Guides workbooks, Connect chapters, and News items.',
+          permissions: ['edit_site_copy', 'edit_guides', 'edit_chapters', 'edit_opportunities'],
+        },
+        {
+          id: 'finance_treasurer',
+          name: 'Finance Treasurer',
+          defaultTeam: 'Finance & Operations',
+          description: 'Record verified EGP inflows, infrastructure expenses, memos, and receipt proofs.',
+          permissions: ['edit_ledger'],
+        },
+        {
+          id: 'team_member',
+          name: 'Team Member',
+          defaultTeam: '',
+          description: 'Standard dashboard collaborator access: Tasks Board and Work Session Time Logs.',
+          permissions: [],
+        },
+      ];
 
       const CONTENT_TABS = [
         { id: 'ledger', label: 'Open Ledger', perm: 'edit_ledger' },
@@ -1280,13 +1525,19 @@ const faviconSvg = encodeURIComponent(
         rows.forEach((e) => {
           const row = document.createElement('div');
           row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13.5px]';
-          row.innerHTML = `<div><span class="font-code text-[12px] text-[#767D8C]">${esc(e.txDate)}</span> <strong class="ml-2">${esc(e.donorOrVendor)}</strong> <span class="text-[#525866] ml-1">(${esc(e.paymentChannel)})</span></div><div class="flex items-center gap-3"><span class="font-code font-semibold ${e.entryType === 'outflow' ? 'text-[#161A22]' : 'text-[#0B5F58]'}">${e.entryType === 'outflow' ? '-' : '+'}${fmt(e.amountEgp)}</span><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
+          const titleLabel = e.memo && String(e.memo).trim() ? `${esc(e.memo)} · <span class="text-[#525866] font-normal">${esc(e.donorOrVendor)}</span>` : esc(e.donorOrVendor);
+          const catTag = e.category ? `<span class="font-code text-[11px] px-1.5 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#525866] ml-1.5">${esc(e.category)}</span>` : '';
+          row.innerHTML = `<div class="min-w-0"><span class="font-code text-[12px] text-[#767D8C]">${esc(e.txDate)}</span> <strong class="ml-2">${titleLabel}</strong> <span class="text-[#525866] ml-1">(${esc(e.paymentChannel)})</span>${catTag}${e.receiptUrl ? '<span class="font-code text-[10.5px] text-[#1B365D] ml-1.5">Receipt</span>' : ''}</div><div class="flex items-center gap-3 shrink-0"><span class="font-code font-semibold ${e.entryType === 'outflow' ? 'text-[#161A22]' : 'text-[#0B5F58]'}">${e.entryType === 'outflow' ? '-' : '+'}${fmt(e.amountEgp)}</span><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Delete</button></div>`;
           row.querySelector('.edit-btn').addEventListener('click', () => {
             document.getElementById('ld-id').value = e.id;
             document.getElementById('ld-date').value = e.txDate || '';
             document.getElementById('ld-vendor').value = e.donorOrVendor || '';
             document.getElementById('ld-channel').value = e.paymentChannel || '';
             document.getElementById('ld-type').value = e.entryType || 'inflow';
+            document.getElementById('ld-category').value = e.category || (e.entryType === 'outflow' ? 'Operations' : 'Donations');
+            document.getElementById('ld-memo').value = e.memo || '';
+            document.getElementById('ld-receipt').value = e.receiptUrl || '';
+            document.getElementById('ld-notes').value = e.notes || '';
             document.getElementById('ld-status').value = e.verificationStatus || 'Verified';
             document.getElementById('ld-amount').value = e.amountEgp || 0;
           });
@@ -1311,18 +1562,34 @@ const faviconSvg = encodeURIComponent(
       document.getElementById('ledger-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('ld-id').value.trim();
+        const rawReceipt = document.getElementById('ld-receipt').value.trim();
+        let receiptUrl = '';
+        if (rawReceipt) {
+          try {
+            const parsed = new URL(rawReceipt);
+            if (parsed.protocol === 'https:' || parsed.protocol === 'http:') receiptUrl = parsed.href;
+            else { showToast('Receipt URL must start with https:// or http://'); return; }
+          } catch {
+            showToast('Please enter a valid receipt URL or leave it blank.');
+            return;
+          }
+        }
         const payload = {
           txDate: document.getElementById('ld-date').value,
           donorOrVendor: document.getElementById('ld-vendor').value.trim(),
           paymentChannel: document.getElementById('ld-channel').value.trim(),
           entryType: document.getElementById('ld-type').value,
+          category: document.getElementById('ld-category').value,
+          memo: document.getElementById('ld-memo').value.trim(),
+          receiptUrl,
+          notes: document.getElementById('ld-notes').value.trim(),
           verificationStatus: document.getElementById('ld-status').value,
           amountEgp: Number(document.getElementById('ld-amount').value),
           updatedAt: new Date().toISOString(),
         };
         if (id) await setDoc(doc(db, 'ledgerEntries', id), payload, { merge: true });
         else await addDoc(collection(db, 'ledgerEntries'), payload);
-        await writeAudit('ledger', id ? 'update' : 'create', id || 'new', `${payload.entryType}: ${payload.amountEgp} EGP`);
+        await writeAudit('ledger', id ? 'update' : 'create', id || 'new', `${payload.entryType}: ${payload.amountEgp} EGP (${payload.category})`);
         e.target.reset();
         document.getElementById('ld-id').value = '';
         showToast('Saved ledger entry');
@@ -1839,7 +2106,59 @@ const faviconSvg = encodeURIComponent(
         loadAchievers();
       });
 
-      // ---- 5. ACCESS & ACTIVITY WORKSPACE ----
+      // ---- 5. ACCESS, PEOPLE DIRECTORY & DYNAMIC ROLE RULES ----
+      function fmtDate(val) {
+        if (!val) return '—';
+        try {
+          if (typeof val === 'object' && typeof val.toDate === 'function') {
+            return val.toDate().toISOString().slice(0, 16).replace('T', ' ');
+          }
+          if (typeof val === 'object' && typeof val.seconds === 'number') {
+            return new Date(val.seconds * 1000).toISOString().slice(0, 16).replace('T', ' ');
+          }
+          const s = String(val).trim();
+          if (!s) return '—';
+          return s.length >= 16 ? s.slice(0, 16).replace('T', ' ') : s;
+        } catch {
+          return '—';
+        }
+      }
+
+      function pickStr(...vals) {
+        for (const v of vals) {
+          if (v !== undefined && v !== null && String(v).trim()) return String(v).trim();
+        }
+        return '';
+      }
+
+      function slugifyRole(str) {
+        return String(str || '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '')
+          .slice(0, 40);
+      }
+
+      const TEAM_OPTIONS = new Set([
+        '', 'Founders', 'Marketing Team', 'HR Team', 'PR Team',
+        'Social Media Team', 'IT Team', 'Research & Guides',
+        'Chapters & Connect', 'Finance & Operations',
+      ]);
+
+      let roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
+      let staffAccessCache = [];
+      let peopleDirectoryCache = [];
+      let peopleFilter = 'all';
+
+      function getRoleRule(roleId) {
+        return roleDefinitionsCache.find((r) => r.id === roleId) || null;
+      }
+
+      function permLabel(key) {
+        return ALL_PERMS.find((p) => p.key === key)?.label || key;
+      }
+
       document.querySelectorAll('#access-subtabs .ac-tab').forEach((btn) => {
         btn.addEventListener('click', () => {
           const target = btn.getAttribute('data-ac');
@@ -1853,84 +2172,640 @@ const faviconSvg = encodeURIComponent(
         });
       });
 
-      function renderPermCheckboxes() {
-        const box = document.getElementById('ac-perms');
-        box.replaceChildren();
+      function renderRoleBuilderCheckboxes() {
+        const rrBox = document.getElementById('rr-perms');
+        rrBox.replaceChildren();
         ALL_PERMS.forEach((p) => {
           const lbl = document.createElement('label');
-          lbl.className = 'inline-flex items-center gap-2 p-2 rounded-lg border border-[#EAE8E1] cursor-pointer';
-          lbl.innerHTML = `<input type="checkbox" class="ac-cb" value="${esc(p.key)}" /><span>${esc(p.label)}</span>`;
-          box.appendChild(lbl);
+          lbl.className = 'flex items-start gap-2.5 p-2.5 rounded-lg border border-[#EAE8E1] hover:bg-[#FAF9F6] cursor-pointer';
+          lbl.innerHTML = `<input type="checkbox" class="rr-cb mt-0.5 rounded border-[#DCD9D0]" value="${esc(p.key)}" /><div class="min-w-0"><div class="font-medium text-[#161A22]">${esc(p.label)}</div><div class="text-[11px] text-[#767D8C] leading-snug">${esc(p.desc)}</div></div>`;
+          rrBox.appendChild(lbl);
+        });
+
+        const paBox = document.getElementById('pa-perms-wrap');
+        paBox.replaceChildren();
+        ALL_PERMS.forEach((p) => {
+          const lbl = document.createElement('label');
+          lbl.className = 'inline-flex items-center gap-2 p-2 rounded-lg border border-[#EAE8E1] bg-[#FAF9F6] cursor-pointer';
+          lbl.innerHTML = `<input type="checkbox" class="pa-cb rounded border-[#DCD9D0]" value="${esc(p.key)}" /><span>${esc(p.label)}</span>`;
+          paBox.appendChild(lbl);
         });
       }
-      renderPermCheckboxes();
+      renderRoleBuilderCheckboxes();
 
-      document.getElementById('ac-role').addEventListener('change', (e) => {
-        const preset = ROLE_PRESETS[e.target.value];
-        if (!preset) return;
-        const set = new Set(preset);
-        document.querySelectorAll('.ac-cb').forEach((c) => { c.checked = set.has(c.value); });
+      function populatePersonRoleDropdown(selectedRoleId) {
+        const sel = document.getElementById('pa-role');
+        sel.replaceChildren();
+
+        const normOpt = document.createElement('option');
+        normOpt.value = 'normal_user';
+        normOpt.textContent = 'Normal User (No dashboard access)';
+        sel.appendChild(normOpt);
+
+        roleDefinitionsCache.forEach((r) => {
+          const opt = document.createElement('option');
+          opt.value = r.id;
+          opt.textContent = `${r.name} (${(r.permissions || []).length} capabilities)`;
+          sel.appendChild(opt);
+        });
+
+        if (selectedRoleId && selectedRoleId !== 'normal_user' && !getRoleRule(selectedRoleId)) {
+          const legacyOpt = document.createElement('option');
+          legacyOpt.value = selectedRoleId;
+          legacyOpt.textContent = `${selectedRoleId} (Legacy / Custom)`;
+          sel.appendChild(legacyOpt);
+        }
+
+        sel.value = selectedRoleId || 'normal_user';
+      }
+
+      function updatePersonRulePreview() {
+        const roleId = document.getElementById('pa-role').value;
+        const preview = document.getElementById('pa-rule-preview');
+        const activeWrap = document.getElementById('pa-active-wrap');
+        const activeCb = document.getElementById('pa-active');
+        const customToggle = document.getElementById('pa-custom-toggle');
+        const permsWrap = document.getElementById('pa-perms-wrap');
+
+        if (roleId === 'normal_user') {
+          activeCb.disabled = true;
+          activeWrap.classList.add('opacity-70');
+          customToggle.checked = false;
+          customToggle.disabled = true;
+          permsWrap.classList.add('hidden');
+          preview.innerHTML = '<span class="text-[11.5px] text-[#767D8C]">Public student / user account — no dashboard workspaces unlocked.</span>';
+          return;
+        }
+
+        activeCb.disabled = false;
+        activeWrap.classList.remove('opacity-70');
+        customToggle.disabled = false;
+        permsWrap.classList.toggle('hidden', !customToggle.checked);
+
+        const rule = getRoleRule(roleId);
+        const rulePerms = rule ? (rule.permissions || []) : [];
+        if (!customToggle.checked) {
+          const set = new Set(rulePerms);
+          document.querySelectorAll('.pa-cb').forEach((c) => { c.checked = set.has(c.value); });
+        }
+
+        if (!rulePerms.length) {
+          preview.innerHTML = '<span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">Tasks Board & Time Logs</span>';
+        } else {
+          preview.innerHTML = rulePerms
+            .map((k) => `<span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]">${esc(permLabel(k))}</span>`)
+            .join('');
+        }
+      }
+
+      document.getElementById('pa-team').addEventListener('change', (e) => {
+        const customInput = document.getElementById('pa-team-custom');
+        customInput.classList.toggle('hidden', e.target.value !== '__custom__');
+        if (e.target.value === '__custom__') customInput.focus();
       });
 
-      async function loadAccessAndAudit() {
-        const [acSnap, auSnap] = await Promise.all([
-          getDocs(collection(db, 'staffAccess')),
-          getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60))).catch(() => getDocs(collection(db, 'auditLogs'))),
-        ]);
+      document.getElementById('pa-role').addEventListener('change', () => {
+        const roleId = document.getElementById('pa-role').value;
+        const rule = getRoleRule(roleId);
+        if (roleId === 'normal_user') {
+          document.getElementById('pa-team').value = '';
+          document.getElementById('pa-team-custom').classList.add('hidden');
+          document.getElementById('pa-rank').value = 'Normal User';
+        } else {
+          if (document.getElementById('pa-rank').value === 'Normal User') {
+            document.getElementById('pa-rank').value = roleId === 'owner' ? 'Owner' : 'Member';
+          }
+          if (!document.getElementById('pa-team').value && rule?.defaultTeam) {
+            if (TEAM_OPTIONS.has(rule.defaultTeam)) {
+              document.getElementById('pa-team').value = rule.defaultTeam;
+              document.getElementById('pa-team-custom').classList.add('hidden');
+            } else {
+              document.getElementById('pa-team').value = '__custom__';
+              document.getElementById('pa-team-custom').value = rule.defaultTeam;
+              document.getElementById('pa-team-custom').classList.remove('hidden');
+            }
+          }
+        }
+        updatePersonRulePreview();
+      });
 
-        const acList = document.getElementById('ac-list');
-        acList.replaceChildren();
-        acSnap.docs.forEach((d) => {
-          const s = { email: d.id, ...d.data() };
-          const row = document.createElement('div');
-          row.className = 'p-4 flex flex-wrap items-center justify-between gap-2 text-[13px]';
-          row.innerHTML = `<div><strong>${esc(s.email)}</strong> <span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] ml-1">${esc(s.role)}</span> <span class="text-[#767D8C] ml-1">${s.active ? 'Active' : 'Disabled'}</span><div class="text-[11.5px] text-[#525866] mt-0.5">${esc((s.permissions || []).join(', ') || 'Tasks & Time only')}</div></div><div class="flex gap-3"><button type="button" class="edit-btn text-[12px] text-[#1B365D] hover:underline">Edit</button><button type="button" class="del-btn text-[12px] text-[#B42318] hover:underline">Revoke</button></div>`;
-          row.querySelector('.edit-btn').addEventListener('click', () => {
-            document.getElementById('ac-email').value = s.email;
-            document.getElementById('ac-name').value = s.displayName || '';
-            document.getElementById('ac-role').value = ROLE_PRESETS[s.role] ? s.role : 'custom';
-            const set = new Set(s.permissions || []);
-            document.querySelectorAll('.ac-cb').forEach((c) => { c.checked = set.has(c.value); });
-            document.getElementById('ac-active').checked = Boolean(s.active);
+      document.getElementById('pa-custom-toggle').addEventListener('change', updatePersonRulePreview);
+
+      function openPersonModal(person) {
+        const modal = document.getElementById('person-detail-modal');
+        const isManual = !person;
+        const p = person || {
+          name: 'Assign Teammate by Email',
+          email: '',
+          phone: '',
+          uid: '',
+          school: '',
+          grade: '',
+          gov: '',
+          track: '',
+          bio: '',
+          createdAt: '—',
+          lastLoginAt: '—',
+          team: '',
+          rank: 'Member',
+          roleId: 'team_member',
+          roleName: 'Team Member',
+          permissions: [],
+          customPermissions: false,
+          active: true,
+          hasStaff: false,
+          hasUser: false,
+          hasApplicant: false,
+        };
+
+        document.getElementById('pdm-name').textContent = p.name || p.email || 'Candidate Profile';
+        const badges = document.getElementById('pdm-badges');
+        badges.replaceChildren();
+        if (p.hasStaff) {
+          badges.innerHTML += `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium ${p.active ? 'bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]' : 'bg-[#FEF3F2] border border-[#FECDCA] text-[#B42318]'}">${esc(p.roleName || p.roleId)}${p.active ? '' : ' (Disabled)'}</span>`;
+        } else {
+          badges.innerHTML += '<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#EAE8E1] text-[#525866]">Normal User</span>';
+        }
+        if (p.team) {
+          badges.innerHTML += `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#E4EAF2] text-[#1B365D]">${esc(p.team)}${p.rank && p.rank !== 'Normal User' ? ' · ' + esc(p.rank) : ''}</span>`;
+        }
+
+        document.getElementById('pdm-email').textContent = p.email || 'New invite / lookup by email';
+        document.getElementById('pdm-phone').textContent = p.phone || '—';
+        document.getElementById('pdm-school').textContent = p.school || '—';
+        document.getElementById('pdm-grade').textContent = p.grade || '—';
+        document.getElementById('pdm-gov').textContent = p.gov || '—';
+        document.getElementById('pdm-track').textContent = p.track || '—';
+        document.getElementById('pdm-bio').textContent = p.bio || 'No extra bio or application notes provided.';
+        document.getElementById('pdm-created').textContent = p.createdAt || '—';
+        document.getElementById('pdm-lastlogin').textContent = p.lastLoginAt || '—';
+        document.getElementById('pdm-uid').textContent = p.uid || 'Not signed in yet';
+
+        const srcBox = document.getElementById('pdm-sources');
+        srcBox.replaceChildren();
+        if (p.hasUser) srcBox.innerHTML += '<span class="font-code text-[10.5px] px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">Logged-In User</span>';
+        if (p.hasStaff) srcBox.innerHTML += '<span class="font-code text-[10.5px] px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">Staff Access</span>';
+        if (p.hasApplicant) srcBox.innerHTML += '<span class="font-code text-[10.5px] px-1.5 py-0.5 rounded bg-white border border-[#DFDDD6]">Volunteer Applicant</span>';
+        if (!p.hasUser && !p.hasStaff && !p.hasApplicant) srcBox.innerHTML = '<span class="text-[11px] text-[#767D8C]">Manual invitation</span>';
+
+        document.getElementById('pa-uid').value = p.uid || '';
+        document.getElementById('pa-existing-staff').value = p.hasStaff ? '1' : '';
+        const emailInput = document.getElementById('pa-email');
+        emailInput.value = p.email || '';
+        emailInput.readOnly = !isManual && Boolean(p.email);
+        emailInput.classList.toggle('opacity-80', emailInput.readOnly);
+
+        document.getElementById('pa-name').value = isManual ? '' : (p.name || '');
+        document.getElementById('pa-phone').value = p.phone || '';
+
+        const teamSel = document.getElementById('pa-team');
+        const customTeamInput = document.getElementById('pa-team-custom');
+        if (TEAM_OPTIONS.has(p.team || '')) {
+          teamSel.value = p.team || '';
+          customTeamInput.value = '';
+          customTeamInput.classList.add('hidden');
+        } else {
+          teamSel.value = '__custom__';
+          customTeamInput.value = p.team || '';
+          customTeamInput.classList.remove('hidden');
+        }
+
+        document.getElementById('pa-rank').value = p.rank || (p.hasStaff ? 'Member' : 'Normal User');
+        populatePersonRoleDropdown(p.roleId || (isManual ? 'team_member' : 'normal_user'));
+
+        const isCustom = Boolean(p.customPermissions);
+        document.getElementById('pa-custom-toggle').checked = isCustom;
+        if (isCustom) {
+          const set = new Set(p.permissions || []);
+          document.querySelectorAll('.pa-cb').forEach((c) => { c.checked = set.has(c.value); });
+        }
+        document.getElementById('pa-active').checked = p.hasStaff ? Boolean(p.active) : true;
+        document.getElementById('pa-demote-btn').classList.toggle('hidden', !p.hasStaff);
+
+        updatePersonRulePreview();
+        modal.classList.remove('hidden');
+        if (isManual) emailInput.focus();
+        else document.getElementById('pdm-close').focus();
+      }
+
+      function closePersonModal() {
+        document.getElementById('person-detail-modal').classList.add('hidden');
+      }
+
+      document.getElementById('pdm-close').addEventListener('click', closePersonModal);
+      document.getElementById('person-detail-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'person-detail-modal') closePersonModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !document.getElementById('person-detail-modal').classList.contains('hidden')) {
+          closePersonModal();
+        }
+      });
+
+      document.getElementById('btn-manual-assign').addEventListener('click', () => openPersonModal(null));
+
+      document.getElementById('pa-demote-btn').addEventListener('click', async () => {
+        const email = document.getElementById('pa-email').value.trim().toLowerCase();
+        const uid = document.getElementById('pa-uid').value.trim();
+        if (!email) return;
+        await deleteDoc(doc(db, 'staffAccess', email));
+        if (uid) {
+          await updateDoc(doc(db, 'users', uid), {
+            team: '',
+            rank: 'Normal User',
+            roleId: 'normal_user',
+            roleName: 'Normal User',
+            updatedAt: serverTimestamp(),
+          }).catch(() => {});
+        }
+        await writeAudit('access', 'demote', email, `Moved ${email} to Normal User`);
+        closePersonModal();
+        showToast(`Moved ${email} to Normal User`);
+        loadAccessAndAudit();
+      });
+
+      document.getElementById('person-assign-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('pa-email').value.trim().toLowerCase();
+        if (!email) return;
+        const uid = document.getElementById('pa-uid').value.trim();
+        const hadStaff = document.getElementById('pa-existing-staff').value === '1';
+        const displayName = document.getElementById('pa-name').value.trim() || email.split('@')[0];
+        const phone = document.getElementById('pa-phone').value.trim();
+        const rawTeam = document.getElementById('pa-team').value;
+        const team = rawTeam === '__custom__' ? document.getElementById('pa-team-custom').value.trim() : rawTeam;
+        const rank = document.getElementById('pa-rank').value;
+        const roleId = document.getElementById('pa-role').value;
+
+        if (roleId === 'normal_user') {
+          if (hadStaff) await deleteDoc(doc(db, 'staffAccess', email)).catch(() => {});
+          if (uid) {
+            await updateDoc(doc(db, 'users', uid), {
+              team,
+              rank: 'Normal User',
+              roleId: 'normal_user',
+              roleName: 'Normal User',
+              updatedAt: serverTimestamp(),
+            }).catch(() => {});
+          }
+          await writeAudit('access', 'demote', email, `Set ${email} as Normal User`);
+          closePersonModal();
+          showToast(`Saved ${displayName} as Normal User`);
+          loadAccessAndAudit();
+          return;
+        }
+
+        const rule = getRoleRule(roleId);
+        const roleName = rule ? rule.name : roleId;
+        const isCustom = document.getElementById('pa-custom-toggle').checked;
+        let permissions = isCustom
+          ? Array.from(document.querySelectorAll('.pa-cb')).filter((c) => c.checked).map((c) => c.value)
+          : (rule ? [...(rule.permissions || [])] : []);
+        if (['owner', 'admin', 'founder'].includes(roleId) && !isCustom) {
+          permissions = ALL_PERMS.map((p) => p.key);
+        }
+
+        await setDoc(doc(db, 'staffAccess', email), {
+          email,
+          displayName,
+          phone,
+          team,
+          rank,
+          role: roleId,
+          roleName,
+          customPermissions: isCustom,
+          permissions,
+          active: document.getElementById('pa-active').checked,
+          updatedBy: (currentUser?.email || '').toLowerCase(),
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+
+        if (uid) {
+          await updateDoc(doc(db, 'users', uid), {
+            team,
+            rank,
+            roleId,
+            roleName,
+            updatedAt: serverTimestamp(),
+          }).catch(() => {});
+        }
+
+        await writeAudit('access', 'assign', email, `${displayName} -> ${team || 'No team'} / ${rank} (${roleName})`);
+        closePersonModal();
+        showToast(`Assigned ${displayName} as ${team ? team + ' ' + rank : roleName}`);
+        loadAccessAndAudit();
+      });
+
+      function renderPeopleDirectory() {
+        const q = (document.getElementById('people-search').value || '').trim().toLowerCase();
+        const filtered = peopleDirectoryCache.filter((p) => {
+          if (peopleFilter === 'staff' && !p.hasStaff) return false;
+          if (peopleFilter === 'normal' && p.hasStaff) return false;
+          if (peopleFilter === 'applicant' && !p.hasApplicant) return false;
+          if (q) {
+            const hay = `${p.name} ${p.phone} ${p.email} ${p.team} ${p.rank} ${p.roleName} ${p.school}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        document.getElementById('people-count').textContent = `${filtered.length} of ${peopleDirectoryCache.length} accounts`;
+        const tbody = document.getElementById('people-list');
+        tbody.replaceChildren();
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="py-8 px-5 text-center text-[13px] text-[#767D8C]">No members or logged-in accounts match this filter.</td></tr>';
+          return;
+        }
+
+        filtered.forEach((p) => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-[#FAF9F6] transition cursor-pointer';
+          const roleBadge = p.hasStaff
+            ? `<span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-medium ${p.active ? 'bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]' : 'bg-[#FEF3F2] border border-[#FECDCA] text-[#B42318]'}">${esc(p.roleName || p.roleId)}</span>`
+            : '<span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#F3F2EE] border border-[#DFDDD6] text-[#525866]">Normal User</span>';
+          const teamLine = p.team
+            ? `<div class="text-[11.5px] font-medium text-[#1B365D] mb-0.5">${esc(p.team)}${p.rank && p.rank !== 'Normal User' ? ' · ' + esc(p.rank) : ''}</div>`
+            : '';
+
+          tr.innerHTML = `
+            <td class="py-3 px-5 font-medium text-[#161A22]">${esc(p.name || 'Unnamed account')}</td>
+            <td class="py-3 px-4 font-code text-[12.5px] text-[#525866] whitespace-nowrap">${esc(p.phone || '—')}</td>
+            <td class="py-3 px-4 font-code text-[12.5px] text-[#161A22]">${esc(p.email)}</td>
+            <td class="py-3 px-4">${teamLine}${roleBadge}${p.hasApplicant && !p.hasStaff ? ' <span class="ml-1 font-code text-[10.5px] px-1.5 py-0.5 rounded bg-[#E4EAF2] text-[#1B365D]">Applicant</span>' : ''}</td>
+            <td class="py-3 px-5 text-right whitespace-nowrap">
+              <button type="button" class="inspect-btn h-8 px-3 rounded-lg border border-[#DFDDD6] bg-white hover:bg-[#F3F2EE] text-[12px] font-medium text-[#1B365D]">Inspect &amp; Assign</button>
+            </td>
+          `;
+          tr.addEventListener('click', () => openPersonModal(p));
+          tbody.appendChild(tr);
+        });
+      }
+
+      document.getElementById('people-search').addEventListener('input', renderPeopleDirectory);
+      document.querySelectorAll('#people-filter-bar .pf-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          peopleFilter = btn.getAttribute('data-pf') || 'all';
+          document.querySelectorAll('#people-filter-bar .pf-btn').forEach((b) => {
+            b.className = b.getAttribute('data-pf') === peopleFilter
+              ? 'pf-btn px-3 py-1 rounded-lg text-[12px] font-semibold bg-[#1B365D] text-white'
+              : 'pf-btn px-3 py-1 rounded-lg text-[12px] font-medium bg-[#F3F2EE] text-[#525866] hover:text-[#161A22]';
           });
-          row.querySelector('.del-btn').addEventListener('click', async () => {
-            await deleteDoc(doc(db, 'staffAccess', s.email));
-            await writeAudit('access', 'revoke', s.email, `Revoked ${s.email}`);
-            showToast(`Revoked ${s.email}`);
+          renderPeopleDirectory();
+        });
+      });
+
+      // ---- ROLE RULES BUILDER ----
+      function resetRoleRuleForm() {
+        document.getElementById('role-rule-form').reset();
+        document.getElementById('rr-original-id').value = '';
+        document.getElementById('rr-form-title').textContent = 'Create or edit role rule';
+        const idInput = document.getElementById('rr-id');
+        idInput.readOnly = false;
+        idInput.classList.remove('opacity-70');
+        document.querySelectorAll('.rr-cb').forEach((c) => { c.checked = false; });
+      }
+
+      document.getElementById('rr-new-btn').addEventListener('click', resetRoleRuleForm);
+      document.getElementById('rr-cancel-btn').addEventListener('click', resetRoleRuleForm);
+      document.getElementById('rr-name').addEventListener('input', (e) => {
+        if (!document.getElementById('rr-original-id').value) {
+          document.getElementById('rr-id').value = slugifyRole(e.target.value);
+        }
+      });
+
+      function renderRoleRulesList() {
+        document.getElementById('rr-count').textContent = `${roleDefinitionsCache.length} role rules`;
+        const box = document.getElementById('role-rules-list');
+        box.replaceChildren();
+        if (!roleDefinitionsCache.length) {
+          box.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No role rules defined yet. Create one on the left.</div>';
+          return;
+        }
+
+        roleDefinitionsCache.forEach((r) => {
+          const assignedCount = staffAccessCache.filter((s) => s.role === r.id && s.active !== false).length;
+          const perms = Array.isArray(r.permissions) ? r.permissions : [];
+          const permChips = perms.length
+            ? perms.map((k) => `<span class="font-code text-[10.5px] px-2 py-0.5 rounded bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]">${esc(permLabel(k))}</span>`).join('')
+            : '<span class="font-code text-[10.5px] px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[#525866]">Tasks Board & Time Logs only</span>';
+
+          const card = document.createElement('div');
+          card.className = 'p-4 sm:p-5 space-y-2.5';
+          card.innerHTML = `
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <strong class="text-[15px] text-[#161A22]">${esc(r.name)}</strong>
+                  <span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">${esc(r.id)}</span>
+                  ${r.defaultTeam ? `<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-[#E4EAF2] text-[#1B365D]">${esc(r.defaultTeam)}</span>` : ''}
+                  <span class="font-code text-[11px] text-[#767D8C]">${assignedCount} assigned</span>
+                </div>
+                ${r.description ? `<p class="text-[12.5px] text-[#525866] mt-1">${esc(r.description)}</p>` : ''}
+              </div>
+              <div class="flex gap-3 shrink-0">
+                <button type="button" class="edit-rule-btn text-[12px] font-medium text-[#1B365D] hover:underline">Edit rule</button>
+                ${r.id !== 'owner' ? '<button type="button" class="del-rule-btn text-[12px] font-medium text-[#B42318] hover:underline">Delete</button>' : ''}
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-1.5">${permChips}</div>
+          `;
+
+          card.querySelector('.edit-rule-btn').addEventListener('click', () => {
+            document.getElementById('rr-original-id').value = r.id;
+            document.getElementById('rr-form-title').textContent = `Editing rule: ${r.name}`;
+            document.getElementById('rr-name').value = r.name || '';
+            const idInput = document.getElementById('rr-id');
+            idInput.value = r.id;
+            idInput.readOnly = true;
+            idInput.classList.add('opacity-70');
+            document.getElementById('rr-team').value = r.defaultTeam || '';
+            document.getElementById('rr-desc').value = r.description || '';
+            const set = new Set(perms);
+            document.querySelectorAll('.rr-cb').forEach((c) => { c.checked = set.has(c.value); });
+          });
+
+          card.querySelector('.del-rule-btn')?.addEventListener('click', async () => {
+            const countUsing = staffAccessCache.filter((s) => s.role === r.id).length;
+            if (countUsing > 0) {
+              showToast(`Cannot delete "${r.name}": ${countUsing} teammate(s) are still assigned to it. Reassign them first.`);
+              return;
+            }
+            await deleteDoc(doc(db, 'roleDefinitions', r.id));
+            await writeAudit('roles', 'delete', r.id, `Deleted role rule ${r.name}`);
+            showToast(`Deleted role rule "${r.name}"`);
             loadAccessAndAudit();
           });
-          acList.appendChild(row);
+
+          box.appendChild(card);
         });
+      }
+
+      document.getElementById('role-rule-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('rr-name').value.trim();
+        const originalId = document.getElementById('rr-original-id').value.trim();
+        const ruleId = originalId || slugifyRole(document.getElementById('rr-id').value || name);
+        if (!ruleId || ruleId.length < 2) {
+          showToast('Role Rule ID must be at least 2 alphanumeric characters.');
+          return;
+        }
+        const defaultTeam = document.getElementById('rr-team').value.trim();
+        const description = document.getElementById('rr-desc').value.trim();
+        let permissions = Array.from(document.querySelectorAll('.rr-cb')).filter((c) => c.checked).map((c) => c.value);
+        if (ruleId === 'owner' && permissions.length < ALL_PERMS.length) {
+          permissions = ALL_PERMS.map((p) => p.key);
+        }
+
+        await setDoc(doc(db, 'roleDefinitions', ruleId), {
+          id: ruleId,
+          name,
+          defaultTeam,
+          description,
+          permissions,
+          updatedBy: (currentUser?.email || '').toLowerCase(),
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+
+        // Live propagate rule capabilities to all non-overridden teammates holding this role
+        const affected = staffAccessCache.filter((s) => s.role === ruleId && !s.customPermissions);
+        await Promise.all(
+          affected.map((s) =>
+            setDoc(doc(db, 'staffAccess', s.email), {
+              role: ruleId,
+              roleName: name,
+              permissions,
+              active: s.active !== false,
+              updatedBy: (currentUser?.email || '').toLowerCase(),
+              updatedAt: new Date().toISOString(),
+            }, { merge: true })
+          )
+        );
+
+        await writeAudit('roles', originalId ? 'update' : 'create', ruleId, `${name} (${permissions.length} perms) -> synced ${affected.length}`);
+        showToast(`Saved "${name}" & synced ${affected.length} teammate(s)`);
+        resetRoleRuleForm();
+        loadAccessAndAudit();
+      });
+
+      function buildPeopleDirectory(userDocs, staffDocs, volDocs) {
+        const byEmail = new Map();
+        const ensureBucket = (key, email) => {
+          if (!byEmail.has(key)) {
+            byEmail.set(key, { key, email: email || '', user: null, staff: null, vol: null });
+          }
+          const b = byEmail.get(key);
+          if (email && !b.email) b.email = email;
+          return b;
+        };
+
+        userDocs.forEach((d) => {
+          const data = { id: d.id, uid: d.data().uid || d.id, ...d.data() };
+          const email = String(data.email || '').trim().toLowerCase();
+          const b = ensureBucket(email || `uid:${d.id}`, email);
+          b.user = data;
+        });
+
+        staffDocs.forEach((d) => {
+          const email = String(d.id || d.data().email || '').trim().toLowerCase();
+          const b = ensureBucket(email, email);
+          b.staff = { email, ...d.data() };
+        });
+
+        volDocs.forEach((d) => {
+          const data = { id: d.id, ...d.data() };
+          const email = String(data.email || '').trim().toLowerCase();
+          const b = ensureBucket(email || `vol:${d.id}`, email);
+          if (!b.vol) b.vol = data;
+        });
+
+        const entries = Array.from(byEmail.values()).map((b) => {
+          const u = b.user || {};
+          const s = b.staff || {};
+          const v = b.vol || {};
+          const fullNameFromParts = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
+          const emailPrefix = b.email ? b.email.split('@')[0] : '';
+          const name = pickStr(s.displayName, u.fullName, fullNameFromParts, v.fullName, v.name, emailPrefix, 'Member');
+          const roleId = b.staff ? (s.role || 'team_member') : 'normal_user';
+          const matchedRule = getRoleRule(roleId);
+          return {
+            key: b.key,
+            email: b.email,
+            name,
+            phone: pickStr(s.phone, u.phone, u.phoneNumber, v.phone, v.phoneNumber),
+            uid: pickStr(u.uid, u.id, v.uid),
+            school: pickStr(u.stemSchool, u.school, v.stemSchool, v.school),
+            grade: pickStr(u.grade, u.academicLevel, v.grade, v.academicLevel),
+            gov: pickStr(u.governorate, u.gov, v.governorate, v.gov),
+            track: pickStr(v.track, v.team, v.division, u.track),
+            bio: pickStr(v.motivation, v.notes, v.bio, u.bio),
+            createdAt: fmtDate(u.createdAt || u.registrationDate || v.createdAt),
+            lastLoginAt: fmtDate(u.lastLoginAt || u.updatedAt),
+            team: pickStr(s.team, u.team),
+            rank: pickStr(s.rank, u.rank, b.staff ? 'Member' : 'Normal User'),
+            roleId,
+            roleName: b.staff ? pickStr(s.roleName, matchedRule?.name, roleId) : 'Normal User',
+            permissions: b.staff && Array.isArray(s.permissions) ? s.permissions : [],
+            customPermissions: Boolean(s.customPermissions),
+            active: b.staff ? Boolean(s.active) : false,
+            hasStaff: Boolean(b.staff),
+            hasUser: Boolean(b.user),
+            hasApplicant: Boolean(b.vol),
+          };
+        });
+
+        entries.sort((a, b) => {
+          if (a.hasStaff !== b.hasStaff) return a.hasStaff ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        });
+        return entries;
+      }
+
+      async function loadAccessAndAudit() {
+        const [roleSnap, acSnap, usrSnap, volSnap, auSnap] = await Promise.all([
+          getDocs(collection(db, 'roleDefinitions')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'staffAccess')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'users')).catch(() => ({ docs: [] })),
+          getDocs(collection(db, 'volunteers')).catch(() => ({ docs: [] })),
+          getDocs(query(collection(db, 'auditLogs'), orderBy('createdIso', 'desc'), limit(60))).catch(() => getDocs(collection(db, 'auditLogs')).catch(() => ({ docs: [] }))),
+        ]);
+
+        if (roleSnap.docs.length === 0 && can('manage_access')) {
+          await Promise.all(
+            DEFAULT_ROLE_RULES.map((r) =>
+              setDoc(doc(db, 'roleDefinitions', r.id), {
+                ...r,
+                updatedBy: (currentUser?.email || '').toLowerCase(),
+                updatedAt: new Date().toISOString(),
+              }, { merge: true }).catch(() => {})
+            )
+          );
+          roleDefinitionsCache = [...DEFAULT_ROLE_RULES];
+        } else {
+          roleDefinitionsCache = roleSnap.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .sort((a, b) => String(a.name || a.id).localeCompare(String(b.name || b.id)));
+        }
+
+        staffAccessCache = acSnap.docs.map((d) => ({ email: d.id, ...d.data() }));
+        peopleDirectoryCache = buildPeopleDirectory(usrSnap.docs, acSnap.docs, volSnap.docs);
+
+        renderPeopleDirectory();
+        renderRoleRulesList();
 
         const auList = document.getElementById('audit-list');
         auList.replaceChildren();
-        auSnap.docs.forEach((d) => {
-          const a = d.data();
-          const row = document.createElement('div');
-          row.className = 'p-3.5 flex flex-wrap justify-between gap-2 text-[13px]';
-          row.innerHTML = `<div><span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1]">${esc(a.section)}:${esc(a.action)}</span> <strong class="ml-1.5">${esc(a.summary)}</strong> <span class="text-[#525866] ml-1.5">by ${esc(a.actorEmail)}</span></div><span class="font-code text-[11px] text-[#767D8C]">${esc(String(a.createdIso || '').slice(0, 19).replace('T', ' '))}</span>`;
-          auList.appendChild(row);
-        });
+        if (!auSnap.docs.length) {
+          auList.innerHTML = '<div class="p-6 text-center text-[13px] text-[#767D8C]">No dashboard activity recorded yet.</div>';
+        } else {
+          auSnap.docs.forEach((d) => {
+            const a = d.data();
+            const row = document.createElement('div');
+            row.className = 'p-3.5 flex flex-wrap justify-between gap-2 text-[13px]';
+            row.innerHTML = `<div><span class="font-code text-[11px] px-2 py-0.5 rounded bg-[#EAE8E1]">${esc(a.section)}:${esc(a.action)}</span> <strong class="ml-1.5">${esc(a.summary)}</strong> <span class="text-[#525866] ml-1.5">by ${esc(a.actorEmail)}</span></div><span class="font-code text-[11px] text-[#767D8C]">${esc(String(a.createdIso || '').slice(0, 19).replace('T', ' '))}</span>`;
+            auList.appendChild(row);
+          });
+        }
       }
-
-      document.getElementById('ac-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('ac-email').value.trim().toLowerCase();
-        const role = document.getElementById('ac-role').value;
-        const permissions = Array.from(document.querySelectorAll('.ac-cb')).filter((c) => c.checked).map((c) => c.value);
-        await setDoc(doc(db, 'staffAccess', email), {
-          email,
-          displayName: document.getElementById('ac-name').value.trim(),
-          role,
-          permissions,
-          active: document.getElementById('ac-active').checked,
-          updatedBy: (currentUser?.email || '').toLowerCase(),
-          updatedAt: new Date().toISOString(),
-        });
-        await writeAudit('access', 'grant', email, `${role}: ${permissions.join(', ')}`);
-        showToast(`Saved permissions for ${email}`);
-        loadAccessAndAudit();
-      });
 
       // ---- AUTH & BOOTSTRAP ----
       document.getElementById('mobile-nav-btn').addEventListener('click', () => {
@@ -1968,9 +2843,47 @@ const faviconSvg = encodeURIComponent(
         document.getElementById(id).addEventListener('click', () => signOut(auth));
       });
 
+      async function ensureLoggedInUserRecord(user) {
+        if (!user || !user.uid || !user.email) return;
+        try {
+          const userRef = doc(db, 'users', user.uid);
+          const nowIso = new Date().toISOString();
+          const emailLower = user.email.toLowerCase();
+          const fallbackName = (user.displayName || emailLower.split('@')[0] || 'Member').trim().slice(0, 150);
+          const snap = await getDoc(userRef);
+          if (!snap.exists()) {
+            const parts = fallbackName.split(/\s+/);
+            await setDoc(userRef, {
+              uid: user.uid,
+              email: emailLower,
+              fullName: fallbackName,
+              firstName: (parts[0] || '').slice(0, 80),
+              lastName: parts.slice(1).join(' ').slice(0, 80),
+              phone: (user.phoneNumber || '').slice(0, 40),
+              role: 'student',
+              createdAt: nowIso,
+              lastLoginAt: nowIso,
+              registrationDate: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          } else {
+            const existing = snap.data() || {};
+            const patch = {
+              email: existing.email || emailLower,
+              lastLoginAt: nowIso,
+              updatedAt: serverTimestamp(),
+            };
+            if (!existing.fullName && fallbackName) patch.fullName = fallbackName;
+            if (!existing.phone && user.phoneNumber) patch.phone = user.phoneNumber;
+            await updateDoc(userRef, patch);
+          }
+        } catch {}
+      }
+
       async function resolveSession(user) {
         currentUser = user;
         if (!user) { showGate('gate-signin'); return; }
+        await ensureLoggedInUserRecord(user);
         if (!user.email || !user.emailVerified) {
           document.getElementById('unverified-email').textContent = user.email || '';
           showGate('gate-unverified');
@@ -1979,6 +2892,7 @@ const faviconSvg = encodeURIComponent(
 
         const email = user.email.toLowerCase();
         let authorized = false;
+        let rolePillLabel = 'MEMBER';
         activeRole = 'member';
         activePerms = new Set();
 
@@ -1992,6 +2906,7 @@ const faviconSvg = encodeURIComponent(
               activeRole = d.role || 'member';
               const perms = ['owner', 'admin', 'founder'].includes(activeRole) ? ALL_PERMS.map((p) => p.key) : (Array.isArray(d.permissions) ? d.permissions : []);
               activePerms = new Set(perms);
+              rolePillLabel = (d.team ? `${d.team} · ` : '') + (d.roleName || activeRole);
             }
           } else {
             // Server-enforced bootstrap: firestore.rules allows only configured owner emails
@@ -1999,6 +2914,9 @@ const faviconSvg = encodeURIComponent(
               email,
               displayName: user.displayName || 'Foundation Owner',
               role: 'owner',
+              roleName: 'Owner',
+              team: 'Founders',
+              rank: 'Owner',
               permissions: ALL_PERMS.map((p) => p.key),
               active: true,
               updatedAt: new Date().toISOString(),
@@ -2007,6 +2925,7 @@ const faviconSvg = encodeURIComponent(
             authorized = true;
             activeRole = 'owner';
             activePerms = new Set(boot.permissions);
+            rolePillLabel = 'Founders · Owner';
           }
         } catch {}
 
@@ -2016,7 +2935,7 @@ const faviconSvg = encodeURIComponent(
           return;
         }
 
-        document.getElementById('sb-role-pill').textContent = activeRole.toUpperCase();
+        document.getElementById('sb-role-pill').textContent = rolePillLabel.toUpperCase();
         document.getElementById('sb-user-name').textContent = user.displayName || email.split('@')[0];
         document.getElementById('sb-user-email').textContent = email;
         showGate('dash-shell');

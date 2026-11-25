@@ -59,12 +59,15 @@ test('never grants unconditional public write or read+write access', () => {
   assert.doesNotMatch(rulesText, /allow\s+write\s*:\s*if\s+true\b/);
 });
 
-test('/users/{userId} enforces ownership/lead reads and blocks privilege escalation', () => {
+test('/users/{userId} enforces ownership/lead/HR reads and blocks privilege escalation', () => {
   const block = extractMatchBlock(rulesText, 'match /users/{userId}');
   assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/);
   assert.match(block, /isOwner\(userId\)/);
   assert.match(block, /isLead\(\)/);
-  for (const protectedKey of ['role', 'badges', 'tracks', 'baserowRowId', 'uid']) {
+  assert.match(block, /isAdmin\(\)/);
+  assert.match(block, /hasPermission\(['"]edit_team['"]\)/);
+  assert.match(block, /hasPermission\(['"]manage_access['"]\)/);
+  for (const protectedKey of ['role', 'badges', 'tracks', 'baserowRowId', 'uid', 'team', 'rank', 'roleId', 'roleName']) {
     assert.ok(
       block.includes(`'${protectedKey}'`) || block.includes(`"${protectedKey}"`),
       `/users/{userId} must guard privileged field "${protectedKey}"`,
@@ -107,11 +110,22 @@ test('private intake collections forbid blanket public reads', () => {
   }
 });
 
-test('/staffAccess/{email} restricts reads to self/admin and writes to admin', () => {
+test('/staffAccess/{email} restricts reads to self/admin/access-manager and writes to admin/access-manager', () => {
   const block = extractMatchBlock(rulesText, 'match /staffAccess/{email}');
   assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/);
   assert.match(block, /userEmail\(\)\s*==\s*email/);
   assert.match(block, /isAdmin\(\)/);
+  assert.match(block, /hasPermission\(['"]manage_access['"]\)/);
+});
+
+test('/roleDefinitions/{roleId} forbids public reads, requires admin or manage_access writes, and validates fields', () => {
+  const block = extractMatchBlock(rulesText, 'match /roleDefinitions/{roleId}');
+  assert.doesNotMatch(block, /allow\s+read\s*:\s*if\s+true\b/);
+  assert.match(block, /allow\s+read:\s*if\s+isAdmin\(\)\s*\|\|\s*hasStaffRecord\(\)\s*;/);
+  assert.match(block, /isAdmin\(\)/);
+  assert.match(block, /hasPermission\(['"]manage_access['"]\)/);
+  assert.match(block, /request\.resource\.data\.name\s+is\s+string/);
+  assert.match(block, /request\.resource\.data\.permissions\s+is\s+list/);
 });
 
 test('studio content collections enforce granular per-permission writes and PII protection', () => {
@@ -153,9 +167,9 @@ test('team dashboard collections (/tasks, /timeLogs, /recognitions) restrict rea
   }
 });
 
-test('/auditLogs/{logId} is append-only for verified staff/admins and readable only by admin', () => {
+test('/auditLogs/{logId} is append-only for verified staff/admins and readable by admin/access-manager', () => {
   const block = extractMatchBlock(rulesText, 'match /auditLogs/{logId}');
-  assert.match(block, /allow\s+read:\s*if\s+isAdmin\(\)\s*;/);
+  assert.match(block, /allow\s+read:\s*if\s+isAdmin\(\)(\s*\|\|\s*hasPermission\(['"]manage_access['"]\))?\s*;/);
   assert.match(block, /actorUid\s*==\s*request\.auth\.uid/);
   assert.match(block, /allow\s+update,\s*delete:\s*if\s+false\s*;/);
 });
