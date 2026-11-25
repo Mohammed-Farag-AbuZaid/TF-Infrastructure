@@ -79,6 +79,12 @@ function checkPortal(portal) {
         fail(`missing or empty dist/${seoFile}`);
       }
     }
+    if (fs.existsSync(indexPath)) {
+      const indexHtml = fs.readFileSync(indexPath, 'utf8');
+      if (!indexHtml.includes('application/ld+json')) {
+        fail('dist/index.html missing application/ld+json structured data');
+      }
+    }
   }
 
   if (portal.hasAr) {

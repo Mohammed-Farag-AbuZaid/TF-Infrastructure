@@ -19,6 +19,19 @@ const {
 const faviconSvg = encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
 );
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  description,
+  url: Astro.url.href,
+  publisher: {
+    '@type': 'Organization',
+    name: 'TF Unions',
+    url: 'https://www.tfunions.com',
+  },
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -42,6 +55,7 @@ const faviconSvg = encodeURIComponent(
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body class="min-h-screen bg-tf-canvas text-tf-ink antialiased flex flex-col">
     <div class="w-full max-w-[1160px] mx-auto px-4 sm:px-6 pt-6">

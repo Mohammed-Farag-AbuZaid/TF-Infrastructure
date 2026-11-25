@@ -14,11 +14,15 @@ mkdir -p "${INSTALL_DIR}/init-scripts" "${INSTALL_DIR}/backups"
 
 cp -f "${SCRIPT_DIR}/docker-compose.yml" "${INSTALL_DIR}/docker-compose.yml"
 cp -f "${SCRIPT_DIR}/Caddyfile" "${INSTALL_DIR}/Caddyfile"
+cp -f "${SCRIPT_DIR}/harden-host.sh" "${INSTALL_DIR}/harden-host.sh"
 cp -f "${SCRIPT_DIR}/init-scripts/01-init-multi-db.sh" "${INSTALL_DIR}/init-scripts/01-init-multi-db.sh"
 cp -f "${SCRIPT_DIR}/backups/backup-cron.sh" "${INSTALL_DIR}/backups/backup-cron.sh"
+cp -f "${SCRIPT_DIR}/backups/restore-verify.sh" "${INSTALL_DIR}/backups/restore-verify.sh"
 
+chmod +x "${INSTALL_DIR}/harden-host.sh"
 chmod +x "${INSTALL_DIR}/init-scripts/01-init-multi-db.sh"
 chmod +x "${INSTALL_DIR}/backups/backup-cron.sh"
+chmod +x "${INSTALL_DIR}/backups/restore-verify.sh"
 
 # Generate .env with strong cryptographic secrets if it does not exist yet
 if [ ! -f "${INSTALL_DIR}/.env" ]; then
@@ -45,9 +49,14 @@ if [ ! -f "${INSTALL_DIR}/.env" ]; then
     echo "⚠️  Remember to update SMTP_PASS in ${INSTALL_DIR}/.env with your Brevo/Resend SMTP key."
 fi
 
-# Register nightly 03:00 AM Cairo backup cron job if not already installed
-CRON_ENTRY="0 3 * * * /opt/tfunions-infra/backups/backup-cron.sh >> /var/log/tfunions-backup.log 2>&1"
-(crontab -l 2>/dev/null | grep -v "backup-cron.sh" || true; echo "${CRON_ENTRY}") | crontab -
+# Register nightly 03:00 AM Cairo backup cron & monthly restore verification drill
+BACKUP_CRON="0 3 * * * /opt/tfunions-infra/backups/backup-cron.sh >> /var/log/tfunions-backup.log 2>&1"
+RESTORE_CRON="0 4 1 * * /opt/tfunions-infra/backups/restore-verify.sh >> /var/log/tfunions-restore.log 2>&1"
+(
+  crontab -l 2>/dev/null | grep -v "backup-cron.sh" | grep -v "restore-verify.sh" || true
+  echo "${BACKUP_CRON}"
+  echo "${RESTORE_CRON}"
+) | crontab -
 
 echo "🐳 Starting Docker Compose stack..."
 cd "${INSTALL_DIR}"

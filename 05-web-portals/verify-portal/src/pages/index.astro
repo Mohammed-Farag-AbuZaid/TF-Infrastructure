@@ -9,6 +9,20 @@ import '../styles/tf-ui.css';
 const faviconSvg = encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1B365D"/><rect x="22" y="5" width="5" height="5" rx="1.5" fill="#0F766E"/><path d="M6.8 9.5h11.4v2.7h-4.2V23h-3V12.2H6.8V9.5zm10.8 0H25v2.7h-4.4v2.9h3.8v2.6h-3.8V23h-3V9.5z" fill="#FFFFFF"/></svg>`
 );
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'TF Unions Credential Verifier',
+  url: 'https://verify.tfunions.com',
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Any',
+  publisher: {
+    '@type': 'Organization',
+    name: 'TF Unions',
+    url: 'https://www.tfunions.com',
+  },
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -36,6 +50,7 @@ const faviconSvg = encodeURIComponent(
       .font-display { font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif; }
       .font-code { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
     </style>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body class="min-h-screen bg-[#F3F2EE] text-[#161A22] antialiased flex flex-col">
     <main class="flex-1 w-full max-w-[1160px] mx-auto px-4 sm:px-6 py-7 sm:py-10">
