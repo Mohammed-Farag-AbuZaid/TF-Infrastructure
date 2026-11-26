@@ -1,17 +1,24 @@
-﻿# Step 3: Unified Single Sign-On (SSO) Architecture (`auth.tfunions.com`)
+﻿# Step 3: Unified Single Sign-On (SSO), Backend API & Client SDK (`auth.tfunions.com`)
 
 ## Overview
-Implements **"One account. All TF Unions services"** across all `*.tfunions.com` subdomains using **Root-Domain Session Cookies (`.tfunions.com`) + Short-Lived Custom Token Exchange**.
+Implements **"One account. All TF Unions services"** across all `*.tfunions.com` subdomains using Firebase Authentication, root-domain `.tfunions.com` session cookies, custom token exchange, and supporting backend API helpers.
 
-## Components Outline
+## Subdirectories
+
 ### 1. Central Login Hub & Edge Functions (`web-portal/`)
-- **`src/pages/index.astro`**: Central login interface supporting Google OAuth, Email/Password, and GitHub via Firebase Auth, with strict `*.tfunions.com` whitelist validation on `?redirect_to=`.
-- **`functions/api/sessionLogin.ts`**: Cloudflare Pages Function (`POST /api/sessionLogin`) that verifies the Firebase ID token, calls Firebase `createSessionCookie` (14-day TTL), and sets:
+- **`src/pages/index.astro`** — Central SSO sign-in portal on `auth.tfunions.com` supporting Google OAuth and Email/Password via Firebase Auth, with strict `*.tfunions.com` whitelist validation on `?redirect_to=`.
+- **`functions/api/sessionLogin.ts`** — Cloudflare Pages Function (`POST /api/sessionLogin`) that verifies the Firebase ID token, creates a 14-day Firebase session cookie, and sets:
   - `tf_session` (`HttpOnly; Secure; SameSite=Lax; Domain=.tfunions.com`)
-  - `tf_user_hint` (`Secure; SameSite=Lax; Domain=.tfunions.com` â€” non-sensitive JSON `{ uid, name, role }` for instant UI rendering)
-- **`functions/api/mintCustomToken.ts`**: Cloudflare Pages Function (`GET /api/mintCustomToken`) that validates `tf_session` and returns a short-lived Firebase Custom Token for cross-subdomain Flutter Web SPAs.
-- **`functions/api/sessionLogout.ts`**: Clears both `.tfunions.com` cookies on sign-out.
+  - `tf_user_hint` (`Secure; SameSite=Lax; Domain=.tfunions.com` — non-sensitive display metadata)
+- **`functions/api/mintCustomToken.ts`** — Exchanges a valid `tf_session` cookie for a short-lived Firebase Custom Token for cross-subdomain clients.
+- **`functions/api/sessionLogout.ts`** — Clears both `.tfunions.com` cookies on sign-out.
+- **`functions/api/_firebaseAdmin.ts`** — Lightweight Web Crypto Firebase Admin helper compatible with Cloudflare Workers/Pages runtime.
 
-### 2. Flutter Web Client Helper (`flutter-sdk/`)
-- **`tf_sso_client.dart`**: Drop-in Dart helper for `news.tfunions.com` and `connect.tfunions.com` that detects `tf_user_hint`, calls `/api/mintCustomToken` with `credentials: 'include'`, and silently hydrates `FirebaseAuth.instance.signInWithCustomToken(token)`.
+### 2. TF Backend API (`tf-api/`)
+- Hono + TypeScript + Zod API service (`src/app.ts`, `src/schemas.ts`, `src/server.ts`, `src/middleware/`) with `Dockerfile` and Vitest test suite (`npm test` runs `test/api.test.ts`).
 
+### 3. Self-Hosted VPS Auth Bridge (`vps-auth-service/`)
+- Standalone Node auth service (`server.js`) and Firebase migration utility (`migrate_firebase_to_vps.js`).
+
+### 4. Flutter Web Client Helper (`flutter-sdk/`)
+- **`tf_sso_client.dart`** — Drop-in Dart helper that detects `tf_user_hint`, calls `/api/mintCustomToken` with `credentials: 'include'`, and silently hydrates `FirebaseAuth.instance.signInWithCustomToken(token)`.
