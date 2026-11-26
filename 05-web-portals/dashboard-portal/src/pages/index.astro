@@ -2769,7 +2769,7 @@ const faviconSvg = encodeURIComponent(
             document.getElementById('tm-role').value = m.role || '';
             document.getElementById('tm-team').value = CANONICAL_TEAMS.includes(m.team) ? m.team : 'Founders';
             document.getElementById('tm-tier').value = String(typeof m.tier === 'number' ? m.tier : 4);
-            document.getElementById('tm-start').value = (m.startDate || m.cohortDate || '2026-07').slice(0, 7);
+            document.getElementById('tm-start').value = (m.startDate || m.cohortDate || '2025-07').slice(0, 7);
             document.getElementById('tm-end').value = (m.endDate || '').slice(0, 7);
             document.getElementById('tm-parent').value = m.parent || '';
             document.getElementById('tm-school').value = m.school || '';

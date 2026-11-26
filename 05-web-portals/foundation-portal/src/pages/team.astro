@@ -109,7 +109,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         From Season 1 roots to an AI-augmented core.
       </h1>
       <p data-tf-copy="team.subtitle" class="mt-4 text-[16px] leading-[1.65] text-[#525866] max-w-[60ch]">
-        Two co-founders built TF Unions alone in July 2026, grew to {publicMembers.length} leaders including {alumniCount} Season 1 pioneers across {teamCount} divisions, welcomed Zain as our first AI teammate in October, and now lead Season 2 together.
+        Two co-founders launched TF Unions in July 2025, grew Season 1 to {alumniCount} student leaders across Egypt through November 2025, welcomed Zain as our first AI teammate in October 2026, and continue leading Season 2 today.
       </p>
     </div>
 
@@ -119,7 +119,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         <div>
           <div class="flex items-center gap-2 text-[12.5px] font-medium text-[#525866]">
             <span class="w-2 h-2 rounded-full bg-[#0F766E] inline-block tf-live-dot" aria-hidden="true"></span>
-            <span id="hero-milestone-name">Live Now · Season 2 Core</span>
+            <span id="hero-milestone-name">Live Now · Season 2 (2026)</span>
           </div>
           <div class="mt-2 flex items-baseline gap-2.5 flex-wrap">
             <span id="hero-active-num" class="font-display font-bold text-[46px] leading-none tracking-[-0.03em] text-[#161A22] tabular-nums">
@@ -127,7 +127,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             </span>
             <span id="hero-active-unit" class="text-[13.5px] text-[#525866] font-medium">active core</span>
             <span id="hero-alumni-chip" class="font-code text-[11.5px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">
-              + {alumniCount} Season 1 Alumni
+              {alumniCount} S1 Alumni (2025)
             </span>
           </div>
         </div>
@@ -163,17 +163,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               <span id="data-source-dot" class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]"></span>
               <span id="data-source-status">Live registry</span>
             </div>
-
-            <button
-              id="btn-alumni-ghost"
-              type="button"
-              aria-pressed="true"
-              class="h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-[#5EC4B8]/40 text-[#7DD3C8] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5"
-              title="Toggle Season 1 Alumni stars around active core"
-            >
-              <span class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]/70"></span>
-              <span id="alumni-ghost-label">Alumni stars: On</span>
-            </button>
           </div>
 
           <div class="pointer-events-auto flex items-center gap-1 bg-[#142540]/95 p-1 rounded-lg border border-white/15">
@@ -234,13 +223,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
                 <circle cx="540" cy="400" r="342" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5" />
 
                 <!-- Sector Labels positioned directly outside their angular arcs -->
-                <text x="540" y="54" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.09em" fill="#5EC4B8">AI &amp; AUTOMATION</text>
-                <text x="802" y="138" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#5EC4B8">PR TEAM</text>
-                <text x="908" y="405" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#E7A35C">SOCIAL MEDIA</text>
-                <text x="772" y="692" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#FDBA74">CONTENT PROD.</text>
-                <text x="378" y="758" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#6EE7B7">ACADEMIC FIELDS</text>
-                <text x="172" y="405" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#CBD5E1">MARKETING</text>
-                <text x="278" y="138" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#8FB1E0">HR TEAM</text>
+                <text data-sector-team="AI & Automation" x="540" y="54" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.09em" fill="#5EC4B8" style="transition: opacity 320ms ease;">AI &amp; AUTOMATION</text>
+                <text data-sector-team="PR Team" x="802" y="138" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#5EC4B8" style="transition: opacity 320ms ease;">PR TEAM</text>
+                <text data-sector-team="Social Media Team" x="908" y="405" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#E7A35C" style="transition: opacity 320ms ease;">SOCIAL MEDIA</text>
+                <text data-sector-team="Content Production" x="772" y="692" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#FDBA74" style="transition: opacity 320ms ease;">CONTENT PROD.</text>
+                <text data-sector-team="Academic Fields" x="378" y="758" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#6EE7B7" style="transition: opacity 320ms ease;">ACADEMIC FIELDS</text>
+                <text data-sector-team="Marketing Team" x="172" y="405" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#CBD5E1" style="transition: opacity 320ms ease;">MARKETING</text>
+                <text data-sector-team="HR Team" x="278" y="138" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#8FB1E0" style="transition: opacity 320ms ease;">HR TEAM</text>
               </g>
 
               <g id="edges-layer"></g>
@@ -380,7 +369,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         <div class="flex-1 min-w-0 space-y-2.5">
           <div class="flex items-center justify-between gap-3 text-[12.5px]">
             <span id="cohort-desc" class="text-[#F3F2EE] font-medium truncate">
-              Live Now — Active Core Leadership &amp; Autonomous AI Stack
+              Season 2 Live Now (2026) — Active Founders &amp; Zain AI (select 2025 tabs to replay Season 1)
             </span>
             <span id="active-count-badge" class="font-code text-[#7DD3C8] shrink-0">{activeCoreCount} active · {alumniCount} alumni</span>
           </div>
@@ -420,7 +409,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
   <section class="pt-12 pb-6">
     <div class="flex items-baseline justify-between gap-4 pb-4 border-b border-[#DFDDD6]">
       <h2 data-tf-copy="team.founders_heading" class="font-display font-bold text-[22px] text-[#161A22] tracking-[-0.02em]">Core leadership &amp; first AI teammate</h2>
-      <span class="font-code text-[12px] text-[#0B5F58]">Jul 2026 Founding · Oct 2026 AI Core</span>
+      <span class="font-code text-[12px] text-[#0B5F58]">Jul 2025 Founding · Oct 2026 AI Core</span>
     </div>
 
     <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -536,12 +525,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
   <script is:inline define:vars={{ initialMembers: publicMembers }}>
     (function () {
       var BASE_STEPS = [
-        { key: '2026-07-15', short: 'Jul 2026', title: 'Founding Month', desc: 'July 2026 — Mohammed Farag & Mohammed Abdelghany launch TF Unions alone' },
-        { key: '2026-08-05', short: 'Early Aug', title: 'Track Heads', desc: 'Early August 2026 — Track & Division Heads appointed across core teams' },
-        { key: '2026-08-20', short: 'Mid Aug', title: 'Full Teams', desc: 'Mid August 2026 — Vice Heads & full student teams join ~2 weeks later' },
-        { key: '2026-10-15', short: 'Oct 2026', title: 'Zain AI Joins', desc: 'October 2026 — Zain joins as the first Autonomous AI teammate & assistant' },
-        { key: '2026-11-15', short: 'Nov 2026', title: 'Season 1 Alumni', desc: 'November 2026 — Season 1 cohort completes its journey; Founders & Zain stay active' },
-        { key: 'present', short: 'Live Now', title: 'Season 2 Core', desc: 'Live Now — Active Founders + Zain AI (toggle Alumni stars above to explore Season 1)' },
+        { key: '2025-07-15', short: 'Jul 2025', title: 'Founding Month', desc: 'July 2025 — Mohammed Farag & Mohammed Abdelghany launch TF Unions alone' },
+        { key: '2025-08-05', short: 'Early Aug 25', title: 'Track Heads', desc: 'Early August 2025 — 21 Track & Division Heads appointed across Season 1' },
+        { key: '2025-08-20', short: 'Mid Aug 25', title: 'Full S1 Teams', desc: 'Mid August 2025 — Vice Heads & full student teams join ~2 weeks later' },
+        { key: '2025-11-15', short: 'Nov 2025', title: 'S1 Concludes', desc: 'November 2025 — Season 1 cohort completes its journey; Founders carry TF Unions forward' },
+        { key: '2026-10-15', short: 'Oct 2026', title: 'Zain AI Joins', desc: 'October 2026 — Zain joins in Season 2 as the first Autonomous AI teammate & assistant' },
+        { key: 'present', short: 'Live Now', title: 'Season 2 (2026)', desc: 'Season 2 Live Now (2026) — Active Founders & Zain AI (scrub back to 2025 to view Season 1)' },
       ];
       var STEPS = BASE_STEPS.slice();
 
@@ -580,7 +569,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         return s || 'Present';
       }
       function fmtTenure(m) {
-        var start = m.startDate || m.cohortDate || '2026-07-01';
+        var start = m.startDate || m.cohortDate || '2025-07-01';
         var end = m.endDate || '';
         return fmtMonth(start) + ' – ' + (end ? fmtMonth(end) : 'Present');
       }
@@ -599,8 +588,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       var state = {
         stepIdx: 5,
-        showAlumniStars: true,
-        dirStatus: 'all',
+        dirStatus: 'milestone',
         team: 'All',
         search: '',
         sort: 'tier',
@@ -636,8 +624,6 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       var cohortDescEl = document.getElementById('cohort-desc');
       var activeBadgeEl = document.getElementById('active-count-badge');
       var sourceStatusEl = document.getElementById('data-source-status');
-      var alumniGhostBtn = document.getElementById('btn-alumni-ghost');
-      var alumniGhostLabel = document.getElementById('alumni-ghost-label');
       var dirSubtitleEl = document.getElementById('dir-subtitle');
       var searchInput = document.getElementById('graph-search');
       var searchMatchPill = document.getElementById('search-match-pill');
@@ -692,26 +678,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       function isActiveAtStep(m, idx) {
         var step = STEPS[idx] || STEPS[STEPS.length - 1];
-        var start = normDate(m.startDate || m.cohortDate || '2026-07-01');
+        var start = normDate(m.startDate || m.cohortDate || '2025-07-01');
         var end = m.endDate ? normDate(m.endDate) : '';
         if (step.key === 'present') {
           return !end && m.status !== 'alumni';
         }
         return start <= step.key && (!end || end > step.key);
-      }
-
-      function hasJoinedByStep(m, idx) {
-        var step = STEPS[idx] || STEPS[STEPS.length - 1];
-        if (step.key === 'present') return true;
-        var start = normDate(m.startDate || m.cohortDate || '2026-07-01');
-        return start <= step.key;
-      }
-
-      // A node is rendered in SVG either because it's active now OR it is an alumni star visible during archive mode
-      function visualModeAtStep(m, idx) {
-        if (isActiveAtStep(m, idx)) return 'active';
-        if (state.showAlumniStars && hasJoinedByStep(m, idx)) return 'alumni';
-        return 'hidden';
       }
 
       function bestStepForMember(m) {
@@ -890,14 +862,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         ALL_MEMBERS.forEach(function (m) {
           var pos = POS.get(m.id) || { x: m.x, y: m.y, r: m.r };
           var pPos = m.parent ? POS.get(m.parent) : null;
-          var mode = visualModeAtStep(m, state.stepIdx);
-          var initOpacity = mode === 'active' ? 1 : mode === 'alumni' ? 0.36 : 0;
-          var initScale = mode === 'active' ? 1 : mode === 'alumni' ? 0.88 : 0.25;
+          var active = isActiveAtStep(m, state.stepIdx);
+          var initOpacity = active ? 1 : 0;
+          var initScale = active ? 1 : 0.2;
 
           if (!NODE_ANIM.has(m.id)) {
             NODE_ANIM.set(m.id, {
-              x: mode !== 'hidden' ? pos.x : pPos ? pPos.x : pos.x,
-              y: mode !== 'hidden' ? pos.y : pPos ? pPos.y : pos.y,
+              x: active ? pos.x : pPos ? pPos.x : pos.x,
+              y: active ? pos.y : pPos ? pPos.y : pos.y,
               vx: 0,
               vy: 0,
               scale: initScale,
@@ -1025,8 +997,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var sx = ox + (anim.x * cam.zoom + cam.x) * scale;
         var sy = oy + (anim.y * cam.zoom + cam.y) * scale;
 
-        var mode = visualModeAtStep(m, state.stepIdx);
-        var suffix = mode === 'alumni' ? ' (S1 Alumni)' : m.isAI ? ' · AI Core' : '';
+        var suffix = m.isAI ? ' · AI Core' : '';
         tooltipEl.textContent = m.name + ' · ' + m.role + suffix;
         tooltipEl.style.left = Math.min(Math.max(12, sx + 14), vpRect.width - 250) + 'px';
         tooltipEl.style.top = Math.max(12, sy - 34) + 'px';
@@ -1045,8 +1016,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           var pPos = m.parent ? POS.get(m.parent) : null;
           if (!a) return;
 
-          var mode = visualModeAtStep(m, state.stepIdx);
-          if (mode === 'active' || mode === 'alumni') {
+          var active = isActiveAtStep(m, state.stepIdx);
+          if (active) {
             var wasHidden = a.topacity === 0;
             if (wasHidden && pPos && m.parent && !prefersReducedMotion) {
               a.x = pPos.x;
@@ -1057,12 +1028,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             a.delayUntil = (wasHidden && !prefersReducedMotion) ? now + Math.min(260, m.tier * 38 + (idx % 12) * 14) : 0;
             a.tx = pos.x;
             a.ty = pos.y;
-            a.tscale = mode === 'active' ? 1 : 0.85;
-            a.topacity = mode === 'active' ? 1 : 0.36;
+            a.tscale = 1;
+            a.topacity = 1;
           } else {
             a.delayUntil = 0;
-            a.tx = pPos ? pPos.x : pos.x;
-            a.ty = pPos ? pPos.y : pos.y;
+            a.tx = pPos ? pPos.x : CX;
+            a.ty = pPos ? pPos.y : CY;
             a.tscale = 0.2;
             a.topacity = 0;
           }
@@ -1148,8 +1119,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var lineage = getLineageSet(focusId);
         var hasSearch = state.search.trim().length > 0;
         var hasTeam = state.team !== 'All';
+        var activeTeams = new Set();
 
         ALL_MEMBERS.forEach(function (m) {
+          if (isActiveAtStep(m, state.stepIdx) && matchesFilter(m)) {
+            activeTeams.add(m.team);
+          }
           var a = NODE_ANIM.get(m.id);
           var els = NODE_ELS.get(m.id);
           if (!a || !els) return;
@@ -1162,14 +1137,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             return;
           }
 
-          var mode = visualModeAtStep(m, state.stepIdx);
+          var active = isActiveAtStep(m, state.stepIdx);
           var matched = matchesFilter(m);
           var inLineage = !focusId || lineage.has(m.id);
           var filterMul = matched ? (inLineage ? 1 : 0.24) : 0.12;
           var isSelected = state.selectedId === m.id;
           var isHovered = state.hoveredId === m.id;
 
-          // Brighten hovered/selected alumni star up to 1.0 immediately
           var baseAlpha = isSelected || isHovered || (focusId && inLineage) ? 1 : a.opacity;
           var finalOpacity = Math.min(1, baseAlpha * filterMul);
 
@@ -1178,12 +1152,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           els.g.style.pointerEvents = a.topacity === 0 ? 'none' : 'auto';
 
           els.halo.setAttribute('r', String(els.pos.r + (isSelected ? 6 : 4)));
-          els.halo.setAttribute('opacity', isSelected || isHovered || (m.tier === 0 && mode === 'active') ? '1' : '0');
+          els.halo.setAttribute('opacity', isSelected || isHovered || (m.tier === 0 && active) ? '1' : '0');
 
           var showLabel =
             m.tier === 0 ||
             m.isAI ||
-            (mode === 'active' && m.tier <= 1) ||
+            (active && m.tier <= 1) ||
             isSelected ||
             isHovered ||
             (focusId && inLineage) ||
@@ -1211,18 +1185,38 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             }
           }
         });
+
+        document.querySelectorAll('[data-sector-team]').forEach(function (lbl) {
+          var tname = lbl.getAttribute('data-sector-team');
+          lbl.style.opacity = activeTeams.has(tname) ? '1' : '0.14';
+        });
+      }
+
+      function fitStepCamera() {
+        if (state.team !== 'All' || state.selectedId) return;
+        var active = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, state.stepIdx); });
+        if (active.length <= 5 && active.length > 0) {
+          var hasAi = active.some(function (m) { return m.isAI; });
+          var zoom = 1.24;
+          var focusY = hasAi ? CY - 26 : CY + 8;
+          cam.tzoom = zoom;
+          cam.tx = CX - CX * zoom;
+          cam.ty = CY - focusY * zoom;
+        } else {
+          cam.tx = 0;
+          cam.ty = 0;
+          cam.tzoom = 1;
+        }
+        startAnimation();
       }
 
       function fitTeamCamera(team) {
         if (team === 'All') {
-          cam.tx = 0;
-          cam.ty = 0;
-          cam.tzoom = 1;
-          startAnimation();
+          fitStepCamera();
           return;
         }
         var coords = ALL_MEMBERS
-          .filter(function (m) { return m.team === team && visualModeAtStep(m, state.stepIdx) !== 'hidden'; })
+          .filter(function (m) { return m.team === team && isActiveAtStep(m, state.stepIdx); })
           .map(function (m) { return POS.get(m.id); })
           .filter(Boolean);
         if (coords.length === 0) return;
@@ -1270,7 +1264,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var m = BY_ID.get(id);
         if (!m) return;
 
-        if (visualModeAtStep(m, state.stepIdx) === 'hidden') {
+        if (!isActiveAtStep(m, state.stepIdx)) {
           var targetIdx = bestStepForMember(m);
           if (targetIdx !== -1) setStep(targetIdx, true);
         }
@@ -1461,44 +1455,40 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       function renderControls() {
         var active = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, state.stepIdx); });
-        var alumniNow = ALL_MEMBERS.filter(function (m) { return !isActiveAtStep(m, state.stepIdx) && hasJoinedByStep(m, state.stepIdx); });
-        var barPool = state.stepIdx >= 4 && state.showAlumniStars && alumniNow.length > 0 ? ALL_MEMBERS : active;
+        var departedByNow = ALL_MEMBERS.filter(function (m) {
+          var end = m.endDate ? normDate(m.endDate) : '';
+          var step = STEPS[state.stepIdx] || STEPS[STEPS.length - 1];
+          if (step.key === 'present') return isMemberAlumni(m);
+          return Boolean(end) && end <= step.key;
+        });
 
         heroMilestoneEl.textContent = STEPS[state.stepIdx].short + ' · ' + STEPS[state.stepIdx].title;
         animateHeroCounter(active.length);
         heroActiveUnitEl.textContent = active.length <= 3 ? 'active core' : 'active contributors';
 
-        if (alumniNow.length > 0) {
-          heroAlumniChipEl.textContent = '+ ' + alumniNow.length + ' Season 1 Alumni';
+        if (departedByNow.length > 0) {
+          heroAlumniChipEl.textContent = departedByNow.length + ' S1 Alumni (2025)';
           heroAlumniChipEl.classList.remove('hidden');
         } else {
           heroAlumniChipEl.classList.add('hidden');
         }
 
         activeBadgeEl.textContent =
-          alumniNow.length > 0
-            ? active.length + ' active · ' + alumniNow.length + ' alumni'
+          departedByNow.length > 0
+            ? active.length + ' active · ' + departedByNow.length + ' alumni'
             : active.length + ' active';
         cohortDescEl.textContent = STEPS[state.stepIdx].desc;
 
-        // Alumni ghost button state
-        alumniGhostBtn.classList.toggle('hidden', alumniNow.length === 0);
-        alumniGhostBtn.setAttribute('aria-pressed', state.showAlumniStars ? 'true' : 'false');
-        alumniGhostLabel.textContent = 'Alumni stars: ' + (state.showAlumniStars ? 'On' : 'Core only');
-        alumniGhostBtn.className = state.showAlumniStars
-          ? 'h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-[#5EC4B8]/45 text-[#7DD3C8] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5'
-          : 'h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-white/15 text-[#9AA7BC] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5';
-
-        // Proportional division bar + interactive legend
+        // Proportional division bar + interactive legend strictly reflect currently active members
         var teamOrder = [...new Set(ALL_MEMBERS.map(function (m) { return m.team; }))];
         divBarEl.replaceChildren();
         divLegendEl.replaceChildren();
 
         teamOrder.forEach(function (teamName) {
-          var count = barPool.filter(function (m) { return m.team === teamName; }).length;
+          var count = active.filter(function (m) { return m.team === teamName; }).length;
           if (count === 0) return;
           var meta = metaFor(teamName);
-          var pct = (count / Math.max(1, barPool.length)) * 100;
+          var pct = (count / Math.max(1, active.length)) * 100;
 
           var seg = document.createElement('div');
           seg.className = 'h-full transition-all duration-500';
@@ -1757,7 +1747,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         updateTargets();
         renderControls();
         renderDirectory();
-        if (!skipCameraFit && state.team !== 'All') {
+        if (!skipCameraFit) {
           fitTeamCamera(state.team);
         }
       }
@@ -1775,25 +1765,19 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           playSvg.classList.add('hidden');
           pauseSvg.classList.remove('hidden');
           playLabel.textContent = 'Pause story';
-          if (state.stepIdx === STEPS.length - 1) setStep(0, true);
+          if (state.stepIdx === STEPS.length - 1) setStep(0, false);
           state.playTimer = setInterval(function () {
             if (state.stepIdx >= STEPS.length - 1) {
               togglePlay();
             } else {
-              setStep(state.stepIdx + 1, true);
+              setStep(state.stepIdx + 1, false);
             }
           }, 1650);
         }
       }
 
       // Wire events
-      alumniGhostBtn.addEventListener('click', function () {
-        state.showAlumniStars = !state.showAlumniStars;
-        updateTargets();
-        renderControls();
-        refreshVisualStyles();
-      });
-      sliderEl.addEventListener('input', function (e) { setStep(e.target.value, true); });
+      sliderEl.addEventListener('input', function (e) { setStep(e.target.value, false); });
       playBtn.addEventListener('click', togglePlay);
       searchInput.addEventListener('input', function (e) {
         state.search = e.target.value;
@@ -1804,7 +1788,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && state.search.trim()) {
           var first = ALL_MEMBERS.find(function (m) {
-            return visualModeAtStep(m, state.stepIdx) !== 'hidden' && matchesFilter(m);
+            return isActiveAtStep(m, state.stepIdx) && matchesFilter(m);
           });
           if (first) {
             stageEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
@@ -1868,10 +1852,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         startAnimation();
       });
       document.getElementById('btn-zoom-reset').addEventListener('click', function () {
-        cam.tx = 0;
-        cam.ty = 0;
-        cam.tzoom = 1;
-        startAnimation();
+        if (state.team === 'All' && !state.selectedId) {
+          fitStepCamera();
+        } else {
+          cam.tx = 0;
+          cam.ty = 0;
+          cam.tzoom = 1;
+          startAnimation();
+        }
       });
 
       viewportEl.addEventListener('wheel', function (e) {
@@ -1931,10 +1919,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (inInput) return;
         if (e.key === 'ArrowRight') {
           e.preventDefault();
-          setStep(state.stepIdx + 1, true);
+          setStep(state.stepIdx + 1, false);
         } else if (e.key === 'ArrowLeft') {
           e.preventDefault();
-          setStep(state.stepIdx - 1, true);
+          setStep(state.stepIdx - 1, false);
         } else if (e.key === ' ') {
           e.preventDefault();
           togglePlay();
@@ -1947,6 +1935,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       syncDirStatusButtons();
       renderControls();
       renderDirectory();
+      fitStepCamera();
 
       var params = new URLSearchParams(window.location.search);
       if (params.get('team')) {
@@ -2000,8 +1989,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             isAI: Boolean(o.isAI),
             school: o.school || 'TF Unions',
             grade: o.grade || '',
-            cohortDate: o.startDate || o.cohortDate || '2026-07-01',
-            startDate: o.startDate || o.cohortDate || '2026-07-01',
+            cohortDate: o.startDate || o.cohortDate || '2025-07-01',
+            startDate: o.startDate || o.cohortDate || '2025-07-01',
             endDate: o.endDate || '',
             status: o.endDate ? 'alumni' : (o.status || 'active'),
             replacedBy: o.replacedBy || '',

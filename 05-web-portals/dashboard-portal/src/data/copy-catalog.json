@@ -29,7 +29,7 @@
         "key": "cohort",
         "label": "Cohort",
         "kind": "p",
-        "def": "July 2026"
+        "def": "July 2025"
       },
       {
         "key": "founders",
@@ -205,7 +205,7 @@
         "key": "dest_2_desc",
         "label": "Card 3 Desc",
         "kind": "p",
-        "def": "تتبّع رحلة الموسم الأول منذ يوليو 2026 وتعرّف على زين (أول عضو ذكاء اصطناعي) وخريجي الفريق."
+        "def": "تتبّع رحلة الموسم الأول منذ يوليو 2025 وتعرّف على فريق الموسم الثاني وأول عضو ذكاء اصطناعي (زين)."
       },
       {
         "key": "dest_3_title",
@@ -579,7 +579,7 @@
         "key": "dest_2_desc",
         "label": "Card 3 Desc",
         "kind": "p",
-        "def": "Trace Season 1 history from July 2026, meet our AI systems engineer Zain, or browse alumni and active leads."
+        "def": "Trace Season 1 history from July 2025, meet our AI systems engineer Zain, or browse active Season 2 leads and alumni."
       },
       {
         "key": "dest_3_title",
@@ -695,7 +695,7 @@
         "key": "subtitle",
         "label": "Subtitle",
         "kind": "p",
-        "def": "Two co-founders built TF Unions alone in July 2026, grew to 121 leaders including 118 Season 1 pioneers across 8 divisions, welcomed Zain as our first AI teammate in October, and now lead Season 2 together."
+        "def": "Two co-founders launched TF Unions in July 2025, grew Season 1 to 118 student leaders across Egypt through November 2025, welcomed Zain as our first AI teammate in October 2026, and continue leading Season 2 today."
       },
       {
         "key": "founders_heading",

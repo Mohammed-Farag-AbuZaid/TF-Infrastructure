@@ -55,7 +55,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           Member directory roster.
         </h1>
         <p class="mt-2 text-[15px] text-[#525866]">
-          Search or filter all {publicMembers.length} TF Unions leaders across Season 1 Alumni ({alumniCount}) &amp; Season 2 Core ({activeCount}) in {teamCount} divisions.
+          Search or filter TF Unions across active Season 2 Core ({activeCount}) and Season 1 (2025) Alumni ({alumniCount}) in {teamCount} divisions.
         </p>
       </div>
       <a
@@ -72,9 +72,9 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
         <div class="tf-pill-track inline-flex rounded-xl bg-[#EAE8E1] p-1 border border-[#DCD9D0]" id="roster-status-filters">
           <div id="roster-status-pill" class="tf-pill-indicator bg-white border border-[#DFDDD6] shadow-xs"></div>
-          <button type="button" data-st="all" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition">All ({publicMembers.length})</button>
-          <button type="button" data-st="active" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">Core ({activeCount})</button>
+          <button type="button" data-st="active" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition">Core ({activeCount})</button>
           <button type="button" data-st="alumni" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">S1 Alumni ({alumniCount})</button>
+          <button type="button" data-st="all" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">All ({publicMembers.length})</button>
         </div>
         <input
           id="roster-search"
@@ -141,19 +141,21 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function fmtTenure(m) {
-        var start = m.startDate || m.cohortDate || '2026-07-01';
+        var start = m.startDate || m.cohortDate || '2025-07-01';
         var end = m.endDate || '';
         return fmtMonth(start) + ' – ' + (end ? fmtMonth(end) : 'Present');
       }
 
       var selectedTeam = 'All';
-      var selectedStatus = 'all';
+      var selectedStatus = 'active';
       var searchQuery = '';
       var filtersContainer = document.getElementById('roster-team-filters');
       var statusTrackEl = document.getElementById('roster-status-filters');
       var statusPillEl = document.getElementById('roster-status-pill');
       var cardsContainer = document.getElementById('member-cards-container');
       var rosterCount = document.getElementById('roster-count');
+
+      rosterCount.textContent = ALL_MEMBERS.filter(function (m) { return !memberIsAlumni(m); }).length;
 
       function positionStatusPill() {
         var activeBtn = statusTrackEl && statusTrackEl.querySelector('[data-st="' + selectedStatus + '"]');

@@ -19,7 +19,7 @@ type RawMember = (typeof teamData)[number] & {
 };
 
 export function toPublicMember(m: RawMember) {
-  const startDate = m.startDate ?? m.cohortDate ?? '2026-07-01';
+  const startDate = m.startDate ?? m.cohortDate ?? '2025-07-01';
   const endDate = m.endDate ?? '';
   return {
     id: m.id,
