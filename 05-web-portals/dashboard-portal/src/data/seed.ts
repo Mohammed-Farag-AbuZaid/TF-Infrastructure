@@ -3,6 +3,8 @@ import copyCatalog from './copy-catalog.json';
 
 type RawMember = (typeof rawTeam)[number] & {
   arabicName?: string;
+  subTrack?: string;
+  isAI?: boolean;
   school?: string;
   grade?: string;
   cohortDate?: string;
@@ -21,11 +23,13 @@ export const BASELINE_MEMBERS = (rawTeam as RawMember[]).map((m) => ({
   arabicName: m.arabicName ?? '',
   role: m.role,
   team: m.team,
+  subTrack: m.subTrack ?? '',
   tier: m.tier,
+  isAI: Boolean(m.isAI),
   school: m.school ?? 'TF Unions',
   grade: m.grade ?? '',
-  cohortDate: m.startDate ?? m.cohortDate ?? '2026-11',
-  startDate: m.startDate ?? m.cohortDate ?? '2026-11',
+  cohortDate: m.startDate ?? m.cohortDate ?? '2026-07-01',
+  startDate: m.startDate ?? m.cohortDate ?? '2026-07-01',
   endDate: m.endDate ?? '',
   status: m.endDate ? 'alumni' : 'active',
   replacedBy: m.replacedBy ?? '',

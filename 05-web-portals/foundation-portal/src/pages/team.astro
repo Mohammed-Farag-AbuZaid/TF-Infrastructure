@@ -5,6 +5,10 @@ import { toPublicMember } from './team.json';
 
 const publicMembers = (teamData as Parameters<typeof toPublicMember>[0][]).map(toPublicMember);
 const founders = publicMembers.filter((m) => m.tier === 0);
+const zainMember = publicMembers.find((m) => m.id === 'zain-ai' || m.isAI);
+const coreLeaders = zainMember ? [...founders, zainMember] : founders;
+const alumniCount = publicMembers.filter((m) => Boolean(m.endDate) || m.status === 'alumni').length;
+const activeCoreCount = publicMembers.length - alumniCount;
 const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 ---
 <BaseLayout title="Team" backLabel="TF Unions" backHref="/">
@@ -13,14 +17,83 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       from { stroke-dashoffset: 24; }
       to { stroke-dashoffset: 0; }
     }
+    @keyframes tf-ai-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes tf-ai-pulse {
+      0%, 100% { opacity: 0.72; transform: scale(1); }
+      50% { opacity: 0.22; transform: scale(1.22); }
+    }
+    @keyframes tf-live-ping {
+      0% { transform: scale(0.95); opacity: 0.85; }
+      75%, 100% { transform: scale(2.05); opacity: 0; }
+    }
+    @keyframes tf-card-enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .tf-edge-flow {
       stroke-dasharray: 6 6;
       animation: tf-flow 1.15s linear infinite;
     }
+    .tf-ai-orbit {
+      transform-origin: 0px 0px;
+      animation: tf-ai-spin 22s linear infinite;
+    }
+    .tf-ai-pulse-ring {
+      transform-origin: 0px 0px;
+      animation: tf-ai-pulse 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+    .tf-live-dot {
+      position: relative;
+    }
+    .tf-live-dot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      background-color: #0F766E;
+      animation: tf-live-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    .tf-card-enter {
+      animation: tf-card-enter 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .tf-pill-track {
+      position: relative;
+    }
+    .tf-pill-indicator {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: 0;
+      border-radius: 8px;
+      transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1), width 380ms cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .tf-timeline-progress {
+      transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
     @media (prefers-reduced-motion: reduce) {
+      .tf-edge-flow,
+      .tf-ai-orbit,
+      .tf-ai-pulse-ring,
+      .tf-live-dot::after,
+      .tf-card-enter {
+        animation: none !important;
+      }
       .tf-edge-flow {
-        animation: none;
         stroke-dasharray: none;
+      }
+      .tf-pill-indicator,
+      .tf-timeline-progress {
+        transition: none !important;
       }
     }
   </style>
@@ -33,10 +106,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         class="font-display font-bold text-[#161A22] leading-[1.03] tracking-[-0.03em]"
         style="font-size: clamp(34px, 4.6vw, 54px);"
       >
-        Seventy-one students building Egypt’s STEM union.
+        From Season 1 roots to an AI-augmented core.
       </h1>
-      <p data-tf-copy="team.subtitle" class="mt-4 text-[16px] leading-[1.65] text-[#525866] max-w-[58ch]">
-        From two founding systems architects in October 2025 to {publicMembers.length} active leaders across {teamCount} operational divisions — scrub the timeline below or explore the live directory.
+      <p data-tf-copy="team.subtitle" class="mt-4 text-[16px] leading-[1.65] text-[#525866] max-w-[60ch]">
+        Two co-founders built TF Unions alone in July 2026, grew to {publicMembers.length} leaders including {alumniCount} Season 1 pioneers across {teamCount} divisions, welcomed Zain as our first AI teammate in October, and now lead Season 2 together.
       </p>
     </div>
 
@@ -45,14 +118,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       <div class="flex items-start justify-between gap-4">
         <div>
           <div class="flex items-center gap-2 text-[12.5px] font-medium text-[#525866]">
-            <span class="w-2 h-2 rounded-full bg-[#0F766E] inline-block" aria-hidden="true"></span>
-            <span id="hero-milestone-name">Nov 2026 · Full Network</span>
+            <span class="w-2 h-2 rounded-full bg-[#0F766E] inline-block tf-live-dot" aria-hidden="true"></span>
+            <span id="hero-milestone-name">Live Now · Season 2 Core</span>
           </div>
-          <div class="mt-2 flex items-baseline gap-2.5">
+          <div class="mt-2 flex items-baseline gap-2.5 flex-wrap">
             <span id="hero-active-num" class="font-display font-bold text-[46px] leading-none tracking-[-0.03em] text-[#161A22] tabular-nums">
-              {publicMembers.length}
+              {activeCoreCount}
             </span>
-            <span class="text-[13.5px] text-[#525866] font-medium">active contributors</span>
+            <span id="hero-active-unit" class="text-[13.5px] text-[#525866] font-medium">active core</span>
+            <span id="hero-alumni-chip" class="font-code text-[11.5px] px-2 py-0.5 rounded bg-[#EAE8E1] text-[#525866]">
+              + {alumniCount} Season 1 Alumni
+            </span>
           </div>
         </div>
 
@@ -77,14 +153,27 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
     id="constellation-stage"
     class="rounded-2xl overflow-hidden bg-[#0F1D33] border border-[#1B365D]/40 shadow-[0_12px_36px_rgba(15,29,51,0.16)]"
   >
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px]">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_348px]">
       <!-- Interactive SVG Orbital Canvas -->
       <div class="relative bg-[#0F1D33] overflow-hidden">
         <!-- Floating Top Controls Row -->
-        <div class="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between gap-2 pointer-events-none">
-          <div id="stage-status-chip" class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#142540]/90 border border-white/10 text-[11.5px] text-[#CBD5E1]">
-            <span id="data-source-dot" class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]"></span>
-            <span id="data-source-status">Live registry</span>
+        <div class="absolute top-3.5 left-3.5 right-3.5 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+          <div class="pointer-events-auto flex flex-wrap items-center gap-2">
+            <div id="stage-status-chip" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#142540]/95 border border-white/10 text-[11.5px] text-[#CBD5E1]">
+              <span id="data-source-dot" class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]"></span>
+              <span id="data-source-status">Live registry</span>
+            </div>
+
+            <button
+              id="btn-alumni-ghost"
+              type="button"
+              aria-pressed="true"
+              class="h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-[#5EC4B8]/40 text-[#7DD3C8] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5"
+              title="Toggle Season 1 Alumni stars around active core"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-[#5EC4B8]/70"></span>
+              <span id="alumni-ghost-label">Alumni stars: On</span>
+            </button>
           </div>
 
           <div class="pointer-events-auto flex items-center gap-1 bg-[#142540]/95 p-1 rounded-lg border border-white/15">
@@ -111,42 +200,47 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           class="hidden pointer-events-none absolute z-30 px-3 py-1.5 rounded-lg bg-[#F3F2EE] text-[#161A22] border border-[#DFDDD6] text-[12px] font-medium shadow-lg whitespace-nowrap"
         ></div>
 
-        <div id="graph-viewport" class="w-full h-[430px] sm:h-[520px] lg:h-[620px] cursor-grab active:cursor-grabbing select-none touch-none">
+        <div id="graph-viewport" class="w-full h-[450px] sm:h-[540px] lg:h-[640px] cursor-grab active:cursor-grabbing select-none touch-none">
           <svg
             id="network-svg"
-            viewBox="0 0 1000 760"
+            viewBox="0 0 1080 800"
             class="w-full h-full"
             preserveAspectRatio="xMidYMid meet"
             role="img"
             aria-label="Interactive TF Unions orbital team constellation"
           >
             <defs>
-              <radialGradient id="stage-glow" cx="50%" cy="50%" r="52%">
-                <stop offset="0%" stop-color="#1B365D" stop-opacity="0.55" />
+              <radialGradient id="stage-glow" cx="50%" cy="50%" r="54%">
+                <stop offset="0%" stop-color="#1B365D" stop-opacity="0.58" />
+                <stop offset="65%" stop-color="#132542" stop-opacity="0.22" />
                 <stop offset="100%" stop-color="#0F1D33" stop-opacity="0" />
               </radialGradient>
-              <filter id="node-glow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#08101E" flood-opacity="0.45" />
+              <filter id="node-glow" x="-35%" y="-35%" width="170%" height="170%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3.2" flood-color="#060D1A" flood-opacity="0.5" />
               </filter>
             </defs>
 
-            <rect width="1000" height="760" fill="url(#stage-glow)" />
+            <rect width="1080" height="800" fill="url(#stage-glow)" />
 
             <g id="graph-content">
-              <!-- Architectural Orbital Rings & Quadrant Axes -->
+              <!-- Architectural Orbital Rings & Dynamic Sector Axes -->
               <g id="orbits-layer" pointer-events="none">
-                <line x1="500" y1="36" x2="500" y2="724" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-                <line x1="135" y1="380" x2="865" y2="380" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-                <circle cx="500" cy="380" r="130" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 5" />
-                <circle cx="500" cy="380" r="200" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3 5" />
-                <circle cx="500" cy="380" r="268" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3 5" />
-                <circle cx="500" cy="380" r="334" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5" />
+                <line x1="540" y1="36" x2="540" y2="764" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                <line x1="140" y1="400" x2="940" y2="400" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                <circle cx="540" cy="400" r="96" fill="none" stroke="rgba(94,196,184,0.16)" stroke-width="1" stroke-dasharray="2 4" />
+                <circle cx="540" cy="400" r="148" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="540" cy="400" r="214" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="540" cy="400" r="284" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3 5" />
+                <circle cx="540" cy="400" r="342" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5" />
 
-                <!-- Quadrant Titles -->
-                <text x="175" y="64" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#8FB1E0">HR TEAM</text>
-                <text x="825" y="64" text-anchor="end" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#5EC4B8">PR &amp; OUTREACH</text>
-                <text x="175" y="712" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#CBD5E1">MARKETING</text>
-                <text x="825" y="712" text-anchor="end" font-size="11" font-weight="600" letter-spacing="0.08em" fill="#E7A35C">SOCIAL MEDIA</text>
+                <!-- Sector Labels positioned directly outside their angular arcs -->
+                <text x="540" y="54" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.09em" fill="#5EC4B8">AI &amp; AUTOMATION</text>
+                <text x="802" y="138" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#5EC4B8">PR TEAM</text>
+                <text x="908" y="405" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#E7A35C">SOCIAL MEDIA</text>
+                <text x="772" y="692" text-anchor="start" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#FDBA74">CONTENT PROD.</text>
+                <text x="378" y="758" text-anchor="middle" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#6EE7B7">ACADEMIC FIELDS</text>
+                <text x="172" y="405" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#CBD5E1">MARKETING</text>
+                <text x="278" y="138" text-anchor="end" font-size="10.5" font-weight="600" letter-spacing="0.08em" fill="#8FB1E0">HR TEAM</text>
               </g>
 
               <g id="edges-layer"></g>
@@ -165,7 +259,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       <aside
         id="side-panel"
         aria-label="Member spotlight and inspector"
-        class="bg-[#142540] border-t lg:border-t-0 lg:border-l border-white/10 text-[#ECEAE4] p-5 flex flex-col lg:h-[648px] overflow-y-auto"
+        class="bg-[#142540] border-t lg:border-t-0 lg:border-l border-white/10 text-[#ECEAE4] p-5 flex flex-col lg:h-[668px] overflow-y-auto"
       >
         <!-- Default State: Cohort Spotlight -->
         <div id="spotlight-view" class="flex flex-col h-full">
@@ -179,7 +273,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           <div id="spotlight-list" class="mt-3 space-y-2 overflow-y-auto flex-1 pr-0.5"></div>
 
           <div class="mt-4 pt-3 border-t border-white/10 text-[12px] text-[#9AA7BC] flex items-center justify-between">
-            <span>Browse all contributors</span>
+            <span>Browse all {publicMembers.length} records</span>
             <a href="#directory-section" class="text-[#5EC4B8] font-medium hover:underline">Jump to directory ↓</a>
           </div>
         </div>
@@ -228,7 +322,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               <strong id="insp-role" class="text-[#F3F2EE] font-medium text-right"></strong>
             </div>
             <div class="flex items-baseline justify-between gap-3">
-              <span class="text-[#9AA7BC]">School / Univ.</span>
+              <span class="text-[#9AA7BC]">School / Stack</span>
               <span id="insp-school" class="text-[#ECEAE4] text-right"></span>
             </div>
             <div class="flex items-baseline justify-between gap-3">
@@ -265,13 +359,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       </aside>
     </div>
 
-    <!-- Integrated Timeline Control Bar -->
-    <div class="bg-[#0B1628] border-t border-white/10 px-5 py-4 text-[#ECEAE4]">
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    <!-- Smooth Sliding Pill Season 1 Timeline Bar -->
+    <div class="bg-[#0B1628] border-t border-white/10 px-4 sm:px-5 py-4 text-[#ECEAE4]">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-4">
         <button
           id="play-btn"
           type="button"
-          class="h-9 px-4 rounded-lg bg-[#F3F2EE] hover:bg-white text-[#0F1D33] text-[13px] font-semibold transition inline-flex items-center gap-2 shrink-0 w-fit"
+          class="h-10 px-4 rounded-xl bg-[#F3F2EE] hover:bg-white text-[#0F1D33] text-[13px] font-semibold transition inline-flex items-center gap-2 shrink-0 w-fit shadow-xs"
         >
           <svg id="play-svg" width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
             <polygon points="2,1 11,6 2,11" />
@@ -280,16 +374,33 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             <rect x="2" y="1.5" width="3" height="9" rx="0.5" />
             <rect x="7" y="1.5" width="3" height="9" rx="0.5" />
           </svg>
-          <span id="play-label">Play growth</span>
+          <span id="play-label">Play Season 1</span>
         </button>
 
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between text-[12px] text-[#9AA7BC] mb-1.5">
+        <div class="flex-1 min-w-0 space-y-2.5">
+          <div class="flex items-center justify-between gap-3 text-[12.5px]">
             <span id="cohort-desc" class="text-[#F3F2EE] font-medium truncate">
-              November 2026 — Nationwide Scale Across All 27 Governorates
+              Live Now — Active Core Leadership &amp; Autonomous AI Stack
             </span>
-            <span id="active-count-badge" class="font-code text-[#7DD3C8] shrink-0 ml-2">{publicMembers.length} active</span>
+            <span id="active-count-badge" class="font-code text-[#7DD3C8] shrink-0">{activeCoreCount} active · {alumniCount} alumni</span>
           </div>
+
+          <!-- Progress Rail + Fluid Sliding Pill Milestones -->
+          <div class="relative">
+            <div class="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-2">
+              <div id="timeline-progress-fill" class="h-full bg-[#5EC4B8] tf-timeline-progress" style="width: 100%;"></div>
+            </div>
+            <div
+              id="milestone-pill-track"
+              class="tf-pill-track grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 rounded-xl bg-[#101F38] border border-white/10"
+              role="tablist"
+              aria-label="Season 1 to Season 2 timeline toggle"
+            >
+              <div id="timeline-active-pill" class="tf-pill-indicator bg-[#1D365C] border border-[#5EC4B8]/45 shadow-sm"></div>
+            </div>
+          </div>
+
+          <!-- Keyboard-accessible range fallback kept synced cleanly -->
           <input
             id="timeline-slider"
             type="range"
@@ -297,47 +408,65 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             max="5"
             step="1"
             value="5"
-            aria-label="Cohort timeline milestone slider"
-            class="w-full h-1.5 bg-white/15 rounded-lg appearance-none cursor-pointer accent-[#5EC4B8] focus:outline-none"
+            aria-label="Timeline step"
+            class="sr-only"
           />
-          <div id="milestone-buttons" class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-[11px] mt-2"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Founding Leadership Editorial Strip -->
+  <!-- Core Leadership & First AI Teammate Editorial Strip -->
   <section class="pt-12 pb-6">
     <div class="flex items-baseline justify-between gap-4 pb-4 border-b border-[#DFDDD6]">
-      <h2 data-tf-copy="team.founders_heading" class="font-display font-bold text-[22px] text-[#161A22] tracking-[-0.02em]">Founding leadership</h2>
-      <span class="font-code text-[12px] text-[#0B5F58]">Oct 2025 · Inception</span>
+      <h2 data-tf-copy="team.founders_heading" class="font-display font-bold text-[22px] text-[#161A22] tracking-[-0.02em]">Core leadership &amp; first AI teammate</h2>
+      <span class="font-code text-[12px] text-[#0B5F58]">Jul 2026 Founding · Oct 2026 AI Core</span>
     </div>
 
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-      {founders.map((f) => (
-        <article class="bg-white border border-[#DFDDD6] rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between">
-          <div>
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <h3 class="font-display font-bold text-[20px] text-[#161A22]">{f.name}</h3>
-                <div class="text-[13.5px] font-medium text-[#1B365D] mt-0.5">{f.role}</div>
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {coreLeaders.map((f) => {
+        const isAi = Boolean(f.isAI);
+        return (
+          <article class={`bg-white border ${isAi ? 'border-[#0F766E]/45 border-t-[3px] border-t-[#0F766E]' : 'border-[#DFDDD6]'} rounded-xl p-6 shadow-[0_1px_2px_rgba(22,26,34,0.03)] flex flex-col justify-between transition hover:border-[#B8B4A8]`}>
+            <div>
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-display font-bold text-[20px] text-[#161A22]">{f.name}</h3>
+                    {isAi ? (
+                      <span class="px-2 py-0.5 rounded bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] font-code text-[11px] font-semibold">AI Member</span>
+                    ) : null}
+                  </div>
+                  <div class={`text-[13px] font-medium mt-0.5 ${isAi ? 'text-[#0B5F58]' : 'text-[#1B365D]'}`}>{f.role}</div>
+                </div>
+                <span class="font-code text-[12px] text-[#767D8C] shrink-0">{f.arabicName}</span>
               </div>
-              <span class="font-code text-[12px] text-[#767D8C]">{f.arabicName}</span>
+
+              <p class="mt-3 text-[13.5px] leading-[1.62] text-[#525866]">{f.bio}</p>
+
+              {isAi ? (
+                <div class="mt-3.5 flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[11px] font-medium text-[#161A22]">Scholarship Research</span>
+                  <span class="px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[11px] font-medium text-[#161A22]">24/7 Stack Ops</span>
+                  <span class="px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[11px] font-medium text-[#161A22]">Multi-Agent Code</span>
+                  <span class="px-2 py-0.5 rounded bg-[#F3F2EE] border border-[#DFDDD6] text-[11px] font-medium text-[#161A22]">Executive Assistant</span>
+                </div>
+              ) : null}
             </div>
-            <p class="mt-3 text-[14px] leading-[1.6] text-[#525866]">{f.bio}</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-[#EAE8E1] flex items-center justify-between text-[13px]">
-            <span class="text-[#767D8C]">{f.school}</span>
-            <button
-              type="button"
-              data-highlight-founder={f.id}
-              class="font-medium text-[#1B365D] hover:underline"
-            >
-              Highlight branch ↑
-            </button>
-          </div>
-        </article>
-      ))}
+
+            <div class="mt-4 pt-3 border-t border-[#EAE8E1] flex items-center justify-between text-[12.5px]">
+              <span class="text-[#767D8C] font-code text-[11.5px]">{f.cohortLabel || f.school}</span>
+              <button
+                type="button"
+                data-highlight-founder={f.id}
+                class={`font-medium hover:underline ${isAi ? 'text-[#0B5F58]' : 'text-[#1B365D]'}`}
+              >
+                {isAi ? 'Locate Zain ↑' : 'Highlight branch ↑'}
+              </button>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
 
@@ -346,10 +475,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 border-b border-[#DFDDD6]">
       <div>
         <h2 class="font-display font-bold text-[24px] text-[#161A22] tracking-[-0.02em]">
-          Active cohort directory
+          Team &amp; Season 1 Alumni directory
         </h2>
         <p id="dir-subtitle" class="mt-1 text-[14.5px] text-[#525866]">
-          Showing {publicMembers.length} active contributors synced to the selected milestone.
+          Showing contributors across TF Unions Season 1 &amp; Season 2.
         </p>
       </div>
 
@@ -358,7 +487,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           <input
             id="graph-search"
             type="search"
-            placeholder="Search name, school, role..."
+            placeholder="Search name, school, track..."
             aria-label="Search team directory"
             class="w-full h-9 pl-3 pr-14 bg-white border border-[#DFDDD6] rounded-lg text-[13px] text-[#161A22] placeholder-[#767D8C] focus:border-[#1B365D] focus:outline-none"
           />
@@ -388,13 +517,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       </div>
     </div>
 
-    <!-- Dynamic Team & Status Filter Pills -->
+    <!-- Dynamic Team & Sliding Status Filter Pills -->
     <div class="mt-4 flex flex-wrap items-center justify-between gap-2.5">
       <div id="team-filter-buttons" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter directory and orbital map by team"></div>
-      <div id="dir-status-buttons" class="inline-flex rounded-lg bg-[#EAE8E1] p-0.5 border border-[#DFDDD6]" role="group" aria-label="Filter directory by member tenure status">
-        <button type="button" data-dstatus="milestone" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs">Active</button>
-        <button type="button" data-dstatus="alumni" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">Alumni</button>
-        <button type="button" data-dstatus="all" class="dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">All history</button>
+
+      <div id="dir-status-buttons" class="tf-pill-track inline-flex rounded-xl bg-[#EAE8E1] p-1 border border-[#DCD9D0]" role="group" aria-label="Filter directory by member tenure status">
+        <div id="dir-status-pill" class="tf-pill-indicator bg-white border border-[#DFDDD6] shadow-xs"></div>
+        <button type="button" data-dstatus="milestone" class="dst-btn relative z-10 px-3 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition">Milestone (<span id="cnt-d-milestone">0</span>)</button>
+        <button type="button" data-dstatus="alumni" class="dst-btn relative z-10 px-3 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">S1 Alumni (<span id="cnt-d-alumni">{alumniCount}</span>)</button>
+        <button type="button" data-dstatus="all" class="dst-btn relative z-10 px-3 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">All ({publicMembers.length})</button>
       </div>
     </div>
 
@@ -405,39 +536,51 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
   <script is:inline define:vars={{ initialMembers: publicMembers }}>
     (function () {
       var BASE_STEPS = [
-        { key: '2025-10', short: 'Oct 2025', title: 'Founders', desc: 'October 2025 — Co-Founding Systems & Operations Architects' },
-        { key: '2026-01', short: 'Jan 2026', title: 'Heads', desc: 'January 2026 — Division Heads Across HR, PR, Marketing & Social Media' },
-        { key: '2026-04', short: 'Apr 2026', title: 'Vice Heads', desc: 'April 2026 — Vice Heads & Regional Chapter Coordinators' },
-        { key: '2026-07', short: 'Jul 2026', title: 'Committees', desc: 'July 2026 — Interview Panels, Outreach Leads & Guild Managers' },
-        { key: '2026-11', short: 'Nov 2026', title: 'Scale Cohort', desc: 'November 2026 — Nationwide Scale Across All 27 Governorates' },
-        { key: 'present', short: 'Live Now', title: 'Current Roster', desc: 'Live Now — Active TF Unions Team & Recorded Leadership Transitions' },
+        { key: '2026-07-15', short: 'Jul 2026', title: 'Founding Month', desc: 'July 2026 — Mohammed Farag & Mohammed Abdelghany launch TF Unions alone' },
+        { key: '2026-08-05', short: 'Early Aug', title: 'Track Heads', desc: 'Early August 2026 — Track & Division Heads appointed across core teams' },
+        { key: '2026-08-20', short: 'Mid Aug', title: 'Full Teams', desc: 'Mid August 2026 — Vice Heads & full student teams join ~2 weeks later' },
+        { key: '2026-10-15', short: 'Oct 2026', title: 'Zain AI Joins', desc: 'October 2026 — Zain joins as the first Autonomous AI teammate & assistant' },
+        { key: '2026-11-15', short: 'Nov 2026', title: 'Season 1 Alumni', desc: 'November 2026 — Season 1 cohort completes its journey; Founders & Zain stay active' },
+        { key: 'present', short: 'Live Now', title: 'Season 2 Core', desc: 'Live Now — Active Founders + Zain AI (toggle Alumni stars above to explore Season 1)' },
       ];
       var STEPS = BASE_STEPS.slice();
 
       var DIV_META = {
         Founders: { label: 'Founders', nodeFill: '#F3F2EE', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' },
-        'HR Team': { label: 'HR', nodeFill: '#8FB1E0', nodeInk: '#0F1D33', ring: '#8FB1E0', barColor: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
-        'PR Team': { label: 'PR & Outreach', nodeFill: '#5EC4B8', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
-        'Marketing Team': { label: 'Marketing', nodeFill: '#CBD5E1', nodeInk: '#0F1D33', ring: '#CBD5E1', barColor: '#64748B', badgeBg: '#F1F5F9', badgeText: '#334155' },
+        'AI & Automation': { label: 'AI · Zain', nodeFill: '#0F766E', nodeInk: '#FFFFFF', ring: '#5EC4B8', barColor: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
+        'PR Team': { label: 'PR', nodeFill: '#5EC4B8', nodeInk: '#0F1D33', ring: '#5EC4B8', barColor: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
         'Social Media Team': { label: 'Social Media', nodeFill: '#E7A35C', nodeInk: '#0F1D33', ring: '#E7A35C', barColor: '#A2570F', badgeBg: '#FEF6EB', badgeText: '#A2570F' },
+        'Content Production': { label: 'Content Prod.', nodeFill: '#FDBA74', nodeInk: '#0F1D33', ring: '#FDBA74', barColor: '#C2410C', badgeBg: '#FFF7ED', badgeText: '#9A3412' },
+        'Academic Fields': { label: 'Academic Fields', nodeFill: '#6EE7B7', nodeInk: '#0F1D33', ring: '#6EE7B7', barColor: '#047857', badgeBg: '#ECFDF5', badgeText: '#065F46' },
+        'Marketing Team': { label: 'Marketing', nodeFill: '#CBD5E1', nodeInk: '#0F1D33', ring: '#CBD5E1', barColor: '#64748B', badgeBg: '#F1F5F9', badgeText: '#334155' },
+        'HR Team': { label: 'HR', nodeFill: '#8FB1E0', nodeInk: '#0F1D33', ring: '#8FB1E0', barColor: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
         'IT Team': { label: 'IT & Systems', nodeFill: '#93C5FD', nodeInk: '#0F1D33', ring: '#93C5FD', barColor: '#1D4ED8', badgeBg: '#EFF6FF', badgeText: '#1E40AF' },
         'Research & Guides': { label: 'Research & Guides', nodeFill: '#6EE7B7', nodeInk: '#0F1D33', ring: '#6EE7B7', barColor: '#047857', badgeBg: '#ECFDF5', badgeText: '#065F46' },
         'Chapters & Connect': { label: 'Chapters', nodeFill: '#FDBA74', nodeInk: '#0F1D33', ring: '#FDBA74', barColor: '#C2410C', badgeBg: '#FFF7ED', badgeText: '#9A3412' },
-        'Finance & Operations': { label: 'Finance & Ops', nodeFill: '#D8B4FE', nodeInk: '#0F1D33', ring: '#D8B4FE', barColor: '#6D28D9', badgeBg: '#F5F3FF', badgeText: '#5B21B6' },
+        'Finance & Operations': { label: 'Finance & Ops', nodeFill: '#CBD5E1', nodeInk: '#0F1D33', ring: '#CBD5E1', barColor: '#475569', badgeBg: '#F1F5F9', badgeText: '#334155' },
       };
 
       var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function normDate(d) {
+        var s = String(d || '').trim();
+        if (/^\d{4}-\d{2}$/.test(s)) return s + '-01';
+        return s;
+      }
       function fmtMonth(ym) {
         var s = String(ym || '').trim();
         var parts = s.split('-');
-        if (parts.length === 2) {
+        if (parts.length >= 2) {
           var mo = Number(parts[1]);
-          if (mo >= 1 && mo <= 12) return MONTHS[mo - 1] + ' ' + parts[0];
+          if (mo >= 1 && mo <= 12) {
+            var day = Number(parts[2] || 0);
+            var pre = day >= 13 && day <= 18 ? 'Mid ' : '';
+            return pre + MONTHS[mo - 1] + ' ' + parts[0];
+          }
         }
         return s || 'Present';
       }
       function fmtTenure(m) {
-        var start = m.startDate || m.cohortDate || '2026-11';
+        var start = m.startDate || m.cohortDate || '2026-07-01';
         var end = m.endDate || '';
         return fmtMonth(start) + ' – ' + (end ? fmtMonth(end) : 'Present');
       }
@@ -456,7 +599,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       var state = {
         stepIdx: 5,
-        dirStatus: 'milestone',
+        showAlumniStars: true,
+        dirStatus: 'all',
         team: 'All',
         search: '',
         sort: 'tier',
@@ -464,7 +608,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         hoveredId: null,
         isPlaying: false,
         playTimer: null,
-        displayedHeroCount: initialMembers.length,
+        displayedHeroCount: 3,
       };
 
       var cam = { x: 0, y: 0, zoom: 1, tx: 0, ty: 0, tzoom: 1 };
@@ -473,17 +617,27 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       var rafId = null;
 
       var SVG_NS = 'http://www.w3.org/2000/svg';
+      var CX = 540;
+      var CY = 400;
       var stageEl = document.getElementById('constellation-stage');
       var heroMilestoneEl = document.getElementById('hero-milestone-name');
       var heroActiveNumEl = document.getElementById('hero-active-num');
+      var heroActiveUnitEl = document.getElementById('hero-active-unit');
+      var heroAlumniChipEl = document.getElementById('hero-alumni-chip');
       var divBarEl = document.getElementById('division-bar');
       var divLegendEl = document.getElementById('division-legend');
-      var milestoneButtonsEl = document.getElementById('milestone-buttons');
+      var milestoneTrackEl = document.getElementById('milestone-pill-track');
+      var timelinePillEl = document.getElementById('timeline-active-pill');
+      var timelineProgressEl = document.getElementById('timeline-progress-fill');
       var teamFiltersEl = document.getElementById('team-filter-buttons');
+      var dirStatusTrackEl = document.getElementById('dir-status-buttons');
+      var dirStatusPillEl = document.getElementById('dir-status-pill');
       var sliderEl = document.getElementById('timeline-slider');
       var cohortDescEl = document.getElementById('cohort-desc');
       var activeBadgeEl = document.getElementById('active-count-badge');
       var sourceStatusEl = document.getElementById('data-source-status');
+      var alumniGhostBtn = document.getElementById('btn-alumni-ghost');
+      var alumniGhostLabel = document.getElementById('alumni-ghost-label');
       var dirSubtitleEl = document.getElementById('dir-subtitle');
       var searchInput = document.getElementById('graph-search');
       var searchMatchPill = document.getElementById('search-match-pill');
@@ -538,38 +692,49 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       function isActiveAtStep(m, idx) {
         var step = STEPS[idx] || STEPS[STEPS.length - 1];
-        var start = m.startDate || m.cohortDate || '2026-11';
-        var end = m.endDate || '';
+        var start = normDate(m.startDate || m.cohortDate || '2026-07-01');
+        var end = m.endDate ? normDate(m.endDate) : '';
         if (step.key === 'present') {
           return !end && m.status !== 'alumni';
         }
-        return start <= step.key && (!end || end >= step.key);
+        return start <= step.key && (!end || end > step.key);
+      }
+
+      function hasJoinedByStep(m, idx) {
+        var step = STEPS[idx] || STEPS[STEPS.length - 1];
+        if (step.key === 'present') return true;
+        var start = normDate(m.startDate || m.cohortDate || '2026-07-01');
+        return start <= step.key;
+      }
+
+      // A node is rendered in SVG either because it's active now OR it is an alumni star visible during archive mode
+      function visualModeAtStep(m, idx) {
+        if (isActiveAtStep(m, idx)) return 'active';
+        if (state.showAlumniStars && hasJoinedByStep(m, idx)) return 'alumni';
+        return 'hidden';
       }
 
       function bestStepForMember(m) {
         var idxPresent = STEPS.length - 1;
         if (isActiveAtStep(m, idxPresent)) return idxPresent;
-        var targetDate = m.endDate || m.startDate || m.cohortDate || '2026-11';
-        var matched = -1;
-        for (var i = 0; i < STEPS.length - 1; i++) {
-          if (STEPS[i].key <= targetDate && isActiveAtStep(m, i)) matched = i;
+        // Find the peak step where this Season 1 member was actively serving
+        for (var i = STEPS.length - 2; i >= 0; i--) {
+          if (isActiveAtStep(m, i)) return i;
         }
-        if (matched !== -1) return matched;
-        return STEPS.findIndex(function (s) { return s.key !== 'present' && isActiveAtStep(m, STEPS.indexOf(s)); });
+        return idxPresent;
       }
 
       function matchesFilter(m) {
         var teamOk = state.team === 'All' || m.team === state.team;
         var q = state.search.toLowerCase().trim();
         if (!q) return teamOk;
-        var hay = [m.name, m.arabicName, m.role, m.school, m.team, m.bio]
+        var hay = [m.name, m.arabicName, m.role, m.school, m.team, m.subTrack, m.bio]
           .filter(Boolean)
           .join(' ')
           .toLowerCase();
         return teamOk && hay.includes(q);
       }
 
-      // Guarded ancestor + direct report walk (avoids founder mutual parent cycle)
       function getLineageSet(memberId) {
         var set = new Set();
         if (!memberId) return set;
@@ -585,66 +750,80 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         return set;
       }
 
-      // Compute balanced non-overlapping orbital coordinates around center (500, 380)
+      // Balanced 360-deg Multi-Sector Orbital Coordinates for up to 130+ nodes with Zain AI north apex
       function computeOrbitalLayout(members) {
         POS.clear();
-        var CX = 500;
-        var CY = 380;
 
         var foundersList = members.filter(function (m) {
           return m.team === 'Founders' || m.tier === 0;
         });
         if (foundersList.length === 1) {
-          POS.set(foundersList[0].id, { x: CX, y: CY, r: 23 });
+          POS.set(foundersList[0].id, { x: CX, y: CY + 10, r: 24 });
         } else if (foundersList.length === 2) {
-          POS.set(foundersList[0].id, { x: CX + 54, y: CY, r: 22 });
-          POS.set(foundersList[1].id, { x: CX - 54, y: CY, r: 22 });
+          POS.set(foundersList[0].id, { x: CX + 50, y: CY + 12, r: 23 });
+          POS.set(foundersList[1].id, { x: CX - 50, y: CY + 12, r: 23 });
         } else {
           foundersList.forEach(function (f, idx) {
             var a = (idx / Math.max(1, foundersList.length)) * Math.PI * 2;
-            POS.set(f.id, { x: CX + Math.cos(a) * 48, y: CY + Math.sin(a) * 48, r: 22 });
+            POS.set(f.id, { x: CX + Math.cos(a) * 52, y: CY + Math.sin(a) * 52, r: 22 });
           });
         }
 
-        // Quadrant angular ranges in radians (padded away from vertical/horizontal axes)
-        var QUADRANTS = {
-          'HR Team': [(-168 * Math.PI) / 180, (-105 * Math.PI) / 180],
-          'IT Team': [(-100 * Math.PI) / 180, (-80 * Math.PI) / 180],
-          'PR Team': [(-75 * Math.PI) / 180, (-14 * Math.PI) / 180],
-          'Research & Guides': [(-10 * Math.PI) / 180, (10 * Math.PI) / 180],
-          'Social Media Team': [(14 * Math.PI) / 180, (75 * Math.PI) / 180],
-          'Chapters & Connect': [(80 * Math.PI) / 180, (100 * Math.PI) / 180],
-          'Marketing Team': [(105 * Math.PI) / 180, (166 * Math.PI) / 180],
-          'Finance & Operations': [(170 * Math.PI) / 180, (190 * Math.PI) / 180],
+        // Pin AI & Automation (Zain) at clean north pedestal above Founders
+        var aiNodes = members.filter(function (m) {
+          return m.isAI || m.team === 'AI & Automation';
+        });
+        aiNodes.forEach(function (ai, idx) {
+          var offset = (idx - (aiNodes.length - 1) / 2) * 56;
+          POS.set(ai.id, { x: CX + offset, y: CY - 92, r: 19.5 });
+        });
+
+        // Clean angular sectors (radians; -PI/2 is straight north reserved for AI)
+        var D = Math.PI / 180;
+        var SECTORS = {
+          'PR Team': [-72 * D, -26 * D],
+          'Social Media Team': [-20 * D, 24 * D],
+          'Content Production': [30 * D, 78 * D],
+          'Academic Fields': [84 * D, 166 * D],
+          'Marketing Team': [174 * D, 204 * D],
+          'HR Team': [212 * D, 256 * D],
+          'IT Team': [-104 * D, -96 * D],
+          'Research & Guides': [79 * D, 83 * D],
+          'Chapters & Connect': [168 * D, 172 * D],
+          'Finance & Operations': [205 * D, 211 * D],
         };
 
         var TIER_RINGS = {
-          1: { baseR: 130, spread: 0, nodeR: 17 },
-          2: { baseR: 200, spread: 14, nodeR: 13.5 },
-          3: { baseR: 266, spread: 24, nodeR: 11 },
-          4: { baseR: 328, spread: 22, nodeR: 9.5 },
+          1: { baseR: 148, spread: 10, nodeR: 15.5 },
+          2: { baseR: 214, spread: 16, nodeR: 12.5 },
+          3: { baseR: 282, spread: 26, nodeR: 9.8 },
+          4: { baseR: 340, spread: 24, nodeR: 8.6 },
         };
 
-        var teams = [...new Set(members.map(function (m) { return m.team; }))].filter(function (t) { return t !== 'Founders'; });
-        var fallbackQuadrants = Object.values(QUADRANTS);
+        var teams = [...new Set(members.map(function (m) { return m.team; }))].filter(function (t) {
+          return t !== 'Founders' && t !== 'AI & Automation';
+        });
+        var fallbackSectors = Object.values(SECTORS);
 
         teams.forEach(function (teamName, qIdx) {
-          var range = QUADRANTS[teamName] || fallbackQuadrants[qIdx % fallbackQuadrants.length];
+          var range = SECTORS[teamName] || fallbackSectors[qIdx % fallbackSectors.length];
           var startA = range[0];
           var endA = range[1];
 
           for (var tier = 1; tier <= 4; tier++) {
             var bucket = members
-              .filter(function (m) { return m.team === teamName && m.tier === tier; })
+              .filter(function (m) { return !m.isAI && m.team === teamName && m.tier === tier; })
               .slice()
               .sort(function (a, b) {
-                return String(a.parent || '').localeCompare(String(b.parent || '')) || a.name.localeCompare(b.name);
+                return String(a.subTrack || '').localeCompare(String(b.subTrack || '')) ||
+                  String(a.parent || '').localeCompare(String(b.parent || '')) ||
+                  a.name.localeCompare(b.name);
               });
 
             if (bucket.length === 0) continue;
             var ring = TIER_RINGS[tier] || TIER_RINGS[4];
 
-            if (bucket.length <= 7 || ring.spread === 0) {
+            if (bucket.length <= 5 || ring.spread === 0) {
               bucket.forEach(function (m, i) {
                 var frac = bucket.length === 1 ? 0.5 : i / (bucket.length - 1);
                 var angle = startA + frac * (endA - startA);
@@ -655,17 +834,16 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
                 });
               });
             } else {
-              // Split larger tiers into staggered inner & outer sub-arcs for clean separation
               var innerCount = Math.ceil(bucket.length / 2);
               var outerCount = bucket.length - innerCount;
-              var innerR = ring.baseR - ring.spread * 0.55;
-              var outerR = ring.baseR + ring.spread * 0.65;
+              var innerR = ring.baseR - ring.spread * 0.52;
+              var outerR = ring.baseR + ring.spread * 0.62;
 
               bucket.forEach(function (m, i) {
                 var isOuter = i % 2 === 1;
                 var idxInBand = Math.floor(i / 2);
                 var bandTotal = isOuter ? outerCount : innerCount;
-                var frac = bandTotal === 1 ? 0.5 : (idxInBand + (isOuter ? 0.25 : 0)) / (bandTotal - 1 + 0.25);
+                var frac = bandTotal === 1 ? 0.5 : (idxInBand + (isOuter ? 0.28 : 0)) / Math.max(1, bandTotal - 1 + 0.28);
                 var clamped = Math.max(0.02, Math.min(0.98, frac));
                 var angle = startA + clamped * (endA - startA);
                 var radius = isOuter ? outerR : innerR;
@@ -683,9 +861,8 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       function curvePath(x1, y1, x2, y2) {
         var mx = (x1 + x2) / 2;
         var my = (y1 + y2) / 2;
-        // Gently bow toward stage center (500, 380) for architectural curvature
-        var cx = mx + (500 - mx) * 0.16;
-        var cy = my + (380 - my) * 0.16;
+        var cx = mx + (CX - mx) * 0.16;
+        var cy = my + (CY - my) * 0.16;
         return 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1);
       }
 
@@ -713,18 +890,24 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         ALL_MEMBERS.forEach(function (m) {
           var pos = POS.get(m.id) || { x: m.x, y: m.y, r: m.r };
           var pPos = m.parent ? POS.get(m.parent) : null;
-          var active = isActiveAtStep(m, state.stepIdx);
+          var mode = visualModeAtStep(m, state.stepIdx);
+          var initOpacity = mode === 'active' ? 1 : mode === 'alumni' ? 0.36 : 0;
+          var initScale = mode === 'active' ? 1 : mode === 'alumni' ? 0.88 : 0.25;
 
           if (!NODE_ANIM.has(m.id)) {
             NODE_ANIM.set(m.id, {
-              x: active ? pos.x : pPos ? pPos.x : pos.x,
-              y: active ? pos.y : pPos ? pPos.y : pos.y,
-              scale: active ? 1 : 0.25,
-              opacity: active ? 1 : 0,
+              x: mode !== 'hidden' ? pos.x : pPos ? pPos.x : pos.x,
+              y: mode !== 'hidden' ? pos.y : pPos ? pPos.y : pos.y,
+              vx: 0,
+              vy: 0,
+              scale: initScale,
+              vscale: 0,
+              opacity: initOpacity,
               tx: pos.x,
               ty: pos.y,
-              tscale: active ? 1 : 0.25,
-              topacity: active ? 1 : 0,
+              tscale: initScale,
+              topacity: initOpacity,
+              delayUntil: 0,
               r: pos.r,
             });
           } else {
@@ -741,12 +924,32 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
           var meta = metaFor(m.team);
           var isFounder = m.tier === 0;
+          var isAi = Boolean(m.isAI);
           var g = document.createElementNS(SVG_NS, 'g');
           g.setAttribute('class', 'node-group cursor-pointer');
           g.setAttribute('tabindex', '0');
           g.setAttribute('role', 'button');
           g.setAttribute('aria-label', m.name + ' — ' + m.role);
           g.dataset.id = m.id;
+
+          if (isAi) {
+            var pulseRing = document.createElementNS(SVG_NS, 'circle');
+            pulseRing.setAttribute('r', String(pos.r + 9));
+            pulseRing.setAttribute('fill', 'none');
+            pulseRing.setAttribute('stroke', '#5EC4B8');
+            pulseRing.setAttribute('stroke-width', '1.4');
+            pulseRing.setAttribute('class', 'tf-ai-pulse-ring');
+            g.appendChild(pulseRing);
+
+            var orbitDash = document.createElementNS(SVG_NS, 'circle');
+            orbitDash.setAttribute('r', String(pos.r + 5));
+            orbitDash.setAttribute('fill', 'none');
+            orbitDash.setAttribute('stroke', '#7DD3C8');
+            orbitDash.setAttribute('stroke-width', '1.6');
+            orbitDash.setAttribute('stroke-dasharray', '5 4');
+            orbitDash.setAttribute('class', 'tf-ai-orbit');
+            g.appendChild(orbitDash);
+          }
 
           var halo = document.createElementNS(SVG_NS, 'circle');
           halo.setAttribute('fill', 'none');
@@ -757,28 +960,28 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           var circle = document.createElementNS(SVG_NS, 'circle');
           circle.setAttribute('r', String(pos.r));
           circle.setAttribute('fill', meta.nodeFill);
-          circle.setAttribute('stroke', '#0F1D33');
-          circle.setAttribute('stroke-width', isFounder ? '2.5' : '1.6');
+          circle.setAttribute('stroke', isAi ? '#7DD3C8' : '#0F1D33');
+          circle.setAttribute('stroke-width', isFounder || isAi ? '2.4' : '1.5');
           circle.setAttribute('filter', 'url(#node-glow)');
 
           var abbr = document.createElementNS(SVG_NS, 'text');
           abbr.setAttribute('text-anchor', 'middle');
           abbr.setAttribute('dominant-baseline', 'central');
           abbr.setAttribute('fill', meta.nodeInk);
-          abbr.setAttribute('font-size', pos.r > 18 ? '11' : pos.r > 12 ? '9' : '7.5');
+          abbr.setAttribute('font-size', isAi ? '10' : pos.r > 18 ? '11' : pos.r > 12 ? '8.5' : '7');
           abbr.setAttribute('font-weight', '700');
           abbr.setAttribute('pointer-events', 'none');
-          abbr.textContent = initialsOf(m.name);
+          abbr.textContent = isAi ? 'AI' : initialsOf(m.name);
 
           var label = document.createElementNS(SVG_NS, 'text');
           label.setAttribute('text-anchor', 'middle');
-          label.setAttribute('y', String(pos.r + 13));
-          label.setAttribute('fill', '#F3F2EE');
-          label.setAttribute('font-size', isFounder ? '11.5' : '10');
-          label.setAttribute('font-weight', isFounder ? '600' : '500');
+          label.setAttribute('y', String(pos.r + (isAi ? 16 : 13)));
+          label.setAttribute('fill', isAi ? '#7DD3C8' : '#F3F2EE');
+          label.setAttribute('font-size', isFounder || isAi ? '11.5' : '10');
+          label.setAttribute('font-weight', isFounder || isAi ? '600' : '500');
           label.setAttribute('pointer-events', 'none');
           label.setAttribute('class', 'select-none');
-          label.textContent = shortLabel(m);
+          label.textContent = isAi ? 'Zain · AI' : shortLabel(m);
 
           g.appendChild(halo);
           g.appendChild(circle);
@@ -816,14 +1019,16 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         if (!anim) return;
         var svgRect = svgEl.getBoundingClientRect();
         var vpRect = viewportEl.getBoundingClientRect();
-        var scale = Math.min(svgRect.width / 1000, svgRect.height / 760);
-        var ox = (svgRect.width - 1000 * scale) / 2;
-        var oy = (svgRect.height - 760 * scale) / 2;
+        var scale = Math.min(svgRect.width / 1080, svgRect.height / 800);
+        var ox = (svgRect.width - 1080 * scale) / 2;
+        var oy = (svgRect.height - 800 * scale) / 2;
         var sx = ox + (anim.x * cam.zoom + cam.x) * scale;
         var sy = oy + (anim.y * cam.zoom + cam.y) * scale;
 
-        tooltipEl.textContent = m.name + ' · ' + m.role;
-        tooltipEl.style.left = Math.min(Math.max(12, sx + 14), vpRect.width - 230) + 'px';
+        var mode = visualModeAtStep(m, state.stepIdx);
+        var suffix = mode === 'alumni' ? ' (S1 Alumni)' : m.isAI ? ' · AI Core' : '';
+        tooltipEl.textContent = m.name + ' · ' + m.role + suffix;
+        tooltipEl.style.left = Math.min(Math.max(12, sx + 14), vpRect.width - 250) + 'px';
         tooltipEl.style.top = Math.max(12, sy - 34) + 'px';
         tooltipEl.classList.remove('hidden');
       }
@@ -833,26 +1038,32 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function updateTargets() {
-        ALL_MEMBERS.forEach(function (m) {
+        var now = performance.now();
+        ALL_MEMBERS.forEach(function (m, idx) {
           var a = NODE_ANIM.get(m.id);
           var pos = POS.get(m.id) || { x: m.x, y: m.y, r: m.r };
           var pPos = m.parent ? POS.get(m.parent) : null;
           if (!a) return;
 
-          var active = isActiveAtStep(m, state.stepIdx);
-          if (active) {
-            if (a.topacity === 0 && pPos && m.parent && isActiveAtStep(BY_ID.get(m.parent), state.stepIdx) && !prefersReducedMotion) {
+          var mode = visualModeAtStep(m, state.stepIdx);
+          if (mode === 'active' || mode === 'alumni') {
+            var wasHidden = a.topacity === 0;
+            if (wasHidden && pPos && m.parent && !prefersReducedMotion) {
               a.x = pPos.x;
               a.y = pPos.y;
+              a.vx = 0;
+              a.vy = 0;
             }
+            a.delayUntil = (wasHidden && !prefersReducedMotion) ? now + Math.min(260, m.tier * 38 + (idx % 12) * 14) : 0;
             a.tx = pos.x;
             a.ty = pos.y;
-            a.tscale = 1;
-            a.topacity = 1;
+            a.tscale = mode === 'active' ? 1 : 0.85;
+            a.topacity = mode === 'active' ? 1 : 0.36;
           } else {
+            a.delayUntil = 0;
             a.tx = pPos ? pPos.x : pos.x;
             a.ty = pPos ? pPos.y : pos.y;
-            a.tscale = 0.25;
+            a.tscale = 0.2;
             a.topacity = 0;
           }
         });
@@ -864,15 +1075,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         rafId = requestAnimationFrame(tickAnimation);
       }
 
-      function tickAnimation() {
+      function tickAnimation(now) {
         rafId = null;
-        var ease = prefersReducedMotion ? 1 : 0.22;
+        var camEase = prefersReducedMotion ? 1 : 0.2;
+        var stiffness = prefersReducedMotion ? 1 : 0.14;
+        var damping = 0.72;
         var moving = false;
 
-        if (Math.abs(cam.tx - cam.x) > 0.2 || Math.abs(cam.ty - cam.y) > 0.2 || Math.abs(cam.tzoom - cam.zoom) > 0.002) {
-          cam.x += (cam.tx - cam.x) * ease;
-          cam.y += (cam.ty - cam.y) * ease;
-          cam.zoom += (cam.tzoom - cam.zoom) * ease;
+        if (Math.abs(cam.tx - cam.x) > 0.25 || Math.abs(cam.ty - cam.y) > 0.25 || Math.abs(cam.tzoom - cam.zoom) > 0.002) {
+          cam.x += (cam.tx - cam.x) * camEase;
+          cam.y += (cam.ty - cam.y) * camEase;
+          cam.zoom += (cam.tzoom - cam.zoom) * camEase;
           moving = true;
         } else {
           cam.x = cam.tx;
@@ -884,21 +1097,44 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         ALL_MEMBERS.forEach(function (m) {
           var a = NODE_ANIM.get(m.id);
           if (!a) return;
+          if (a.delayUntil && now < a.delayUntil) {
+            moving = true;
+            return;
+          }
+
+          if (prefersReducedMotion) {
+            a.x = a.tx;
+            a.y = a.ty;
+            a.scale = a.tscale;
+            a.opacity = a.topacity;
+            return;
+          }
+
+          a.vx = (a.vx + (a.tx - a.x) * stiffness) * damping;
+          a.vy = (a.vy + (a.ty - a.y) * stiffness) * damping;
+          a.vscale = (a.vscale + (a.tscale - a.scale) * stiffness) * damping;
+
+          a.x += a.vx;
+          a.y += a.vy;
+          a.scale += a.vscale;
+          a.opacity += (a.topacity - a.opacity) * 0.18;
+
           if (
-            Math.abs(a.tx - a.x) > 0.2 ||
-            Math.abs(a.ty - a.y) > 0.2 ||
+            Math.abs(a.tx - a.x) > 0.25 ||
+            Math.abs(a.ty - a.y) > 0.25 ||
+            Math.abs(a.vx) > 0.12 ||
+            Math.abs(a.vy) > 0.12 ||
             Math.abs(a.tscale - a.scale) > 0.005 ||
             Math.abs(a.topacity - a.opacity) > 0.01
           ) {
-            a.x += (a.tx - a.x) * ease;
-            a.y += (a.ty - a.y) * ease;
-            a.scale += (a.tscale - a.scale) * ease;
-            a.opacity += (a.topacity - a.opacity) * ease;
             moving = true;
           } else {
             a.x = a.tx;
             a.y = a.ty;
+            a.vx = 0;
+            a.vy = 0;
             a.scale = a.tscale;
+            a.vscale = 0;
             a.opacity = a.topacity;
           }
         });
@@ -926,29 +1162,34 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             return;
           }
 
+          var mode = visualModeAtStep(m, state.stepIdx);
           var matched = matchesFilter(m);
           var inLineage = !focusId || lineage.has(m.id);
-          var targetAlpha = matched ? (inLineage ? 1 : 0.28) : 0.14;
-          var finalOpacity = a.opacity * targetAlpha;
+          var filterMul = matched ? (inLineage ? 1 : 0.24) : 0.12;
+          var isSelected = state.selectedId === m.id;
+          var isHovered = state.hoveredId === m.id;
+
+          // Brighten hovered/selected alumni star up to 1.0 immediately
+          var baseAlpha = isSelected || isHovered || (focusId && inLineage) ? 1 : a.opacity;
+          var finalOpacity = Math.min(1, baseAlpha * filterMul);
 
           els.g.setAttribute('transform', 'translate(' + a.x.toFixed(2) + ', ' + a.y.toFixed(2) + ') scale(' + a.scale.toFixed(3) + ')');
           els.g.setAttribute('opacity', finalOpacity.toFixed(3));
           els.g.style.pointerEvents = a.topacity === 0 ? 'none' : 'auto';
 
-          var isSelected = state.selectedId === m.id;
-          var isHovered = state.hoveredId === m.id;
           els.halo.setAttribute('r', String(els.pos.r + (isSelected ? 6 : 4)));
-          els.halo.setAttribute('opacity', isSelected || isHovered || m.tier === 0 ? '1' : '0');
+          els.halo.setAttribute('opacity', isSelected || isHovered || (m.tier === 0 && mode === 'active') ? '1' : '0');
 
-          // Declutter small outer labels at 100% view; reveal on focus/team/search/zoom
           var showLabel =
-            m.tier <= 1 ||
+            m.tier === 0 ||
+            m.isAI ||
+            (mode === 'active' && m.tier <= 1) ||
             isSelected ||
             isHovered ||
             (focusId && inLineage) ||
             (hasSearch && matched) ||
             (hasTeam && matched && m.tier <= 2) ||
-            cam.zoom >= 1.28;
+            cam.zoom >= 1.32;
           els.label.style.opacity = showLabel ? '1' : '0';
 
           var edge = EDGE_ELS.get(m.id);
@@ -961,11 +1202,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               edge.setAttribute('d', curvePath(a.x, a.y, pa.x, pa.y));
 
               var isFounderLink = m.id === 'founder-1' && m.parent === 'founder-2';
+              var isAiLink = Boolean(m.isAI);
               var highlightEdge = focusId && lineage.has(m.id) && lineage.has(m.parent);
-              edge.setAttribute('stroke', highlightEdge ? '#5EC4B8' : isFounderLink ? '#8FB1E0' : 'rgba(255,255,255,0.16)');
-              edge.setAttribute('stroke-width', isFounderLink ? '2.2' : highlightEdge ? '2' : '1');
-              edge.setAttribute('stroke-opacity', String(Math.min(a.opacity, pa.opacity) * (highlightEdge ? 1 : (hasTeam || hasSearch) && !matched ? 0.25 : 0.85)));
-              edge.classList.toggle('tf-edge-flow', Boolean(highlightEdge));
+              edge.setAttribute('stroke', highlightEdge || isAiLink ? '#5EC4B8' : isFounderLink ? '#8FB1E0' : 'rgba(255,255,255,0.16)');
+              edge.setAttribute('stroke-width', isFounderLink || isAiLink ? '2.2' : highlightEdge ? '2' : '1');
+              edge.setAttribute('stroke-opacity', String(Math.min(baseAlpha, pa.opacity) * (highlightEdge || isAiLink ? 1 : (hasTeam || hasSearch) && !matched ? 0.22 : 0.78)));
+              edge.classList.toggle('tf-edge-flow', Boolean(highlightEdge || isAiLink));
             }
           }
         });
@@ -980,7 +1222,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           return;
         }
         var coords = ALL_MEMBERS
-          .filter(function (m) { return m.team === team && isActiveAtStep(m, state.stepIdx); })
+          .filter(function (m) { return m.team === team && visualModeAtStep(m, state.stepIdx) !== 'hidden'; })
           .map(function (m) { return POS.get(m.id); })
           .filter(Boolean);
         if (coords.length === 0) return;
@@ -989,14 +1231,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var maxX = Math.max.apply(null, coords.map(function (c) { return c.x; }));
         var minY = Math.min.apply(null, coords.map(function (c) { return c.y; }));
         var maxY = Math.max.apply(null, coords.map(function (c) { return c.y; }));
-        var w = Math.max(160, maxX - minX + 180);
-        var h = Math.max(160, maxY - minY + 180);
-        var zoom = Math.min(1.65, Math.max(0.95, Math.min(1000 / w, 760 / h)));
+        var w = Math.max(180, maxX - minX + 200);
+        var h = Math.max(180, maxY - minY + 200);
+        var zoom = Math.min(1.65, Math.max(0.95, Math.min(1080 / w, 800 / h)));
         var cx = (minX + maxX) / 2;
         var cy = (minY + maxY) / 2;
         cam.tzoom = zoom;
-        cam.tx = 500 - cx * zoom;
-        cam.ty = 380 - cy * zoom;
+        cam.tx = CX - cx * zoom;
+        cam.ty = CY - cy * zoom;
         startAnimation();
       }
 
@@ -1008,7 +1250,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         }
         var start = state.displayedHeroCount;
         var diff = target - start;
-        if (diff === 0) return;
+        if (diff === 0) {
+          heroActiveNumEl.textContent = String(target);
+          return;
+        }
         var startTime = performance.now();
         var duration = 360;
         function step(now) {
@@ -1025,7 +1270,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var m = BY_ID.get(id);
         if (!m) return;
 
-        if (!isActiveAtStep(m, state.stepIdx)) {
+        if (visualModeAtStep(m, state.stepIdx) === 'hidden') {
           var targetIdx = bestStepForMember(m);
           if (targetIdx !== -1) setStep(targetIdx, true);
         }
@@ -1038,9 +1283,9 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         renderInspector(m);
         if (flyTo) {
           var pos = POS.get(m.id) || { x: m.x, y: m.y };
-          cam.tzoom = Math.max(cam.tzoom, 1.35);
-          cam.tx = 500 - pos.x * cam.tzoom;
-          cam.ty = 380 - pos.y * cam.tzoom;
+          cam.tzoom = Math.max(cam.tzoom, 1.38);
+          cam.tx = CX - pos.x * cam.tzoom;
+          cam.ty = CY - pos.y * cam.tzoom;
           startAnimation();
         } else {
           refreshVisualStyles();
@@ -1062,7 +1307,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'px-2.5 py-1 rounded bg-[#1D3253] border border-white/15 hover:border-[#5EC4B8] text-[12px] font-medium text-[#ECEAE4] transition text-left';
-        btn.textContent = member.name;
+        btn.textContent = member.name + (member.isAI ? ' (AI)' : '');
         btn.addEventListener('click', function () { selectMember(member.id, true); });
         return btn;
       }
@@ -1070,8 +1315,9 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       function renderInspector(m) {
         var meta = metaFor(m.team);
         var avatarEl = document.getElementById('insp-avatar');
-        avatarEl.textContent = initialsOf(m.name);
+        avatarEl.textContent = m.isAI ? 'AI' : initialsOf(m.name);
         avatarEl.style.backgroundColor = meta.nodeFill;
+        avatarEl.style.color = meta.nodeInk;
 
         document.getElementById('insp-name').textContent = m.name;
         var arabicEl = document.getElementById('insp-arabic');
@@ -1089,14 +1335,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         var isAlum = Boolean(m.endDate) || m.status === 'alumni';
         var stBadge = document.getElementById('insp-status-badge');
-        stBadge.textContent = isAlum ? 'Alumni' : 'Active';
+        stBadge.textContent = m.isAI ? 'AI Active' : isAlum ? 'S1 Alumni' : 'Active';
         stBadge.className = isAlum
           ? 'inline-block px-2 py-0.5 rounded text-[11px] font-code font-medium bg-white/10 text-[#CBD5E1]'
           : 'inline-block px-2 py-0.5 rounded text-[11px] font-code font-medium bg-[#0F766E]/35 text-[#7DD3C8]';
 
         document.getElementById('insp-role').textContent = m.role;
         document.getElementById('insp-school').textContent = m.school || 'TF Unions';
-        document.getElementById('insp-grade').textContent = m.grade || (isAlum ? 'Former cohort' : 'Active cohort');
+        document.getElementById('insp-grade').textContent = m.grade || (isAlum ? 'Season 1' : 'Core');
         document.getElementById('insp-cohort').textContent = fmtTenure(m);
         document.getElementById('insp-bio').textContent = m.bio || 'Contributor in ' + m.team + '.';
 
@@ -1130,7 +1376,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         if (reports.length > 0) {
           reportsLabel.textContent = 'Direct reports (' + reports.length + ')';
-          reports.slice(0, 10).forEach(function (r) { reportsSlot.appendChild(makeDarkChip(r)); });
+          reports.slice(0, 12).forEach(function (r) { reportsSlot.appendChild(makeDarkChip(r)); });
           reportsWrap.classList.remove('hidden');
         } else {
           reportsWrap.classList.add('hidden');
@@ -1157,16 +1403,16 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function renderSpotlight(activeMembers) {
-        var heads = activeMembers
+        var list = activeMembers
           .filter(function (m) {
-            return m.tier <= 1 && (state.team === 'All' || m.team === state.team);
+            return (m.tier <= 1 || m.isAI) && (state.team === 'All' || m.team === state.team);
           })
-          .slice(0, 10);
+          .slice(0, 12);
 
-        spotlightSub.textContent = heads.length + ' core leaders active at ' + STEPS[state.stepIdx].short;
+        spotlightSub.textContent = list.length + ' key leads active at ' + STEPS[state.stepIdx].short;
         spotlightList.replaceChildren();
 
-        heads.forEach(function (m) {
+        list.forEach(function (m) {
           var meta = metaFor(m.team);
           var btn = document.createElement('button');
           btn.type = 'button';
@@ -1176,9 +1422,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           left.className = 'flex items-center gap-2.5 min-w-0';
 
           var dot = document.createElement('span');
-          dot.className = 'w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[11px] text-[#0F1D33] shrink-0';
+          dot.className = 'w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[11px] shrink-0';
           dot.style.backgroundColor = meta.nodeFill;
-          dot.textContent = initialsOf(m.name);
+          dot.style.color = meta.nodeInk;
+          dot.textContent = m.isAI ? 'AI' : initialsOf(m.name);
 
           var info = document.createElement('div');
           info.className = 'min-w-0';
@@ -1203,16 +1450,44 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         });
       }
 
+      function positionSlidingPill(container, pill, activeBtn) {
+        if (!container || !pill || !activeBtn) return;
+        var cr = container.getBoundingClientRect();
+        var br = activeBtn.getBoundingClientRect();
+        if (cr.width === 0 || br.width === 0) return;
+        pill.style.width = br.width.toFixed(1) + 'px';
+        pill.style.transform = 'translateX(' + (br.left - cr.left).toFixed(1) + 'px)';
+      }
+
       function renderControls() {
         var active = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, state.stepIdx); });
-        var matched = active.filter(matchesFilter);
+        var alumniNow = ALL_MEMBERS.filter(function (m) { return !isActiveAtStep(m, state.stepIdx) && hasJoinedByStep(m, state.stepIdx); });
+        var barPool = state.stepIdx >= 4 && state.showAlumniStars && alumniNow.length > 0 ? ALL_MEMBERS : active;
 
         heroMilestoneEl.textContent = STEPS[state.stepIdx].short + ' · ' + STEPS[state.stepIdx].title;
         animateHeroCounter(active.length);
-        activeBadgeEl.textContent = active.length + ' active';
+        heroActiveUnitEl.textContent = active.length <= 3 ? 'active core' : 'active contributors';
+
+        if (alumniNow.length > 0) {
+          heroAlumniChipEl.textContent = '+ ' + alumniNow.length + ' Season 1 Alumni';
+          heroAlumniChipEl.classList.remove('hidden');
+        } else {
+          heroAlumniChipEl.classList.add('hidden');
+        }
+
+        activeBadgeEl.textContent =
+          alumniNow.length > 0
+            ? active.length + ' active · ' + alumniNow.length + ' alumni'
+            : active.length + ' active';
         cohortDescEl.textContent = STEPS[state.stepIdx].desc;
-        dirSubtitleEl.textContent =
-          'Showing ' + matched.length + ' of ' + active.length + ' active contributors at ' + STEPS[state.stepIdx].short + '.';
+
+        // Alumni ghost button state
+        alumniGhostBtn.classList.toggle('hidden', alumniNow.length === 0);
+        alumniGhostBtn.setAttribute('aria-pressed', state.showAlumniStars ? 'true' : 'false');
+        alumniGhostLabel.textContent = 'Alumni stars: ' + (state.showAlumniStars ? 'On' : 'Core only');
+        alumniGhostBtn.className = state.showAlumniStars
+          ? 'h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-[#5EC4B8]/45 text-[#7DD3C8] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5'
+          : 'h-8 px-2.5 rounded-lg bg-[#142540]/95 border border-white/15 text-[#9AA7BC] hover:text-white text-[11.5px] font-medium transition inline-flex items-center gap-1.5';
 
         // Proportional division bar + interactive legend
         var teamOrder = [...new Set(ALL_MEMBERS.map(function (m) { return m.team; }))];
@@ -1220,10 +1495,10 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         divLegendEl.replaceChildren();
 
         teamOrder.forEach(function (teamName) {
-          var count = active.filter(function (m) { return m.team === teamName; }).length;
+          var count = barPool.filter(function (m) { return m.team === teamName; }).length;
           if (count === 0) return;
           var meta = metaFor(teamName);
-          var pct = (count / Math.max(1, active.length)) * 100;
+          var pct = (count / Math.max(1, barPool.length)) * 100;
 
           var seg = document.createElement('div');
           seg.className = 'h-full transition-all duration-500';
@@ -1255,8 +1530,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         });
 
         // Search UI badge
+        var dirActivePool = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, state.stepIdx); });
+        var cntMilEl = document.getElementById('cnt-d-milestone');
+        var cntAluEl = document.getElementById('cnt-d-alumni');
+        if (cntMilEl) cntMilEl.textContent = String(dirActivePool.length);
+        if (cntAluEl) cntAluEl.textContent = String(ALL_MEMBERS.filter(isMemberAlumni).length);
+
+        var matchedNow = ALL_MEMBERS.filter(matchesFilter);
         if (state.search.trim()) {
-          searchMatchPill.textContent = matched.length + ' match' + (matched.length === 1 ? '' : 'es');
+          searchMatchPill.textContent = matchedNow.length + ' match' + (matchedNow.length === 1 ? '' : 'es');
           searchMatchPill.classList.remove('hidden');
           searchClearBtn.classList.remove('hidden');
         } else {
@@ -1264,34 +1546,44 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           searchClearBtn.classList.add('hidden');
         }
 
-        // Milestone buttons in dark footer bar
-        milestoneButtonsEl.replaceChildren();
+        // Smooth sliding milestone pill track
+        timelineProgressEl.style.width = ((state.stepIdx / Math.max(1, STEPS.length - 1)) * 100).toFixed(1) + '%';
+        Array.from(milestoneTrackEl.querySelectorAll('.ms-pill-btn')).forEach(function (el) { el.remove(); });
+        var activeStepBtn = null;
+
         STEPS.forEach(function (step, idx) {
           var count = ALL_MEMBERS.filter(function (m) { return isActiveAtStep(m, idx); }).length;
           var btn = document.createElement('button');
           btn.type = 'button';
-          var align = idx === 0 ? 'text-left' : idx === STEPS.length - 1 ? 'text-right' : 'text-center';
+          btn.setAttribute('role', 'tab');
           var isCur = idx === state.stepIdx;
-          btn.className = align + ' transition ' + (isCur ? 'text-[#5EC4B8]' : 'text-[#9AA7BC] hover:text-white');
+          btn.setAttribute('aria-selected', isCur ? 'true' : 'false');
+          btn.className = 'ms-pill-btn relative z-10 px-2 py-1.5 rounded-lg text-center transition ' + (isCur ? 'text-white' : 'text-[#9AA7BC] hover:text-[#ECEAE4]');
           btn.innerHTML =
-            '<span class="font-code block">' +
+            '<span class="font-code text-[10.5px] block ' +
+            (isCur ? 'text-[#7DD3C8]' : 'text-[#9AA7BC]') +
+            '">' +
             esc(step.short) +
             ' (' +
             count +
-            ')</span><strong class="font-medium ' +
-            (isCur ? 'text-white' : '') +
-            '">' +
+            ')</span><strong class="block text-[11.5px] font-semibold truncate">' +
             esc(step.title) +
             '</strong>';
           btn.addEventListener('click', function () { setStep(idx, false); });
-          milestoneButtonsEl.appendChild(btn);
+          milestoneTrackEl.appendChild(btn);
+          if (isCur) activeStepBtn = btn;
+        });
+
+        requestAnimationFrame(function () {
+          positionSlidingPill(milestoneTrackEl, timelinePillEl, activeStepBtn);
         });
 
         // Directory filter pills
+        var poolForPills = state.dirStatus === 'all' ? ALL_MEMBERS : state.dirStatus === 'alumni' ? ALL_MEMBERS.filter(isMemberAlumni) : active;
         var filterOrder = ['All'].concat(teamOrder);
         teamFiltersEl.replaceChildren();
         filterOrder.forEach(function (teamName) {
-          var count = teamName === 'All' ? active.length : active.filter(function (m) { return m.team === teamName; }).length;
+          var count = teamName === 'All' ? poolForPills.length : poolForPills.filter(function (m) { return m.team === teamName; }).length;
           if (teamName !== 'All' && count === 0) return;
 
           var btn = document.createElement('button');
@@ -1320,15 +1612,25 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         return Boolean(m.endDate) || m.status === 'alumni';
       }
 
+      function syncDirStatusButtons() {
+        var activeBtn = null;
+        document.querySelectorAll('#dir-status-buttons .dst-btn').forEach(function (b) {
+          var act = b.getAttribute('data-dstatus') === state.dirStatus;
+          b.className = act
+            ? 'dst-btn relative z-10 px-3 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition'
+            : 'dst-btn relative z-10 px-3 py-1 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] transition';
+          if (act) activeBtn = b;
+        });
+        requestAnimationFrame(function () {
+          positionSlidingPill(dirStatusTrackEl, dirStatusPillEl, activeBtn);
+        });
+      }
+
       document.querySelectorAll('#dir-status-buttons .dst-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          state.dirStatus = btn.getAttribute('data-dstatus') || 'milestone';
-          document.querySelectorAll('#dir-status-buttons .dst-btn').forEach(function (b) {
-            var act = b.getAttribute('data-dstatus') === state.dirStatus;
-            b.className = act
-              ? 'dst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs'
-              : 'dst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]';
-          });
+          state.dirStatus = btn.getAttribute('data-dstatus') || 'all';
+          syncDirStatusButtons();
+          renderControls();
           renderDirectory();
         });
       });
@@ -1343,16 +1645,22 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
         var alumniTotal = ALL_MEMBERS.filter(isMemberAlumni).length;
         if (state.dirStatus === 'alumni') {
-          dirSubtitleEl.textContent = 'Showing ' + active.length + ' past / alumni contributors (' + alumniTotal + ' total alumni recorded).';
+          dirSubtitleEl.textContent = 'Showing ' + active.length + ' Season 1 Alumni pioneers (' + alumniTotal + ' total recorded).';
         } else if (state.dirStatus === 'all') {
-          dirSubtitleEl.textContent = 'Showing ' + active.length + ' of ' + ALL_MEMBERS.length + ' contributors across full TF Unions history.';
+          dirSubtitleEl.textContent = 'Showing ' + active.length + ' of ' + ALL_MEMBERS.length + ' contributors across Season 1 Archive & Season 2 Core.';
+        } else {
+          dirSubtitleEl.textContent = 'Showing ' + active.length + ' contributors active at ' + STEPS[state.stepIdx].short + '.';
         }
 
         var sorted = active.slice().sort(function (a, b) {
           if (state.sort === 'name') return a.name.localeCompare(b.name);
           if (state.sort === 'cohort') {
-            return (a.startDate || a.cohortDate || '').localeCompare(b.startDate || b.cohortDate || '') || a.tier - b.tier || a.name.localeCompare(b.name);
+            return normDate(a.startDate || a.cohortDate || '').localeCompare(normDate(b.startDate || b.cohortDate || '')) || a.tier - b.tier || a.name.localeCompare(b.name);
           }
+          // Pin Active + AI near top of tier sort
+          var aAlum = isMemberAlumni(a) ? 1 : 0;
+          var bAlum = isMemberAlumni(b) ? 1 : 0;
+          if (aAlum !== bAlum) return aAlum - bAlum;
           return a.tier - b.tier || a.team.localeCompare(b.team) || a.name.localeCompare(b.name);
         });
 
@@ -1365,11 +1673,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           return;
         }
 
-        sorted.forEach(function (m) {
+        sorted.forEach(function (m, idx) {
           var meta = metaFor(m.team);
           var isAlum = isMemberAlumni(m);
           var card = document.createElement('article');
-          card.className = 'border-t border-[#DFDDD6] pt-4 flex flex-col justify-between';
+          card.className = 'border-t border-[#DFDDD6] pt-4 flex flex-col justify-between tf-card-enter';
+          if (!prefersReducedMotion) {
+            card.style.animationDelay = Math.min(idx * 16, 280) + 'ms';
+          }
 
           var successor = m.replacedBy ? BY_ID.get(m.replacedBy) : null;
           var predecessor = m.replaces ? BY_ID.get(m.replaces) : null;
@@ -1386,7 +1697,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             '<div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-[#F3F2EE] text-[12px] shrink-0" style="background-color:' +
             meta.barColor +
             ';">' +
-            esc(initialsOf(m.name)) +
+            esc(m.isAI ? 'AI' : initialsOf(m.name)) +
             '</div>' +
             '<div class="min-w-0">' +
             '<h3 class="font-display font-semibold text-[16px] text-[#161A22] leading-snug truncate">' +
@@ -1405,7 +1716,11 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             ';">' +
             esc(meta.label) +
             '</span>' +
-            (isAlum ? '<span class="px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866] text-[10px] font-code">Alumni</span>' : '') +
+            (m.isAI
+              ? '<span class="px-1.5 py-0.5 rounded bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[10px] font-code font-semibold">AI 24/7</span>'
+              : isAlum
+                ? '<span class="px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866] text-[10px] font-code">S1 Alumni</span>'
+                : '<span class="px-1.5 py-0.5 rounded bg-[#EDF7F5] text-[#0B5F58] text-[10px] font-code">Active</span>') +
             '</div>' +
             '</div>' +
             '<p class="mt-2.5 text-[13px] text-[#525866] leading-relaxed line-clamp-2">' +
@@ -1454,12 +1769,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           state.isPlaying = false;
           playSvg.classList.remove('hidden');
           pauseSvg.classList.add('hidden');
-          playLabel.textContent = 'Play growth';
+          playLabel.textContent = 'Play Season 1';
         } else {
           state.isPlaying = true;
           playSvg.classList.add('hidden');
           pauseSvg.classList.remove('hidden');
-          playLabel.textContent = 'Pause';
+          playLabel.textContent = 'Pause story';
           if (state.stepIdx === STEPS.length - 1) setStep(0, true);
           state.playTimer = setInterval(function () {
             if (state.stepIdx >= STEPS.length - 1) {
@@ -1467,11 +1782,17 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             } else {
               setStep(state.stepIdx + 1, true);
             }
-          }, 1500);
+          }, 1650);
         }
       }
 
       // Wire events
+      alumniGhostBtn.addEventListener('click', function () {
+        state.showAlumniStars = !state.showAlumniStars;
+        updateTargets();
+        renderControls();
+        refreshVisualStyles();
+      });
       sliderEl.addEventListener('input', function (e) { setStep(e.target.value, true); });
       playBtn.addEventListener('click', togglePlay);
       searchInput.addEventListener('input', function (e) {
@@ -1483,7 +1804,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && state.search.trim()) {
           var first = ALL_MEMBERS.find(function (m) {
-            return isActiveAtStep(m, state.stepIdx) && matchesFilter(m);
+            return visualModeAtStep(m, state.stepIdx) !== 'hidden' && matchesFilter(m);
           });
           if (first) {
             stageEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
@@ -1502,6 +1823,12 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       sortSelect.addEventListener('change', function (e) {
         state.sort = e.target.value;
         renderDirectory();
+      });
+
+      window.addEventListener('resize', function () {
+        var activeTab = milestoneTrackEl.querySelector('[aria-selected="true"]');
+        positionSlidingPill(milestoneTrackEl, timelinePillEl, activeTab);
+        syncDirStatusButtons();
       });
 
       document.getElementById('close-inspector-btn').addEventListener('click', closeInspector);
@@ -1525,18 +1852,18 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       });
 
       document.getElementById('btn-zoom-in').addEventListener('click', function () {
-        var nextZoom = Math.min(2.4, cam.tzoom * 1.22);
+        var nextZoom = Math.min(2.5, cam.tzoom * 1.22);
         var ratio = nextZoom / cam.tzoom;
-        cam.tx = 500 - (500 - cam.tx) * ratio;
-        cam.ty = 380 - (380 - cam.ty) * ratio;
+        cam.tx = CX - (CX - cam.tx) * ratio;
+        cam.ty = CY - (CY - cam.ty) * ratio;
         cam.tzoom = nextZoom;
         startAnimation();
       });
       document.getElementById('btn-zoom-out').addEventListener('click', function () {
         var nextZoom = Math.max(0.7, cam.tzoom / 1.22);
         var ratio = nextZoom / cam.tzoom;
-        cam.tx = 500 - (500 - cam.tx) * ratio;
-        cam.ty = 380 - (380 - cam.ty) * ratio;
+        cam.tx = CX - (CX - cam.tx) * ratio;
+        cam.ty = CY - (CY - cam.ty) * ratio;
         cam.tzoom = nextZoom;
         startAnimation();
       });
@@ -1550,14 +1877,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       viewportEl.addEventListener('wheel', function (e) {
         e.preventDefault();
         var rect = svgEl.getBoundingClientRect();
-        var scale = Math.min(rect.width / 1000, rect.height / 760) || 1;
-        var ox = (rect.width - 1000 * scale) / 2;
-        var oy = (rect.height - 760 * scale) / 2;
+        var scale = Math.min(rect.width / 1080, rect.height / 800) || 1;
+        var ox = (rect.width - 1080 * scale) / 2;
+        var oy = (rect.height - 800 * scale) / 2;
         var px = (e.clientX - rect.left - ox) / scale;
         var py = (e.clientY - rect.top - oy) / scale;
 
         var factor = e.deltaY < 0 ? 1.12 : 0.89;
-        var nextZoom = Math.min(2.4, Math.max(0.7, cam.tzoom * factor));
+        var nextZoom = Math.min(2.5, Math.max(0.7, cam.tzoom * factor));
         var ratio = nextZoom / cam.tzoom;
         cam.x = cam.tx = px - (px - cam.tx) * ratio;
         cam.y = cam.ty = py - (py - cam.ty) * ratio;
@@ -1575,7 +1902,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       viewportEl.addEventListener('pointermove', function (e) {
         if (!dragging) return;
         var rect = svgEl.getBoundingClientRect();
-        var scale = Math.min(rect.width / 1000, rect.height / 760) || 1;
+        var scale = Math.min(rect.width / 1080, rect.height / 800) || 1;
         cam.x = cam.tx = dragStart.camX + (e.clientX - dragStart.x) / scale;
         cam.y = cam.ty = dragStart.camY + (e.clientY - dragStart.y) / scale;
         graphContent.setAttribute('transform', 'translate(' + cam.x.toFixed(2) + ', ' + cam.y.toFixed(2) + ') scale(' + cam.zoom.toFixed(4) + ')');
@@ -1617,6 +1944,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       // Boot immediately from sanitized snapshot
       indexMembers(initialMembers);
       updateTargets();
+      syncDirStatusButtons();
       renderControls();
       renderDirectory();
 
@@ -1652,7 +1980,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       async function fetchFsTeamMembers() {
         var res = await fetch(
-          'https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=200',
+          'https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=250',
           { cache: 'no-store' }
         );
         if (!res.ok) return [];
@@ -1667,20 +1995,22 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             arabicName: o.arabicName || '',
             role: o.role || '',
             team: o.team || 'HR Team',
+            subTrack: o.subTrack || '',
             tier: typeof o.tier === 'number' ? o.tier : 4,
+            isAI: Boolean(o.isAI),
             school: o.school || 'TF Unions',
             grade: o.grade || '',
-            cohortDate: o.startDate || o.cohortDate || '2026-11',
-            startDate: o.startDate || o.cohortDate || '2026-11',
+            cohortDate: o.startDate || o.cohortDate || '2026-07-01',
+            startDate: o.startDate || o.cohortDate || '2026-07-01',
             endDate: o.endDate || '',
             status: o.endDate ? 'alumni' : (o.status || 'active'),
             replacedBy: o.replacedBy || '',
             replaces: o.replaces || '',
             cohortLabel: o.cohortLabel || '',
             bio: o.bio || '',
-            x: typeof o.x === 'number' ? o.x : 500,
-            y: typeof o.y === 'number' ? o.y : 380,
-            r: typeof o.r === 'number' ? o.r : 12,
+            x: typeof o.x === 'number' ? o.x : 540,
+            y: typeof o.y === 'number' ? o.y : 400,
+            r: typeof o.r === 'number' ? o.r : 11,
             parent: o.parent || null,
             hub: o.hub || o.team || 'HR Team',
             archived: Boolean(o.archived),

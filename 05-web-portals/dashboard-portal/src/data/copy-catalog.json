@@ -29,7 +29,7 @@
         "key": "cohort",
         "label": "Cohort",
         "kind": "p",
-        "def": "October 2025"
+        "def": "July 2026"
       },
       {
         "key": "founders",
@@ -205,7 +205,7 @@
         "key": "dest_2_desc",
         "label": "Card 3 Desc",
         "kind": "p",
-        "def": "تتبّع تاريخ التأسيس منذ أكتوبر 2025 أو ابحث عن كل مساهم في مختلف المحافظات."
+        "def": "تتبّع رحلة الموسم الأول منذ يوليو 2026 وتعرّف على زين (أول عضو ذكاء اصطناعي) وخريجي الفريق."
       },
       {
         "key": "dest_3_title",
@@ -579,7 +579,7 @@
         "key": "dest_2_desc",
         "label": "Card 3 Desc",
         "kind": "p",
-        "def": "Trace leadership history from October 2025 or browse active student contributors across Egypt."
+        "def": "Trace Season 1 history from July 2026, meet our AI systems engineer Zain, or browse alumni and active leads."
       },
       {
         "key": "dest_3_title",
@@ -689,19 +689,19 @@
         "key": "headline",
         "label": "Headline",
         "kind": "h1",
-        "def": "Seventy-one students building Egypt’s STEM union."
+        "def": "From Season 1 roots to an AI-augmented core."
       },
       {
         "key": "subtitle",
         "label": "Subtitle",
         "kind": "p",
-        "def": "From two founding systems architects in October 2025 to 71 active leaders across 5 operational divisions — scrub the timeline below or explore the live directory."
+        "def": "Two co-founders built TF Unions alone in July 2026, grew to 121 leaders including 118 Season 1 pioneers across 8 divisions, welcomed Zain as our first AI teammate in October, and now lead Season 2 together."
       },
       {
         "key": "founders_heading",
         "label": "Founders Heading",
         "kind": "h2",
-        "def": "Founding leadership"
+        "def": "Core leadership & first AI teammate"
       }
     ]
   },

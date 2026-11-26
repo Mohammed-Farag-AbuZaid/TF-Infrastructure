@@ -584,7 +584,7 @@ const faviconSvg = encodeURIComponent(
                     <h3 class="font-display font-semibold text-[16px]">Public Org Tree &amp; Tenure Record (<span class="font-code text-[13px] text-[#1B365D]">tfunions.com/team</span>)</h3>
                     <p class="text-[12px] text-[#525866]">Add, edit, end tenure (Active → Alumni), or replace leaders on the public constellation without breaking lineage history.</p>
                   </div>
-                  <button id="tm-sync-roster" type="button" class="text-[12.5px] font-medium text-[#0B5F58] hover:underline shrink-0">Sync 71-member baseline to Firestore</button>
+                  <button id="tm-sync-roster" type="button" class="text-[12.5px] font-medium text-[#0B5F58] hover:underline shrink-0">Sync 121-member baseline to Firestore</button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <input id="tm-name" type="text" required placeholder="Full name" class="h-9 px-2.5 rounded-lg bg-[#F3F2EE] border border-[#DFDDD6] text-[13px]" />
@@ -1128,10 +1128,13 @@ const faviconSvg = encodeURIComponent(
 
       const CANONICAL_TEAMS = [
         'Founders',
+        'AI & Automation',
         'HR Team',
         'PR Team',
         'Marketing Team',
         'Social Media Team',
+        'Content Production',
+        'Academic Fields',
         'IT Team',
         'Research & Guides',
         'Chapters & Connect',
@@ -2374,9 +2377,13 @@ const faviconSvg = encodeURIComponent(
       function fmtMonth(ym) {
         const s = String(ym || '').trim();
         const parts = s.split('-');
-        if (parts.length === 2) {
+        if (parts.length >= 2) {
           const m = Number(parts[1]);
-          if (m >= 1 && m <= 12) return `${MONTHS[m - 1]} ${parts[0]}`;
+          if (m >= 1 && m <= 12) {
+            const d = Number(parts[2] || 0);
+            const prefix = d >= 13 && d <= 18 ? 'Mid ' : '';
+            return `${prefix}${MONTHS[m - 1]} ${parts[0]}`;
+          }
         }
         return s || 'Present';
       }
@@ -2737,6 +2744,7 @@ const faviconSvg = encodeURIComponent(
               <div class="flex flex-wrap items-center gap-2">
                 <strong class="text-[#161A22]">${esc(m.name)}</strong>
                 <span class="text-[#525866]">— ${esc(m.role)}</span>
+                ${m.isAI ? '<span class="font-code text-[10.5px] px-2 py-0.5 rounded bg-[#EDF7F5] border border-[#0F766E]/40 text-[#0B5F58] font-semibold">AI Member</span>' : ''}
                 <span class="font-code text-[10.5px] px-2 py-0.5 rounded ${isAlum ? 'bg-[#EAE8E1] text-[#525866]' : 'bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58]'}">${isAlum ? 'Alumni' : 'Active'}</span>
                 ${linked ? `<span class="font-code text-[10.5px] px-2 py-0.5 rounded bg-[#E4EAF2] text-[#1B365D]">Dashboard Account</span>` : ''}
               </div>
@@ -2761,8 +2769,8 @@ const faviconSvg = encodeURIComponent(
             document.getElementById('tm-role').value = m.role || '';
             document.getElementById('tm-team').value = CANONICAL_TEAMS.includes(m.team) ? m.team : 'Founders';
             document.getElementById('tm-tier').value = String(typeof m.tier === 'number' ? m.tier : 4);
-            document.getElementById('tm-start').value = m.startDate || m.cohortDate || '2026-11';
-            document.getElementById('tm-end').value = m.endDate || '';
+            document.getElementById('tm-start').value = (m.startDate || m.cohortDate || '2026-07').slice(0, 7);
+            document.getElementById('tm-end').value = (m.endDate || '').slice(0, 7);
             document.getElementById('tm-parent').value = m.parent || '';
             document.getElementById('tm-school').value = m.school || '';
             document.getElementById('tm-bio').value = m.bio || '';
@@ -3330,8 +3338,8 @@ const faviconSvg = encodeURIComponent(
         treeLinkSel.value = matchedOrg ? matchedOrg.id : '';
         const syncTreeCb = document.getElementById('pa-sync-tree');
         syncTreeCb.checked = Boolean(matchedOrg || p.hasStaff);
-        document.getElementById('pa-start-date').value = matchedOrg?.startDate || matchedOrg?.cohortDate || p.startDate || currentYm();
-        document.getElementById('pa-end-date').value = matchedOrg?.endDate || p.endDate || '';
+        document.getElementById('pa-start-date').value = (matchedOrg?.startDate || matchedOrg?.cohortDate || p.startDate || currentYm()).slice(0, 7);
+        document.getElementById('pa-end-date').value = (matchedOrg?.endDate || p.endDate || '').slice(0, 7);
         paParentSel.value = matchedOrg?.parent || '';
         document.getElementById('pa-tree-fields').classList.toggle('hidden', !syncTreeCb.checked);
 
@@ -3348,8 +3356,8 @@ const faviconSvg = encodeURIComponent(
       document.getElementById('pa-tree-link').addEventListener('change', (e) => {
         const m = rosterCache.find((x) => x.id === e.target.value);
         if (m) {
-          document.getElementById('pa-start-date').value = m.startDate || m.cohortDate || currentYm();
-          document.getElementById('pa-end-date').value = m.endDate || '';
+          document.getElementById('pa-start-date').value = (m.startDate || m.cohortDate || currentYm()).slice(0, 7);
+          document.getElementById('pa-end-date').value = (m.endDate || '').slice(0, 7);
           document.getElementById('pa-parent').value = m.parent || '';
         }
       });

@@ -3,6 +3,8 @@ import teamData from '../data/team-nodes.json';
 
 type RawMember = (typeof teamData)[number] & {
   arabicName?: string;
+  subTrack?: string;
+  isAI?: boolean;
   school?: string;
   grade?: string;
   cohortDate?: string;
@@ -17,7 +19,7 @@ type RawMember = (typeof teamData)[number] & {
 };
 
 export function toPublicMember(m: RawMember) {
-  const startDate = m.startDate ?? m.cohortDate ?? '2026-11';
+  const startDate = m.startDate ?? m.cohortDate ?? '2026-07-01';
   const endDate = m.endDate ?? '';
   return {
     id: m.id,
@@ -25,7 +27,9 @@ export function toPublicMember(m: RawMember) {
     arabicName: m.arabicName ?? '',
     role: m.role,
     team: m.team,
+    subTrack: m.subTrack ?? '',
     tier: m.tier,
+    isAI: Boolean(m.isAI),
     school: m.school ?? 'TF Unions',
     grade: m.grade ?? '',
     cohortDate: startDate,

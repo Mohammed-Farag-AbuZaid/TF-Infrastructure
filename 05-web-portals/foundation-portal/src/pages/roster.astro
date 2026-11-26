@@ -4,9 +4,47 @@ import teamData from '../data/team-nodes.json';
 import { toPublicMember } from './team.json';
 
 const publicMembers = (teamData as Parameters<typeof toPublicMember>[0][]).map(toPublicMember);
+const alumniCount = publicMembers.filter((m) => Boolean(m.endDate) || m.status === 'alumni').length;
+const activeCount = publicMembers.length - alumniCount;
 const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 ---
 <BaseLayout title="Directory Roster" backLabel="Team Constellation" backHref="/team">
+  <style is:inline>
+    @keyframes tf-roster-enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .tf-roster-card {
+      animation: tf-roster-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .tf-pill-track {
+      position: relative;
+    }
+    .tf-pill-indicator {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: 0;
+      border-radius: 7px;
+      transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), width 340ms cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tf-roster-card {
+        animation: none !important;
+      }
+      .tf-pill-indicator {
+        transition: none !important;
+      }
+    }
+  </style>
+
   <section class="pt-8 sm:pt-12 pb-6 border-b border-[#DFDDD6]">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
       <div>
@@ -17,7 +55,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           Member directory roster.
         </h1>
         <p class="mt-2 text-[15px] text-[#525866]">
-          Search or filter all {publicMembers.length} TF Unions leaders across {teamCount} teams.
+          Search or filter all {publicMembers.length} TF Unions leaders across Season 1 Alumni ({alumniCount}) &amp; Season 2 Core ({activeCount}) in {teamCount} divisions.
         </p>
       </div>
       <a
@@ -32,10 +70,11 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       <div class="flex flex-wrap items-center gap-1.5" id="roster-team-filters"></div>
 
       <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-        <div class="inline-flex rounded-lg bg-[#EAE8E1] p-0.5 border border-[#DFDDD6]" id="roster-status-filters">
-          <button type="button" data-st="active" class="rst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs">Active</button>
-          <button type="button" data-st="alumni" class="rst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">Alumni</button>
-          <button type="button" data-st="all" class="rst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]">All</button>
+        <div class="tf-pill-track inline-flex rounded-xl bg-[#EAE8E1] p-1 border border-[#DCD9D0]" id="roster-status-filters">
+          <div id="roster-status-pill" class="tf-pill-indicator bg-white border border-[#DFDDD6] shadow-xs"></div>
+          <button type="button" data-st="all" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition">All ({publicMembers.length})</button>
+          <button type="button" data-st="active" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">Core ({activeCount})</button>
+          <button type="button" data-st="alumni" class="rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] transition">S1 Alumni ({alumniCount})</button>
         </div>
         <input
           id="roster-search"
@@ -56,16 +95,21 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
   <script is:inline define:vars={{ initialMembers: publicMembers }}>
     (function () {
       var ALL_MEMBERS = initialMembers;
+      var prefersReducedMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var TEAM_COLORS = {
         Founders: { bg: '#1B365D', badgeBg: '#E4EAF2', badgeText: '#1B365D' },
+        'AI & Automation': { bg: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
         'HR Team': { bg: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
-        'Marketing Team': { bg: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
-        'PR Team': { bg: '#2563EB', badgeBg: '#EFF6FF', badgeText: '#1D4ED8' },
+        'Marketing Team': { bg: '#475569', badgeBg: '#F1F5F9', badgeText: '#334155' },
+        'PR Team': { bg: '#0F766E', badgeBg: '#EDF7F5', badgeText: '#0B5F58' },
         'Social Media Team': { bg: '#A2570F', badgeBg: '#FEF6EB', badgeText: '#A2570F' },
+        'Content Production': { bg: '#C2410C', badgeBg: '#FFF7ED', badgeText: '#9A3412' },
+        'Academic Fields': { bg: '#047857', badgeBg: '#ECFDF5', badgeText: '#065F46' },
         'IT Team': { bg: '#1D4ED8', badgeBg: '#EFF6FF', badgeText: '#1E40AF' },
         'Research & Guides': { bg: '#047857', badgeBg: '#ECFDF5', badgeText: '#065F46' },
         'Chapters & Connect': { bg: '#C2410C', badgeBg: '#FFF7ED', badgeText: '#9A3412' },
-        'Finance & Operations': { bg: '#6D28D9', badgeBg: '#F5F3FF', badgeText: '#5B21B6' },
+        'Finance & Operations': { bg: '#334155', badgeBg: '#EAE8E1', badgeText: '#334155' },
       };
 
       function esc(str) {
@@ -81,9 +125,13 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       function fmtMonth(ym) {
         var s = String(ym || '').trim();
         var parts = s.split('-');
-        if (parts.length === 2) {
+        if (parts.length >= 2) {
           var m = Number(parts[1]);
-          if (m >= 1 && m <= 12) return MONTHS[m - 1] + ' ' + parts[0];
+          if (m >= 1 && m <= 12) {
+            var d = Number(parts[2] || 0);
+            var pre = d >= 13 && d <= 18 ? 'Mid ' : '';
+            return pre + MONTHS[m - 1] + ' ' + parts[0];
+          }
         }
         return s || 'Present';
       }
@@ -93,31 +141,50 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
       }
 
       function fmtTenure(m) {
-        var start = m.startDate || m.cohortDate || '2026-11';
+        var start = m.startDate || m.cohortDate || '2026-07-01';
         var end = m.endDate || '';
         return fmtMonth(start) + ' – ' + (end ? fmtMonth(end) : 'Present');
       }
 
       var selectedTeam = 'All';
-      var selectedStatus = 'active';
+      var selectedStatus = 'all';
       var searchQuery = '';
       var filtersContainer = document.getElementById('roster-team-filters');
+      var statusTrackEl = document.getElementById('roster-status-filters');
+      var statusPillEl = document.getElementById('roster-status-pill');
       var cardsContainer = document.getElementById('member-cards-container');
       var rosterCount = document.getElementById('roster-count');
 
+      function positionStatusPill() {
+        var activeBtn = statusTrackEl && statusTrackEl.querySelector('[data-st="' + selectedStatus + '"]');
+        if (!statusTrackEl || !statusPillEl || !activeBtn) return;
+        var cr = statusTrackEl.getBoundingClientRect();
+        var br = activeBtn.getBoundingClientRect();
+        if (cr.width === 0 || br.width === 0) return;
+        statusPillEl.style.width = br.width.toFixed(1) + 'px';
+        statusPillEl.style.transform = 'translateX(' + (br.left - cr.left).toFixed(1) + 'px)';
+      }
+
+      function syncStatusButtons() {
+        document.querySelectorAll('#roster-status-filters .rst-btn').forEach(function (b) {
+          var act = b.getAttribute('data-st') === selectedStatus;
+          b.className = act
+            ? 'rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-semibold text-[#161A22] transition'
+            : 'rst-btn relative z-10 px-2.5 py-1 rounded-lg text-[12px] font-medium text-[#525866] hover:text-[#161A22] transition';
+        });
+        requestAnimationFrame(positionStatusPill);
+      }
+
       document.querySelectorAll('#roster-status-filters .rst-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          selectedStatus = btn.getAttribute('data-st') || 'active';
-          document.querySelectorAll('#roster-status-filters .rst-btn').forEach(function (b) {
-            var act = b.getAttribute('data-st') === selectedStatus;
-            b.className = act
-              ? 'rst-btn px-2.5 py-1 rounded-md text-[12px] font-semibold bg-white text-[#161A22] shadow-xs'
-              : 'rst-btn px-2.5 py-1 rounded-md text-[12px] font-medium text-[#525866]';
-          });
+          selectedStatus = btn.getAttribute('data-st') || 'all';
+          syncStatusButtons();
           renderFilterPills();
           renderRoster();
         });
       });
+
+      window.addEventListener('resize', positionStatusPill);
 
       function matchesStatus(m) {
         var isAlum = memberIsAlumni(m);
@@ -162,8 +229,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
             m.name.toLowerCase().includes(q) ||
             (m.arabicName && m.arabicName.toLowerCase().includes(q)) ||
             m.role.toLowerCase().includes(q) ||
+            (m.subTrack && m.subTrack.toLowerCase().includes(q)) ||
             (m.school && m.school.toLowerCase().includes(q));
           return matchSt && matchTeam && matchQ;
+        }).slice().sort(function (a, b) {
+          var aAlum = memberIsAlumni(a) ? 1 : 0;
+          var bAlum = memberIsAlumni(b) ? 1 : 0;
+          if (aAlum !== bAlum) return aAlum - bAlum;
+          return (a.tier ?? 4) - (b.tier ?? 4) || a.team.localeCompare(b.team) || a.name.localeCompare(b.name);
         });
 
         rosterCount.textContent = filtered.length;
@@ -174,17 +247,20 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         }
 
         cardsContainer.innerHTML = filtered
-          .map(function (m) {
+          .map(function (m, idx) {
             var c = TEAM_COLORS[m.team] || TEAM_COLORS.Founders;
             var isAlum = memberIsAlumni(m);
-            var initials = m.name
-              .split(/\s+/)
-              .slice(0, 2)
-              .map(function (p) { return p[0] || ''; })
-              .join('')
-              .toUpperCase();
+            var initials = m.isAI
+              ? 'AI'
+              : m.name
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map(function (p) { return p[0] || ''; })
+                  .join('')
+                  .toUpperCase();
+            var delayStyle = prefersReducedMotion ? '' : 'animation-delay:' + Math.min(idx * 14, 240) + 'ms;';
             return (
-              '<article class="border-t border-[#DFDDD6] pt-4 flex flex-col justify-between">' +
+              '<article class="border-t border-[#DFDDD6] pt-4 flex flex-col justify-between tf-roster-card" style="' + delayStyle + '">' +
               '<div>' +
               '<div class="flex items-start justify-between gap-3">' +
               '<div class="flex items-center gap-3 min-w-0">' +
@@ -210,10 +286,14 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
               ';">' +
               esc((m.team || 'TF Unions').replace(' Team', '')) +
               '</span>' +
-              (isAlum ? '<span class="px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866] text-[10px] font-code">Alumni</span>' : '') +
+              (m.isAI
+                ? '<span class="px-1.5 py-0.5 rounded bg-[#EDF7F5] border border-[#BCE3DC] text-[#0B5F58] text-[10px] font-code font-semibold">AI 24/7</span>'
+                : isAlum
+                  ? '<span class="px-1.5 py-0.5 rounded bg-[#EAE8E1] text-[#525866] text-[10px] font-code">S1 Alumni</span>'
+                  : '<span class="px-1.5 py-0.5 rounded bg-[#EDF7F5] text-[#0B5F58] text-[10px] font-code">Active</span>') +
               '</div>' +
               '</div>' +
-              '<p class="mt-2.5 text-[12.5px] text-[#525866] leading-relaxed">' +
+              '<p class="mt-2.5 text-[12.5px] text-[#525866] leading-relaxed line-clamp-3">' +
               esc(m.bio || m.school || 'TF Unions contributor') +
               '</p>' +
               '</div>' +
@@ -237,6 +317,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
         renderRoster();
       });
 
+      syncStatusButtons();
       renderFilterPills();
       renderRoster();
 
@@ -251,7 +332,7 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
 
       Promise.all([
         fetch('/team.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
-        fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=200', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+        fetch('https://firestore.googleapis.com/v1/projects/tf-unions/databases/(default)/documents/teamMembers?pageSize=250', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
       ]).then(function (results) {
         var jsonPayload = results[0];
         var fsPayload = results[1];
@@ -270,6 +351,15 @@ const teamCount = new Set(publicMembers.map((m) => m.team)).size;
           });
         }
         ALL_MEMBERS = Array.from(map.values()).filter(function (m) { return !m.archived && m.name; });
+        var alumLen = ALL_MEMBERS.filter(memberIsAlumni).length;
+        var actLen = ALL_MEMBERS.length - alumLen;
+        var allBtn = statusTrackEl.querySelector('[data-st="all"]');
+        var actBtn = statusTrackEl.querySelector('[data-st="active"]');
+        var aluBtn = statusTrackEl.querySelector('[data-st="alumni"]');
+        if (allBtn) allBtn.textContent = 'All (' + ALL_MEMBERS.length + ')';
+        if (actBtn) actBtn.textContent = 'Core (' + actLen + ')';
+        if (aluBtn) aluBtn.textContent = 'S1 Alumni (' + alumLen + ')';
+        syncStatusButtons();
         renderFilterPills();
         renderRoster();
       }).catch(function () {});
